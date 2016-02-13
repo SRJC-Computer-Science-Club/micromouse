@@ -16,7 +16,7 @@ track position
 
 locate walls
 
- explore maze
+explore maze
 
 detect finish cell
 
@@ -44,14 +44,20 @@ talk with hardware
 
 ### hardware
 
-microcontroller (likely teensy or micro arduino)
+microcontroller (likely teensy or micro arduino): https://www.pjrc.com/store/teensy32.html
 
 sensors
+* proximity/range finder : https://www.pololu.com/category/79/sharp-distance-sensors
 
 body
 
 wheels - https://www.pololu.com/  
 
-motors -  https://www.pololu.com/  
+motors -  
+* dual-shaft : https://www.pololu.com/category/60/micro-metal-gearmotors
+* hall-effect quadrature encoders: https://www.pololu.com/product/3081
+* H-bridge: https://www.sparkfun.com/products/315
+ * http://itp.nyu.edu/physcomp/labs/motors-and-transistors/dc-motor-control-using-an-h-bridge/
+* current sensor for stalls: https://www.pololu.com/product/1185
 
 batteries

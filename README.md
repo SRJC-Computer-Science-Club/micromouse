@@ -50,12 +50,8 @@ sensors
 
 body
 
-wheels
+wheels - https://www.pololu.com/  
 
-ben_h's note: https://www.pololu.com/  
-
-motors
-
-ben_h's note: https://www.pololu.com/  
+motors -  https://www.pololu.com/  
 
 batteries

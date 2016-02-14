@@ -5,7 +5,7 @@
 * sim : code that has been successfully tested in dev
 * dev : code that successfully compiles and has been self tested
 
-![alt branches](http://srjcscheduler.com/screenshots/2FG.png)
+![alt branches](https://github.com/SRJC-Computer-Science-Club/micromouse/blob/master/workflow.png)
 
 *the general workflow*
 

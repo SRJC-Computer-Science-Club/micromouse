@@ -9,6 +9,9 @@
 
 *the general workflow*
 
+#### Git tutorials
+
+(*if you're new to git watch this first:* https://www.youtube.com/watch?v=0fKg7e37bQE)
 
 basic example of this workflow: https://www.youtube.com/watch?v=oFYyTZwMyAg
 

@@ -9,6 +9,9 @@
 
 *the general workflow*
 
+
+basic example of this workflow: https://www.youtube.com/watch?v=oFYyTZwMyAg
+
 ## Project Divisions
 
 ### Pathfinding

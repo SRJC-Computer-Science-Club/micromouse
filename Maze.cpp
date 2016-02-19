@@ -1,9 +1,10 @@
 #include <vector>
 #include <algorithm>
 #include "Maze.h"
+#include "Node.h"
+#include <math.h>
 
-
-using namespace pathfinding;
+using namespace Micromouse;
 
 #ifdef SFML_GRAPHICS_HPP
 //sf::RenderWindow renderWindow( sf::VideoMode( 680 , 600 ) , "MicroMouse Sim" );
@@ -14,36 +15,17 @@ sf::Vertex line[] =
 	sf::Vertex( sf::Vector2f( 0, 16 ),  sf::Color( 100 , 250 , 50 ) ),
 	sf::Vertex( sf::Vector2f( 512, 16 ),  sf::Color( 100 , 250 , 50 ) )
 };
+#endif
 
 
-sf::Font font;
 
-
-Maze::Maze( sf::RenderWindow& rw ) :
-	rw( rw )
-{
-	for ( int i = 0; i < MAZE_W; i++ )
-	{
-		for ( int j = 0; j < MAZE_H; j++ )
-		{
-			maze[ j ][ i ] = new Node( coord( i , j ) );
-		}
-	}
-
-
-	if ( !font.loadFromFile( "font.ttf" ) )
-	{
-		// error...
-		throw;
-	}
-}
-
-#else
 
 Maze::Maze()
 {
+	initNodes();
 }
-#endif
+
+
 
 Maze::~Maze()
 {
@@ -58,30 +40,12 @@ bool nodeComparator( const Node* lhs , const Node* rhs )
 int Maze::findPath( coord start , coord end )
 {
 #ifdef SFML_GRAPHICS_HPP
-	sf::RectangleShape rect;
-	for ( int i = 0; i < MAZE_H; i++ )
-	{
-		for ( int j = 0; j < MAZE_W; j++ )
-		{
 
 
-			//rect = sf::RectangleShape( sf::Vector2f( NODE_W , NODE_H ) );
-			//rect.setPosition( sf::Vector2f( NODE_W * j + 16 , NODE_H * i + 16 ) );
-			//rect.setOutlineThickness( 1 );
-			//rect.setFillColor( sf::Color::Black );
-			drawNode( i , j );
-			//sf::sleep( sf::microseconds( 1000 ) );
 
-		}
-	}
-	rw.display();
-
-	//rw.draw( line , 2 , sf::Lines );
-	//rw.display();
 
 #endif
 
-	return 0;
 	std::vector< Node* > openNodes;
 
 	openNodes.reserve( static_cast< int >( MAZE_W * MAZE_H * 0.75 ) ); //assume 3/4 of the maze will need to be searched on average;
@@ -99,7 +63,15 @@ int Maze::findPath( coord start , coord end )
 
 		if ( currentNode == maze[ end.second ][ end.first ] )
 		{
-			currentNode->getF();;
+			Node* temp = currentNode;
+			while ( temp->getParent() != nullptr )
+			{
+				drawLine( temp->getPos() , temp->getParent()->getPos() );
+				temp = temp->getParent();
+			}
+
+			//drawLine( start , end );
+			return currentNode->getF();
 		}
 
 		openNodes.pop_back();
@@ -108,6 +80,12 @@ int Maze::findPath( coord start , coord end )
 		for ( direction dir = direction::E; dir != direction::NONE; ++dir )
 			//loop through neighbor nodes
 		{
+
+			if ( dir == direction::NW || dir == direction::SW || dir == direction::NE || dir == direction::SE )
+			{
+				continue;
+			}
+			// TODO see why this returns invalid objects
 			if ( currentNode->isDirectionBlocked( dir ) )
 			{
 				continue; //neighbor node not reachable from current node
@@ -115,6 +93,10 @@ int Maze::findPath( coord start , coord end )
 
 			neighborNode = getNeighborNode( currentNode->getPos() , dir );
 
+			if ( neighborNode == nullptr )
+			{
+				continue; // there is no neighbor node in this direction
+			}
 
 			if ( neighborNode->isClosed() ) //if neighborNode in closedNodes
 			{
@@ -123,8 +105,8 @@ int Maze::findPath( coord start , coord end )
 
 
 			//TODO make a function that returns the traval cost
-			tentative_G = currentNode->getG() +
-				( dir == direction::NW || dir == direction::SW || dir == direction::NE || dir == direction::SE ) ? 14 : 10; //if moved diagnal add 14, else moved straight add 10
+			tentative_G = currentNode->getG();
+			tentative_G +=	( dir == direction::NW || dir == direction::SW || dir == direction::NE || dir == direction::SE ) ? 14 : 10; //if moved diagnal add 14, else moved straight add 10
 
 
 			if ( std::find( openNodes.begin() , openNodes.end() , neighborNode )
@@ -144,7 +126,8 @@ int Maze::findPath( coord start , coord end )
 			//this path is the best so far
 			neighborNode->setParent( currentNode );
 			neighborNode->setG( tentative_G );
-			neighborNode->setF( tentative_G + /*TODO calculate Hueristic here*/ 0 );
+			neighborNode->setF( tentative_G + 5 * ( abs( currentNode->getPos().first - end.first ) + abs( currentNode->getPos().second - end.second ) )
+				/*TODO calculate Hueristic here*/  );
 		}
 	}
 
@@ -152,9 +135,9 @@ int Maze::findPath( coord start , coord end )
 	return 0;
 }
 
-int Maze::findPath( const Node & start , const Node & end )
+int Maze::findPath( const Node * const start , const Node * const end )
 {
-	return findPath( start.getPos() , end.getPos() );
+	return findPath( start->getPos() , end->getPos() );
 }
 
 
@@ -162,8 +145,13 @@ int Maze::findPath( const Node & start , const Node & end )
 // does not do bound checking and assumes that the neighbor node pointed at exists
 Node * Maze::getNeighborNode( coord pos , direction dir )
 {
+	int x = pos.first + dir % 3 - 1;
+	int y = pos.second + dir / 3 - 1;
 	//return maze[ ypos + offset][ xpos + offset ]
-	return maze[ pos.second + dir / 3 - 1 ][ pos.first + dir % 3 - 1 ];
+	if ( x >= 0 && x < MAZE_W && y >= 0 && y < MAZE_H )
+	{
+		return maze[ y ][ x ];
+	}
 	/*       x
 		 -1  0  1
 		----------
@@ -178,90 +166,42 @@ Node * Maze::getNeighborNode( coord pos , direction dir )
 	return nullptr;
 }
 
+void Maze::initNodes()
+{
+	for ( int i = 0; i < MAZE_W; i++ )
+	{
+		for ( int j = 0; j < MAZE_H; j++ )
+		{
+			maze[ j ][ i ] = new Node( coord( i , j ) );
+		}
+	}
+}
+
+void Micromouse::Maze::drawLine( coord begin , coord end )
+{
+	sf::Vertex line[ 2 ];
+	sf::Color color = sf::Color( 200 , 80 , 30 );
+	line[ 0 ] = sf::Vertex( sf::Vector2f( NODE_W * begin.first + 40.0f , NODE_H * begin.second + 40.0f ) , color );
+	line[ 1 ] = sf::Vertex( sf::Vector2f( NODE_W * end.first + 40.0f , NODE_H * end.second + 40.0f ) , color );
+	renderWindow.draw( line , 2 , sf::Lines );
+}
+
 
 
 
 
 #ifdef SFML_GRAPHICS_HPP
 
-void pathfinding::Maze::drawNode( int i , int j )
+void Maze::draw()
 {
-	for ( direction dir = direction::E; dir != direction::NONE; ++dir )
+	for ( int i = 0; i < MAZE_W; i++ )
 	{
-		sf::Color color;
-		if ( maze[ i ][ j ]->isClosed() )
+		for ( int j = 0; j < MAZE_H; j++ )
 		{
-			color = maze[ i ][ j ]->directionIsBlocked( dir ) ? sf::Color::Color( 200 , 30 , 30 ) : sf::Color( 45 , 0 , 0 );
+			maze[ j ][ i ]->draw();
 		}
-		else
-		{
-			color = maze[ i ][ j ]->directionIsBlocked( dir ) ? sf::Color::Color( 200 , 200 , 200 ) : sf::Color( 40 , 40 , 40 );
-		}
-		sf::Vertex line[ 2 ];
-
-		switch ( dir )
-		{
-		case pathfinding::N:
-
-			line[ 0 ] = sf::Vertex( sf::Vector2f( NODE_W * j + 16 , NODE_H * i + 16 ) , color );
-			line[ 1 ] = sf::Vertex( sf::Vector2f( NODE_W * ( j + 1 ) + 14 , NODE_H * i + 16 ) , color );
-
-			break;
-		case pathfinding::W:
-
-			line[ 0 ] = sf::Vertex( sf::Vector2f( NODE_W * j + 16 , NODE_H * i + 16 ) , color );
-			line[ 1 ] = sf::Vertex( sf::Vector2f( NODE_W * j + 16 , NODE_H * ( i + 1 ) + 15 ) , color );
-
-			break;
-		case pathfinding::E:
-
-			line[ 0 ] = sf::Vertex( sf::Vector2f( NODE_W * ( j + 1 ) + 14 , NODE_H * i + 16 ) , color );
-			line[ 1 ] = sf::Vertex( sf::Vector2f( NODE_W * ( j + 1 ) + 14 , NODE_H * ( i + 1 ) + 14 ) , color );
-
-			break;
-		case pathfinding::S:
-
-			line[ 0 ] = sf::Vertex( sf::Vector2f( NODE_W * j + 16 , NODE_H * ( i + 1 ) + 14 ) , color );
-			line[ 1 ] = sf::Vertex( sf::Vector2f( NODE_W * ( j + 1 ) + 14 , NODE_H * ( i + 1 ) + 14 ) , color );
-
-			break;
-		case pathfinding::NW:
-
-			line[ 0 ] = sf::Vertex( sf::Vector2f( NODE_W * j + 16 , NODE_H * i + 25 ) , color );
-			line[ 1 ] = sf::Vertex( sf::Vector2f( NODE_W * j + 25 , NODE_H * i + 16 ) , color );
-
-			break;
-		case pathfinding::NE:
-
-			line[ 0 ] = sf::Vertex( sf::Vector2f( NODE_W * ( j + 1 ) + 13 , NODE_H * i + 25 ) , color );
-			line[ 1 ] = sf::Vertex( sf::Vector2f( NODE_W * ( j + 1 ) + 4 , NODE_H * i + 16 ) , color );
-
-			break;
-		case pathfinding::SW:
-
-			line[ 0 ] = sf::Vertex( sf::Vector2f( NODE_W * j + 16 , NODE_H * ( i + 1 ) + 6 ) , color );
-			line[ 1 ] = sf::Vertex( sf::Vector2f( NODE_W * j + 24 , NODE_H * ( i + 1 ) + 14 ) , color );
-
-			break;
-		case pathfinding::SE:
-
-			line[ 0 ] = sf::Vertex( sf::Vector2f( NODE_W * ( j + 1 ) + 14 , NODE_H * ( i + 1 ) + 5 ) , color );
-			line[ 1 ] = sf::Vertex( sf::Vector2f( NODE_W * ( j + 1 ) + 5 , NODE_H * ( i + 1 ) + 14 ) , color );
-
-			break;
-		default:
-			break;
-		}
-		sf::Text text;
-		text.setFont( font );
-		text.setPosition( sf::Vector2f( NODE_W * j + 18 , NODE_H * i + 25 ) );
-		text.setString( "G:" );
-		text.setCharacterSize( 7 );
-		rw.draw( text );
-		rw.draw( line , 2 , sf::Lines );
 	}
 }
-
 #endif
 
 

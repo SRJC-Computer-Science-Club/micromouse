@@ -1,35 +1,33 @@
 #pragma once
 #include <utility> //pair
+#include "Drawable.h"
 
 const int INF = 65000;
 
-typedef std::pair< int , int > coord;
 
-
-namespace pathfinding
+namespace Micromouse
 {
-	/* defines directions 0-8, with 4 being NONE
-	it is done this way to make converting from direction to coordinates easier
-	here are the 8 directions
-	NW  N  NE
 
-	W  NONE E
-
-	SW  s  SE
-	*/
-	enum direction { NW , N , NE , W , NONE , E , SW , S , SE };
+#ifdef SFML_GRAPHICS_HPP
+	const int NODE_W = 48 , NODE_H = 48;
+#endif
 
 
-	class Node
+
+
+	class Node : public Drawable
 	{
 	public:
 		Node( coord newPos );
 		~Node();
 
+		//getters
 		int getF() const;
 		int getG() const;
 		coord getPos() const;
+		Node* getParent();
 
+		//setters
 		void setG( const int newG );
 		void setF( const int newF );
 		void setParent( Node * const newParent );
@@ -39,11 +37,15 @@ namespace pathfinding
 		void close();
 		void open();
 
+#ifdef SFML_GRAPHICS_HPP
+		void draw();
+#endif
+
 	private:
 		bool openDirections[ 8 ] = { true , true , true , true , true , true , true , true };
 		int G = INF; //movement cost
-		int F; //movement + hueristic cost
-		Node* parent;
+		int F = INF; //movement + hueristic cost
+		Node* parent = nullptr;
 		coord pos;
 
 		bool closed = false;

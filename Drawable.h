@@ -1,29 +1,40 @@
 #pragma once
+#include "Window.h"
 
 
-//used for gui
-#include "SFML\Graphics.hpp" //comment this line if compile error
-// do so should disable the gui entirely
-// to get sfml
-// download: http://www.sfml-dev.org/download/sfml/2.3.2/
-// install: http://www.sfml-dev.org/tutorials/2.3/#getting-started
-// video: https://www.youtube.com/playlist?list=PLS9MbmO_ssyCSyqZC2NEfblIa9_xSrMqR
-// do not include files in git because different people will need different versions
+// TODO: change to a struct with members x,y for clarity
+typedef std::pair< int , int > coord;
 
-
-
-class Drawable
+namespace Micromouse
 {
-public:
-	Drawable();
-	~Drawable();
+	const int WINDOW_W = 1000 , WINDOW_H = 800;
 
-	// draw is a pure virtual function meaning that any class that
-	// inherents from Drawable will need to implement it.
-	// this function will draw a representation of the calling 
-	// object to the RenderWindow rw
 
-	virtual void draw( sf::RenderWindow & rw ) = 0;
+	/* defines directions 0-8, with 4 being NONE
+	it is done this way to make converting from direction to coordinates easier
+	here are the 8 directions
+	NW  N  NE
 
-};
+	W  NONE E
 
+	SW  s  SE
+	*/
+	enum direction { NW , N , NE , W , NONE , E , SW , S , SE };
+
+
+
+	class Drawable : public Window
+	{
+	public:
+
+	protected:
+
+		// draw is a pure virtual function meaning that any class that
+		// inherents from Drawable will need to implement it.
+		// this function will draw a representation of the 
+		// object to the RenderWindow renderWindow
+		virtual void draw() = 0;
+
+
+	};
+}

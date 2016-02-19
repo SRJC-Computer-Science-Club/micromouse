@@ -1,12 +1,4 @@
 #include "Drawable.h"
 
+//theres nothing here :)
 
-
-Drawable::Drawable()
-{
-}
-
-
-Drawable::~Drawable()
-{
-}

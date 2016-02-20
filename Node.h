@@ -1,6 +1,5 @@
 #pragma once
-#include <utility> //pair
-#include "Drawable.h"
+#include "Coord.h"
 
 const int INF = 65000;
 
@@ -14,17 +13,20 @@ namespace Micromouse
 
 
 
-
+#ifdef SFML_GRAPHICS_HPP
 	class Node : public Drawable
+#else
+	class Node
+#endif
 	{
 	public:
-		Node( coord newPos );
+		Node( Coord newPos );
 		~Node();
 
 		//getters
 		int getF() const;
 		int getG() const;
-		coord getPos() const;
+		Coord getPos() const;
 		Node* getParent();
 
 		//setters
@@ -46,12 +48,10 @@ namespace Micromouse
 		int G = INF; //movement cost
 		int F = INF; //movement + hueristic cost
 		Node* parent = nullptr;
-		coord pos;
+		Coord pos;
 
 		bool closed = false;
 
 
 	};
-
-	direction operator++( direction& dir );
 }

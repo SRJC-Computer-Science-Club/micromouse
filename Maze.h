@@ -1,36 +1,37 @@
 #pragma once
-#include <utility> //pair
-#include "Drawable.h"
-
-
+#include "Node.h"
+#include "Coord.h"
 
 namespace Micromouse
 {
 	const int MAZE_W = 16 , MAZE_H = 16;
 
-	class Node;
 
-	class Maze : public Drawable
+	class Maze
 	{
 	public:
 		Maze();
 		~Maze();
 
-		int findPath( coord start , coord end );
+
+		// TODO it should return a list of Coords to utilized by the motion controller
+		int findPath( Coord start , Coord end );
 		int findPath( const Node * const start , const Node * const end );
 
-#ifdef SFML_GRAPHICS_HPP
-		void draw();
-#endif
+
 
 	private:
-		Node* maze[ MAZE_H ][ MAZE_W ];
-		Node* getNeighborNode( coord pos , direction dir );
-		void initNodes();
+		// returns a pointer to the node in the direction 'dir' from the given Coord 'pos'
+		// if no such node exists then nullptr is returned
+		Node* getNeighborNode( Coord pos , direction dir ); 
 
-#ifdef SFML_GRAPHICS_HPP
-		void drawLine(coord begin , coord end);
-#endif
+
+		// populates 'maze' with Nodes
+		void initNodes();
+		
+		// a 2D array of Nodes that represents the physical maze
+		Node* maze[ MAZE_W ][ MAZE_H ];
+
 
 
 	};

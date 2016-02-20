@@ -1,24 +1,11 @@
 #include <vector>
 #include <algorithm>
-#include "Maze.h"
-#include "Node.h"
 #include <math.h>
+#include "Maze.h"
 
 using namespace Micromouse;
 
-#ifdef SFML_GRAPHICS_HPP
-//sf::RenderWindow renderWindow( sf::VideoMode( 680 , 600 ) , "MicroMouse Sim" );
-//sf::Event event;
-//
-sf::Vertex line[] =
-{
-	sf::Vertex( sf::Vector2f( 0, 16 ),  sf::Color( 100 , 250 , 50 ) ),
-	sf::Vertex( sf::Vector2f( 512, 16 ),  sf::Color( 100 , 250 , 50 ) )
-};
-#endif
-
-
-
+// constructors //////////////////////////////////////////////////
 
 Maze::Maze()
 {
@@ -26,31 +13,30 @@ Maze::Maze()
 }
 
 
-
 Maze::~Maze()
 {
 }
 
 
+// this is to allow the sorting of the vecotr of Nodes
+// sorts in descending order
 bool nodeComparator( const Node* lhs , const Node* rhs )
 {
 	return lhs->getF() > rhs->getF();
 }
 
-int Maze::findPath( coord start , coord end )
+
+
+int Maze::findPath( Coord start , Coord end )
 {
-#ifdef SFML_GRAPHICS_HPP
-
-
-
-
-#endif
-
 	std::vector< Node* > openNodes;
 
-	openNodes.reserve( static_cast< int >( MAZE_W * MAZE_H * 0.75 ) ); //assume 3/4 of the maze will need to be searched on average;
+	// assume 3/4 of the maze will need to be searched on average;
+	// this prevents too many resizes, idk if this is optimal I was just estimating
+	openNodes.reserve( static_cast< int >( MAZE_W * MAZE_H * 0.75 ) ); 
 
-	openNodes.push_back( maze[ start.second ][ start.first ] );
+	openNodes.push_back( maze[ start.x() ][ start.y() ] );// the start node is add to openNodes
+	maze[ start.x() ][ start.y() ]->setG( 0 ); // initialize the movement cost to 0 for the first node
 
 	Node* currentNode;
 	Node* neighborNode;
@@ -59,19 +45,21 @@ int Maze::findPath( coord start , coord end )
 	while ( !openNodes.empty() ) //while openNodes is not empty
 	{
 		std::sort( openNodes.begin() , openNodes.end() , nodeComparator ); //sort in descending order by F value
-		currentNode = openNodes.back();
+		currentNode = openNodes.back(); //get node will lowest F value
 
-		if ( currentNode == maze[ end.second ][ end.first ] )
+		if ( currentNode == maze[ end.x() ][ end.y() ] ) // if we are at the end node then we are done!
 		{
+#ifdef SFML_GRAPHICS_HPP
 			Node* temp = currentNode;
-			while ( temp->getParent() != nullptr )
+			while ( temp->getParent() != nullptr ) // draw the path pack to the start node
 			{
 				drawLine( temp->getPos() , temp->getParent()->getPos() );
 				temp = temp->getParent();
 			}
+#endif
 
-			//drawLine( start , end );
-			return currentNode->getF();
+			// TODO: this should return a list of coords for the motion control to utilize
+			return currentNode->getF(); // return the cost of the trip
 		}
 
 		openNodes.pop_back();
@@ -80,12 +68,15 @@ int Maze::findPath( coord start , coord end )
 		for ( direction dir = direction::E; dir != direction::NONE; ++dir )
 			//loop through neighbor nodes
 		{
-
+			// TODO get diagonals working
+			//Diagonals are broken right now so this will skip over them
 			if ( dir == direction::NW || dir == direction::SW || dir == direction::NE || dir == direction::SE )
 			{
-				continue;
+				continue; // skip checking diagonals
 			}
-			// TODO see why this returns invalid objects
+
+			// BUG TODO see why this returns invalid objects sometimes
+			// TODO incorporate this into getNeighborNode
 			if ( currentNode->isDirectionBlocked( dir ) )
 			{
 				continue; //neighbor node not reachable from current node
@@ -104,7 +95,7 @@ int Maze::findPath( coord start , coord end )
 			}
 
 
-			//TODO make a function that returns the traval cost
+			//TODO turn this into a function
 			tentative_G = currentNode->getG();
 			tentative_G +=	( dir == direction::NW || dir == direction::SW || dir == direction::NE || dir == direction::SE ) ? 14 : 10; //if moved diagnal add 14, else moved straight add 10
 
@@ -126,31 +117,36 @@ int Maze::findPath( coord start , coord end )
 			//this path is the best so far
 			neighborNode->setParent( currentNode );
 			neighborNode->setG( tentative_G );
-			neighborNode->setF( tentative_G + 5 * ( abs( currentNode->getPos().first - end.first ) + abs( currentNode->getPos().second - end.second ) )
-				/*TODO calculate Hueristic here*/  );
+			neighborNode->setF( tentative_G + 0 /*TODO calculate Hueristic here*/  );
 		}
 	}
 
 	// no path was found
-	return 0;
+	// this should never happen in real maze
+	return -1;
 }
 
+
+
+// an overload of  findPath that takes nodes instead of coords
+// might be useful
 int Maze::findPath( const Node * const start , const Node * const end )
 {
 	return findPath( start->getPos() , end->getPos() );
 }
 
 
-// returns a pointer to trhe neighbor node at direction dir from pos
-// does not do bound checking and assumes that the neighbor node pointed at exists
-Node * Maze::getNeighborNode( coord pos , direction dir )
+
+
+// returns a pointer to the neighbor node at direction dir from pos
+Node * Maze::getNeighborNode( Coord pos , direction dir )
 {
-	int x = pos.first + dir % 3 - 1;
-	int y = pos.second + dir / 3 - 1;
-	//return maze[ ypos + offset][ xpos + offset ]
+	int x = pos.x() + dir % 3 - 1;
+	int y = pos.y() + dir / 3 - 1;
+
 	if ( x >= 0 && x < MAZE_W && y >= 0 && y < MAZE_H )
 	{
-		return maze[ y ][ x ];
+		return maze[ x ][ y ];
 	}
 	/*       x
 		 -1  0  1
@@ -166,43 +162,17 @@ Node * Maze::getNeighborNode( coord pos , direction dir )
 	return nullptr;
 }
 
+
+
+// populates the maze with Nodes
 void Maze::initNodes()
 {
-	for ( int i = 0; i < MAZE_W; i++ )
+	for ( int x = 0; x < MAZE_W; x++ )
 	{
-		for ( int j = 0; j < MAZE_H; j++ )
+		for ( int y = 0; y < MAZE_H; y++ )
 		{
-			maze[ j ][ i ] = new Node( coord( i , j ) );
+			maze[ x ][ y ] = new Node( Coord( x , y ) );
 		}
 	}
 }
-
-void Micromouse::Maze::drawLine( coord begin , coord end )
-{
-	sf::Vertex line[ 2 ];
-	sf::Color color = sf::Color( 200 , 80 , 30 );
-	line[ 0 ] = sf::Vertex( sf::Vector2f( NODE_W * begin.first + 40.0f , NODE_H * begin.second + 40.0f ) , color );
-	line[ 1 ] = sf::Vertex( sf::Vector2f( NODE_W * end.first + 40.0f , NODE_H * end.second + 40.0f ) , color );
-	renderWindow.draw( line , 2 , sf::Lines );
-}
-
-
-
-
-
-#ifdef SFML_GRAPHICS_HPP
-
-void Maze::draw()
-{
-	for ( int i = 0; i < MAZE_W; i++ )
-	{
-		for ( int j = 0; j < MAZE_H; j++ )
-		{
-			maze[ j ][ i ]->draw();
-		}
-	}
-}
-#endif
-
-
 

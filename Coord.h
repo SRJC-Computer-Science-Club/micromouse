@@ -26,7 +26,7 @@ namespace Micromouse
 		int y();
 		void x( int x );
 		void y( int y );
-		
+
 
 		//static const Coord& UNDEFINED;//a coord that represents an undefined coord
 
@@ -37,5 +37,4 @@ namespace Micromouse
 
 	direction& operator++( direction& dir );
 }
-
 

@@ -33,7 +33,7 @@ int Maze::findPath( Coord start , Coord end )
 
 	// assume 3/4 of the maze will need to be searched on average;
 	// this prevents too many resizes, idk if this is optimal I was just estimating
-	openNodes.reserve( static_cast< int >( MAZE_W * MAZE_H * 0.75 ) ); 
+	openNodes.reserve( static_cast< int >( MAZE_W * MAZE_H * 0.75 ) );
 
 	openNodes.push_back( maze[ start.x() ][ start.y() ] );// the start node is add to openNodes
 	maze[ start.x() ][ start.y() ]->setG( 0 ); // initialize the movement cost to 0 for the first node
@@ -97,7 +97,7 @@ int Maze::findPath( Coord start , Coord end )
 
 			//TODO turn this into a function
 			tentative_G = currentNode->getG();
-			tentative_G +=	( dir == direction::NW || dir == direction::SW || dir == direction::NE || dir == direction::SE ) ? 14 : 10; //if moved diagnal add 14, else moved straight add 10
+			tentative_G += ( dir == direction::NW || dir == direction::SW || dir == direction::NE || dir == direction::SE ) ? 14 : 10; //if moved diagnal add 14, else moved straight add 10
 
 
 			if ( std::find( openNodes.begin() , openNodes.end() , neighborNode )
@@ -117,7 +117,7 @@ int Maze::findPath( Coord start , Coord end )
 			//this path is the best so far
 			neighborNode->setParent( currentNode );
 			neighborNode->setG( tentative_G );
-			neighborNode->setF( tentative_G + 0 /*TODO calculate Hueristic here*/  );
+			neighborNode->setF( tentative_G + 0 /*TODO calculate Hueristic here*/ );
 		}
 	}
 
@@ -149,14 +149,14 @@ Node * Maze::getNeighborNode( Coord pos , direction dir )
 		return maze[ x ][ y ];
 	}
 	/*       x
-		 -1  0  1
-		----------
-	 -1| NW| N |NE|
-	   |---+---+--|
+	-1  0  1
+	----------
+	-1| NW| N |NE|
+	|---+---+--|
 	y 0| W |   | E|
-	   |---+---+--|
-	  1| SW| s  SE|
-		----------
+	|---+---+--|
+	1| SW| s  SE|
+	----------
 	*/
 
 	return nullptr;
@@ -175,4 +175,39 @@ void Maze::initNodes()
 		}
 	}
 }
+
+
+
+
+
+
+
+
+#ifdef SFML_GRAPHICS_HPP
+void Micromouse::Maze::drawLine( Coord begin , Coord end )
+{
+	sf::Vertex line[ 2 ];
+	sf::Color color = sf::Color( 200 , 80 , 30 );
+	line[ 0 ] = sf::Vertex( sf::Vector2f( NODE_W * begin.x() + 40.0f , NODE_H * begin.y() + 40.0f ) , color );
+	line[ 1 ] = sf::Vertex( sf::Vector2f( NODE_W * end.x() + 40.0f , NODE_H * end.y() + 40.0f ) , color );
+	renderWindow.draw( line , 2 , sf::Lines );
+}
+
+
+
+
+
+
+void Maze::draw()
+{
+	for ( int x = 0; x < MAZE_W; x++ )
+	{
+		for ( int y = 0; y < MAZE_H; y++ )
+		{
+			maze[ x ][ y ]->draw();
+		}
+	}
+}
+#endif
+
 

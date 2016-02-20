@@ -1,4 +1,6 @@
 #pragma once
+#include <utility> //pair
+#include "Drawable.h"
 #include "Coord.h"
 
 const int INF = 65000;
@@ -33,7 +35,7 @@ namespace Micromouse
 		void setG( const int newG );
 		void setF( const int newF );
 		void setParent( Node * const newParent );
-		
+
 		bool isDirectionBlocked( direction dir );
 		bool isClosed();
 		void close();

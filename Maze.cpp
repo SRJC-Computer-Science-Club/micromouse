@@ -48,16 +48,7 @@ int Maze::findPath( Coord start , Coord end )
 		currentNode = openNodes.back(); //get node will lowest F value
 
 		if ( currentNode == maze[ end.x() ][ end.y() ] ) // if we are at the end node then we are done!
-		{
-#ifdef SFML_GRAPHICS_HPP
-			Node* temp = currentNode;
-			while ( temp->getParent() != nullptr ) // draw the path pack to the start node
-			{
-				drawLine( temp->getPos() , temp->getParent()->getPos() );
-				temp = temp->getParent();
-			}
-#endif
-
+	{	
 			// TODO: this should return a list of coords for the motion control to utilize
 			return currentNode->getF(); // return the cost of the trip
 		}

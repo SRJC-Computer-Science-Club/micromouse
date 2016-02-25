@@ -48,11 +48,11 @@ other_pr_master | [link title](www.github.com)
 #### Screenshots (if appropriate)
 <placeholder>
 #### Changes or additions made:
-<placeholder>
-- Item #1
+- [added]Item #1
     - Item a
     - Item b
-- Item #2
-- Item #3, etc
+- [improved]Item #2
+- [fix]Item #3
+- [fix]Item #4, etc
 
 Thanks for contributing!

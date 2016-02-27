@@ -1,5 +1,5 @@
 #pragma once
-#include "Coord.h"
+#include "Vector.h"
 
 const int INF = 65000;
 
@@ -10,13 +10,13 @@ namespace Micromouse
 	class Node
 	{
 	public:
-		Node( Coord newPos );
+		Node( Vector::Pos newPos );
 		~Node();
 
 		//getters
 		int getF() const;
 		int getG() const;
-		Coord getPos() const;
+		Vector::Pos getPos() const;
 		Node* getParent();
 
 		//setters
@@ -34,7 +34,7 @@ namespace Micromouse
 		int G = INF; //movement cost
 		int F = INF; //movement + hueristic cost
 		Node* parent = nullptr;
-		Coord pos;
+		Vector::Pos pos;
 
 		bool closed = false;
 

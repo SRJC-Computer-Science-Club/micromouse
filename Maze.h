@@ -1,6 +1,6 @@
 #pragma once
 #include "Node.h"
-#include "Coord.h"
+#include "Vector.h"
 
 namespace Micromouse
 {
@@ -14,16 +14,16 @@ namespace Micromouse
 		~Maze();
 
 
-		// TODO it should return a list of Coords to utilized by the motion controller
-		int findPath( Coord start , Coord end );
+		// TODO it should return a list of Vectors to utilized by the motion controller
+		int findPath( Vector::Pos start , Vector::Pos end );
 		int findPath( const Node * const start , const Node * const end );
 
 
 
 	private:
-		// returns a pointer to the node in the direction 'dir' from the given Coord 'pos'
+		// returns a pointer to the node in the direction 'dir' from the given Vector::Pos 'pos'
 		// if no such node exists then nullptr is returned
-		Node* getNeighborNode( Coord pos , direction dir ); 
+		Node* getNeighborNode( Vector::Pos pos , direction dir ); 
 
 
 		// populates 'maze' with Nodes

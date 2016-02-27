@@ -27,7 +27,7 @@ bool nodeComparator( const Node* lhs , const Node* rhs )
 
 
 
-int Maze::findPath( Coord start , Coord end )
+int Maze::findPath( Vector::Pos start , Vector::Pos end )
 {
 	std::vector< Node* > openNodes;
 
@@ -49,7 +49,7 @@ int Maze::findPath( Coord start , Coord end )
 
 		if ( currentNode == maze[ end.x() ][ end.y() ] ) // if we are at the end node then we are done!
 	{	
-			// TODO: this should return a list of coords for the motion control to utilize
+			// TODO: this should return a list of Vectors for the motion control to utilize
 			return currentNode->getF(); // return the cost of the trip
 		}
 
@@ -119,7 +119,7 @@ int Maze::findPath( Coord start , Coord end )
 
 
 
-// an overload of  findPath that takes nodes instead of coords
+// an overload of  findPath that takes nodes instead of Vectors
 // might be useful
 int Maze::findPath( const Node * const start , const Node * const end )
 {
@@ -130,7 +130,7 @@ int Maze::findPath( const Node * const start , const Node * const end )
 
 
 // returns a pointer to the neighbor node at direction dir from pos
-Node * Maze::getNeighborNode( Coord pos , direction dir )
+Node * Maze::getNeighborNode( Vector::Pos pos , direction dir )
 {
 	int x = pos.x() + dir % 3 - 1;
 	int y = pos.y() + dir / 3 - 1;
@@ -162,7 +162,7 @@ void Maze::initNodes()
 	{
 		for ( int y = 0; y < MAZE_H; y++ )
 		{
-			maze[ x ][ y ] = new Node( Coord( x , y ) );
+			maze[ x ][ y ] = new Node( Vector::Pos( x , y ) );
 		}
 	}
 }

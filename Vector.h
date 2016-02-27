@@ -2,7 +2,6 @@
 
 namespace Micromouse
 {
-
 	/* defines directions 0-8, with 4 being NONE
 	it is done this way to make converting from direction to Vectorinates easier
 	here are the 8 directions
@@ -42,11 +41,14 @@ namespace Micromouse
 			int _x , _y;
 		};
 
+
+
+
+
 		// a direction vector that represents a direction and magnitude
 		// it contains a direction 'dir' and int 'mag'
 		// 'dir' cant equal NONE
 		// 'mag' cant be negative or equal to the size of the maze
-
 		class Dir
 		{
 		public:

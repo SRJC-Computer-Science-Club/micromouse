@@ -7,6 +7,8 @@ namespace Micromouse
 
 	namespace Vector
 	{
+		// Pos ///////////////////////////////////////////////////
+
 		Pos::Pos( int x , int y ) :
 			_x( x ) ,
 			_y( y )
@@ -14,29 +16,45 @@ namespace Micromouse
 			validateSelf();
 		}
 
+
+
 		Pos::~Pos()
 		{
 		}
+
+
 
 		int Pos::x()
 		{
 			return _x;
 		}
+
+
+
 		int Pos::y()
 		{
 			return _y;
 		}
+
+
+
 		void Pos::x( int x )
 		{
 			_x = x;
 			validateSelf();
 
 		}
+
+
+
 		void Pos::y( int y )
 		{
 			_y = y;
 			validateSelf();
 		}
+
+
+
 
 		void Pos::validateSelf()
 		{
@@ -51,6 +69,8 @@ namespace Micromouse
 
 
 
+		// Dir ///////////////////////////////////////////////////
+
 		Dir::Dir( direction dir , int mag ):
 			_dir( dir ),
 			_mag( mag )
@@ -58,17 +78,25 @@ namespace Micromouse
 			validateSelf();
 		}
 
+
+
 		Dir::~Dir() {}
+
+
 
 		direction Dir::dir()
 		{
 			return _dir;
 		}
 
+
+
 		int Dir::mag()
 		{
 			return _mag;
 		}
+
+
 
 		void Dir::dir( direction dir )
 		{
@@ -76,11 +104,15 @@ namespace Micromouse
 			validateSelf();
 		}
 
+
+
 		void Dir::mag( int mag )
 		{
 			_mag = mag;
 			validateSelf();
 		}
+
+
 
 		void Dir::validateSelf()
 		{
@@ -90,8 +122,6 @@ namespace Micromouse
 			//TODO use constant
 			assert( _mag < 16 );
 		}
-
-
 	}
 
 

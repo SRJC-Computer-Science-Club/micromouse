@@ -17,12 +17,14 @@ namespace Micromouse
 		int getF() const;
 		int getG() const;
 		Vector::Pos getPos() const;
-		Node* getParent();
+		Node* getParent() const;
+		direction getDir() const;
 
 		//setters
 		void setG( const int newG );
 		void setF( const int newF );
 		void setParent( Node * const newParent );
+		void setDir( direction dir );
 		
 		bool isDirectionBlocked( direction dir );
 		bool isClosed();
@@ -33,7 +35,9 @@ namespace Micromouse
 		bool openDirections[ 8 ] = { true , true , true , true , true , true , true , true };
 		int G = INF; //movement cost
 		int F = INF; //movement + hueristic cost
-		Node* parent = nullptr;
+		Node* parent = nullptr; // the parent node used for pathfinding
+		direction dir; // the direction from the parent node to self
+
 		Vector::Pos pos;
 
 		bool closed = false;

@@ -4,9 +4,6 @@
 
 namespace Micromouse
 {
-	const int MAZE_W = 16 , MAZE_H = 16;
-
-
 	class Maze
 	{
 	public:

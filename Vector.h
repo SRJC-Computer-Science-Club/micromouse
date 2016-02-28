@@ -2,8 +2,15 @@
 
 namespace Micromouse
 {
+	//number of cells in maze
+	const int MAZE_W = 16 * 2 - 1 , MAZE_H = 16 * 2 - 1; 
+
+	//number of nodes used to represent the maze
+	const int NUM_NODES_W = MAZE_W * 2 - 1 , NUM_NODES_H = MAZE_H * 2 - 1; 
+
+
 	/* defines directions 0-8, with 4 being NONE
-	it is done this way to make converting from direction to Vectorinates easier
+	it is done this way to make converting from direction to coordinates easier
 	here are the 8 directions
 	NW  N  NE
 

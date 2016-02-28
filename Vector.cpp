@@ -60,10 +60,11 @@ namespace Micromouse
 		{
 			assert( _x >= 0 );
 			assert( _y >= 0 );
+			assert( _x < NUM_NODES_W );
+			assert( _y < NUM_NODES_H );
 
-			//TODO use constants
-			assert( _x < 16 );
-			assert( _y < 16 );
+			// no Node should exist at two odd coordinates
+			assert( ( _x % 2 != 1 ) && ( _y % 2 != 1 ) );
 		}
 
 
@@ -119,8 +120,7 @@ namespace Micromouse
 			assert( _dir != NONE );
 			assert( _mag >= 0 );
 
-			//TODO use constant
-			assert( _mag < 16 );
+			assert( _mag < NUM_NODES_W || _mag < NUM_NODES_H );
 		}
 	}
 

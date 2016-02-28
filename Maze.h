@@ -27,7 +27,7 @@ namespace Micromouse
 		void initNodes();
 		
 		// a 2D array of Nodes that represents the physical maze
-		Node* maze[ MAZE_W ][ MAZE_H ];
+		Node* maze[ NUM_NODES_W ][ NUM_NODES_H ];
 
 
 

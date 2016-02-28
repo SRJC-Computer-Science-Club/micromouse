@@ -59,13 +59,6 @@ int Maze::findPath( Vector::Pos start , Vector::Pos end )
 		for ( direction dir = direction::E; dir != direction::NONE; ++dir )
 			//loop through neighbor nodes
 		{
-			// BUG TODO see why this returns invalid objects sometimes
-			// TODO incorporate this into getNeighborNode
-			if ( currentNode->isDirectionBlocked( dir ) )
-			{
-				continue; //neighbor node not reachable from current node
-			}
-
 			neighborNode = getNeighborNode( currentNode->getPos() , dir );
 
 			if ( neighborNode == nullptr )

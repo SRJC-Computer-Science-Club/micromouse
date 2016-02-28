@@ -19,9 +19,6 @@ namespace Micromouse
 
 
 
-
-
-
 	// this is to allow the sorting of the vector of Nodes
 	// sorts in descending order
 	bool nodeComparator( const Node* lhs , const Node* rhs )
@@ -35,9 +32,9 @@ namespace Micromouse
 	{
 		std::vector< Node* > openNodes;
 
-		// assume 3/4 of the maze will need to be searched on average;
+		// assume 1/2 of the maze will need to be searched on average;
 		// this prevents too many resizes, idk if this is optimal I was just estimating
-		openNodes.reserve( static_cast< int >( MAZE_W * MAZE_H * 0.75 ) );
+		openNodes.reserve( static_cast< int >( NUM_NODES_W * NUM_NODES_H * 0.5f ) );
 
 		openNodes.push_back( maze[ start.x() ][ start.y() ] );// the start node is added to openNodes
 		maze[ start.x() ][ start.y() ]->setG( 0 ); // initialize the movement cost to 0 for the first node
@@ -63,20 +60,6 @@ namespace Micromouse
 			for ( direction dir = direction::E; dir != direction::NONE; ++dir )
 				//loop through neighbor nodes
 			{
-				// TODO get diagonals working
-				//Diagonals are broken right now so this will skip over them
-				if ( dir == direction::NW || dir == direction::SW || dir == direction::NE || dir == direction::SE )
-				{
-					continue; // skip checking diagonals
-				}
-
-				// BUG TODO see why this returns invalid objects sometimes
-				// TODO incorporate this into getNeighborNode
-				if ( currentNode->isDirectionBlocked( dir ) )
-				{
-					continue; //neighbor node not reachable from current node
-				}
-
 				neighborNode = getNeighborNode( currentNode->getPos() , dir );
 
 				if ( neighborNode == nullptr )
@@ -148,7 +131,7 @@ namespace Micromouse
 		int x = pos.x() + dir % 3 - 1;
 		int y = pos.y() + dir / 3 - 1;
 
-		if ( x >= 0 && x < MAZE_W && y >= 0 && y < MAZE_H )
+		if ( x >= 0 && x < NUM_NODES_W && y >= 0 && y < NUM_NODES_H )
 		{
 			return maze[ x ][ y ];
 		}
@@ -168,15 +151,15 @@ namespace Micromouse
 
 
 
+
 	// populates the maze with Nodes
 	void Maze::initNodes()
 	{
-		// TODO initialize to nullptrs instead and only create Nodes as needed
-		for ( int x = 0; x < MAZE_W; x++ )
+		for ( int x = 0; x < NUM_NODES_W; x++ )
 		{
-			for ( int y = 0; y < MAZE_H; y++ )
+			for ( int y = 0; y < NUM_NODES_H; y++ )
 			{
-				maze[ x ][ y ] = new Node( Vector::Pos( x , y ) );
+				maze[ x ][ y ] = nullptr;
 			}
 		}
 	}

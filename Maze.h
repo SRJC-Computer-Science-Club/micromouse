@@ -15,7 +15,9 @@ namespace Micromouse
 		int findPath( Vector::Pos start , Vector::Pos end );
 		int findPath( const Node * const start , const Node * const end );
 
-
+		// adds a Node to the Maze
+		// 'pos' is the position of the new Node being created
+		void addNode( Vector::Pos newPos );
 
 	private:
 		// returns a pointer to the node in the direction 'dir' from the given Vector::Pos 'pos'

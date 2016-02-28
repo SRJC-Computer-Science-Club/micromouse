@@ -6,9 +6,6 @@
 
 namespace Micromouse
 {
-	const int MAZE_W = 16 , MAZE_H = 16;
-
-
 	class Maze
 	{
 	public:
@@ -20,7 +17,9 @@ namespace Micromouse
 		Path * findPath( Vector::Pos start , Vector::Pos end );
 		Path * findPath( const Node * const start , const Node * const end );
 
-
+		// adds a Node to the Maze
+		// 'pos' is the position of the new Node being created
+		void addNode( Vector::Pos newPos );
 
 	private:
 		// returns a pointer to the node in the direction 'dir' from the given Vector::Pos 'pos'
@@ -38,7 +37,7 @@ namespace Micromouse
 		void initNodes();
 		
 		// a 2D array of Nodes that represents the physical maze
-		Node* maze[ MAZE_W ][ MAZE_H ];
+		Node* maze[ NUM_NODES_W ][ NUM_NODES_H ];
 
 
 

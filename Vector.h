@@ -2,8 +2,15 @@
 
 namespace Micromouse
 {
+	//number of cells in maze
+	const int MAZE_W = 16 * 2 - 1 , MAZE_H = 16 * 2 - 1; 
+
+	//number of nodes used to represent the maze
+	const int NUM_NODES_W = MAZE_W * 2 - 1 , NUM_NODES_H = MAZE_H * 2 - 1; 
+
+
 	/* defines directions 0-8, with 4 being NONE
-	it is done this way to make converting from direction to Vectorinates easier
+	it is done this way to make converting from direction to coordinates easier
 	here are the 8 directions
 	NW  N  NE
 
@@ -20,7 +27,7 @@ namespace Micromouse
 	{
 		// a position vector that represents a coordinate within the maze
 		// it contains x and y integers
-		// the values for x and y are bounded to 0<=x,y<MAZE_W,MAZE_H
+		// the values for x and y are bounded to 0<=x,y<NUM_NODES_W,NUM_NODES_H
 		class Pos
 		{
 		public:
@@ -29,8 +36,8 @@ namespace Micromouse
 
 			int x(); // return x
 			int y(); // return y 
-			void x( int x ); // set x, 0<=x<MAZE_W
-			void y( int y ); // set y, 0<=y<MAZE_H
+			void x( int x ); // set x, 0<=x<NUM_NODES_W
+			void y( int y ); // set y, 0<=y<NUM_NODES_H
 
 
 			// static const Vector::Pos& UNDEFINED;//a Vector that represents an undefined Vector
@@ -58,7 +65,7 @@ namespace Micromouse
 			direction dir(); //return the direction
 			int mag(); // return the magnitude
 			void dir( direction dir ); // set the direction, dir != NOONE
-			void mag( int mag ); // set the magnitude, 0 <= mag < maze size
+			void mag( int mag ); // set the magnitude, 0 <= mag < NUM_NODES_W,NUM_NODES_H
 
 		private:
 			void validateSelf(); // ensures dir and mag are with bounds

@@ -10,21 +10,6 @@ namespace Micromouse
 	Node::Node( Vector::Pos newPos ) :
 		pos( newPos )
 	{
-		int x , y;
-		for ( direction dir = direction::E; dir != direction::NONE; ++dir )
-		{
-			//TODO make into a function
-			//see Maze.cpp getNeighborNode function for explanation
-			x = pos.x() + dir % 3 - 1;
-			y = pos.y() + dir / 3 - 1;
-
-			//TODO replace with constants
-			if ( x < 0 || x >= 16 || y < 0 || y >= 16 )
-			{
-				openDirections[ dir ] = false;
-			}
-		}
-
 		// TEMP randomly closes nodes
 		if ( rand() % 10 == 1 )
 		{
@@ -62,15 +47,12 @@ namespace Micromouse
 		return parent;
 	}
 
+
 	direction Node::getDir() const
 	{
 		return direction();
 	}
 
-	bool Node::isDirectionBlocked( direction dir )
-	{
-		return !openDirections[ dir ];
-	}
 
 	bool Micromouse::Node::isClosed()
 	{

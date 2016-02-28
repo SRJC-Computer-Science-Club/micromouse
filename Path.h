@@ -2,11 +2,13 @@
 #include <stack>
 #include "Vector.h"
 
+
 namespace Micromouse
 {
 	// This class represents the path the mouse should follow to reach the destination
 	// It consists of a stack of direction vectors that when executed in order will
 	// guide the mouse to the finish destination
+
 	class Path
 	{
 	public:

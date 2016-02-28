@@ -26,13 +26,11 @@ namespace Micromouse
 		void setParent( Node * const newParent );
 		void setDir( direction dir );
 		
-		bool isDirectionBlocked( direction dir );
 		bool isClosed();
 		void close();
 		void open();
 
 	private:
-		bool openDirections[ 8 ] = { true , true , true , true , true , true , true , true };
 		int G = INF; //movement cost
 		int F = INF; //movement + hueristic cost
 		Node* parent = nullptr; // the parent node used for pathfinding

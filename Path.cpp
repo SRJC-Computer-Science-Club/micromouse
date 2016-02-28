@@ -3,6 +3,7 @@
 
 
 
+
 namespace Micromouse
 {
 	Path::Path()
@@ -13,6 +14,7 @@ namespace Micromouse
 	Path::~Path()
 	{
 	}
+
 
 
 

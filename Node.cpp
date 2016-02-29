@@ -42,10 +42,17 @@ namespace Micromouse
 		return pos;
 	}
 
-	Node * Node::getParent()
+	Node * Node::getParent() const
 	{
 		return parent;
 	}
+
+
+	direction Node::getDir() const
+	{
+		return direction();
+	}
+
 
 	bool Micromouse::Node::isClosed()
 	{
@@ -71,6 +78,10 @@ namespace Micromouse
 	void Node::setParent( Node * const newParent )
 	{
 		parent = newParent;
+	}
+
+	void Node::setDir( direction dir )
+	{
 	}
 
 

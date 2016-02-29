@@ -19,6 +19,7 @@ namespace Micromouse
 
 
 
+
 	// this is to allow the sorting of the vector of Nodes
 	// sorts in descending order
 	bool nodeComparator( const Node* lhs , const Node* rhs )
@@ -28,13 +29,14 @@ namespace Micromouse
 
 
 
-	int Maze::findPath( Vector::Pos start , Vector::Pos end )
+	Path * Maze::findPath( Vector::Pos start , Vector::Pos end )
 	{
 		std::vector< Node* > openNodes;
 
 		// assume 1/2 of the maze will need to be searched on average;
 		// this prevents too many resizes, idk if this is optimal I was just estimating
 		openNodes.reserve( static_cast< int >( NUM_NODES_W * NUM_NODES_H * 0.5f ) );
+
 
 		openNodes.push_back( maze[ start.x() ][ start.y() ] );// the start node is added to openNodes
 		maze[ start.x() ][ start.y() ]->setG( 0 ); // initialize the movement cost to 0 for the first node
@@ -50,8 +52,7 @@ namespace Micromouse
 
 			if ( currentNode == maze[ end.x() ][ end.y() ] ) // if we are at the end node then we are done!
 			{
-				// TODO: this should return a list of Vectors for the motion control to utilize
-				return currentNode->getF(); // return the cost of the trip
+				return createPath( currentNode ); // create a Path object for motion control to utilize
 			}
 
 			openNodes.pop_back();
@@ -94,6 +95,7 @@ namespace Micromouse
 				//if we made it to this point then
 				//this path is the best so far
 				neighborNode->setParent( currentNode );
+				neighborNode->setDir( dir );
 				neighborNode->setG( tentative_G );
 				neighborNode->setF( tentative_G + 0 /*TODO calculate Hueristic here*/ );
 			}
@@ -101,14 +103,15 @@ namespace Micromouse
 
 		// no path was found
 		// this should never happen in real maze
-		return -1;
+		// TODO throw error if this is reached in real testing
+		return nullptr;
 	}
 
 
 
 	// an overload of  findPath that takes nodes instead of Vectors
 	// might be useful
-	int Maze::findPath( const Node * const start , const Node * const end )
+	Path * Maze::findPath( const Node * const start , const Node * const end )
 	{
 		return findPath( start->getPos() , end->getPos() );
 	}
@@ -121,6 +124,7 @@ namespace Micromouse
 	{
 		maze[ pos.x() ][ pos.y() ] = new Node( pos );
 	}
+
 
 
 
@@ -147,6 +151,37 @@ namespace Micromouse
 		*/
 
 		return nullptr;
+	}
+
+
+
+
+
+	Path * Micromouse::Maze::createPath( const Node * node )
+	{
+		Path* path = new Path;
+		direction travelDir = node->getDir();
+		int mag = 1;
+
+		// while there is more to the path to traverse
+		while ( node != nullptr )
+		{
+			//if we are at the beginning of the path or if the path is not straight
+			if ( node->getParent() == nullptr || node->getParent()->getDir() != travelDir )
+			{
+				// add a step to the path to define the direction and distance need to travel
+				path->addStep( Vector::Dir( travelDir , mag ) );
+
+				travelDir = node->getParent()->getDir();
+				mag = 0;
+			}
+			//else the path is straight so no need for a step
+
+			node = node->getParent();
+			mag++;
+		}
+
+		return path;
 	}
 
 

@@ -116,6 +116,11 @@ namespace Micromouse
 		return findPath( start->getPos() , end->getPos() );
 	}
 
+	// Retruns the Node at the given position.
+	Node* Maze::getNode( Vector::Pos pos )
+	{
+		return maze[ pos.x ][ pos.y ];
+	}
 
 
 

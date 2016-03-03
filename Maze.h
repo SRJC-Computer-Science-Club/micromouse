@@ -17,15 +17,19 @@ namespace Micromouse
 		Path * findPath( Vector::Pos start , Vector::Pos end );
 		Path * findPath( const Node * const start , const Node * const end );
 
+		// returns a Node from the maze
+		// 'pos' is the position of the Node being returned
+		Node* getNode( Vector::Pos pos );
+
 		// adds a Node to the Maze
 		// 'pos' is the position of the new Node being created
 		void addNode( Vector::Pos newPos );
 
-	private:
 		// returns a pointer to the node in the direction 'dir' from the given Vector::Pos 'pos'
 		// if no such node exists then nullptr is returned
-		Node* getNeighborNode( Vector::Pos pos , direction dir ); 
+		Node* getNeighborNode( Vector::Pos pos , direction dir );
 
+	private:
 
 		// creates a Path object after findPath has been called
 		// 'node' is the finish node in the path

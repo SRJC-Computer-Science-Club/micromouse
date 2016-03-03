@@ -48,13 +48,35 @@ namespace Micromouse
 
 	void MouseBot::move(direction dir)
 	{
-
+		pos = pos + dir;
 	}
 
 	void MouseBot::moveForward()
 	{
-
+		move(facing);
 	}
 
+	void MouseBot::turnLeft()
+	{
+		facing = facing % NW;
+		moveForward();
+		facing = facing % NW;
+	}
 
+	void MouseBot::turnRight()
+	{
+		facing = facing % NE;
+		moveForward();
+		facing = facing % NE;
+	}
+
+	void MouseBot::rotateLeft()
+	{
+		facing = facing % W;
+	}
+
+	void MouseBot::rotateRight()
+	{
+		facing = facing % E;
+	}
 }

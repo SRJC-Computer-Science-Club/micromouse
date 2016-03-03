@@ -25,16 +25,11 @@ namespace Micromouse
 
 	enum direction { N, NE, E, SE, S, SW, W, NW, NONE };
 
-	direction operator+(const direction &dir1, const direction &dir2)
-	{
-		return static_cast<direction>( (dir1 + dir2) % 8 );
-	}
-
-
-	direction& operator++( direction& dir )
-	{ //++prefix
-		return dir = dir + NE;
-	}
+	// --Rotate Function: dir1 % dir2 --
+	// Returns dir1, rotated in the direction of dir2,
+	// where north is forward, east is right, south is backward, etc.
+	direction operator%(const direction &dir1, const direction &dir2);
+	direction& operator++(direction& dir);
 
 	namespace Vector
 	{
@@ -47,8 +42,8 @@ namespace Micromouse
 			Pos( int x , int y );
 			~Pos();
 
-			int x(); // return x
-			int y(); // return y 
+			int x() const; // return x
+			int y() const; // return y 
 			void x( int x ); // set x, 0 <= x < NUM_NODES_W
 			void y( int y ); // set y, 0 <= y < NUM_NODES_H
 

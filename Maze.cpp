@@ -132,13 +132,15 @@ namespace Micromouse
 	// returns a pointer to the neighbor node at direction dir from pos
 	Node * Maze::getNeighborNode( Vector::Pos pos , direction dir )
 	{
-		int x = pos.x() + dir % 3 - 1;
-		int y = pos.y() + dir / 3 - 1;
+		// Uses old direction enum order
+		// int x = pos.x() + dir % 3 - 1;
+		// int y = pos.y() + dir / 3 - 1;
+		//if (x >= 0 && x < NUM_NODES_W && y >= 0 && y < NUM_NODES_H) { return maze[x][y]; }
 
-		if ( x >= 0 && x < NUM_NODES_W && y >= 0 && y < NUM_NODES_H )
-		{
-			return maze[ x ][ y ];
-		}
+		Vector::Pos offsetPos = pos + dir;
+		
+		return maze[offsetPos.x()][offsetPos.y()];
+
 		/*       x
 			 -1  0  1
 			----------

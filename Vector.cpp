@@ -1,8 +1,21 @@
 #include "Vector.h"
 #include <assert.h>
+#include <iostream>
+
+using namespace std;
 
 namespace Micromouse
 {
+	direction operator%(const direction &dir1, const direction &dir2)
+	{
+		return static_cast<direction>((dir1 + dir2) % 8);
+	}
+
+	direction& operator++(direction& dir)
+	{ //++prefix
+		return dir = dir % NE;
+	}
+
 	//static const Pos & UNDEFINED = Pos( 0 , -1 );
 
 	namespace Vector
@@ -24,14 +37,14 @@ namespace Micromouse
 
 
 
-		int Pos::x()
+		int Pos::x() const
 		{
 			return _x;
 		}
 
 
 
-		int Pos::y()
+		int Pos::y() const
 		{
 			return _y;
 		}
@@ -61,10 +74,10 @@ namespace Micromouse
 			int x = _x;
 			int y = _y;
 
+			if (dir == NE || dir == N || dir == NW) { y++; }
 			if (dir == NE || dir == E || dir == SE) { x++; }
+			if (dir == SE || dir == S || dir == SW) { y--; }
 			if (dir == NW || dir == W || dir == SW) { x--; }
-			if (dir == SE || dir == S || dir == SW) { y++; }
-			if (dir == NE || dir == N || dir == NW) { y--; }
 
 			return Pos(x, y);
 		}
@@ -79,7 +92,7 @@ namespace Micromouse
 			assert( _y < NUM_NODES_H );
 
 			// no Pos should have a position at two odd coordinates
-			assert( ( _x % 2 != 1 ) && ( _y % 2 != 1 ) );
+			//assert( ( _x % 2 != 1 ) && ( _y % 2 != 1 ) );
 		}
 
 

@@ -19,9 +19,22 @@ namespace Micromouse
 	SW  s  SE
 	*/
 	// TODO: move into own namespace maybe?
-	enum direction { NW , N , NE , W , NONE , E , SW , S , SE };
-	
-	direction& operator++( direction& dir );
+
+	//Old enum order
+	//enum direction { NW , N , NE , W , NONE , E , SW , S , SE };
+
+	enum direction { N, NE, E, SE, S, SW, W, NW, NONE };
+
+	direction operator+(const direction &dir1, const direction &dir2)
+	{
+		return static_cast<direction>( (dir1 + dir2) % 8 );
+	}
+
+
+	direction& operator++( direction& dir )
+	{ //++prefix
+		return dir = dir + NE;
+	}
 
 	namespace Vector
 	{
@@ -36,9 +49,10 @@ namespace Micromouse
 
 			int x(); // return x
 			int y(); // return y 
-			void x( int x ); // set x, 0<=x<NUM_NODES_W
-			void y( int y ); // set y, 0<=y<NUM_NODES_H
+			void x( int x ); // set x, 0 <= x < NUM_NODES_W
+			void y( int y ); // set y, 0 <= y < NUM_NODES_H
 
+			Pos operator+(direction dir); // Returns a Pos that has been offset in the given direction.
 
 			// static const Vector::Pos& UNDEFINED;//a Vector that represents an undefined Vector
 

@@ -56,6 +56,21 @@ namespace Micromouse
 
 
 
+		Pos Pos::operator+(direction dir)
+		{
+			int x = _x;
+			int y = _y;
+
+			if (dir == NE || dir == E || dir == SE) { x++; }
+			if (dir == NW || dir == W || dir == SW) { x--; }
+			if (dir == SE || dir == S || dir == SW) { y++; }
+			if (dir == NE || dir == N || dir == NW) { y--; }
+
+			return Pos(x, y);
+		}
+
+
+
 		void Pos::validateSelf()
 		{
 			assert( _x >= 0 );
@@ -122,18 +137,5 @@ namespace Micromouse
 
 			assert( _mag < NUM_NODES_W || _mag < NUM_NODES_H );
 		}
-	}
-
-
-	direction& operator++( direction& dir )
-	{ //++prefix
-		if ( dir == direction::SE )
-		{
-			return dir = direction::NW; // rollover
-		}
-
-		int temp = dir;
-
-		return dir = static_cast<direction> ( ++temp );
 	}
 }

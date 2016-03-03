@@ -63,7 +63,7 @@ namespace Micromouse
 			assert( _x < NUM_NODES_W );
 			assert( _y < NUM_NODES_H );
 
-			// no Node should exist at two odd coordinates
+			// no Pos should have a position at two odd coordinates
 			assert( ( _x % 2 != 1 ) && ( _y % 2 != 1 ) );
 		}
 

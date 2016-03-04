@@ -1,8 +1,41 @@
 #include "Vector.h"
 #include <assert.h>
 
+using namespace std;
+
 namespace Micromouse
 {
+	direction operator+(const direction &dir1, const direction &dir2)
+	{
+		return static_cast<direction>(((int)dir1 + (int)dir2) % 8);
+	}
+
+	direction operator-(const direction &dir1, const direction &dir2)
+	{
+		return static_cast<direction>(((int)dir1 - (int)dir2) % 8);
+	}
+
+	direction& operator++(direction& dir)
+	{ //++prefix
+		return dir = static_cast<direction>(((int)dir + 1) % 9);
+	}
+
+	ostream& operator<<(ostream& out, const direction& dir)
+	{
+		switch (dir)
+		{
+		case N:  return out << "N";
+		case NE: return out << "NE";
+		case E:  return out << "E";
+		case SE: return out << "SE";
+		case S:  return out << "S";
+		case SW: return out << "SW";
+		case W:  return out << "W";
+		case NW: return out << "NW";
+		default: return out << "NONE";
+		}
+	}
+
 	//static const Pos & UNDEFINED = Pos( 0 , -1 );
 
 	namespace Vector
@@ -24,14 +57,14 @@ namespace Micromouse
 
 
 
-		int Pos::x()
+		int Pos::x() const
 		{
 			return _x;
 		}
 
 
 
-		int Pos::y()
+		int Pos::y() const
 		{
 			return _y;
 		}
@@ -56,6 +89,21 @@ namespace Micromouse
 
 
 
+		Pos Pos::operator+(direction dir)
+		{
+			int x = _x;
+			int y = _y;
+
+			if (dir == NE || dir == N || dir == NW) { y++; }
+			if (dir == NE || dir == E || dir == SE) { x++; }
+			if (dir == SE || dir == S || dir == SW) { y--; }
+			if (dir == NW || dir == W || dir == SW) { x--; }
+
+			return Pos(x, y);
+		}
+
+
+
 		void Pos::validateSelf()
 		{
 			assert( _x >= 0 );
@@ -63,8 +111,8 @@ namespace Micromouse
 			assert( _x < NUM_NODES_W );
 			assert( _y < NUM_NODES_H );
 
-			// no Node should exist at two odd coordinates
-			assert( ( _x % 2 != 1 ) && ( _y % 2 != 1 ) );
+			// no Pos should have a position at two odd coordinates
+			assert( ( _x % 2 == 0 ) || ( _y % 2 == 0 ) );
 		}
 
 
@@ -122,18 +170,5 @@ namespace Micromouse
 
 			assert( _mag < NUM_NODES_W || _mag < NUM_NODES_H );
 		}
-	}
-
-
-	direction& operator++( direction& dir )
-	{ //++prefix
-		if ( dir == direction::SE )
-		{
-			return dir = direction::NW; // rollover
-		}
-
-		int temp = dir;
-
-		return dir = static_cast<direction> ( ++temp );
 	}
 }

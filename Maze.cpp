@@ -58,7 +58,10 @@ namespace Micromouse
 			openNodes.pop_back();
 			currentNode->close();
 
-			for ( direction dir = direction::E; dir != direction::NONE; ++dir )
+			// Uses old direction order
+			//for (direction dir = E; dir != direction::NONE; ++dir)
+
+			for (direction dir = N; dir != NONE; ++dir)
 				//loop through neighbor nodes
 			{
 				neighborNode = getNeighborNode( currentNode->getPos() , dir );
@@ -137,21 +140,23 @@ namespace Micromouse
 	// returns a pointer to the neighbor node at direction dir from pos
 	Node * Maze::getNeighborNode( Vector::Pos pos , direction dir )
 	{
-		int x = pos.x() + dir % 3 - 1;
-		int y = pos.y() + dir / 3 - 1;
+		// Uses old direction enum order
+		// int x = pos.x() + dir % 3 - 1;
+		// int y = pos.y() + dir / 3 - 1;
+		//if (x >= 0 && x < NUM_NODES_W && y >= 0 && y < NUM_NODES_H) { return maze[x][y]; }
 
-		if ( x >= 0 && x < NUM_NODES_W && y >= 0 && y < NUM_NODES_H )
-		{
-			return maze[ x ][ y ];
-		}
+		Vector::Pos offsetPos = pos + dir;
+		
+		return maze[offsetPos.x()][offsetPos.y()];
+
 		/*       x
 			 -1  0  1
 			----------
-		 -1| NW| N |NE|
+		  1| NW| N |NE|
 		   |---+---+--|
 		y 0| W |   | E|
 		   |---+---+--|
-		  1| SW| s  SE|
+		 -1| SW| s  SE|
 			----------
 		*/
 

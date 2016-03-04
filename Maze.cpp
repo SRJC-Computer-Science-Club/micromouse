@@ -58,7 +58,10 @@ namespace Micromouse
 			openNodes.pop_back();
 			currentNode->close();
 
-			for ( direction dir = direction::E; dir != direction::NONE; ++dir )
+			// Uses old direction order
+			//for (direction dir = E; dir != direction::NONE; ++dir)
+
+			for (direction dir = N; dir != NONE; ++dir)
 				//loop through neighbor nodes
 			{
 				neighborNode = getNeighborNode( currentNode->getPos() , dir );
@@ -144,11 +147,11 @@ namespace Micromouse
 		/*       x
 			 -1  0  1
 			----------
-		 -1| NW| N |NE|
+		  1| NW| N |NE|
 		   |---+---+--|
 		y 0| W |   | E|
 		   |---+---+--|
-		  1| SW| s  SE|
+		 -1| SW| s  SE|
 			----------
 		*/
 

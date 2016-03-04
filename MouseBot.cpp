@@ -58,25 +58,25 @@ namespace Micromouse
 
 	void MouseBot::turnLeft()
 	{
-		facing = facing % NW;
+		facing = facing + NW;
 		moveForward();
-		facing = facing % NW;
+		facing = facing + NW;
 	}
 
 	void MouseBot::turnRight()
 	{
-		facing = facing % NE;
+		facing = facing + NE;
 		moveForward();
-		facing = facing % NE;
+		facing = facing + NE;
 	}
 
 	void MouseBot::rotateLeft()
 	{
-		facing = facing % W;
+		facing = facing + W;
 	}
 
 	void MouseBot::rotateRight()
 	{
-		facing = facing % E;
+		facing = facing + E;
 	}
 }

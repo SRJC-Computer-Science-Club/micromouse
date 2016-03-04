@@ -119,7 +119,7 @@ namespace Micromouse
 	// Retruns the Node at the given position.
 	Node* Maze::getNode( Vector::Pos pos )
 	{
-		return maze[ pos.x ][ pos.y ];
+		return maze[ pos.x() ][ pos.y() ];
 	}
 
 

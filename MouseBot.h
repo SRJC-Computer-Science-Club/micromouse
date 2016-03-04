@@ -19,6 +19,7 @@ namespace Micromouse
 		MouseBot(Vector::Pos pos);
 
 		Vector::Pos getPos();					// Returns the position of the mouse
+		direction getFacing();					// Return the direction the mouse is facing.
 		void setPos(int x, int y);				// Sets the position to (x,y)
 		void setPos(Vector::Pos pos);			// Sets the position to pos
 

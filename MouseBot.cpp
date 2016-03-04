@@ -34,6 +34,11 @@ namespace Micromouse
 		return pos;
 	}
 
+	direction MouseBot::getFacing()
+	{
+		return facing;
+	}
+
 	void MouseBot::setPos(int x, int y)
 	{
 		setPos(Vector::Pos(x, y));

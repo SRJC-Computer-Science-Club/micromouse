@@ -25,7 +25,7 @@ namespace Micromouse
 
 
 
-	Vector::Dir Path::nextStep()
+	Vector::Dir Path::popStep()
 	{
 		assert( !path.empty() );
 

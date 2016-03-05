@@ -103,6 +103,12 @@ namespace Micromouse
 		}
 
 
+		Pos Pos::operator*(int scalar)
+		{
+			return Pos(_x*scalar, _y*scalar);
+		}
+
+
 
 		void Pos::validateSelf()
 		{

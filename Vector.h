@@ -61,6 +61,7 @@ namespace Micromouse
 			void y( int y ); // set y, 0 <= y < NUM_NODES_H
 
 			Pos operator+(direction dir); // Returns a Pos that has been offset in the given direction.
+			Pos operator*(int scalar); // Returns a Pos with x and y multiplied by scalar.
 
 			// static const Vector::Pos& UNDEFINED;//a Vector that represents an undefined Vector
 

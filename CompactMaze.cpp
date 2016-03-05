@@ -97,9 +97,12 @@ namespace Micromouse
 
 		while (!path.empty())
 		{
-			Vector::Pos* temp = path.back();
-			Vector::Pos head = Vector::Pos(temp->x(), temp->y());
+			int r = rand() % path.size();
+			Vector::Pos* temp = path[r];
+			path[r] = path.back();
 			path.pop_back();
+
+			Vector::Pos head = Vector::Pos(temp->x(), temp->y());
 			delete temp;
 
 			direction dir = randomPossibleDirection(head, path);
@@ -120,6 +123,12 @@ namespace Micromouse
 			}
 			cout << path.size() << endl;
 		}
+
+		for (int i = 0; i < 20; i++)
+		{
+			destroyRandomWall();
+		}
+
 		for (int y = 0; y < height; y++)
 		{
 			for (int x = 0; x < width; x++)
@@ -172,6 +181,50 @@ namespace Micromouse
 			int r = rand() % numPossibleDirections;
 			return possibleDirections[r];
 		}
+	}
+
+	void CompactMaze::destroyRandomWall()
+	{
+		int x;
+		int y = rand() % height;
+		
+		if (y%2 == 0)
+		{
+			x = 2 * (rand() % ((width - 1) / 2)) + 1;
+			Vector::Pos pos(x, y);
+			if (getNumAdjacentWalls(pos + N) > 1 && getNumAdjacentWalls(pos + S) > 1)
+			{
+				setOpen(true, pos);
+			}
+			else
+			{
+				destroyRandomWall();
+			}
+		}
+		else
+		{
+			x = 2 * (rand() % ((width + 1) / 2));
+			Vector::Pos pos(x, y);
+			if (getNumAdjacentWalls(pos + E) > 1 && getNumAdjacentWalls(pos + W) > 1)
+			{
+				setOpen(true, pos);
+			}
+			else
+			{
+				destroyRandomWall();
+			}
+		}
+
+	}
+
+	int CompactMaze::getNumAdjacentWalls(Vector::Pos pos)
+	{
+		int n = 0;
+		if (!isOpen(pos + N)) n++;
+		if (!isOpen(pos + E)) n++;
+		if (!isOpen(pos + S)) n++;
+		if (!isOpen(pos + W)) n++;
+		return n;
 	}
 
 	ostream& operator<<(ostream& out, const CompactMaze& maze)

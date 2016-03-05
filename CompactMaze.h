@@ -41,6 +41,8 @@ namespace Micromouse
 		void generateRandomMap();
 	private:
 		direction randomPossibleDirection(Vector::Pos pos, vector<Vector::Pos*>& path);
+		void destroyRandomWall();
+		int getNumAdjacentWalls(Vector::Pos pos);
 
 		FlagMatrix open;
 		FlagMatrix explored;

@@ -66,9 +66,15 @@ namespace Micromouse
 
 	bool FlagMatrix::getFlag(int x, int y) const
 	{
-		assert((x < width) && (y < height) && (x >= 0) && (y >= 0));
-		Index i = indexFromCoord(x, y);
-		return (data[i.byteIndex] & i.flagOffset) > 0;
+		if ((x < width) && (y < height) && (x >= 0) && (y >= 0))
+		{
+			Index i = indexFromCoord(x, y);
+			return (data[i.byteIndex] & i.flagOffset) > 0;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	int FlagMatrix::getWidth() const

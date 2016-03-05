@@ -92,52 +92,75 @@ namespace Micromouse
 		setExplored(true, 0, 0);
 		setOpen(true, 0, 0);
 
-		Vector::Pos head = Vector::Pos(0, 0);
-		direction dir = randomPossibleDirection(head);
+		vector<Vector::Pos*> path;
+		path.push_back(new Vector::Pos(0, 0));
 
-		while (dir != NONE)
+		while (!path.empty())
 		{
-			setExplored(true, head + N);
-			setExplored(true, head + E);
-			setExplored(true, head + S);
-			setExplored(true, head + W);
+			Vector::Pos* temp = path.back();
+			Vector::Pos head = Vector::Pos(temp->x(), temp->y());
+			path.pop_back();
+			delete temp;
 
-			head = head + dir;
-			setOpen(true, head);
+			direction dir = randomPossibleDirection(head, path);
 
-			head = head + dir;
-			setOpen(true, head);
-			setExplored(true, head);
+			while (dir != NONE)
+			{
 
-			dir = randomPossibleDirection(head);
+				head = head + dir;
+				setOpen(true, head);
+				setExplored(true, head);
+
+				head = head + dir;
+				setOpen(true, head);
+				setExplored(true, head);
+
+				dir = randomPossibleDirection(head, path);
+				cout << path.size() << endl;
+			}
+			cout << path.size() << endl;
 		}
-		
+		for (int y = 0; y < height; y++)
+		{
+			for (int x = 0; x < width; x++)
+			{
+				if (x % 2 == 0 || y % 2 == 0)
+				{
+					setExplored(true, x, y);
+				}
+			}
+		}
 	}
 
-	direction CompactMaze::randomPossibleDirection(Vector::Pos pos)
+	direction CompactMaze::randomPossibleDirection(Vector::Pos pos, vector<Vector::Pos*>& path)
 	{
 		direction possibleDirections[4];
 		int numPossibleDirections = 0;
 
-		if (isInsideMaze(pos + N) && !isExplored(pos + N))
+		if (isInsideMaze(pos + N) && !isExplored(pos + N + N))
 		{
 			possibleDirections[numPossibleDirections] = N;
 			numPossibleDirections++;
 		}
-		if (isInsideMaze(pos + E) && !isExplored(pos + E))
+		if (isInsideMaze(pos + E) && !isExplored(pos + E + E))
 		{
 			possibleDirections[numPossibleDirections] = E;
 			numPossibleDirections++;
 		}
-		if (isInsideMaze(pos + S) && !isExplored(pos + S))
+		if (isInsideMaze(pos + S) && !isExplored(pos + S + S))
 		{
 			possibleDirections[numPossibleDirections] = S;
 			numPossibleDirections++;
 		}
-		if (isInsideMaze(pos + W) && !isExplored(pos + W))
+		if (isInsideMaze(pos + W) && !isExplored(pos + W + W))
 		{
 			possibleDirections[numPossibleDirections] = W;
 			numPossibleDirections++;
+		}
+
+		if (numPossibleDirections > 1)
+		{
+			path.push_back(new Vector::Pos(pos.x(), pos.y()));
 		}
 
 		if (numPossibleDirections == 0)

@@ -40,7 +40,7 @@ namespace Micromouse
 
 		void generateRandomMap();
 	private:
-		direction randomPossibleDirection(Vector::Pos pos);
+		direction randomPossibleDirection(Vector::Pos pos, vector<Vector::Pos*>& path);
 
 		FlagMatrix open;
 		FlagMatrix explored;

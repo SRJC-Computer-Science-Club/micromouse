@@ -48,21 +48,25 @@ namespace Micromouse
 
 	void FlagMatrix::setFlag(bool flag, int x, int y)
 	{
-		Index i = indexFromCoord(x, y);
+		if ((x < width) && (y < height) && (x >= 0) && (y >= 0))
+		{
+			Index i = indexFromCoord(x, y);
 
-		if (flag)
-		{
-			data[i.byteIndex] = data[i.byteIndex] | i.flagOffset;
-		}
-		else
-		{
-			i.flagOffset = ~i.flagOffset;
-			data[i.byteIndex] = data[i.byteIndex] & i.flagOffset;
+			if (flag)
+			{
+				data[i.byteIndex] = data[i.byteIndex] | i.flagOffset;
+			}
+			else
+			{
+				i.flagOffset = ~i.flagOffset;
+				data[i.byteIndex] = data[i.byteIndex] & i.flagOffset;
+			}
 		}
 	}
 
 	bool FlagMatrix::getFlag(int x, int y) const
 	{
+		assert((x < width) && (y < height) && (x >= 0) && (y >= 0));
 		Index i = indexFromCoord(x, y);
 		return (data[i.byteIndex] & i.flagOffset) > 0;
 	}
@@ -84,7 +88,6 @@ namespace Micromouse
 
 	FlagMatrix::Index FlagMatrix::indexFromCoord(int x, int y) const
 	{
-		assert((x < width) && (y < height) && (x >= 0) && (y >= 0));
 		Index i;
 		int flagIndex = x + y * width;
 		i.byteIndex = flagIndex / NUM_BITS;

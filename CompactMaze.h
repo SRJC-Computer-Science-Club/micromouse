@@ -8,6 +8,11 @@ Author GitHub:	joshuasrjc
 #pragma once
 #include "FlagMatrix.h"
 #include "Vector.h"
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
 namespace Micromouse
 {
 	class CompactMaze
@@ -21,11 +26,17 @@ namespace Micromouse
 		void setExplored(bool flag, int x, int y);
 		void setExplored(bool flag, Vector::Pos pos);
 
-		bool isOpen(int x, int y);
-		bool isOpen(Vector::Pos pos);
+		bool isOpen(int x, int y) const;
+		bool isOpen(Vector::Pos pos) const;
 
-		bool isExplored(int x, int y);
-		bool isExplored(Vector::Pos pos);
+		bool isExplored(int x, int y) const;
+		bool isExplored(Vector::Pos pos) const;
+
+		bool isInsideMaze(int x, int y) const;
+		bool isInsideMaze(Vector::Pos pos) const;
+
+		int getWidth() const;
+		int getHeight() const;
 
 		void generateRandomMap();
 	private:
@@ -36,4 +47,6 @@ namespace Micromouse
 		int width;
 		int height;
 	};
+
+	ostream& operator<<(ostream& out, const CompactMaze& maze);
 }

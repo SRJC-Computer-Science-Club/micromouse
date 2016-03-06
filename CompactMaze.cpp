@@ -126,7 +126,6 @@ namespace Micromouse
 				setExplored(true, head);
 
 				dir = randomPossibleDirection(head, path);
-				cout << path.size() << endl;
 			}
 		}
 

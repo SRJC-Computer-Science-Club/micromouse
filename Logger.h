@@ -14,7 +14,7 @@ log( logLevel ) will output to both the console and the log file
 logC( logLevel ) will output to the console only
 logF( logLevel ) will output to the log file only
 
-log level defines the importance of the log
+logLevel defines the importance of the log
 the log type from most to least importance
 ERROR , WARN , INFO , DEBUG1 , DEBUG2 , DEBUG3
 
@@ -24,8 +24,8 @@ ex. LOG_LEVEL = INFO will only print INFO , WARN , ERROR
 
 // USAGE //
 
-#include "Logger.h"
-LogLevel LOG_LEVEL = LOG_ALL; // this is required
+#include "Logger.h" //required for every file using logging
+const LogLevel LOG_LEVEL = LOG_ALL; // this is required only once in Main
 
 
 log( DEBUG1 ) << "Mouse position: " << pos.x() << " , " << pos.y();

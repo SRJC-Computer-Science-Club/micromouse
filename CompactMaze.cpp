@@ -361,7 +361,7 @@ namespace Micromouse
 		for ( int y = 0; y < height; y++ )
 		{
 			yy = height - y - 1; // flip up right side up
-			//out << "| ";
+
 			for ( int x = 0; x < width; x++ )
 			{
 				if ( isExplored( x , y ) )
@@ -370,11 +370,13 @@ namespace Micromouse
 					{
 						if ( y % 2 == 0 && x % 2 == 1 )
 						{
+							// |
 							line[ 0 ] = sf::Vertex( sf::Vector2f( ns * x + os , ns * ( yy - 1 ) + os ) , color );
 							line[ 1 ] = sf::Vertex( sf::Vector2f( ns * x + os , ns * ( yy + 1 ) + os ) , color );
 						}
 						else if ( y % 2 == 1 && x % 2 == 0 )
 						{
+							// -
 							line[ 0 ] = sf::Vertex( sf::Vector2f( ns * ( x - 1 ) + os , ns * yy + os ) , color );
 							line[ 1 ] = sf::Vertex( sf::Vector2f( ns * ( x + 1 ) + os , ns * yy + os ) , color );
 						}

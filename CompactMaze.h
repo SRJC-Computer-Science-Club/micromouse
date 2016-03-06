@@ -72,7 +72,7 @@ namespace Micromouse
 
 
 #ifdef SFML_GRAPHICS_HPP
-		//draws the maze to the hui
+		//draws the maze to the gui
 		void draw();
 #endif
 

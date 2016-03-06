@@ -7,7 +7,7 @@ Author GitHub:	joshuasrjc
 
 #include "CompactMaze.h"
 #include <stdlib.h>
-#include <iostream>
+#include <assert.h>
 
 using namespace std;
 
@@ -20,7 +20,7 @@ namespace Micromouse
 		open(FlagMatrix(width, height)),
 		explored(FlagMatrix(width, height))
 	{
-
+		assert(width % 4 == 3 && height % 4 == 3);
 	}
 
 
@@ -87,14 +87,21 @@ namespace Micromouse
 
 	// GENERATION FUNCTIONS //
 
-	void CompactMaze::generateRandomMap()
+	void CompactMaze::generateRandomMaze()
 	{
+		//Initializes the starting cell.
 		setExplored(true, 0, 0);
 		setOpen(true, 0, 0);
 
+		//Create 2x2 end zone in the middle.
+		openRegion(Vector::Pos(width / 2 - 1, height / 2 - 1), 3, 3);
+		exploreRegion(Vector::Pos(width / 2 - 2, height / 2 - 2), 5, 5);
+
+		//path contains every position where a random direction was picked.
 		vector<Vector::Pos*> path;
 		path.push_back(new Vector::Pos(0, 0));
 
+		//Generates the maze
 		while (!path.empty())
 		{
 			int r = rand() % path.size();
@@ -124,19 +131,37 @@ namespace Micromouse
 			cout << path.size() << endl;
 		}
 
-		for (int i = 0; i < 20; i++)
+		//Opens one wall to the 2x2 finish area in the middle.
+		destroyRandomWallInPerimeter(Vector::Pos(width / 2 - 2, height / 2 - 2), 5, 5);
+
+		//Randomly removes about 1 in 25 walls from the maze.
+		for (int i = 0; i < width * height / 50; i++)
 		{
 			destroyRandomWall();
 		}
 
-		for (int y = 0; y < height; y++)
+		//Sets the entire maze as explored.
+		exploreRegion(Vector::Pos(0, 0), width, height);
+	}
+
+	void CompactMaze::openRegion(Vector::Pos pos, int w, int h)
+	{
+		for (int y = 0; y < h; y++)
 		{
-			for (int x = 0; x < width; x++)
+			for (int x = 0; x < w; x++)
 			{
-				if (x % 2 == 0 || y % 2 == 0)
-				{
-					setExplored(true, x, y);
-				}
+				setOpen(true, pos.x() + x, pos.y() + y);
+			}
+		}
+	}
+
+	void CompactMaze::exploreRegion(Vector::Pos pos, int w, int h)
+	{
+		for (int y = 0; y < h; y++)
+		{
+			for (int x = 0; x < w; x++)
+			{
+				setExplored(true, pos.x() + x, pos.y() + y);
 			}
 		}
 	}
@@ -183,16 +208,39 @@ namespace Micromouse
 		}
 	}
 
+	void CompactMaze::destroyRandomWallInPerimeter(Vector::Pos pos, int w, int h)
+	{
+		w /= 2; //DO NOT SIMPLIFY: w/2 needs to round down to the nearest int w;
+		h /= 2; //DO NOT SIMPLIFY: h/2 needs to round down to the nearest int h;
+		int numWallsInPerimeter = 2*( w + h );
+		int r = rand() % numWallsInPerimeter;
+		int x, y;
+
+		if (r < 2*w)
+		{
+			x = 2*( r % w ) + 1;
+			y = 2*h * (r/w);
+		}
+		else
+		{
+			r = r - 2*w;
+			x = 2*w * (r/h);
+			y = 2*(r % h) + 1;
+		}
+
+		setOpen(true, pos.x() + x, pos.y() + y);
+	}
+
 	void CompactMaze::destroyRandomWall()
 	{
 		int x;
 		int y = rand() % height;
-		
-		if (y%2 == 0)
+
+		if (y % 2 == 0)
 		{
 			x = 2 * (rand() % ((width - 1) / 2)) + 1;
 			Vector::Pos pos(x, y);
-			if (getNumAdjacentWalls(pos + N) > 1 && getNumAdjacentWalls(pos + S) > 1)
+			if (!isExplored(x, y) && getNumAdjacentWalls(pos + N) > 1 && getNumAdjacentWalls(pos + S) > 1)
 			{
 				setOpen(true, pos);
 			}
@@ -205,7 +253,7 @@ namespace Micromouse
 		{
 			x = 2 * (rand() % ((width + 1) / 2));
 			Vector::Pos pos(x, y);
-			if (getNumAdjacentWalls(pos + E) > 1 && getNumAdjacentWalls(pos + W) > 1)
+			if (!isExplored(x, y) && getNumAdjacentWalls(pos + E) > 1 && getNumAdjacentWalls(pos + W) > 1)
 			{
 				setOpen(true, pos);
 			}
@@ -214,7 +262,6 @@ namespace Micromouse
 				destroyRandomWall();
 			}
 		}
-
 	}
 
 	int CompactMaze::getNumAdjacentWalls(Vector::Pos pos)
@@ -246,13 +293,17 @@ namespace Micromouse
 					}
 					else
 					{
-						if (y % 2 == 0)
+						if (y % 2 == 0 && x % 2 == 1)
 						{
 							out << "| ";
 						}
-						else
+						else if (y % 2 == 1 && x % 2 == 0)
 						{
 							out << "- ";
+						}
+						else
+						{
+							out << "+ ";
 						}
 					}
 				}

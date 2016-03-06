@@ -1,7 +1,7 @@
 #pragma once
 
 //used for gui
-//#include "SFML\Graphics.hpp" //uncomment this line to enable gui
+#include "SFML\Graphics.hpp" //uncomment this line to enable gui
 // you will need sfml properly installed
 // to get sfml
 // download: http://www.sfml-dev.org/download/sfml/2.3.2/

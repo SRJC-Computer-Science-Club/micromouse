@@ -1,15 +1,18 @@
 #include <iostream>
 #include "Controller.h"
+#include "CompactMaze.h"
 
+using namespace std;
 
 namespace Micromouse
 {
 
-
-
 	Controller::Controller()
 	{
 		beginSimulation();
+		CompactMaze maze = CompactMaze(31, 31);
+		maze.generateRandomMaze();
+		cout << maze;
 	}
 
 
@@ -28,7 +31,7 @@ namespace Micromouse
 	// This is the main loop that will virtually test the mouse
 	void Controller::beginSimulation()
 	{
-		Maze* maze = new Maze;
+		//Maze* maze = new Maze;
 
 #ifdef SFML_GRAPHICS_HPP
 		bool drawn = false;
@@ -56,9 +59,9 @@ namespace Micromouse
 			if ( !drawn ) // we dont want it to draw over itself..yet
 			{
 				Window::clear();
-				maze->draw();
+				//maze->draw();
 #endif
-				std::cout << maze->findPath( Coord( 2 , 2 ) , Coord( 14 , 11 ) );
+				//std::cout << maze->findPath( Vector::Pos( 2 , 2 ) , Vector::Pos( 14 , 11 ) );
 #ifdef SFML_GRAPHICS_HPP
 
 				Window::display();

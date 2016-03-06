@@ -1,10 +1,9 @@
 #pragma once
 #include "Maze.h"
+#include "MouseBot.h"
 #include "Drawable.h" //includes SFML
 
-#ifdef SFML_GRAPHICS_HPP
-#include "Window.h"
-#endif
+
 
 
 

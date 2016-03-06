@@ -7,24 +7,9 @@ namespace Micromouse
 
 
 	// constructors ////////////////////////////////////////////////////////
-	Node::Node( Coord newPos ) :
+	Node::Node( Vector::Pos newPos ) :
 		pos( newPos )
 	{
-		int x , y;
-		for ( direction dir = direction::E; dir != direction::NONE; ++dir )
-		{
-			//TODO make into a function
-			//see Maze.cpp getNeighborNode function for explanation
-			x = pos.x() + dir % 3 - 1;
-			y = pos.y() + dir / 3 - 1;
-
-			//TODO replace with constants
-			if ( x < 0 || x >= 16 || y < 0 || y >= 16 )
-			{
-				openDirections[ dir ] = false;
-			}
-		}
-
 		// TEMP randomly closes nodes
 		if ( rand() % 10 == 1 )
 		{
@@ -52,20 +37,22 @@ namespace Micromouse
 		return G;
 	}
 
-	Coord Node::getPos() const
+	Vector::Pos Node::getPos() const
 	{
 		return pos;
 	}
 
-	Node * Node::getParent()
+	Node * Node::getParent() const
 	{
 		return parent;
 	}
 
-	bool Node::isDirectionBlocked( direction dir )
+
+	direction Node::getDir() const
 	{
-		return !openDirections[ dir ];
+		return direction();
 	}
+
 
 	bool Micromouse::Node::isClosed()
 	{
@@ -93,6 +80,10 @@ namespace Micromouse
 		parent = newParent;
 	}
 
+	void Node::setDir( direction dir )
+	{
+	}
+
 
 
 
@@ -109,7 +100,6 @@ namespace Micromouse
 
 
 
-
 #ifdef SFML_GRAPHICS_HPP
 
 	// this is still rough code
@@ -122,11 +112,12 @@ namespace Micromouse
 			sf::Color color;
 			if ( isClosed() )
 			{
-				color = isDirectionBlocked( dir ) ? sf::Color::Color( 250 , 30 , 30 ) : sf::Color( 200 , 0 , 0 );
+				color = sf::Color::Color( 250 , 30 , 30 );
+				//color = isDirectionBlocked( dir ) ? sf::Color::Color( 250 , 30 , 30 ) : sf::Color( 200 , 0 , 0 );
 			}
 			else
 			{
-				color = isDirectionBlocked( dir ) ? sf::Color::Color( 250 , 250 , 250 ) : sf::Color( 50 , 50 , 50 );
+				//color = isDirectionBlocked( dir ) ? sf::Color::Color( 250 , 250 , 250 ) : sf::Color( 50 , 50 , 50 );
 			}
 			sf::Vertex line[ 2 ];
 

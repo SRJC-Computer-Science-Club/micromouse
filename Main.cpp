@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstdlib>
-#include<time.h>
+#include <time.h>
 #include "Controller.h"
 
 using namespace std;

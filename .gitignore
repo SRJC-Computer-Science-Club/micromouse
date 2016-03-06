@@ -40,6 +40,7 @@ xcuserdata/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
+[Ss]imulation/**
 x64/
 x86/
 bld/

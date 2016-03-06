@@ -159,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Controller.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="MouseBot.h" />
     <ClInclude Include="Maze.h" />
     <ClInclude Include="Path.h" />

@@ -62,6 +62,9 @@
     <ClInclude Include="MouseBot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="FlagMatrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>

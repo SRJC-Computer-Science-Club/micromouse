@@ -162,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="CompactMaze.h" />
     <ClInclude Include="Controller.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="FlagMatrix.h" />
     <ClInclude Include="MouseBot.h" />
     <ClInclude Include="Maze.h" />

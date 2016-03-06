@@ -21,7 +21,7 @@ namespace Micromouse
 
 		// returns the next step in the path and removes it from the path
 		// calling on an empty path will result in an error
-		Vector::Dir nextStep();
+		Vector::Dir popStep();
 
 		// returns the next step in the path without removing it
 		// calling on an empty path will result in an error

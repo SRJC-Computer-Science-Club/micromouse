@@ -10,9 +10,6 @@ namespace Micromouse
 	Controller::Controller()
 	{
 		beginSimulation();
-		CompactMaze maze = CompactMaze(31, 31);
-		maze.generateRandomMaze();
-		cout << maze;
 	}
 
 
@@ -31,7 +28,12 @@ namespace Micromouse
 	// This is the main loop that will virtually test the mouse
 	void Controller::beginSimulation()
 	{
+		//TODO fix draw standard maze
+		//null Nodes break it
 		//Maze* maze = new Maze;
+
+		CompactMaze cmaze = CompactMaze( 31 , 31 );
+		cmaze.generateRandomMaze();
 
 #ifdef SFML_GRAPHICS_HPP
 		bool drawn = false;
@@ -60,6 +62,8 @@ namespace Micromouse
 			{
 				Window::clear();
 				//maze->draw();
+				cout << cmaze;
+				cmaze.draw();
 #endif
 				//std::cout << maze->findPath( Vector::Pos( 2 , 2 ) , Vector::Pos( 14 , 11 ) );
 #ifdef SFML_GRAPHICS_HPP

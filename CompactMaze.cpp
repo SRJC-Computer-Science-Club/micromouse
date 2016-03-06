@@ -142,6 +142,7 @@ namespace Micromouse
 		exploreRegion(Vector::Pos(0, 0), width, height);
 	}
 
+
 	void CompactMaze::openRegion(Vector::Pos pos, int w, int h)
 	{
 		for (int y = 0; y < h; y++)
@@ -319,4 +320,70 @@ namespace Micromouse
 
 		return out;
 	}
+
+
+
+#ifdef SFML_GRAPHICS_HPP
+	void CompactMaze::draw()
+	{
+		// TODO make this function not so gigantic
+
+		int ns = 20; //nodeSize in px
+		float os = 3 * ns; //vertical and horizontal transaltion offset
+
+		sf::Color color;
+		color = sf::Color::Color( 250 , 250 , 250 );
+
+		sf::Vertex line[ 2 ];
+
+		//top
+		line[ 0 ] = sf::Vertex( sf::Vector2f( -ns + os , -ns  + os ) , color );
+		line[ 1 ] = sf::Vertex( sf::Vector2f( ns * width + os , -ns + os ) , color );
+		renderWindow.draw( line , 2 , sf::Lines );
+
+		//bottom
+		line[ 0 ] = sf::Vertex( sf::Vector2f( -ns + os , ns * height + os ) , color );
+		line[ 1 ] = sf::Vertex( sf::Vector2f( ns * width + os , ns * height + os ) , color );
+		renderWindow.draw( line , 2 , sf::Lines );
+
+		//left
+		line[ 0 ] = sf::Vertex( sf::Vector2f( -ns + os , -ns + os ) , color );
+		line[ 1 ] = sf::Vertex( sf::Vector2f( -ns + os , ns * height + os ) , color );
+		renderWindow.draw( line , 2 , sf::Lines );
+
+		//right
+		line[ 0 ] = sf::Vertex( sf::Vector2f( ns * width + os , -ns + os ) , color );
+		line[ 1 ] = sf::Vertex( sf::Vector2f( ns * width + os , ns * height + os ) , color );
+		renderWindow.draw( line , 2 , sf::Lines );
+
+		int yy;
+		
+		for ( int y = 0; y < height; y++ )
+		{
+			yy = height - y - 1; // flip up right side up
+			//out << "| ";
+			for ( int x = 0; x < width; x++ )
+			{
+				if ( isExplored( x , y ) )
+				{
+					if ( !isOpen( x , y ) )
+					{
+						if ( y % 2 == 0 && x % 2 == 1 )
+						{
+							line[ 0 ] = sf::Vertex( sf::Vector2f( ns * x + os , ns * ( yy - 1 ) + os ) , color );
+							line[ 1 ] = sf::Vertex( sf::Vector2f( ns * x + os , ns * ( yy + 1 ) + os ) , color );
+						}
+						else if ( y % 2 == 1 && x % 2 == 0 )
+						{
+							line[ 0 ] = sf::Vertex( sf::Vector2f( ns * ( x - 1 ) + os , ns * yy + os ) , color );
+							line[ 1 ] = sf::Vertex( sf::Vector2f( ns * ( x + 1 ) + os , ns * yy + os ) , color );
+						}
+					}
+				}
+			
+				renderWindow.draw( line , 2 , sf::Lines );
+			}
+		}
+	}
+#endif
 }

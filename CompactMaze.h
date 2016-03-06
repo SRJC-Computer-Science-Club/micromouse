@@ -10,6 +10,7 @@ Author GitHub:	joshuasrjc
 #include "Vector.h"
 #include <iostream>
 #include <vector>
+#include "Drawable.h"
 
 using namespace std;
 
@@ -18,7 +19,12 @@ namespace Micromouse
 	//A class that stores data about a maze.
 	//Each cell, edge, and corner of the map can be either
 	//open or closed, and either explored or unexplored.
+
+#ifdef SFML_GRAPHICS_HPP
+	class CompactMaze : public Drawable
+#else
 	class CompactMaze
+#endif
 	{
 	public:
 		//Creates a maze with the given width and height.
@@ -63,6 +69,13 @@ namespace Micromouse
 		//Generates a random maze, with a 2x2 empty finish area at the center.
 		//The generated maze does contain loops.
 		void generateRandomMaze();
+
+
+#ifdef SFML_GRAPHICS_HPP
+		//draws the maze to the hui
+		void draw();
+#endif
+
 	private:
 
 		//Sets the open flags = true in the region.

@@ -128,7 +128,6 @@ namespace Micromouse
 				dir = randomPossibleDirection(head, path);
 				cout << path.size() << endl;
 			}
-			cout << path.size() << endl;
 		}
 
 		//Opens one wall to the 2x2 finish area in the middle.

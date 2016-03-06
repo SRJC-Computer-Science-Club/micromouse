@@ -103,16 +103,22 @@ namespace Micromouse
 		}
 
 
+		Pos Pos::operator*(int scalar)
+		{
+			return Pos(_x*scalar, _y*scalar);
+		}
+
+
 
 		void Pos::validateSelf()
 		{
-			assert( _x >= 0 );
-			assert( _y >= 0 );
-			assert( _x < NUM_NODES_W );
-			assert( _y < NUM_NODES_H );
+			//assert( _x >= 0 );
+			//assert( _y >= 0 );
+			//assert( _x < NUM_NODES_W );
+			//assert( _y < NUM_NODES_H );
 
 			// no Pos should have a position at two odd coordinates
-			assert( ( _x % 2 == 0 ) || ( _y % 2 == 0 ) );
+			//assert( ( _x % 2 == 0 ) || ( _y % 2 == 0 ) );
 		}
 
 

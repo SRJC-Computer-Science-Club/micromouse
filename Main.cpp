@@ -33,5 +33,7 @@ int main( int argc , char** argv )
 
 	log( INFO ) << "Program End \n\n\n";
 
+	system( "pause" );
+
 	return 0;
 }

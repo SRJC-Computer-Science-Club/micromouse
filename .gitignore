@@ -40,6 +40,7 @@ xcuserdata/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
+simulation/
 x64/
 x86/
 bld/
@@ -49,6 +50,7 @@ bld/
 
 # Visual Studio 2015 cache/options directory
 .vs/
+__vm/
 # Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
 

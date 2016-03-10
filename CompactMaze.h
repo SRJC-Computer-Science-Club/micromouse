@@ -30,29 +30,29 @@ namespace Micromouse
 		//Sets the open flag at the given position.
 		//If the position is outside the maze, nothing happens.
 		void setOpen(bool flag, int x, int y);
-		void setOpen(bool flag, Vector::Pos pos);
+		void setOpen(bool flag, PositionVector pos);
 
 
 		//Sets the explored flag at the given position.
 		//If the position is outside the maze, nothing happens.
 		void setExplored(bool flag, int x, int y);
-		void setExplored(bool flag, Vector::Pos pos);
+		void setExplored(bool flag, PositionVector pos);
 
 		//Returns the open flag at the given position.
 		//If the position is outside the maze, returns false.
 		bool isOpen(int x, int y) const;
-		bool isOpen(Vector::Pos pos) const;
+		bool isOpen(PositionVector pos) const;
 
 
 		//Returns the explored flag at the given position.
 		//If the position is outside the maze, returns false.
 		bool isExplored(int x, int y) const;
-		bool isExplored(Vector::Pos pos) const;
+		bool isExplored(PositionVector pos) const;
 
 		//Returns true if the given position in within the maze.
 		//( 0 <= x < width and 0 <= y < height )
 		bool isInsideMaze(int x, int y) const;
-		bool isInsideMaze(Vector::Pos pos) const;
+		bool isInsideMaze(PositionVector pos) const;
 
 		//Returns the width of the maze.
 		int getWidth() const;
@@ -66,15 +66,15 @@ namespace Micromouse
 	private:
 
 		//Sets the open flags = true in the region.
-		void openRegion(Vector::Pos pos, int w, int h);
+		void openRegion(PositionVector pos, int w, int h);
 
 		//Sets the explored flags = true in the region.
-		void exploreRegion(Vector::Pos pos, int w, int h);
+		void exploreRegion(PositionVector pos, int w, int h);
 
-		direction randomPossibleDirection(Vector::Pos pos, vector<Vector::Pos*>& path);
+		direction randomPossibleDirection(PositionVector pos, vector<PositionVector*>& path);
 
 		//Opens a random wall in the perimeter of the given region.
-		void destroyRandomWallInPerimeter(Vector::Pos pos, int w, int h);
+		void destroyRandomWallInPerimeter(PositionVector pos, int w, int h);
 
 		//Opens a random, unexplored wall in the maze.
 		//Will not open a wall if it is the only wall connected to a corner.
@@ -82,7 +82,7 @@ namespace Micromouse
 		void destroyRandomWall();
 
 		//Returns the number of closed edges adjacent to the given position.
-		int getNumAdjacentWalls(Vector::Pos pos);
+		int getNumAdjacentWalls(PositionVector pos);
 
 		//A 2D array of flags (booleans), that denote whether or not a cell, edge, or corner is open.
 		FlagMatrix open;

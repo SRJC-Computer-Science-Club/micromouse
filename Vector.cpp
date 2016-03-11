@@ -20,21 +20,21 @@ namespace Micromouse
 		return dir = static_cast<direction>(((int)dir + 1) % 9);
 	}
 
-	ostream& operator<<(ostream& out, const direction& dir)
-	{
-		switch (dir)
-		{
-		case N:  return out << "N";
-		case NE: return out << "NE";
-		case E:  return out << "E";
-		case SE: return out << "SE";
-		case S:  return out << "S";
-		case SW: return out << "SW";
-		case W:  return out << "W";
-		case NW: return out << "NW";
-		default: return out << "NONE";
-		}
-	}
+	//ostream& operator<<(ostream& out, const direction& dir)
+	//{
+	//	switch (dir)
+	//	{
+	//	case N:  return out << "N";
+	//	case NE: return out << "NE";
+	//	case E:  return out << "E";
+	//	case SE: return out << "SE";
+	//	case S:  return out << "S";
+	//	case SW: return out << "SW";
+	//	case W:  return out << "W";
+	//	case NW: return out << "NW";
+	//	default: return out << "NONE";
+	//	}
+	//}
 
 	//static const Pos & UNDEFINED = Pos( 0 , -1 );
 

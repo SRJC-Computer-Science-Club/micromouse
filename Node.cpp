@@ -10,12 +10,6 @@ namespace Micromouse
 	Node::Node( Vector::Pos newPos ) :
 		pos( newPos )
 	{
-		// TEMP randomly closes nodes
-		if ( rand() % 10 == 1 )
-		{
-			closed = true;
-		}
-
 	}
 
 	Node::~Node()

@@ -8,7 +8,7 @@ Author GitHub:	joshuasrjc
 #pragma once
 #include "FlagMatrix.h"
 #include "Vector.h"
-#include <iostream>
+//#include <iostream>
 #include <vector>
 
 using namespace std;
@@ -97,5 +97,5 @@ namespace Micromouse
 
 	//Prints out a picture of the maze for debugging.
 	//Just use: log( DEBUGX ) << maze;
-	ostream& operator<<(ostream& out, const CompactMaze& maze);
+	//ostream& operator<<(ostream& out, const CompactMaze& maze);
 }

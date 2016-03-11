@@ -1,5 +1,5 @@
 #pragma once
-#include <iostream>
+//#include <iostream>
 #include <sstream>
 #include <fstream>
 
@@ -91,10 +91,10 @@ public:
 		{
 		case Logger::BOTH:
 			file << s;
-			std::cout << s;
+			//std::cout << s;
 			break;
 		case Logger::CONSOLE:
-			std::cout << s;
+			//std::cout << s;
 			break;
 		case Logger::FILE:
 			file << s;

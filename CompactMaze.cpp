@@ -272,51 +272,51 @@ namespace Micromouse
 		return n;
 	}
 
-	ostream& operator<<(ostream& out, const CompactMaze& maze)
-	{
-		out << endl << "+ ";
-		for (int x = 0; x < maze.getWidth(); x++) out << "- ";
-		out << "+" << endl;
-
-		for (int y = maze.getHeight() - 1; y >= 0; y--)
-		{
-			out << "| ";
-			for (int x = 0; x < maze.getWidth(); x++)
-			{
-				if (maze.isExplored(x, y))
-				{
-					if (maze.isOpen(x, y))
-					{
-						out << "  ";
-					}
-					else
-					{
-						if (y % 2 == 0 && x % 2 == 1)
-						{
-							out << "| ";
-						}
-						else if (y % 2 == 1 && x % 2 == 0)
-						{
-							out << "- ";
-						}
-						else
-						{
-							out << "+ ";
-						}
-					}
-				}
-				else
-				{
-					out << "+ ";
-				}
-			}
-			out << "|" << endl;
-		}
-
-		out << "+ ";
-		for (int x = 0; x < maze.getWidth(); x++) out << "- ";
-		out << "+" << endl;
-
-		return out;
-	}
+//	ostream& operator<<(ostream& out, const CompactMaze& maze)
+//	{
+//		out << endl << "+ ";
+//		for (int x = 0; x < maze.getWidth(); x++) out << "- ";
+//		out << "+" << endl;
+//
+//		for (int y = maze.getHeight() - 1; y >= 0; y--)
+//		{
+//			out << "| ";
+//			for (int x = 0; x < maze.getWidth(); x++)
+//			{
+//				if (maze.isExplored(x, y))
+//				{
+//					if (maze.isOpen(x, y))
+//					{
+//						out << "  ";
+//					}
+//					else
+//					{
+//						if (y % 2 == 0 && x % 2 == 1)
+//						{
+//							out << "| ";
+//						}
+//						else if (y % 2 == 1 && x % 2 == 0)
+//						{
+//							out << "- ";
+//						}
+//						else
+//						{
+//							out << "+ ";
+//						}
+//					}
+//				}
+//				else
+//				{
+//					out << "+ ";
+//				}
+//			}
+//			out << "|" << endl;
+//		}
+//
+//		out << "+ ";
+//		for (int x = 0; x < maze.getWidth(); x++) out << "- ";
+//		out << "+" << endl;
+//
+//		return out;
+//	}
 }

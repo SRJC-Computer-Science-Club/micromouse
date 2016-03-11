@@ -6,7 +6,7 @@ Author GitHub:	joshuasrjc
 \*********************************/
 
 #include "FlagMatrix.h"
-#include <iostream>
+//#include <iostream>
 #include <assert.h>
 
 using namespace std;
@@ -101,30 +101,30 @@ namespace Micromouse
 		return i;
 	}
 
-	ostream& operator<<(ostream& out, const FlagMatrix& matrix)
-	{
-		out << endl << '+';
-		for (int x = 0; x < matrix.getWidth(); x++)
-		{
-			out << " -";
-		}
-		out << " +" << endl;
-		for (int y = matrix.getHeight() - 1; y >= 0; y--)
-		{
-			out << "| ";
-			for (int x = 0; x < matrix.getWidth(); x++)
-			{
-				out << matrix.getFlag(x, y) << ' ';
-			}
-			out << '|' << endl;
-		}
-		out << '+';
-		for (int x = 0; x < matrix.getWidth(); x++)
-		{
-			out << " -";
-		}
-		out << " +" << endl;
-		return	out;
-	}
+//	ostream& operator<<(ostream& out, const FlagMatrix& matrix)
+//	{
+//		out << endl << '+';
+//		for (int x = 0; x < matrix.getWidth(); x++)
+//		{
+//			out << " -";
+//		}
+//		out << " +" << endl;
+//		for (int y = matrix.getHeight() - 1; y >= 0; y--)
+//		{
+//			out << "| ";
+//			for (int x = 0; x < matrix.getWidth(); x++)
+//			{
+//				out << matrix.getFlag(x, y) << ' ';
+//			}
+//			out << '|' << endl;
+//		}
+//		out << '+';
+//		for (int x = 0; x < matrix.getWidth(); x++)
+//		{
+//			out << " -";
+//		}
+//		out << " +" << endl;
+//		return	out;
+//	}
 }
 

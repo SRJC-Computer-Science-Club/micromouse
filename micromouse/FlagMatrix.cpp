@@ -36,7 +36,8 @@ namespace Micromouse
 	{
 		delete[] data;
 
-		width, height = matrix.width, matrix.height;
+		width = matrix.width;
+		height = matrix.height;
 		numDataMembers = matrix.numDataMembers;
 
 		data = new unsigned int[numDataMembers];

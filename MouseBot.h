@@ -16,12 +16,12 @@ namespace Micromouse
 	public:
 		MouseBot();								// Uses a default position of (0,0)
 		MouseBot(int x, int y);					// Sets the position to (x,y)
-		MouseBot(Vector::Pos pos);
+		MouseBot(PositionVector pos);
 
-		Vector::Pos getPos();					// Returns the position of the mouse
+		PositionVector getPos();					// Returns the position of the mouse
 		direction getFacing();					// Return the direction the mouse is facing.
 		void setPos(int x, int y);				// Sets the position to (x,y)
-		void setPos(Vector::Pos pos);			// Sets the position to pos
+		void setPos(PositionVector pos);			// Sets the position to pos
 
 		void moveForward();						// Moves the mouse forward by 1 node (1/2 cell)
 		void turnLeft();						// Moves the mouse forward and to the left, turning 90 degrees.
@@ -33,7 +33,7 @@ namespace Micromouse
 
 		void move(direction dir);
 
-		Vector::Pos pos = Vector::Pos(0,0);
+		PositionVector pos = PositionVector(0,0);
 		direction facing = N;
 	};
 }

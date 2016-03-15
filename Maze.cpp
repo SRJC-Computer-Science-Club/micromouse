@@ -29,7 +29,7 @@ namespace Micromouse
 
 
 
-	Path * Maze::findPath( Vector::Pos start , Vector::Pos end )
+	Path * Maze::findPath( PositionVector start , PositionVector end )
 	{
 		std::vector< Node* > openNodes;
 
@@ -120,7 +120,7 @@ namespace Micromouse
 	}
 
 	// Retruns the Node at the given position.
-	Node* Maze::getNode( Vector::Pos pos )
+	Node* Maze::getNode( PositionVector pos )
 	{
 		return maze[ pos.x() ][ pos.y() ];
 	}
@@ -128,7 +128,7 @@ namespace Micromouse
 
 
 	// adds a new node to the maze at the given position
-	void Maze::addNode( Vector::Pos pos )
+	void Maze::addNode( PositionVector pos )
 	{
 		maze[ pos.x() ][ pos.y() ] = new Node( pos );
 	}
@@ -138,14 +138,14 @@ namespace Micromouse
 
 
 	// returns a pointer to the neighbor node at direction dir from pos
-	Node * Maze::getNeighborNode( Vector::Pos pos , direction dir )
+	Node * Maze::getNeighborNode( PositionVector pos , direction dir )
 	{
 		// Uses old direction enum order
 		// int x = pos.x() + dir % 3 - 1;
 		// int y = pos.y() + dir / 3 - 1;
 		//if (x >= 0 && x < NUM_NODES_W && y >= 0 && y < NUM_NODES_H) { return maze[x][y]; }
 
-		Vector::Pos offsetPos = pos + dir;
+		PositionVector offsetPos = pos + dir;
 		
 		return maze[offsetPos.x()][offsetPos.y()];
 
@@ -180,7 +180,7 @@ namespace Micromouse
 			if ( node->getParent() == nullptr || node->getParent()->getDir() != travelDir )
 			{
 				// add a step to the path to define the direction and distance need to travel
-				path->addStep( Vector::Dir( travelDir , mag ) );
+				path->addStep( DirectionVector( travelDir , mag ) );
 
 				travelDir = node->getParent()->getDir();
 				mag = 0;

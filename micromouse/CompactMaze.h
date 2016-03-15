@@ -6,10 +6,10 @@ Author GitHub:	joshuasrjc
 \*********************************/
 
 #pragma once
+#include <ostream>
+#include <vector>
 #include "FlagMatrix.h"
 #include "Vector.h"
-#include <iostream>
-#include <vector>
 
 using namespace std;
 

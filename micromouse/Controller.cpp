@@ -1,4 +1,3 @@
-#include <iostream>
 #include "Controller.h"
 #include "CompactMaze.h"
 #include "Logger.h"

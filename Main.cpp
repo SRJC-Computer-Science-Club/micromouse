@@ -1,11 +1,11 @@
-#include "Logger.h"
+#include "micromouse/Logger.h"
 const LogLevel LOG_LEVEL = LOG_ALL;
 
 #include <iostream>
 #include <cstdlib>
 #include <ctime> //time
 #include <iomanip> //put_time
-#include "Controller.h"
+#include "micromouse/Controller.h"
 
 using namespace std;
 
@@ -25,7 +25,7 @@ int main( int argc , char** argv )
 	srand( (unsigned int)time( NULL ) );
 
 
-	Micromouse::Controller routine;//begins the maze solving routine
+	Micromouse::Controller routine;//begins the maze solving log
 
 
 

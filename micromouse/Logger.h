@@ -1,5 +1,11 @@
 #pragma once
+
+#ifdef __MK20DX256__ //this the the Teensy signature
+#include <ostream>
+#else
 #include <iostream>
+#endif
+
 #include <sstream>
 #include <fstream>
 
@@ -80,24 +86,40 @@ public:
 		return *this;
 	}
 
+	void consoleOut(const std::string & s)
+	{
+#ifdef __MK20DX256__ //this the the Teensy signature
+		//TODO serial out
+#else
+		std::cout << s;
+#endif
+	}
+
+	void fileOut(const std::string & s)
+	{
+#ifdef __MK20DX256__ //this the the Teensy signature
+#else
+		std::ofstream file(".log", std::ios::app);
+#endif
+	}
+
 	// prints the log text when the object destructs
 	~Logger()
 	{
 		buffer << std::endl;
-		std::ofstream file( ".log" , std::ios::app );
 		std::string s = buffer.str();
 		
 		switch ( dest )
 		{
 		case Logger::BOTH:
-			file << s;
-			std::cout << s;
+			fileOut(s);
+			consoleOut(s);
 			break;
 		case Logger::CONSOLE:
-			std::cout << s;
+			consoleOut(s);
 			break;
 		case Logger::FILE:
-			file << s;
+			fileOut(s);
 			break;
 		}	
 	}

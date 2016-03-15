@@ -6,7 +6,6 @@ Author GitHub:	joshuasrjc
 \*********************************/
 
 #include "FlagMatrix.h"
-#include <iostream>
 #include <assert.h>
 
 using namespace std;

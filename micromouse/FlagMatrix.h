@@ -6,7 +6,7 @@ Author GitHub:	joshuasrjc
 \*********************************/
 
 #pragma once
-#include <iostream>
+#include <ostream>
 
 using namespace std;
 

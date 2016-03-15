@@ -1,6 +1,6 @@
 #pragma once
 #include "Maze.h"
-//#include "MouseBot.h"
+#include "MouseBot.h"
 
 
 namespace Micromouse
@@ -16,4 +16,5 @@ namespace Micromouse
 
 
 	};
+
 }

@@ -1,8 +1,8 @@
 #pragma once
 
-//#include <iostream>
+#include <ostream>
 
-//using namespace std;
+using namespace std;
 
 namespace Micromouse
 {
@@ -42,7 +42,7 @@ namespace Micromouse
 	// to N.
 	direction& operator++(direction& dir);
 
-	//ostream& operator<<(ostream& out, const direction& dir);
+	ostream& operator<<(ostream& out, const direction& dir);
 
 	namespace Vector
 	{

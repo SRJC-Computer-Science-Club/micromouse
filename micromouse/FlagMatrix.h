@@ -42,5 +42,5 @@ namespace Micromouse
 		unsigned int* data;
 	};
 
-	//ostream& operator<<(ostream& out, const FlagMatrix& matrix); //Printout for debugging.
+	ostream& operator<<(ostream& out, const FlagMatrix& matrix); //Printout for debugging.
 }

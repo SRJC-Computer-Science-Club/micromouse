@@ -5,7 +5,6 @@ Author Name:	Joshua Murphy
 Author GitHub:	joshuasrjc
 \*********************************/
 
-//#include <iostream>
 #include "MouseBot.h"
 
 namespace Micromouse

@@ -18,57 +18,57 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Maze.cpp">
+    <ClCompile Include="micromouse\CompactMaze.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Node.cpp">
+    <ClCompile Include="micromouse\Controller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Controller.cpp">
+    <ClCompile Include="micromouse\FlagMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Vector.cpp">
+    <ClCompile Include="micromouse\Maze.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Path.cpp">
+    <ClCompile Include="micromouse\MouseBot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MouseBot.cpp">
+    <ClCompile Include="micromouse\Node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FlagMatrix.cpp">
+    <ClCompile Include="micromouse\Path.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CompactMaze.cpp">
+    <ClCompile Include="micromouse\Vector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Maze.h">
+    <ClInclude Include="micromouse\CompactMaze.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Node.h">
+    <ClInclude Include="micromouse\Controller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Controller.h">
+    <ClInclude Include="micromouse\FlagMatrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vector.h">
+    <ClInclude Include="micromouse\Logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Path.h">
+    <ClInclude Include="micromouse\Maze.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MouseBot.h">
+    <ClInclude Include="micromouse\MouseBot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Logger.h">
+    <ClInclude Include="micromouse\Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FlagMatrix.h">
+    <ClInclude Include="micromouse\Path.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CompactMaze.h">
+    <ClInclude Include="micromouse\Vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

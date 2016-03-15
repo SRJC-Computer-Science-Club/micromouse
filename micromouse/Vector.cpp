@@ -38,143 +38,145 @@ namespace Micromouse
 
 	//static const Pos & UNDEFINED = Pos( 0 , -1 );
 
-	namespace Vector
+
+
+
+	// PositionVector ///////////////////////////////////////////////////
+
+	PositionVector::PositionVector( int x , int y ) :
+		_x( x ) ,
+		_y( y )
 	{
-		// Pos ///////////////////////////////////////////////////
-
-		Pos::Pos( int x , int y ) :
-			_x( x ) ,
-			_y( y )
-		{
-			validateSelf();
-		}
+		validateSelf();
+	}
 
 
 
-		Pos::~Pos()
-		{
-		}
+	PositionVector::~PositionVector()
+	{
+	}
 
 
 
-		int Pos::x() const
-		{
-			return _x;
-		}
+	int PositionVector::x() const
+	{
+		return _x;
+	}
 
 
 
-		int Pos::y() const
-		{
-			return _y;
-		}
+	int PositionVector::y() const
+	{
+		return _y;
+	}
 
 
 
-		void Pos::x( int x )
-		{
-			_x = x;
-			validateSelf();
+	void PositionVector::x( int x )
+	{
+		_x = x;
+		validateSelf();
 
-		}
+	}
 
 
 
-		void Pos::y( int y )
-		{
-			_y = y;
-			validateSelf();
-		}
+	void PositionVector::y( int y )
+	{
+		_y = y;
+		validateSelf();
+	}
 
 
 
 
-		Pos Pos::operator+(direction dir)
-		{
-			int x = _x;
-			int y = _y;
+	PositionVector PositionVector::operator+(direction dir)
+	{
+		int x = _x;
+		int y = _y;
 
-			if (dir == NE || dir == N || dir == NW) { y++; }
-			if (dir == NE || dir == E || dir == SE) { x++; }
-			if (dir == SE || dir == S || dir == SW) { y--; }
-			if (dir == NW || dir == W || dir == SW) { x--; }
+		if (dir == NE || dir == N || dir == NW) { y++; }
+		if (dir == NE || dir == E || dir == SE) { x++; }
+		if (dir == SE || dir == S || dir == SW) { y--; }
+		if (dir == NW || dir == W || dir == SW) { x--; }
 
-			return Pos(x, y);
-		}
-
-
-		Pos Pos::operator*(int scalar)
-		{
-			return Pos(_x*scalar, _y*scalar);
-		}
+		return PositionVector(x, y);
+	}
 
 
-
-		void Pos::validateSelf()
-		{
-			//assert( _x >= 0 );
-			//assert( _y >= 0 );
-			//assert( _x < NUM_NODES_W );
-			//assert( _y < NUM_NODES_H );
-
-			// no Pos should have a position at two odd coordinates
-			//assert( ( _x % 2 == 0 ) || ( _y % 2 == 0 ) );
-		}
+	PositionVector PositionVector::operator*(int scalar)
+	{
+		return PositionVector(_x*scalar, _y*scalar);
+	}
 
 
 
+	void PositionVector::validateSelf()
+	{
+		//assert( _x >= 0 );
+		//assert( _y >= 0 );
+		//assert( _x < NUM_NODES_W );
+		//assert( _y < NUM_NODES_H );
 
-		// Dir ///////////////////////////////////////////////////
-
-		Dir::Dir( direction dir , int mag ):
-			_dir( dir ),
-			_mag( mag )
-		{
-			validateSelf();
-		}
-
-
-
-		Dir::~Dir() {}
+		// no Pos should have a position at two odd coordinates
+		//assert( ( _x % 2 == 0 ) || ( _y % 2 == 0 ) );
+	}
 
 
 
-		direction Dir::dir()
-		{
-			return _dir;
-		}
 
 
 
-		int Dir::mag()
-		{
-			return _mag;
-		}
+	// DirectionVector ///////////////////////////////////////////////////
+
+	DirectionVector::DirectionVector( direction dir , int mag ):
+		_dir( dir ),
+		_mag( mag )
+	{
+		validateSelf();
+	}
 
 
 
-		void Dir::dir( direction dir )
-		{
-			_dir = dir;
-			validateSelf();
-		}
+	DirectionVector::~DirectionVector() {}
 
 
 
-		void Dir::mag( int mag )
-		{
-			_mag = mag;
-			validateSelf();
-		}
+	direction DirectionVector::dir()
+	{
+		return _dir;
+	}
 
 
 
-		void Dir::validateSelf()
-		{
-			assert( _dir != NONE );
-			assert( _mag >= 0 );
+	int DirectionVector::mag()
+	{
+		return _mag;
+	}
 
-			assert( _mag < NUM_NODES_W || _mag < NUM_NODES_H );
-		}
+
+
+	void DirectionVector::dir( direction dir )
+	{
+		_dir = dir;
+		validateSelf();
+	}
+
+
+
+	void DirectionVector::mag( int mag )
+	{
+		_mag = mag;
+		validateSelf();
+	}
+
+
+
+	void DirectionVector::validateSelf()
+	{
+		assert( _dir != NONE );
+		assert( _mag >= 0 );
+
+		assert( _mag < NUM_NODES_W || _mag < NUM_NODES_H );
 	}
 }

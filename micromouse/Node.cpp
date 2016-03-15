@@ -7,7 +7,7 @@ namespace Micromouse
 
 
 	// constructors ////////////////////////////////////////////////////////
-	Node::Node( Vector::Pos newPos ) :
+	Node::Node( PositionVector newPos ) :
 		pos( newPos )
 	{
 	}
@@ -31,7 +31,7 @@ namespace Micromouse
 		return G;
 	}
 
-	Vector::Pos Node::getPos() const
+	PositionVector Node::getPos() const
 	{
 		return pos;
 	}

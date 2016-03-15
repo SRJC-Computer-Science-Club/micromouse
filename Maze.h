@@ -14,20 +14,20 @@ namespace Micromouse
 
 
 		// TODO it should return a list of Vectors to utilized by the motion controller
-		Path * findPath( Vector::Pos start , Vector::Pos end );
+		Path * findPath( PositionVector start , PositionVector end );
 		Path * findPath( const Node * const start , const Node * const end );
 
 		// returns a Node from the maze
 		// 'pos' is the position of the Node being returned
-		Node* getNode( Vector::Pos pos );
+		Node* getNode( PositionVector pos );
 
 		// adds a Node to the Maze
 		// 'pos' is the position of the new Node being created
-		void addNode( Vector::Pos newPos );
+		void addNode( PositionVector newPos );
 
-		// returns a pointer to the node in the direction 'dir' from the given Vector::Pos 'pos'
+		// returns a pointer to the node in the direction 'dir' from the given Pos 'pos'
 		// if no such node exists then nullptr is returned
-		Node* getNeighborNode( Vector::Pos pos , direction dir );
+		Node* getNeighborNode( PositionVector pos , direction dir );
 
 	private:
 

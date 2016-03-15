@@ -10,13 +10,13 @@ namespace Micromouse
 	class Node
 	{
 	public:
-		Node( Vector::Pos newPos );
+		Node( PositionVector newPos );
 		~Node();
 
 		//getters
 		int getF() const;
 		int getG() const;
-		Vector::Pos getPos() const;
+		PositionVector getPos() const;
 		Node* getParent() const;
 		direction getDir() const;
 
@@ -36,7 +36,7 @@ namespace Micromouse
 		Node* parent = nullptr; // the parent node used for pathfinding
 		direction dir; // the direction from the parent node to self
 
-		Vector::Pos pos;
+		PositionVector pos;
 
 		bool closed = false;
 

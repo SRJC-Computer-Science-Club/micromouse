@@ -14,22 +14,22 @@ namespace Micromouse
 
 	MouseBot::MouseBot()
 	{
-		setPos(Vector::Pos(0, 0));
+		setPos(PositionVector(0, 0));
 	}
 
 	MouseBot::MouseBot(int x, int y)
 	{
-		setPos(Vector::Pos(x, y));
+		setPos(PositionVector(x, y));
 	}
 
-	MouseBot::MouseBot(Vector::Pos pos)
+	MouseBot::MouseBot(PositionVector pos)
 	{
 		setPos(pos);
 	}
 
 	/**** SET / GET FUNCTIONS ****/
 
-	Vector::Pos MouseBot::getPos()
+	PositionVector MouseBot::getPos()
 	{
 		return pos;
 	}
@@ -41,10 +41,10 @@ namespace Micromouse
 
 	void MouseBot::setPos(int x, int y)
 	{
-		setPos(Vector::Pos(x, y));
+		setPos(PositionVector(x, y));
 	}
 
-	void MouseBot::setPos(Vector::Pos pos)
+	void MouseBot::setPos(PositionVector pos)
 	{
 		this->pos = pos;
 	}

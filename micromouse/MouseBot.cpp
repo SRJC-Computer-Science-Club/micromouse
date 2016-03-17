@@ -48,6 +48,13 @@ namespace Micromouse
 		this->pos = pos;
 	}
 
+	/**** MAPPING FUNCTIONS ****/
+
+	void MouseBot::mapMaze()
+	{
+
+	}
+
 	/**** MOVEMENT FUNCTIONS ****/
 
 	void MouseBot::move(direction dir)

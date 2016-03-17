@@ -18,10 +18,12 @@ namespace Micromouse
 		MouseBot(int x, int y);					// Sets the position to (x,y)
 		MouseBot(PositionVector pos);
 
-		PositionVector getPos();					// Returns the position of the mouse
+		PositionVector getPos();				// Returns the position of the mouse
 		direction getFacing();					// Return the direction the mouse is facing.
 		void setPos(int x, int y);				// Sets the position to (x,y)
-		void setPos(PositionVector pos);			// Sets the position to pos
+		void setPos(PositionVector pos);		// Sets the position to pos
+
+		void mapMaze();
 
 		void moveForward();						// Moves the mouse forward by 1 node (1/2 cell)
 		void turnLeft();						// Moves the mouse forward and to the left, turning 90 degrees.

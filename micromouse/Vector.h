@@ -61,6 +61,7 @@ namespace Micromouse
 
 		PositionVector operator+(direction dir); // Returns a Pos that has been offset in the given direction.
 		PositionVector operator*(int scalar); // Returns a Pos with x and y multiplied by scalar.
+		bool operator==(PositionVector pos); // Returns true of the x of each position and the y of each position are equal.
 
 		// static const Pos& UNDEFINED;//a Vector that represents an undefined Vector
 

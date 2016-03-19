@@ -91,10 +91,14 @@ namespace Micromouse {
 					i * calibrationInterval + calibrationStart,
 					(i + 1) * calibrationInterval + calibrationStart, val);
 
-				log(DEBUG2) << dist;
+				log(DEBUG2) << "Measured Distance: " << dist;
 
 				return dist;
 			}
+
+			log(DEBUG2) << "Measured Distance*: " << MIN_RANGE;
+
+			return MIN_RANGE;
 		}
 	}
 

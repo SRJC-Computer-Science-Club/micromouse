@@ -157,6 +157,7 @@
     <ClCompile Include="micromouse\MouseBot.cpp" />
     <ClCompile Include="micromouse\Node.cpp" />
     <ClCompile Include="micromouse\Path.cpp" />
+    <ClCompile Include="micromouse\IRSensor.cpp" />
     <ClCompile Include="micromouse\Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +169,7 @@
     <ClInclude Include="micromouse\MouseBot.h" />
     <ClInclude Include="micromouse\Node.h" />
     <ClInclude Include="micromouse\Path.h" />
+    <ClInclude Include="micromouse\IRSensor.h" />
     <ClInclude Include="micromouse\Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

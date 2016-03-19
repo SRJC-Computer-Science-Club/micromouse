@@ -14,7 +14,7 @@ namespace Micromouse {
 		MIN_RANGE(minRange),
 		MAX_RANGE(maxRange)
 	{
-		initCalibration();
+		defaultCalibration();
 	}
 
 
@@ -65,7 +65,7 @@ namespace Micromouse {
 		}
 #else
 		log(WARN) << "performed pseudo calibration instead";
-		initCalibration();
+		defaultCalibration();
 #endif
 
 		return false;
@@ -98,6 +98,10 @@ namespace Micromouse {
 		}
 	}
 
+
+
+
+
 	float IRSenor::interpolate(int x1, int x2, int y1, int y2, int x)
 	{
 		return(float(x - x1) / (x2 - x1)*(y2 - y1) + y1);
@@ -106,8 +110,7 @@ namespace Micromouse {
 
 
 
-
-	void IRSenor::initCalibration()
+	void IRSenor::defaultCalibration()
 	{
 		if (MIN_RANGE == 40)
 		{
@@ -124,33 +127,5 @@ namespace Micromouse {
 		}
 		//TODO add default calibration for 2-15cm sensor
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	//GYRO/////////////////////////////
-
-
-
-
-
-
-
-
-
-	//Encoder
 }
 

@@ -7,6 +7,7 @@ Author GitHub:	joshuasrjc
 
 #pragma once
 #include "Vector.h"
+#include "IRSensor.h"
 
 namespace Micromouse
 {
@@ -17,6 +18,7 @@ namespace Micromouse
 		MouseBot();								// Uses a default position of (0,0)
 		MouseBot(int x, int y);					// Sets the position to (x,y)
 		MouseBot(PositionVector pos);
+		~MouseBot();
 
 		PositionVector getPos();					// Returns the position of the mouse
 		direction getFacing();					// Return the direction the mouse is facing.
@@ -30,10 +32,25 @@ namespace Micromouse
 		void rotateRight();						// Rotates the mouse in place to the right by 90 degrees.
 
 	private:
+		//TODO use actual pin numbers
+#ifdef __MK20DX256__ //this is the Teensy signature
+		//comment line below to test compile, remove #error when pins have been set
+#error define correct pin numbers 
+#endif
+		const int IR_LEFT_PIN = 1;
+		const int IR_RIGHT_PIN = 2;
+		const int IR_FRONT_LEFT_PIN = 3;
+		const int IR_FRONT_RIGHT_PIN = 4;
+
+		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };
 
 		void move(direction dir);
+		void initSensors();
 
 		PositionVector pos = PositionVector(0,0);
 		direction facing = N;
+
+		IRSenor* IRSensors[4];
+
 	};
 }

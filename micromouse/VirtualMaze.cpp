@@ -1,11 +1,11 @@
 /*********************************\
-File:			CompactMaze.cpp
+File:			VirtualMaze.cpp
 Creation date:	3/4/2016
 Author Name:	Joshua Murphy
 Author GitHub:	joshuasrjc
 \*********************************/
 
-#include "CompactMaze.h"
+#include "VirtualMaze.h"
 #include <stdlib.h>
 #include <assert.h>
 
@@ -14,7 +14,7 @@ using namespace std;
 namespace Micromouse
 {
 	// CONSTRUCTOR //
-	CompactMaze::CompactMaze(int width, int height) :
+	VirtualMaze::VirtualMaze(int width, int height) :
 		width(width),
 		height(height),
 		open(FlagMatrix(width, height)),
@@ -26,60 +26,60 @@ namespace Micromouse
 
 	// SET / GET FUNCTIONS //
 
-	void CompactMaze::setOpen(bool flag, int x, int y)
+	void VirtualMaze::setOpen(bool flag, int x, int y)
 	{
 		open.setFlag(flag, x, y);
 	}
 
-	void CompactMaze::setOpen(bool flag, PositionVector pos)
+	void VirtualMaze::setOpen(bool flag, PositionVector pos)
 	{
 		setOpen(flag, pos.x(), pos.y());
 	}
 
-	void CompactMaze::setExplored(bool flag, int x, int y)
+	void VirtualMaze::setExplored(bool flag, int x, int y)
 	{
 		explored.setFlag(flag, x, y);
 	}
-	void CompactMaze::setExplored(bool flag, PositionVector pos)
+	void VirtualMaze::setExplored(bool flag, PositionVector pos)
 	{ 
 		setExplored(flag, pos.x(), pos.y());
 	}
 
-	bool CompactMaze::isOpen(int x, int y) const
+	bool VirtualMaze::isOpen(int x, int y) const
 	{
 		return open.getFlag(x, y);
 	}
-	bool CompactMaze::isOpen(PositionVector pos) const
+	bool VirtualMaze::isOpen(PositionVector pos) const
 	{
 		return isOpen(pos.x(), pos.y());
 	}
 
-	bool CompactMaze::isExplored(int x, int y) const
+	bool VirtualMaze::isExplored(int x, int y) const
 	{
 		return explored.getFlag(x, y);
 	}
 
-	bool CompactMaze::isExplored(PositionVector pos) const
+	bool VirtualMaze::isExplored(PositionVector pos) const
 	{
 		return isExplored(pos.x(), pos.y());
 	}
 
-	bool CompactMaze::isInsideMaze(int x, int y) const
+	bool VirtualMaze::isInsideMaze(int x, int y) const
 	{
 		return (x >= 0) && (y >= 0) && (x < width) && (y < height);
 	}
 
-	bool CompactMaze::isInsideMaze(PositionVector pos) const
+	bool VirtualMaze::isInsideMaze(PositionVector pos) const
 	{
 		return isInsideMaze(pos.x(), pos.y());
 	}
 
-	int CompactMaze::getWidth() const
+	int VirtualMaze::getWidth() const
 	{
 		return width;
 	}
 
-	int CompactMaze::getHeight() const
+	int VirtualMaze::getHeight() const
 	{
 		return height;
 	}
@@ -87,7 +87,7 @@ namespace Micromouse
 
 	// GENERATION FUNCTIONS //
 
-	void CompactMaze::generateRandomMaze()
+	void VirtualMaze::generateRandomMaze()
 	{
 		//Initializes the starting cell.
 		setExplored(true, 0, 0);
@@ -142,7 +142,7 @@ namespace Micromouse
 		exploreRegion(PositionVector(0, 0), width, height);
 	}
 
-	void CompactMaze::openRegion(PositionVector pos, int w, int h)
+	void VirtualMaze::openRegion(PositionVector pos, int w, int h)
 	{
 		for (int y = 0; y < h; y++)
 		{
@@ -153,7 +153,7 @@ namespace Micromouse
 		}
 	}
 
-	void CompactMaze::exploreRegion(PositionVector pos, int w, int h)
+	void VirtualMaze::exploreRegion(PositionVector pos, int w, int h)
 	{
 		for (int y = 0; y < h; y++)
 		{
@@ -164,7 +164,7 @@ namespace Micromouse
 		}
 	}
 
-	direction CompactMaze::randomPossibleDirection(PositionVector pos, vector<PositionVector*>& path)
+	direction VirtualMaze::randomPossibleDirection(PositionVector pos, vector<PositionVector*>& path)
 	{
 		direction possibleDirections[4];
 		int numPossibleDirections = 0;
@@ -206,7 +206,7 @@ namespace Micromouse
 		}
 	}
 
-	void CompactMaze::destroyRandomWallInPerimeter(PositionVector pos, int w, int h)
+	void VirtualMaze::destroyRandomWallInPerimeter(PositionVector pos, int w, int h)
 	{
 		w /= 2; //DO NOT SIMPLIFY: w/2 needs to round down to the nearest int w;
 		h /= 2; //DO NOT SIMPLIFY: h/2 needs to round down to the nearest int h;
@@ -229,7 +229,7 @@ namespace Micromouse
 		setOpen(true, pos.x() + x, pos.y() + y);
 	}
 
-	void CompactMaze::destroyRandomWall()
+	void VirtualMaze::destroyRandomWall()
 	{
 		int x;
 		int y = rand() % height;
@@ -262,7 +262,7 @@ namespace Micromouse
 		}
 	}
 
-	int CompactMaze::getNumAdjacentWalls(PositionVector pos)
+	int VirtualMaze::getNumAdjacentWalls(PositionVector pos)
 	{
 		int n = 0;
 		if (!isOpen(pos + N)) n++;
@@ -272,7 +272,7 @@ namespace Micromouse
 		return n;
 	}
 
-	ostream& operator<<(ostream& out, const CompactMaze& maze)
+	ostream& operator<<(ostream& out, const VirtualMaze& maze)
 	{
 		out << endl << "+ ";
 		for (int x = 0; x < maze.getWidth(); x++) out << "- ";

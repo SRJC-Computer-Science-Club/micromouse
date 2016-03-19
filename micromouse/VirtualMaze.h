@@ -1,5 +1,5 @@
 /*********************************\
-File:			CompactMaze.h
+File:			VirtualMaze.h
 Creation date:	3/4/2016
 Author Name:	Joshua Murphy
 Author GitHub:	joshuasrjc
@@ -18,14 +18,14 @@ namespace Micromouse
 	//A class that stores data about a maze.
 	//Each cell, edge, and corner of the map can be either
 	//open or closed, and either explored or unexplored.
-	class CompactMaze
+	class VirtualMaze
 	{
 	public:
 		//Creates a maze with the given width and height.
 		//width and height must each be greater than 0 and
 		//must each be 1 less than a multiple of 4.
 		//(3, 7, 11, 15, 19, 23, 27, 31, ...)
-		CompactMaze(int width, int height);
+		VirtualMaze(int width, int height);
 
 		//Sets the open flag at the given position.
 		//If the position is outside the maze, nothing happens.
@@ -97,5 +97,5 @@ namespace Micromouse
 
 	//Prints out a picture of the maze for debugging.
 	//Just use: log( DEBUGX ) << maze;
-	ostream& operator<<(ostream& out, const CompactMaze& maze);
+	ostream& operator<<(ostream& out, const VirtualMaze& maze);
 }

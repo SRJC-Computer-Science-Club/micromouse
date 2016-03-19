@@ -7,6 +7,8 @@ Author GitHub:	joshuasrjc
 
 #pragma once
 #include "Vector.h"
+#include "RobotIO.h"
+#include "VirtualMaze.h"
 
 namespace Micromouse
 {
@@ -39,6 +41,9 @@ namespace Micromouse
 	private:
 
 		void move(direction dir);
+
+		VirtualMaze* virtualMaze;
+		RobotIO robotIO;
 
 		PositionVector position = PositionVector(0,0);
 		direction facing = N;

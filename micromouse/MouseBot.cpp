@@ -8,23 +8,38 @@ Author GitHub:	joshuasrjc
 #include "MouseBot.h"
 #include <stack>
 
+#define __MK20DX256__
+
 namespace Micromouse
 {
 	/**** CONSTRUCTORS ****/
 
 	MouseBot::MouseBot()
 	{
-		setPos(PositionVector(0, 0));
+		MouseBot::MouseBot(0,0);
 	}
 
 	MouseBot::MouseBot(int x, int y)
 	{
-		setPos(PositionVector(x, y));
+		MouseBot(PositionVector(x, y));
 	}
 
 	MouseBot::MouseBot(PositionVector pos)
 	{
 		setPos(pos);
+
+#ifdef __MK20DX256__
+		// If compiled for Teensy
+
+		robotIO = RobotIO();
+
+#else
+		// If compiled for PC
+
+		virtualMaze = new VirtualMaze(31, 31);
+
+#endif
+
 	}
 
 	/**** SET / GET FUNCTIONS ****/
@@ -65,6 +80,57 @@ namespace Micromouse
 		}
 	}
 
+	bool MouseBot::isClearForward()
+	{
+
+#ifdef __MK20DX256__
+		// If compiled for Teensy
+
+		return robotIO.isClearForward();
+
+#else
+		// If compiled for PC
+
+		return virtualMaze->isOpen(position + facing);
+
+#endif
+
+	}
+
+	bool MouseBot::isClearRight()
+	{
+
+#ifdef __MK20DX256__
+		// If compiled for Teensy
+
+		return robotIO.isClearRight();
+
+#else
+		// If compiled for PC
+
+		return virtualMaze->isOpen(position + (facing + E));
+
+#endif
+
+	}
+
+	bool MouseBot::isClearLeft()
+	{
+
+#ifdef __MK20DX256__
+		// If compiled for Teensy
+
+		return robotIO.isClearLeft();
+
+#else
+		// If compiled for PC
+
+		return virtualMaze->isOpen(position + (facing + W));
+
+#endif
+
+	}
+
 	/**** MOVEMENT FUNCTIONS ****/
 
 	void MouseBot::move(direction dir)
@@ -75,6 +141,14 @@ namespace Micromouse
 	void MouseBot::moveForward()
 	{
 		move(facing);
+
+#ifdef __MK20DX256__
+		// If compiled for Teensy
+
+		robotIO.moveForward();
+
+#endif
+
 	}
 
 	void MouseBot::turnLeft()
@@ -94,11 +168,25 @@ namespace Micromouse
 	void MouseBot::rotateLeft()
 	{
 		facing = facing + W;
+
+#ifdef __MK20DX256__
+		// If compiled for Teensy
+
+		robotIO.rotateLeft();
+
+#endif
 	}
 
 	void MouseBot::rotateRight()
 	{
 		facing = facing + E;
+
+#ifdef __MK20DX256__
+		// If compiled for Teensy
+
+		robotIO.rotateRight();
+
+#endif
 	}
 
 	void MouseBot::rotateToFaceDirection(direction dir)

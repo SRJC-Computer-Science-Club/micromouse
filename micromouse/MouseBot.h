@@ -30,12 +30,13 @@ namespace Micromouse
 		void turnRight();						// Moves the mouse forward and to the right, turning 90 degrees.
 		void rotateLeft();						// Rotates the mouse in place to the left by 90 degrees.
 		void rotateRight();						// Rotates the mouse in place to the right by 90 degrees.
+		void rotateToFaceDirection(direction dir); // Rotates the mouse in place until it reaches the given direction.
 
 	private:
 
 		void move(direction dir);
 
-		PositionVector pos = PositionVector(0,0);
+		PositionVector position = PositionVector(0,0);
 		direction facing = N;
 	};
 }

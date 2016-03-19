@@ -52,6 +52,16 @@ namespace Micromouse
 
 
 
+	PositionVector::PositionVector(const PositionVector& pos)
+	{
+		_x = pos._x;
+		_y = pos._y;
+
+		validateSelf();
+	}
+
+
+
 	PositionVector::~PositionVector()
 	{
 	}

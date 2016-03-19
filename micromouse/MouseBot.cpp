@@ -6,6 +6,7 @@ Author GitHub:	joshuasrjc
 \*********************************/
 
 #include "MouseBot.h"
+#include <stack>
 
 namespace Micromouse
 {
@@ -30,7 +31,7 @@ namespace Micromouse
 
 	PositionVector MouseBot::getPos()
 	{
-		return pos;
+		return position;
 	}
 
 	direction MouseBot::getFacing()
@@ -45,21 +46,30 @@ namespace Micromouse
 
 	void MouseBot::setPos(PositionVector pos)
 	{
-		this->pos = pos;
+		this->position = pos;
 	}
 
 	/**** MAPPING FUNCTIONS ****/
 
 	void MouseBot::mapMaze()
 	{
+		stack<PositionVector*> choicePositions = stack<PositionVector*>();
+		choicePositions.push(new PositionVector(position));
+		
+		while (!choicePositions.empty())
+		{
+			PositionVector* pos = choicePositions.top();
+			choicePositions.pop();
 
+			
+		}
 	}
 
 	/**** MOVEMENT FUNCTIONS ****/
 
 	void MouseBot::move(direction dir)
 	{
-		pos = pos + dir;
+		position = position + dir;
 	}
 
 	void MouseBot::moveForward()
@@ -89,5 +99,21 @@ namespace Micromouse
 	void MouseBot::rotateRight()
 	{
 		facing = facing + E;
+	}
+
+	void MouseBot::rotateToFaceDirection(direction dir)
+	{
+		while (facing != dir)
+		{
+			direction temp = dir - facing;
+			if (temp == NE || temp == E || temp == SE)
+			{
+				turnRight();
+			}
+			else
+			{
+				turnLeft();
+			}
+		}
 	}
 }

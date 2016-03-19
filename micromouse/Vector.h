@@ -52,6 +52,7 @@ namespace Micromouse
 	{
 	public:
 		PositionVector( int x , int y );
+		PositionVector(const PositionVector& pos);
 		~PositionVector();
 
 		int x() const; // return x

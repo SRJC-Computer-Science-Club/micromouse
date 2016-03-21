@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef __MK20DX256__ //this the the Teensy signature
+#ifdef __MK20DX256__ //this is the Teensy signature
 #include <ostream>
 #else
 #include <iostream>
@@ -88,7 +88,7 @@ public:
 
 	void consoleOut(const std::string & s)
 	{
-#ifdef __MK20DX256__ //this the the Teensy signature
+#ifdef __MK20DX256__ //this is the Teensy signature
 		//TODO serial out
 #else
 		std::cout << s;
@@ -97,7 +97,7 @@ public:
 
 	void fileOut(const std::string & s)
 	{
-#ifdef __MK20DX256__ //this the the Teensy signature
+#ifdef __MK20DX256__ //this is the Teensy signature
 #else
 		std::ofstream file(".log", std::ios::app);
 #endif

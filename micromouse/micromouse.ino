@@ -1,4 +1,3 @@
-#define TEENSY
 
 void setup() {
 }

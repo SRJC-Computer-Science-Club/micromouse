@@ -42,6 +42,9 @@
     <ClCompile Include="micromouse\Vector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="micromouse\IRSensor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="micromouse\CompactMaze.h">
@@ -69,6 +72,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="micromouse\Vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="micromouse\IRSensor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

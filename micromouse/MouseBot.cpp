@@ -14,17 +14,45 @@ namespace Micromouse
 	MouseBot::MouseBot()
 	{
 		setPos(PositionVector(0, 0));
+		initSensors();
 	}
 
 	MouseBot::MouseBot(int x, int y)
 	{
 		setPos(PositionVector(x, y));
+		initSensors();
 	}
 
 	MouseBot::MouseBot(PositionVector pos)
 	{
 		setPos(pos);
+		initSensors();
 	}
+
+	MouseBot::~MouseBot()
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			delete IRSensors[i];
+		}
+	}
+
+	/**** INITIALIZATIONS ****/
+
+	void MouseBot::initSensors()
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			delete IRSensors[i];
+		}
+
+		IRSensors[LEFT] = new IRSenor(IR_LEFT_PIN, 40, 300);
+		IRSensors[RIGHT] = new IRSenor(IR_RIGHT_PIN, 40, 300);
+		IRSensors[FRONT_LEFT] = new IRSenor(IR_FRONT_LEFT_PIN, 40, 300);
+		IRSensors[FRONT_RIGHT] = new IRSenor(IR_FRONT_RIGHT_PIN, 40, 300);
+	}
+
+
 
 	/**** SET / GET FUNCTIONS ****/
 

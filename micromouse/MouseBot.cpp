@@ -111,4 +111,47 @@ namespace Micromouse
 	{
 		facing = facing + E;
 	}
+	
+	
+	
+	
+	
+	bool isWallinDirection( direction dir )
+	{
+	    assert( dir == W || dir == N || dir == E || dir == NW || dir == NE );
+	    
+	    //TODO fill in distances will measured values
+	    // distances now are just estimates
+	    switch( dir )
+	    {
+	     case W:
+	       return ( IRSensors[ LEFT ]->getDistance() < 100 );
+	     break;
+	     
+	     case E:
+	        return ( IRSensors[ RIGHT ]->getDistance() < 100 );
+	     break;
+	     
+	     case N:
+	        int dist1 = IRSensors[ FRONT_LEFT ]-.getDistance();
+	        
+	        return ( dist1 < 120 && abs( dist1 - IRSensors[ FRONT_RIGHT]->getDistance() ) < 30 );
+	     break
+	     
+	     case NW:
+	        int dist = IRSensors[ FRONT_LEFT ]->getDistance();
+	        return ( dist < 150 && dist > 110 );
+	     break;
+	     
+	     case NE:
+            int dist = IRSensors[ FRONT_RIGHT ]->getDistance();
+            return ( dist < 150 && dist > 110 );
+         break;
+	    }
+	}
+	
+	
+	
+	
+	
 }

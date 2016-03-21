@@ -46,7 +46,9 @@ namespace Micromouse
 
 		void move(direction dir);
 		void initSensors();
-
+		
+		bool isWallInDirection( direction dir );
+		
 		PositionVector pos = PositionVector(0,0);
 		direction facing = N;
 

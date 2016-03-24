@@ -43,17 +43,6 @@ namespace Micromouse
 		void rotateToFaceDirection(direction dir); // Rotates the mouse in place until it reaches the given direction.
 
 	private:
-		//TODO use actual pin numbers
-#ifdef __MK20DX256__ //this is the Teensy signature
-		//comment line below to test compile, remove #error when pins have been set
-#error define correct pin numbers 
-#endif
-		const int IR_LEFT_PIN = 1;
-		const int IR_RIGHT_PIN = 2;
-		const int IR_FRONT_LEFT_PIN = 3;
-		const int IR_FRONT_RIGHT_PIN = 4;
-
-		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };
 
 		void move(direction dir);
 		void followPath(Path* path);
@@ -68,12 +57,8 @@ namespace Micromouse
 		VirtualMaze* virtualMaze;
 		RobotIO robotIO;
 		stack<direction> movementHistory;
-		void initSensors();
 
 		PositionVector position = PositionVector(0,0);
 		direction facing = N;
-
-		IRSenor* IRSensors[4];
-
 	};
 }

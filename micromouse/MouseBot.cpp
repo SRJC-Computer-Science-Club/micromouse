@@ -45,10 +45,6 @@ namespace Micromouse
 
 	MouseBot::~MouseBot()
 	{
-		for (int i = 0; i < 4; i++)
-		{
-			delete IRSensors[i];
-		}
 	}
 
 	/**** INITIALIZATIONS ****/

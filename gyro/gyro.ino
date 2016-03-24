@@ -54,17 +54,24 @@ void setup()
 
 void loop() 
 {
-  for(int count = 0; count <= 1000; count ++){
-    lsm.read();
-    rotation = (int)lsm.gyroData.z;
-    
-    if(maxValue < rotation)
+  int x_integrator = 0;
+  int degree = 0;
+  while(true){
+    for( int x = 0 ; x < 100 ; x++ )
     {
-      maxValue = rotation;//larges sensor value
+    lsm.read();
+    x_integrator += ( (int)lsm.gyroData.z + 418);
+    Serial.println((int)lsm.gyroData.z + 418);//Serial.print("    ");Serial.println(x_integrator);
+     delay(10);
     }
-    delay(1);
+
+    degree = (int)(( x_integrator / 32767.0f)*245 )%360;
+  
+  // Serial.println(degree); 
+    
   }
-  Serial.print("Z: "); Serial.print((int)lsm.gyroData.z); 
-  Serial.print(" Max Value: ");   Serial.println(maxValue);
-  //delay(200);//default 200
+    
+    
+
+  
 }

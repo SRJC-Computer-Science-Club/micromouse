@@ -48,6 +48,8 @@ namespace Micromouse
 
 
 
+
+
 	/**** SET / GET FUNCTIONS ****/
 
 	PositionVector MouseBot::getPos()
@@ -69,6 +71,10 @@ namespace Micromouse
 	{
 		this->position = pos;
 	}
+
+
+
+
 
 	/**** MAPPING FUNCTIONS ****/
 
@@ -218,6 +224,10 @@ namespace Micromouse
 #endif
 
 	}
+
+
+
+
 
 	/**** MOVEMENT FUNCTIONS ****/
 

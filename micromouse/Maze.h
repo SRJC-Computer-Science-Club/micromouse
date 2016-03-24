@@ -78,4 +78,8 @@ namespace Micromouse
 		FlagMatrix explored;
 
 	};
+
+	//Prints out a picture of the maze for debugging.
+	//Just use: log( DEBUGX ) << maze;
+	ostream& operator<<(ostream& out, const Maze& maze);
 }

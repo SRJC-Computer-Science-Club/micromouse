@@ -262,4 +262,52 @@ namespace Micromouse
 			}
 		}
 	}
+
+	ostream& operator<<(ostream& out, const Maze& maze)
+	{
+		out << endl << "+ ";
+		for (int x = 0; x < NUM_NODES_W; x++) out << "- ";
+		out << "+" << endl;
+
+		for (int y = NUM_NODES_H - 1; y >= 0; y--)
+		{
+			out << "| ";
+			for (int x = 0; x < NUM_NODES_W; x++)
+			{
+				if (maze.isExplored(x, y))
+				{
+					if (maze.isOpen(x, y))
+					{
+						out << "  ";
+					}
+					else
+					{
+						if (y % 2 == 0 && x % 2 == 1)
+						{
+							out << "| ";
+						}
+						else if (y % 2 == 1 && x % 2 == 0)
+						{
+							out << "- ";
+						}
+						else
+						{
+							out << "+ ";
+						}
+					}
+				}
+				else
+				{
+					out << "+ ";
+				}
+			}
+			out << "|" << endl;
+		}
+
+		out << "+ ";
+		for (int x = 0; x < NUM_NODES_W; x++) out << "- ";
+		out << "+" << endl;
+
+		return out;
+	}
 }

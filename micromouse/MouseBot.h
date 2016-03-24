@@ -9,6 +9,8 @@ Author GitHub:	joshuasrjc
 #include "Vector.h"
 #include "RobotIO.h"
 #include "VirtualMaze.h"
+#include "Maze.h"
+#include <stack>
 
 namespace Micromouse
 {
@@ -41,9 +43,18 @@ namespace Micromouse
 	private:
 
 		void move(direction dir);
+		void followPath(Path* path);
+		void backtrack();
 
+		void lookAround();
+		bool isPossibleDirection(direction dir);
+		int numPossibleDirections();
+		direction pickPossibleDirection();
+
+		Maze maze;
 		VirtualMaze* virtualMaze;
 		RobotIO robotIO;
+		stack<direction> movementHistory;
 
 		PositionVector position = PositionVector(0,0);
 		direction facing = N;

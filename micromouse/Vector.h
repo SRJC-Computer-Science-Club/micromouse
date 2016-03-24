@@ -7,7 +7,7 @@ using namespace std;
 namespace Micromouse
 {
 	//number of cells in maze
-	const int MAZE_W = 16 * 2 - 1 , MAZE_H = 16 * 2 - 1; 
+	const int MAZE_W = 16, MAZE_H = 16;
 
 	//number of nodes used to represent the maze
 	const int NUM_NODES_W = MAZE_W * 2 - 1 , NUM_NODES_H = MAZE_H * 2 - 1; 
@@ -63,6 +63,7 @@ namespace Micromouse
 		PositionVector operator+(direction dir); // Returns a Pos that has been offset in the given direction.
 		PositionVector operator*(int scalar); // Returns a Pos with x and y multiplied by scalar.
 		bool operator==(PositionVector pos); // Returns true of the x of each position and the y of each position are equal.
+		bool operator!=(PositionVector pos); // Returns true of the x of each position and the y of each position are equal.
 
 		// static const Pos& UNDEFINED;//a Vector that represents an undefined Vector
 

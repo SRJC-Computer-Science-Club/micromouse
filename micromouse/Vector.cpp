@@ -126,6 +126,12 @@ namespace Micromouse
 	}
 
 
+	bool PositionVector::operator!=(PositionVector pos)
+	{
+		return _x != pos._x || _y != pos._y;
+	}
+
+
 	void PositionVector::validateSelf()
 	{
 		//assert( _x >= 0 );

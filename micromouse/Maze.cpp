@@ -8,6 +8,9 @@ namespace Micromouse
 	// constructors //////////////////////////////////////////////////
 
 	Maze::Maze()
+		:
+		open(FlagMatrix(NUM_NODES_W, NUM_NODES_H)),
+		explored(FlagMatrix(NUM_NODES_W, NUM_NODES_H))
 	{
 		initNodes();
 	}
@@ -161,6 +164,57 @@ namespace Micromouse
 		*/
 
 		return nullptr;
+	}
+
+
+
+
+	void Maze::setOpen(bool flag, int x, int y)
+	{
+		open.setFlag(flag, x, y);
+	}
+
+	void Maze::setOpen(bool flag, PositionVector pos)
+	{
+		setOpen(flag, pos.x(), pos.y());
+	}
+
+	void Maze::setExplored(bool flag, int x, int y)
+	{
+		explored.setFlag(flag, x, y);
+	}
+	void Maze::setExplored(bool flag, PositionVector pos)
+	{
+		setExplored(flag, pos.x(), pos.y());
+	}
+
+	bool Maze::isOpen(int x, int y) const
+	{
+		return open.getFlag(x, y);
+	}
+	bool Maze::isOpen(PositionVector pos) const
+	{
+		return isOpen(pos.x(), pos.y());
+	}
+
+	bool Maze::isExplored(int x, int y) const
+	{
+		return explored.getFlag(x, y);
+	}
+
+	bool Maze::isExplored(PositionVector pos) const
+	{
+		return isExplored(pos.x(), pos.y());
+	}
+
+	bool Maze::isInsideMaze(int x, int y) const
+	{
+		return (x >= 0) && (y >= 0) && (x < NUM_NODES_W) && (y < NUM_NODES_H);
+	}
+
+	bool Maze::isInsideMaze(PositionVector pos) const
+	{
+		return isInsideMaze(pos.x(), pos.y());
 	}
 
 

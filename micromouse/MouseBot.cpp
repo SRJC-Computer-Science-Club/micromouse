@@ -31,7 +31,6 @@ namespace Micromouse
 		// If compiled for Teensy
 
 		robotIO = RobotIO();
-		initSensors();
 
 #else
 		// If compiled for PC
@@ -45,25 +44,6 @@ namespace Micromouse
 
 	MouseBot::~MouseBot()
 	{
-		for (int i = 0; i < 4; i++)
-		{
-			delete IRSensors[i];
-		}
-	}
-
-	/**** INITIALIZATIONS ****/
-
-	void MouseBot::initSensors()
-	{
-		for (int i = 0; i < 4; i++)
-		{
-			delete IRSensors[i];
-		}
-
-		IRSensors[LEFT] = new IRSenor(IR_LEFT_PIN, 40, 300);
-		IRSensors[RIGHT] = new IRSenor(IR_RIGHT_PIN, 40, 300);
-		IRSensors[FRONT_LEFT] = new IRSenor(IR_FRONT_LEFT_PIN, 40, 300);
-		IRSensors[FRONT_RIGHT] = new IRSenor(IR_FRONT_RIGHT_PIN, 40, 300);
 	}
 
 

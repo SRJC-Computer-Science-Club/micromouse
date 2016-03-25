@@ -20,11 +20,17 @@ namespace Micromouse
 #ifdef __MK20DX256__
 		// If compiled for Teensy
 
-		robotIO = RobotIO();
-
+		//robotIO = RobotIO();
+		// 1. the default constructor is implicitly called since 
+		//the variable was of type RobotIO, and not RobotIO*, but
+		// this alone would not cause an error
+		//
+		// 2. RobotIO contains constants which makes the = operator not work because it knows it can't copy the consts 
+		// giving this error
+		//MouseBot.cpp:33: error: use of deleted function 'Micromouse::RobotIO& Micromouse::RobotIO::operator=(const Micromouse::RobotIO&)'
+		// i made the constants static as they should be to avoid this
 #else
 		// If compiled for PC
-
 		virtualMaze = new VirtualMaze(NUM_NODES_W, NUM_NODES_H);
 		virtualMaze->generateRandomMaze();
 		logC(INFO) << "Randomly generated a virtual maze:\n";

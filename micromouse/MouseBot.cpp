@@ -13,19 +13,9 @@ namespace Micromouse
 {
 	/**** CONSTRUCTORS ****/
 
-	MouseBot::MouseBot()
-	{
-		MouseBot::MouseBot(0,0);
-	}
-
 	MouseBot::MouseBot(int x, int y)
 	{
-		MouseBot(PositionVector(x, y));
-	}
-
-	MouseBot::MouseBot(PositionVector pos)
-	{
-		setPos(pos);
+		setPos(x, y);
 
 #ifdef __MK20DX256__
 		// If compiled for Teensy

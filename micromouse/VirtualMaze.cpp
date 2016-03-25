@@ -6,10 +6,13 @@ Author GitHub:	joshuasrjc
 \*********************************/
 
 #include "VirtualMaze.h"
-#include <stdlib.h>
 #include <assert.h>
 
-using namespace std;
+#ifdef __MK20DX256__ //this is the Teensy signature
+#include <Arduino.h>//random
+#else
+#include <stdlib.h> //rand
+#endif
 
 namespace Micromouse
 {
@@ -104,7 +107,12 @@ namespace Micromouse
 		//Generates the maze
 		while (!path.empty())
 		{
+#ifdef __MK20DX256__ //this is the Teensy signature
+			int r = random(path.size());
+#else
 			int r = rand() % path.size();
+#endif
+
 			PositionVector* temp = path[r];
 			path[r] = path.back();
 			path.pop_back();
@@ -201,8 +209,12 @@ namespace Micromouse
 		}
 		else
 		{
+#ifdef __MK20DX256__ //this is the Teensy signature
+			int r = random(numPossibleDirections);
+#else
 			int r = rand() % numPossibleDirections;
 			return possibleDirections[r];
+#endif
 		}
 	}
 
@@ -211,7 +223,11 @@ namespace Micromouse
 		w /= 2; //DO NOT SIMPLIFY: w/2 needs to round down to the nearest int w;
 		h /= 2; //DO NOT SIMPLIFY: h/2 needs to round down to the nearest int h;
 		int numWallsInPerimeter = 2*( w + h );
+#ifdef __MK20DX256__ //this is the Teensy signature
+		int r = random(numWallsInPerimeter);
+#else
 		int r = rand() % numWallsInPerimeter;
+#endif
 		int x, y;
 
 		if (r < 2*w)
@@ -232,11 +248,19 @@ namespace Micromouse
 	void VirtualMaze::destroyRandomWall()
 	{
 		int x;
+#ifdef __MK20DX256__ //this is the Teensy signature
+		int y = random(height);
+#else
 		int y = rand() % height;
+#endif
 
 		if (y % 2 == 0)
 		{
+#ifdef __MK20DX256__ //this is the Teensy signature
+			x = 2 * (random((width - 1) / 2)) + 1;
+#else
 			x = 2 * (rand() % ((width - 1) / 2)) + 1;
+#endif
 			PositionVector pos(x, y);
 			if (!isExplored(x, y) && getNumAdjacentWalls(pos + N) > 1 && getNumAdjacentWalls(pos + S) > 1)
 			{
@@ -249,7 +273,11 @@ namespace Micromouse
 		}
 		else
 		{
+#ifdef __MK20DX256__ //this is the Teensy signature
+			x = 2 * random((width + 1) / 2);
+#else
 			x = 2 * (rand() % ((width + 1) / 2));
+#endif
 			PositionVector pos(x, y);
 			if (!isExplored(x, y) && getNumAdjacentWalls(pos + E) > 1 && getNumAdjacentWalls(pos + W) > 1)
 			{

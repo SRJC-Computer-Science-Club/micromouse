@@ -34,7 +34,7 @@ namespace Micromouse
 		virtualMaze = new VirtualMaze(NUM_NODES_W, NUM_NODES_H);
 		virtualMaze->generateRandomMaze();
 		logC(INFO) << "Randomly generated a virtual maze:\n";
-		logC(INFO) << *virtualMaze << "\n";
+		//logC(INFO) << *virtualMaze << "\n";
 #endif
 	}
 
@@ -116,7 +116,7 @@ namespace Micromouse
 		}
 
 		logC(INFO) << "Mapped maze:\n";
-		logC(INFO) << maze;
+		//logC(INFO) << maze;
 	}
 
 	void MouseBot::lookAround()

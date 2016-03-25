@@ -81,5 +81,8 @@ namespace Micromouse
 
 	//Prints out a picture of the maze for debugging.
 	//Just use: log( DEBUGX ) << maze;
+#ifdef __MK20DX256__ //this is the Teensy signature
+#else
 	ostream& operator<<(ostream& out, const Maze& maze);
+#endif
 }

@@ -101,6 +101,8 @@ namespace Micromouse
 		return i;
 	}
 
+#ifdef __MK20DX256__ //this is the Teensy signature
+#else
 	ostream& operator<<(ostream& out, const FlagMatrix& matrix)
 	{
 		out << endl << '+';
@@ -126,5 +128,6 @@ namespace Micromouse
 		out << " +" << endl;
 		return	out;
 	}
+#endif
 }
 

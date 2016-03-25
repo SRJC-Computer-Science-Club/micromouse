@@ -20,6 +20,8 @@ namespace Micromouse
 		return dir = static_cast<direction>(((int)dir + 1) % 9);
 	}
 
+#ifdef __MK20DX256__ //this is the Teensy signature
+#else
 	ostream& operator<<(ostream& out, const direction& dir)
 	{
 		switch (dir)
@@ -35,6 +37,7 @@ namespace Micromouse
 		default: return out << "NONE";
 		}
 	}
+#endif
 
 	//static const Pos & UNDEFINED = Pos( 0 , -1 );
 

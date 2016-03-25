@@ -13,7 +13,7 @@ namespace Micromouse
 		//VirtualMaze maze = VirtualMaze(31, 31);
 		//maze.generateRandomMaze();
 
-		MouseBot mouse = MouseBot(PositionVector(0,0));
+		MouseBot mouse = MouseBot(0, 0);
 		mouse.mapMaze();
 
 		//logC( DEBUG1 ) << maze; //log to console only

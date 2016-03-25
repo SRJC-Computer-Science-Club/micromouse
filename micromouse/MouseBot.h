@@ -19,9 +19,7 @@ namespace Micromouse
 	class MouseBot
 	{
 	public:
-		MouseBot();								// Uses a default position of (0,0)
-		MouseBot(int x, int y);					// Sets the position to (x,y)
-		MouseBot(PositionVector pos);
+		MouseBot(int x = 0, int y = 0);					// Sets the position to (x,y)
 		~MouseBot();
 
 		PositionVector getPos();				// Returns the position of the mouse

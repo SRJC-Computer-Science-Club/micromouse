@@ -73,11 +73,6 @@ namespace Micromouse
 
 	void RobotIO::initSensors()
 	{
-		for (int i = 0; i < 4; i++)
-		{
-			delete IRSensors[i];
-		}
-
 		IRSensors[LEFT] = new IRSenor(IR_LEFT_PIN, 40, 300);
 		IRSensors[RIGHT] = new IRSenor(IR_RIGHT_PIN, 40, 300);
 		IRSensors[FRONT_LEFT] = new IRSenor(IR_FRONT_LEFT_PIN, 40, 300);

@@ -52,6 +52,16 @@ namespace Micromouse
 
 
 
+	PositionVector::PositionVector(const PositionVector& pos)
+	{
+		_x = pos._x;
+		_y = pos._y;
+
+		validateSelf();
+	}
+
+
+
 	PositionVector::~PositionVector()
 	{
 	}
@@ -109,6 +119,17 @@ namespace Micromouse
 		return PositionVector(_x*scalar, _y*scalar);
 	}
 
+
+	bool PositionVector::operator==(PositionVector pos)
+	{
+		return _x == pos._x && _y == pos._y;
+	}
+
+
+	bool PositionVector::operator!=(PositionVector pos)
+	{
+		return _x != pos._x || _y != pos._y;
+	}
 
 
 	void PositionVector::validateSelf()

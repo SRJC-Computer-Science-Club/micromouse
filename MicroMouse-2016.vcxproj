@@ -150,18 +150,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="micromouse\CompactMaze.cpp" />
     <ClCompile Include="micromouse\Controller.cpp" />
     <ClCompile Include="micromouse\FlagMatrix.cpp" />
     <ClCompile Include="micromouse\Maze.cpp" />
     <ClCompile Include="micromouse\MouseBot.cpp" />
     <ClCompile Include="micromouse\Node.cpp" />
     <ClCompile Include="micromouse\Path.cpp" />
+    <ClCompile Include="micromouse\RobotIO.cpp" />
     <ClCompile Include="micromouse\IRSensor.cpp" />
     <ClCompile Include="micromouse\Vector.cpp" />
+    <ClCompile Include="micromouse\VirtualMaze.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="micromouse\CompactMaze.h" />
     <ClInclude Include="micromouse\Controller.h" />
     <ClInclude Include="micromouse\FlagMatrix.h" />
     <ClInclude Include="micromouse\Logger.h" />
@@ -169,8 +169,10 @@
     <ClInclude Include="micromouse\MouseBot.h" />
     <ClInclude Include="micromouse\Node.h" />
     <ClInclude Include="micromouse\Path.h" />
+    <ClInclude Include="micromouse\RobotIO.h" />
     <ClInclude Include="micromouse\IRSensor.h" />
     <ClInclude Include="micromouse\Vector.h" />
+    <ClInclude Include="micromouse\VirtualMaze.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

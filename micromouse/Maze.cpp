@@ -8,6 +8,9 @@ namespace Micromouse
 	// constructors //////////////////////////////////////////////////
 
 	Maze::Maze()
+		:
+		open(FlagMatrix(NUM_NODES_W, NUM_NODES_H)),
+		explored(FlagMatrix(NUM_NODES_W, NUM_NODES_H))
 	{
 		initNodes();
 	}
@@ -166,6 +169,57 @@ namespace Micromouse
 
 
 
+	void Maze::setOpen(bool flag, int x, int y)
+	{
+		open.setFlag(flag, x, y);
+	}
+
+	void Maze::setOpen(bool flag, PositionVector pos)
+	{
+		setOpen(flag, pos.x(), pos.y());
+	}
+
+	void Maze::setExplored(bool flag, int x, int y)
+	{
+		explored.setFlag(flag, x, y);
+	}
+	void Maze::setExplored(bool flag, PositionVector pos)
+	{
+		setExplored(flag, pos.x(), pos.y());
+	}
+
+	bool Maze::isOpen(int x, int y) const
+	{
+		return open.getFlag(x, y);
+	}
+	bool Maze::isOpen(PositionVector pos) const
+	{
+		return isOpen(pos.x(), pos.y());
+	}
+
+	bool Maze::isExplored(int x, int y) const
+	{
+		return explored.getFlag(x, y);
+	}
+
+	bool Maze::isExplored(PositionVector pos) const
+	{
+		return isExplored(pos.x(), pos.y());
+	}
+
+	bool Maze::isInsideMaze(int x, int y) const
+	{
+		return (x >= 0) && (y >= 0) && (x < NUM_NODES_W) && (y < NUM_NODES_H);
+	}
+
+	bool Maze::isInsideMaze(PositionVector pos) const
+	{
+		return isInsideMaze(pos.x(), pos.y());
+	}
+
+
+
+
 
 	Path * Micromouse::Maze::createPath( const Node * node )
 	{
@@ -207,5 +261,53 @@ namespace Micromouse
 				maze[ x ][ y ] = nullptr;
 			}
 		}
+	}
+
+	ostream& operator<<(ostream& out, const Maze& maze)
+	{
+		out << endl << "+ ";
+		for (int x = 0; x < NUM_NODES_W; x++) out << "- ";
+		out << "+" << endl;
+
+		for (int y = NUM_NODES_H - 1; y >= 0; y--)
+		{
+			out << "| ";
+			for (int x = 0; x < NUM_NODES_W; x++)
+			{
+				if (maze.isExplored(x, y))
+				{
+					if (maze.isOpen(x, y))
+					{
+						out << "  ";
+					}
+					else
+					{
+						if (y % 2 == 0 && x % 2 == 1)
+						{
+							out << "| ";
+						}
+						else if (y % 2 == 1 && x % 2 == 0)
+						{
+							out << "- ";
+						}
+						else
+						{
+							out << "+ ";
+						}
+					}
+				}
+				else
+				{
+					out << "+ ";
+				}
+			}
+			out << "|" << endl;
+		}
+
+		out << "+ ";
+		for (int x = 0; x < NUM_NODES_W; x++) out << "- ";
+		out << "+" << endl;
+
+		return out;
 	}
 }

@@ -2,6 +2,7 @@
 #include "Node.h"
 #include "Vector.h"
 #include "Path.h"
+#include "FlagMatrix.h"
 
 
 namespace Micromouse
@@ -29,6 +30,33 @@ namespace Micromouse
 		// if no such node exists then nullptr is returned
 		Node* getNeighborNode( PositionVector pos , direction dir );
 
+		//Sets the open flag at the given position.
+		//If the position is outside the maze, nothing happens.
+		void setOpen(bool flag, int x, int y);
+		void setOpen(bool flag, PositionVector pos);
+
+
+		//Sets the explored flag at the given position.
+		//If the position is outside the maze, nothing happens.
+		void setExplored(bool flag, int x, int y);
+		void setExplored(bool flag, PositionVector pos);
+
+		//Returns the open flag at the given position.
+		//If the position is outside the maze, returns false.
+		bool isOpen(int x, int y) const;
+		bool isOpen(PositionVector pos) const;
+
+
+		//Returns the explored flag at the given position.
+		//If the position is outside the maze, returns false.
+		bool isExplored(int x, int y) const;
+		bool isExplored(PositionVector pos) const;
+
+		//Returns true if the given position in within the maze.
+		//( 0 <= x < NUM_NODES_W and 0 <= y < NUM_NODES_H )
+		bool isInsideMaze(int x, int y) const;
+		bool isInsideMaze(PositionVector pos) const;
+
 	private:
 
 		// creates a Path object after findPath has been called
@@ -43,7 +71,15 @@ namespace Micromouse
 		// a 2D array of Nodes that represents the physical maze
 		Node* maze[ NUM_NODES_W ][ NUM_NODES_H ];
 
+		// a 2D array of flags (booleans), that denote whether or not a cell, edge, or corner is open.
+		FlagMatrix open;
 
+		//A 2D array of flags (booleans), that denote whether or not a cell, edge, or corner has been explored.
+		FlagMatrix explored;
 
 	};
+
+	//Prints out a picture of the maze for debugging.
+	//Just use: log( DEBUGX ) << maze;
+	ostream& operator<<(ostream& out, const Maze& maze);
 }

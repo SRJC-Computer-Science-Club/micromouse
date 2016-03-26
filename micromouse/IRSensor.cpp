@@ -116,6 +116,8 @@ namespace Micromouse {
 
 	void IRSenor::defaultCalibration()
 	{
+		calibrationData = new int[10];
+
 		if (MIN_RANGE == 40)
 		{
 			calibrationData[0] = 517; //40mm

@@ -83,6 +83,6 @@ namespace Micromouse
 	//Just use: log( DEBUGX ) << maze;
 #ifdef __MK20DX256__ //this is the Teensy signature
 #else
-	ostream& operator<<(ostream& out, const Maze& maze);
+	std::ostream& operator<<(std::ostream& out, const Maze& maze);
 #endif
 }

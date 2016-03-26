@@ -15,6 +15,8 @@ namespace Micromouse
 
 	MouseBot::MouseBot(int x, int y)
 	{
+		log(DEBUG2) << "Creating MouseBot at (" << x << ", " << y << ")";
+
 		setPos(x, y);
 
 #ifdef __MK20DX256__
@@ -33,6 +35,7 @@ namespace Micromouse
 		// If compiled for PC
 		virtualMaze = new VirtualMaze(NUM_NODES_W, NUM_NODES_H);
 		virtualMaze->generateRandomMaze();
+
 		logC(INFO) << "Randomly generated a virtual maze:\n";
 		//logC(INFO) << *virtualMaze << "\n";
 #endif
@@ -40,6 +43,11 @@ namespace Micromouse
 
 	MouseBot::~MouseBot()
 	{
+#ifdef __MK20DX256__
+		// If compiled for Teensy
+#else
+		delete virtualMaze;
+#endif
 	}
 
 
@@ -76,11 +84,13 @@ namespace Micromouse
 
 	void MouseBot::mapMaze()
 	{
+		log(DEBUG2) << "Starting Mapping";
+
 		maze.setOpen(true, position);
 		maze.addNode(position);
 		maze.setExplored(true, position);
 
-		stack<PositionVector*> choicePositions = stack<PositionVector*>();
+		std::stack<PositionVector*> choicePositions = std::stack<PositionVector*>();
 		choicePositions.push(new PositionVector(position));
 		lookAround();
 		
@@ -98,7 +108,7 @@ namespace Micromouse
 
 			delete pos;
 
-			//logC(DEBUG1) << "Number of possible directions: " << numPossibleDirections();
+			logC(DEBUG3) << "Number of possible directions: " << numPossibleDirections();
 			while (numPossibleDirections() > 0)
 			{
 				if (numPossibleDirections() > 1)
@@ -107,7 +117,7 @@ namespace Micromouse
 				}
 				direction dir = pickPossibleDirection();
 				rotateToFaceDirection(dir);
-				//logC(DEBUG1) << "Traveled " << dir;
+				logC(DEBUG3) << "Traveled " << dir;
 				moveForward();
 				lookAround();
 				moveForward();
@@ -115,8 +125,9 @@ namespace Micromouse
 			}
 		}
 
-		logC(INFO) << "Mapped maze:\n";
-		//logC(INFO) << maze;
+		logC(INFO) << maze;
+		maze.findPath(PositionVector(0, 0), PositionVector(8, 8));
+		//logC(INFO) << "Mapped maze:\n";
 	}
 
 	void MouseBot::lookAround()
@@ -180,9 +191,7 @@ namespace Micromouse
 
 		PositionVector pos = position + (facing + N);
 		return virtualMaze->isInsideMaze(pos) && virtualMaze->isOpen(pos);
-
 #endif
-
 	}
 
 	bool MouseBot::isClearRight()
@@ -198,9 +207,7 @@ namespace Micromouse
 
 		PositionVector pos = position + (facing + E);
 		return virtualMaze->isInsideMaze(pos) && virtualMaze->isOpen(pos);
-
 #endif
-
 	}
 
 	bool MouseBot::isClearLeft()
@@ -216,9 +223,7 @@ namespace Micromouse
 
 		PositionVector pos = position + (facing + W);
 		return virtualMaze->isInsideMaze(pos) && virtualMaze->isOpen(pos);
-
 #endif
-
 	}
 
 

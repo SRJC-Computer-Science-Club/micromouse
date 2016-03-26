@@ -101,7 +101,7 @@ namespace Micromouse
 		exploreRegion(PositionVector(width / 2 - 2, height / 2 - 2), 5, 5);
 
 		//path contains every position where a random direction was picked.
-		vector<PositionVector*> path;
+		std::vector<PositionVector*> path;
 		path.push_back(new PositionVector(0, 0));
 
 		//Generates the maze
@@ -172,7 +172,7 @@ namespace Micromouse
 		}
 	}
 
-	direction VirtualMaze::randomPossibleDirection(PositionVector pos, vector<PositionVector*>& path)
+	direction VirtualMaze::randomPossibleDirection(PositionVector pos, std::vector<PositionVector*>& path)
 	{
 		direction possibleDirections[4];
 		int numPossibleDirections = 0;
@@ -303,11 +303,11 @@ namespace Micromouse
 
 #ifdef __MK20DX256__ //this is the Teensy signature
 #else
-	ostream& operator<<(ostream& out, const VirtualMaze& maze)
+	std::ostream& operator<<(std::ostream& out, const VirtualMaze& maze)
 	{
-		out << endl << "+ ";
+		out << std::endl << "+ ";
 		for (int x = 0; x < maze.getWidth(); x++) out << "- ";
-		out << "+" << endl;
+		out << "+" << std::endl;
 
 		for (int y = maze.getHeight() - 1; y >= 0; y--)
 		{
@@ -341,12 +341,12 @@ namespace Micromouse
 					out << "+ ";
 				}
 			}
-			out << "|" << endl;
+			out << "|" << std::endl;
 		}
 
 		out << "+ ";
 		for (int x = 0; x < maze.getWidth(); x++) out << "- ";
-		out << "+" << endl;
+		out << "+" << std::endl;
 
 		return out;
 	}

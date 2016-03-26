@@ -6,12 +6,14 @@ Author GitHub:	joshuasrjc
 \*********************************/
 
 #pragma once
-#include <ostream>
 #include <vector>
 #include "FlagMatrix.h"
 #include "Vector.h"
 
-using namespace std;
+#ifdef __MK20DX256__ //this is the Teensy signature
+#else
+#include <ostream>
+#endif
 
 namespace Micromouse
 {
@@ -71,7 +73,7 @@ namespace Micromouse
 		//Sets the explored flags = true in the region.
 		void exploreRegion(PositionVector pos, int w, int h);
 
-		direction randomPossibleDirection(PositionVector pos, vector<PositionVector*>& path);
+		direction randomPossibleDirection(PositionVector pos, std::vector<PositionVector*>& path);
 
 		//Opens a random wall in the perimeter of the given region.
 		void destroyRandomWallInPerimeter(PositionVector pos, int w, int h);
@@ -99,6 +101,6 @@ namespace Micromouse
 #else
 	//Prints out a picture of the maze for debugging.
 	//Just use: log( DEBUGX ) << maze;
-	ostream& operator<<(ostream& out, const VirtualMaze& maze);
+	std::ostream& operator<<(std::ostream& out, const VirtualMaze& maze);
 #endif
 }

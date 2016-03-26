@@ -265,11 +265,11 @@ namespace Micromouse
 
 #ifdef __MK20DX256__ //this is the Teensy signature
 #else
-	ostream& operator<<(ostream& out, const Maze& maze)
+	std::ostream& operator<<(std::ostream& out, const Maze& maze)
 	{
-		out << endl << "+ ";
+		out << std::endl << "+ ";
 		for (int x = 0; x < NUM_NODES_W; x++) out << "- ";
-		out << "+" << endl;
+		out << "+" << std::endl;
 
 		for (int y = NUM_NODES_H - 1; y >= 0; y--)
 		{
@@ -303,12 +303,12 @@ namespace Micromouse
 					out << "+ ";
 				}
 			}
-			out << "|" << endl;
+			out << "|" << std::endl;
 		}
 
 		out << "+ ";
 		for (int x = 0; x < NUM_NODES_W; x++) out << "- ";
-		out << "+" << endl;
+		out << "+" << std::endl;
 
 		return out;
 	}

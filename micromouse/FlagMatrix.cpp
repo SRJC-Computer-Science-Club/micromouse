@@ -8,8 +8,6 @@ Author GitHub:	joshuasrjc
 #include "FlagMatrix.h"
 #include <assert.h>
 
-using namespace std;
-
 namespace Micromouse
 {
 	FlagMatrix::FlagMatrix(int width, int height)
@@ -103,14 +101,14 @@ namespace Micromouse
 
 #ifdef __MK20DX256__ //this is the Teensy signature
 #else
-	ostream& operator<<(ostream& out, const FlagMatrix& matrix)
+	std::ostream& operator<<(std::ostream& out, const FlagMatrix& matrix)
 	{
-		out << endl << '+';
+		out << std::endl << '+';
 		for (int x = 0; x < matrix.getWidth(); x++)
 		{
 			out << " -";
 		}
-		out << " +" << endl;
+		out << " +" << std::endl;
 		for (int y = matrix.getHeight() - 1; y >= 0; y--)
 		{
 			out << "| ";
@@ -118,14 +116,14 @@ namespace Micromouse
 			{
 				out << matrix.getFlag(x, y) << ' ';
 			}
-			out << '|' << endl;
+			out << '|' << std::endl;
 		}
 		out << '+';
 		for (int x = 0; x < matrix.getWidth(); x++)
 		{
 			out << " -";
 		}
-		out << " +" << endl;
+		out << " +" << std::endl;
 		return	out;
 	}
 #endif

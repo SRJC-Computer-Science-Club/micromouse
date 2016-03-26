@@ -1,4 +1,4 @@
-
+//dont ask
 namespace std {
   void __throw_bad_alloc()
   {
@@ -12,17 +12,15 @@ namespace std {
   }
 }
 
+
+
 #include "Logger.h"
 const LogLevel LOG_LEVEL = DEBUG3;
 
 #include "Controller.h"
-#include <ostream>
 
 void setup() {
-	
-
 	Serial.begin(9600);
-
 
     for (int i = 10; i > 0; i--)
     {
@@ -35,24 +33,5 @@ void setup() {
 	Micromouse::Controller cont;
 	}
 
-void loop()
-{
-}
-
-
-// int main( int argc , char** argv )
-// {
-
-// 	int i = 10;
-// 	pinMode(13, OUTPUT);
-// 	while( true )
-// 	{
-// Serial.print("sfg");
-// 		digitalWrite( 13 , HIGH );
-// 	delay(i);
-// 	digitalWrite( 13 , LOW );	
-// 	delay(2*i);
-// 	i++;
-// 	}
-// }
+void loop() {}
 

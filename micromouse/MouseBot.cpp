@@ -125,7 +125,7 @@ namespace Micromouse
 			}
 		}
 
-		logC(INFO) << maze;
+		//logC(INFO) << maze;
 		//logC(INFO) << "Mapped maze:\n";
 	}
 

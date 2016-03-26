@@ -24,7 +24,7 @@ namespace Micromouse
 		//TODO use actual pin numbers
 #ifdef __MK20DX256__ //this is the Teensy signature
 		//comment line below to test compile, remove #error when pins have been set
-#error define correct pin numbers 
+//#error define correct pin numbers 
 #endif
 		static const int IR_LEFT_PIN = 1;
 		static const int IR_RIGHT_PIN = 2;

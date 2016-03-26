@@ -126,7 +126,6 @@ namespace Micromouse
 		}
 
 		logC(INFO) << maze;
-		maze.findPath(PositionVector(0, 0), PositionVector(8, 8));
 		//logC(INFO) << "Mapped maze:\n";
 	}
 

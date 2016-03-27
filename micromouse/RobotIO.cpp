@@ -1,6 +1,7 @@
 #include "RobotIO.h"
 #include "IRSensor.h"
 #include "Vector.h"
+#include "Logger.h"
 
 #ifdef __MK20DX256__ //this is the Teensy signature
 #include <Arduino.h>//random
@@ -118,6 +119,10 @@ namespace Micromouse
                     }
                     break;
                 }
+				default:
+					log(ERROR) << "NOT valid direction to check for wall";
+					break;
+
             }
         }
         

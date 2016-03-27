@@ -19,6 +19,7 @@ namespace Micromouse
 		bool isClearForward(); // ## NOT YET IMPLEMENTED ## Returns false if the range-finder sensors detect a wall in front of the bot. Otherwise, returns true.
 		bool isClearRight(); // ## NOT YET IMPLEMENTED ## Returns false if the range-finder sensors detect a wall to the right of the bot. Otherwise, returns true.
 		bool isClearLeft(); // ## NOT YET IMPLEMENTED ## Returns false if the range-finder sensors detect a wall to the left of the bot. Otherwise, returns true.
+        bool isWallinDirection( direction dir );
 
 	private:
 		//TODO use actual pin numbers

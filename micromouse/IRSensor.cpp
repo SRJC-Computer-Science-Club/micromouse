@@ -7,6 +7,8 @@
 
 namespace Micromouse {
 
+    extern const int BUTTON_PIN = 10;
+    
 	//IR SENSORS/////////////////////////
 
 	IRSenor::IRSenor(int pin, int minRange, int maxRange):

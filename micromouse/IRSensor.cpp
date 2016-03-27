@@ -100,6 +100,8 @@ namespace Micromouse {
 
 			return MIN_RANGE;
 		}
+        // to complile with Xcode win archit.
+        return 666;
 	}
 
 

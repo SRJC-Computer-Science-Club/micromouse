@@ -12,6 +12,12 @@ namespace std {
   }
 }
 
+extern "C"{
+  int _getpid(){ return -1;}
+  int _kill(int pid, int sig){ return -1; }
+  int _write(){return -1;}
+}
+
 
 
 #include "Logger.h"

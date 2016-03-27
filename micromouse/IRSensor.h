@@ -41,7 +41,6 @@ namespace Micromouse
 		//comment line below to test compile, remove #error when pins have been set
 //#error define correct pin number 
 #endif
-		const int BUTTON_PIN = 10;
 
 		int calibrationStart; //distance for calibration to begin at in mm
 		int calibrationInterval; //the interval between calibrations in mm

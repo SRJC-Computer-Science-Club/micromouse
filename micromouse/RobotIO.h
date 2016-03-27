@@ -29,7 +29,8 @@ namespace Micromouse
 		static const int IR_LEFT_PIN = 1;
 		static const int IR_RIGHT_PIN = 2;
 		static const int IR_FRONT_LEFT_PIN = 3;
-		static const int IR_FRONT_RIGHT_PIN = 4;
+        static const int IR_FRONT_RIGHT_PIN = 4;
+        static const int BUTTON_PIN = 10;
 
 		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };
 

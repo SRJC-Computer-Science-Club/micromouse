@@ -1,8 +1,6 @@
 #include "Vector.h"
 #include <assert.h>
 
-using namespace std;
-
 namespace Micromouse
 {
 	direction operator+(const direction &dir1, const direction &dir2)
@@ -20,7 +18,9 @@ namespace Micromouse
 		return dir = static_cast<direction>(((int)dir + 1) % 9);
 	}
 
-	ostream& operator<<(ostream& out, const direction& dir)
+#ifdef __MK20DX256__ //this is the Teensy signature
+#else
+	std::ostream& operator<<(std::ostream& out, const direction& dir)
 	{
 		switch (dir)
 		{
@@ -35,6 +35,7 @@ namespace Micromouse
 		default: return out << "NONE";
 		}
 	}
+#endif
 
 	//static const Pos & UNDEFINED = Pos( 0 , -1 );
 

@@ -6,6 +6,8 @@
 #endif
 
 namespace Micromouse {
+    
+    extern const int BUTTON_PIN;
 
 	//IR SENSORS/////////////////////////
 

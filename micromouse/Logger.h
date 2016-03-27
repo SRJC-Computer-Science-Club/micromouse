@@ -1,13 +1,14 @@
 #pragma once
 
 #ifdef __MK20DX256__ //this is the Teensy signature
-#include <ostream>
+#include <Arduino.h>
+
 #else
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #endif
 
-#include <sstream>
-#include <fstream>
 
 /*
 This is a helper class that makes logging information easy
@@ -46,14 +47,39 @@ class Logger
 {
 public:
 
-	enum outputDest { BOTH , CONSOLE , FILE };
+	enum outputDest { BOTH, CONSOLE, FILE };
 
 
 	//stores the log text in the buffer
-	Logger( LogLevel logLevel = ERROR , outputDest dest = BOTH ) :
-		dest( dest )
+	Logger(LogLevel logLevel = ERROR, outputDest dest = BOTH) :
+		dest(dest)
 	{
-		switch ( logLevel )
+
+#ifdef __MK20DX256__ //this is the Teensy signature
+		switch (logLevel)
+		{
+		case DEBUG1:
+		case DEBUG2:
+		case DEBUG3:
+			buffer += String("DBUG" ) + String( logLevel - INFO );
+			break;
+		case ERROR:
+			buffer += String("ERROR");
+			break;
+		case WARN:
+			buffer += String("WARN ");
+			break;
+		case INFO:
+			buffer += String("INFO ");
+			break;
+		default:
+			Logger(WARN, CONSOLE) << "Invalid logLevel";
+			break;
+		}
+
+		buffer += String(" : ");
+#else
+		switch (logLevel)
 		{
 		case DEBUG1:
 		case DEBUG2:
@@ -70,45 +96,63 @@ public:
 			buffer << "INFO ";
 			break;
 		default:
-			Logger( WARN , CONSOLE ) << "Invalid logLevel";
+			Logger(WARN, CONSOLE) << "Invalid logLevel";
 			break;
 		}
 
 		buffer << " : "
-			<< std::string( logLevel >= DEBUG1 ? ( logLevel - INFO ) * 2 : 0 , ' ' );
+			<< std::string(logLevel >= DEBUG1 ? (logLevel - INFO) * 2 : 0, ' ');
+#endif
 	}
 
 
 	template <typename T>
-	Logger & operator<<( T const & value )
+	Logger & operator<<(T const & value)
 	{
+#ifdef __MK20DX256__ //this is the Teensy signature
+		buffer += String( value );
+#else
 		buffer << value;
+#endif
 		return *this;
 	}
 
+
+
+#ifdef __MK20DX256__ //this is the Teensy signature
+	void consoleOut()
+	{
+		Serial.println(buffer);
+	}
+#else
 	void consoleOut(const std::string & s)
 	{
-#ifdef __MK20DX256__ //this is the Teensy signature
-		//TODO serial out
-#else
 		std::cout << s;
-#endif
 	}
+#endif
 
+
+
+#ifdef __MK20DX256__ //this is the Teensy signature
+#else
 	void fileOut(const std::string & s)
 	{
-#ifdef __MK20DX256__ //this is the Teensy signature
-#else
-		std::ofstream file(".log", std::ios::app);
-#endif
+		//std::ofstream file(".log", std::ios::app);
 	}
+#endif
 
 	// prints the log text when the object destructs
 	~Logger()
 	{
+#ifdef __MK20DX256__ //this is the Teensy signature
+		if (dest != FILE )
+		{
+			consoleOut();
+		}
+#else
 		buffer << std::endl;
 		std::string s = buffer.str();
-		
+
 		switch ( dest )
 		{
 		case Logger::BOTH:
@@ -122,10 +166,16 @@ public:
 			fileOut(s);
 			break;
 		}	
+#endif
+		
 	}
 
 private:
+#ifdef __MK20DX256__ //this is the Teensy signature
+	String buffer;
+#else
 	std::ostringstream buffer;
+#endif
 	outputDest dest;
 };
 

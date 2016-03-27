@@ -2,8 +2,6 @@
 
 #include <ostream>
 
-using namespace std;
-
 namespace Micromouse
 {
 	//number of cells in maze
@@ -42,8 +40,10 @@ namespace Micromouse
 	// to N.
 	direction& operator++(direction& dir);
 
-	ostream& operator<<(ostream& out, const direction& dir);
-
+#ifdef __MK20DX256__ //this is the Teensy signature
+#else
+	std::ostream& operator<<(std::ostream& out, const direction& dir);
+#endif
 
 	// a position vector that represents a coordinate within the maze
 	// it contains x and y integers

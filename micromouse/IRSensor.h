@@ -39,7 +39,7 @@ namespace Micromouse
 		//TODO use real pin;
 #ifdef __MK20DX256__ //this is the Teensy signature
 		//comment line below to test compile, remove #error when pins have been set
-#error define correct pin number 
+//#error define correct pin number 
 #endif
 		const int BUTTON_PIN = 10;
 

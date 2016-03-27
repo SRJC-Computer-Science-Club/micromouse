@@ -8,8 +8,6 @@ Author GitHub:	joshuasrjc
 #pragma once
 #include <ostream>
 
-using namespace std;
-
 namespace Micromouse
 {
 	//A 2D array of flags. Each flag can be either true or false.
@@ -42,5 +40,8 @@ namespace Micromouse
 		unsigned int* data;
 	};
 
-	ostream& operator<<(ostream& out, const FlagMatrix& matrix); //Printout for debugging.
+#ifdef __MK20DX256__ //this is the Teensy signature
+#else
+	std::ostream& operator<<(std::ostream& out, const FlagMatrix& matrix); //Printout for debugging.
+#endif
 }

@@ -59,7 +59,7 @@ namespace Micromouse
         {
             #ifdef __MK20DX256__ //this is the Teensy signature
             // TODO test for better intervol
-            delay(10);
+            delay(1);
             #endif
             
             //TODO fill in distances will measured values
@@ -123,15 +123,7 @@ namespace Micromouse
         
         // TODO perfect the amount of tests and amount needed to give true.
         // if only 2 or less of the 6 wall tests came out true
-        if (numOpen <= 2)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-        
+		return numOpen > 2;    
     }
     
 

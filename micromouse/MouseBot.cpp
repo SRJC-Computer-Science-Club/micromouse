@@ -117,6 +117,9 @@ namespace Micromouse
 
 		logC(INFO) << "Mapped maze:\n";
 		logC(INFO) << maze;
+
+		//temp for testing
+		maze.findPath(PositionVector(0, 0), PositionVector(16, 16));
 	}
 
 	void MouseBot::lookAround()

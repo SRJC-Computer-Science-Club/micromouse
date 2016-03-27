@@ -24,7 +24,7 @@ namespace Micromouse
 		void setG( const int newG );
 		void setF( const int newF );
 		void setParent( Node * const newParent );
-		void setDir( direction dir );
+		void setDir( direction newDir );
 		
 		bool isClosed();
 		void close();

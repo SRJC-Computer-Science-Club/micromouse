@@ -43,6 +43,8 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="micromouse\VirtualMaze.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="micromouse\IRSensor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -76,6 +78,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="micromouse\VirtualMaze.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="micromouse\IRSensor.h">
       <Filter>Header Files</Filter>
     </ClInclude>

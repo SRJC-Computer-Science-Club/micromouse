@@ -6,6 +6,8 @@
 #endif
 
 namespace Micromouse {
+    
+    extern const int BUTTON_PIN;
 
     extern const int BUTTON_PIN = 10;
     

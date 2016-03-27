@@ -10,7 +10,8 @@ namespace Micromouse
     const int IR_FRONT_LEFT_PIN = 3;
     const int IR_FRONT_RIGHT_PIN = 4;
     const int BUTTON_PIN = 10;
-    
+
+
 	//A class that contains functions and constants used to communicate with the IO pins of the Teensey 3.2 Microcontroller.
 	// ## NOT YET IMPLEMENTED ##
 	class RobotIO
@@ -34,8 +35,9 @@ namespace Micromouse
 		//comment line below to test compile, remove #error when pins have been set
 //#error define correct pin numbers 
 #endif
-        bool isWallinDirection( direction dir );
 
+        bool isWallinDirection( direction dir );
+	
 		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };
 
 		void initSensors();

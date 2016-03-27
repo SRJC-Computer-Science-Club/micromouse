@@ -32,19 +32,19 @@ namespace Micromouse
 	// ## NOT YET IMPLEMENTED ## 
 	bool RobotIO::isClearForward()
 	{
-		return isWallinDirection(N);
+		return !isWallinDirection(N);
 	}
 
 	// ## NOT YET IMPLEMENTED ## 
 	bool RobotIO::isClearRight()
 	{
-		return isWallinDirection(W);
+		return !isWallinDirection(W);
 	}
 
 	// ## NOT YET IMPLEMENTED ## 
 	bool RobotIO::isClearLeft()
 	{
-        return isWallinDirection(E);
+        return !isWallinDirection(E);
     }
 
     

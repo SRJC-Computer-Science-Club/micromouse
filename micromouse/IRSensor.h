@@ -36,12 +36,6 @@ namespace Micromouse
 		const int MIN_RANGE; //min distance for sensor in mm
 		const int MAX_RANGE; //max distance for sensor in mm
 
-		//TODO use real pin;
-#ifdef __MK20DX256__ //this is the Teensy signature
-		//comment line below to test compile, remove #error when pins have been set
-//#error define correct pin number 
-#endif
-
 		int calibrationStart; //distance for calibration to begin at in mm
 		int calibrationInterval; //the interval between calibrations in mm
 		int calibrationSize; //the number of calibration data points

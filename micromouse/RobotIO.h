@@ -5,6 +5,12 @@
 
 namespace Micromouse
 {
+	//TODO use actual pin numbers
+#ifdef __MK20DX256__ //this is the Teensy signature
+
+	//comment line below to test compile, remove #error when pins have been set
+	//#error define correct pin numbers 
+#endif
     const int IR_LEFT_PIN = 1;
     const int IR_RIGHT_PIN = 2;
     const int IR_FRONT_LEFT_PIN = 3;
@@ -29,12 +35,6 @@ namespace Micromouse
 		bool isClearLeft(); // Returns false if the range-finder sensors detect a wall to the left of the bot. Otherwise, returns true.
 
 	private:
-		//TODO use actual pin numbers
-#ifdef __MK20DX256__ //this is the Teensy signature
-        
-		//comment line below to test compile, remove #error when pins have been set
-//#error define correct pin numbers 
-#endif
 
         bool isWallinDirection( direction dir );
 	

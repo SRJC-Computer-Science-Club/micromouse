@@ -127,10 +127,21 @@ namespace Micromouse
 
 
 		logC(INFO) << "Mapped maze:\n";
-		//logC(INFO) << maze;
+
+#ifdef __MK20DX256__
+		// If compiled for Teensy
+#else
+		logC(INFO) << maze;
+#endif
 
 		//temp for testing
-		maze.findPath(PositionVector(0, 0), PositionVector(16, 16));
+		Path * path = maze.findPath(PositionVector(0, 0), PositionVector(16, 16));
+		for (size_t i = 0; i < path->size(); i++)
+		{
+			log(DEBUG2) << path->peekStep().dir() << " " << path->peekStep().mag();
+			path->popStep();
+		}
+
 
 	}
 

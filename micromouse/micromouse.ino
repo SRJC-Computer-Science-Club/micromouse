@@ -21,7 +21,7 @@ extern "C"{
 
 
 #include "Logger.h"
-const LogLevel LOG_LEVEL = DEBUG3;
+const LogLevel LOG_LEVEL = DEBUG2;
 
 #include "Controller.h"
 

@@ -123,6 +123,7 @@ public:
 	void consoleOut()
 	{
 		Serial.println(buffer);
+		delay(20);
 	}
 #else
 	void consoleOut(const std::string & s)

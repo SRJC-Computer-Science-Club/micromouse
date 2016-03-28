@@ -108,6 +108,8 @@ namespace Micromouse
 
 			delete pos;
 
+			int temp = 0;
+
 			logC(DEBUG3) << "Number of possible directions: " << numPossibleDirections();
 			while (numPossibleDirections() > 0)
 			{
@@ -147,6 +149,8 @@ namespace Micromouse
 
 	void MouseBot::lookAround()
 	{
+		logC(DEBUG3) << "lookAround()";
+
 		if (isClearForward())
 		{
 			PositionVector pos = position + (facing + N);
@@ -172,11 +176,13 @@ namespace Micromouse
 
 	bool MouseBot::isPossibleDirection(direction dir)
 	{
+		logC(DEBUG3) << "isPossibleDirection()";
 		return maze.isInsideMaze(position + dir) && maze.isOpen(position + dir) && !maze.isExplored((position + dir) + dir);
 	}
 
 	int MouseBot::numPossibleDirections()
 	{
+		logC(DEBUG3) << "numPossibleDirections()";
 		int n = 0;
 		if (isPossibleDirection(N)) n++;
 		if (isPossibleDirection(E)) n++;
@@ -187,6 +193,7 @@ namespace Micromouse
 
 	direction MouseBot::pickPossibleDirection()
 	{
+		logC(DEBUG3) << "pickPossibleDirection()";
 		if (isPossibleDirection(N)) return N;
 		if (isPossibleDirection(E)) return E;
 		if (isPossibleDirection(S)) return S;

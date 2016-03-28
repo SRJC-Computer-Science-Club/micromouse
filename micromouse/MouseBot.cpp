@@ -180,6 +180,8 @@ namespace Micromouse
 		if (isPossibleDirection(E)) return E;
 		if (isPossibleDirection(S)) return S;
 		if (isPossibleDirection(W)) return W;
+        // to complile with Xcode win archit.
+        return NONE;
 	}
 
 	bool MouseBot::isClearForward()

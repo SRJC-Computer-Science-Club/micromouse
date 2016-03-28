@@ -6,7 +6,11 @@
 #endif
 
 namespace Micromouse {
+    
+    extern const int BUTTON_PIN;
 
+    extern const int BUTTON_PIN = 10;
+    
 	//IR SENSORS/////////////////////////
 
 	IRSenor::IRSenor(int pin, int minRange, int maxRange):
@@ -100,6 +104,8 @@ namespace Micromouse {
 
 			return MIN_RANGE;
 		}
+        // to complile with Xcode win archit.
+        return 666;
 	}
 
 

@@ -5,6 +5,8 @@ Author Name:	Joshua Murphy
 Author GitHub:	joshuasrjc
 \*********************************/
 
+
+
 #include "MouseBot.h"
 #include <stack>
 #include "Logger.h"
@@ -136,9 +138,9 @@ namespace Micromouse
 
 		//temp for testing
 		Path * path = maze.findPath(PositionVector(0, 0), PositionVector(16, 16));
-		for (size_t i = 0; i < path->size(); i++)
+		for (int i = 0; i < path->size(); i++)
 		{
-			log(DEBUG2) << path->peekStep().dir() << " " << path->peekStep().mag();
+			log(DEBUG2) << "Dir: " << path->peekStep().dir() << " Mag: " << path->peekStep().mag();
 			path->popStep();
 		}
 

@@ -213,8 +213,8 @@ namespace Micromouse
 			int r = random(numPossibleDirections);
 #else
 			int r = rand() % numPossibleDirections;
-			return possibleDirections[r];
 #endif
+			return possibleDirections[r];
 		}
 	}
 

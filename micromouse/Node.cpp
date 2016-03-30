@@ -44,7 +44,7 @@ namespace Micromouse
 
 	direction Node::getDir() const
 	{
-		return direction();
+		return dir;
 	}
 
 
@@ -74,8 +74,9 @@ namespace Micromouse
 		parent = newParent;
 	}
 
-	void Node::setDir( direction dir )
+	void Node::setDir( direction newDir )
 	{
+		dir = newDir;
 	}
 
 

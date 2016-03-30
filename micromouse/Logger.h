@@ -23,7 +23,7 @@ logF( logLevel ) will output to the log file only
 
 logLevel defines the importance of the log
 the log type from most to least importance
-ERROR , WARN , INFO , DEBUG1 , DEBUG2 , DEBUG3
+ERROR , WARN , INFO , DEBUG1 , DEBUG2 , DEBUG3 ,DEBUG4
 
 LOG_LEVEL determines the highest level that will be logged
 ex. LOG_LEVEL = INFO will only print INFO , WARN , ERROR
@@ -40,7 +40,7 @@ log( DEBUG1 ) << "Mouse position: " << pos.x() << " , " << pos.y();
 
 
 
-enum LogLevel { ERROR , WARN , INFO , DEBUG1 , DEBUG2 , DEBUG3 , LOG_ALL };
+enum LogLevel { ERROR , WARN , INFO , DEBUG1 , DEBUG2 , DEBUG3 , DEBUG4 , LOG_ALL };
 
 
 class Logger
@@ -61,6 +61,7 @@ public:
 		case DEBUG1:
 		case DEBUG2:
 		case DEBUG3:
+		case DEBUG4:
 			buffer += String("DBUG" ) + String( logLevel - INFO );
 			break;
 		case ERROR:
@@ -84,6 +85,7 @@ public:
 		case DEBUG1:
 		case DEBUG2:
 		case DEBUG3:
+		case DEBUG4:
 			buffer << "DBUG" << logLevel - INFO;
 			break;
 		case ERROR:
@@ -123,6 +125,7 @@ public:
 	void consoleOut()
 	{
 		Serial.println(buffer);
+		delay(20);
 	}
 #else
 	void consoleOut(const std::string & s)

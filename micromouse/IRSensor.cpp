@@ -87,7 +87,7 @@ namespace Micromouse {
 
 		for (int i = calibrationSize - 1; i >= 0; i--)
 		{
-			log(DEBUG3) << "calibrationData[ " << i << " ]= " << calibrationData[i] << " , val = " << val;
+			log(DEBUG4) << "calibrationData[ " << i << " ]= " << calibrationData[i] << " , val = " << val;
 
 			if (val < calibrationData[i])
 			{
@@ -95,12 +95,12 @@ namespace Micromouse {
 					i * calibrationInterval + calibrationStart,
 					(i + 1) * calibrationInterval + calibrationStart, val);
 
-				log(DEBUG2) << "Measured Distance: " << dist;
+				log(DEBUG4) << "Measured Distance: " << dist;
 
 				return dist;
 			}
 
-			log(DEBUG2) << "Measured Distance*: " << MIN_RANGE;
+			log(DEBUG4) << "Measured Distance*: " << MIN_RANGE;
 
 			return MIN_RANGE;
 		}

@@ -148,9 +148,13 @@ namespace Micromouse
 		// int y = pos.y() + dir / 3 - 1;
 		//if (x >= 0 && x < NUM_NODES_W && y >= 0 && y < NUM_NODES_H) { return maze[x][y]; }
 
-		PositionVector offsetPos = pos + dir;
-		
-		return maze[offsetPos.x()][offsetPos.y()];
+		pos = pos + dir;
+
+		if (pos.x() >= 0 && pos.x() < NUM_NODES_W && pos.y() >= 0 && pos.y() < NUM_NODES_H) 
+		{ 
+			return maze[pos.x()][pos.y()]; 
+		}
+
 
 		/*       x
 			 -1  0  1
@@ -227,16 +231,18 @@ namespace Micromouse
 		direction travelDir = node->getDir();
 		int mag = 1;
 
+		node = node->getParent();
+
 		// while there is more to the path to traverse
 		while ( node != nullptr )
 		{
 			//if we are at the beginning of the path or if the path is not straight
-			if ( node->getParent() == nullptr || node->getParent()->getDir() != travelDir )
+			if ( node->getParent() == nullptr || node->getDir() != travelDir )
 			{
 				// add a step to the path to define the direction and distance need to travel
 				path->addStep( DirectionVector( travelDir , mag ) );
 
-				travelDir = node->getParent()->getDir();
+				travelDir = node->getDir();
 				mag = 0;
 			}
 			//else the path is straight so no need for a step

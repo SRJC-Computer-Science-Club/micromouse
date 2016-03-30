@@ -18,10 +18,10 @@ namespace Micromouse
 {
 	// CONSTRUCTOR //
 	VirtualMaze::VirtualMaze(int width, int height) :
-		width(width),
-		height(height),
 		open(FlagMatrix(width, height)),
-		explored(FlagMatrix(width, height))
+		explored(FlagMatrix(width, height)),
+		width(width),
+		height(height)
 	{
 		assert(width % 4 == 3 && height % 4 == 3);
 	}
@@ -213,8 +213,8 @@ namespace Micromouse
 			int r = random(numPossibleDirections);
 #else
 			int r = rand() % numPossibleDirections;
-			return possibleDirections[r];
 #endif
+			return possibleDirections[r];
 		}
 	}
 

@@ -5,6 +5,8 @@ Author Name:	Joshua Murphy
 Author GitHub:	joshuasrjc
 \*********************************/
 
+
+
 #include "MouseBot.h"
 #include <stack>
 #include "Logger.h"
@@ -37,7 +39,7 @@ namespace Micromouse
 		virtualMaze->generateRandomMaze();
 
 		logC(INFO) << "Randomly generated a virtual maze:\n";
-		//logC(INFO) << *virtualMaze << "\n";
+		logC(INFO) << *virtualMaze << "\n";
 #endif
 	}
 
@@ -107,7 +109,7 @@ namespace Micromouse
 			}
 
 			delete pos;
-
+	
 			logC(DEBUG3) << "Number of possible directions: " << numPossibleDirections();
 			while (numPossibleDirections() > 0)
 			{
@@ -125,12 +127,30 @@ namespace Micromouse
 			}
 		}
 
-		//logC(INFO) << maze;
-		//logC(INFO) << "Mapped maze:\n";
+
+		logC(INFO) << "Mapped maze:\n";
+
+#ifdef __MK20DX256__
+		// If compiled for Teensy
+#else
+		logC(INFO) << maze;
+#endif
+
+		//temp for testing
+		Path * path = maze.findPath(PositionVector(0, 0), PositionVector(16, 16));
+		for (int i = 0; i < path->size(); i++)
+		{
+			log(DEBUG2) << "Dir: " << path->peekStep().dir() << " Mag: " << path->peekStep().mag();
+			path->popStep();
+		}
+
+
 	}
 
 	void MouseBot::lookAround()
 	{
+		logC(DEBUG4) << "lookAround()";
+
 		if (isClearForward())
 		{
 			PositionVector pos = position + (facing + N);
@@ -156,11 +176,13 @@ namespace Micromouse
 
 	bool MouseBot::isPossibleDirection(direction dir)
 	{
+		logC(DEBUG4) << "isPossibleDirection()";
 		return maze.isInsideMaze(position + dir) && maze.isOpen(position + dir) && !maze.isExplored((position + dir) + dir);
 	}
 
 	int MouseBot::numPossibleDirections()
 	{
+		logC(DEBUG4) << "numPossibleDirections()";
 		int n = 0;
 		if (isPossibleDirection(N)) n++;
 		if (isPossibleDirection(E)) n++;
@@ -171,6 +193,7 @@ namespace Micromouse
 
 	direction MouseBot::pickPossibleDirection()
 	{
+		logC(DEBUG4) << "pickPossibleDirection()";
 		if (isPossibleDirection(N)) return N;
 		if (isPossibleDirection(E)) return E;
 		if (isPossibleDirection(S)) return S;
@@ -328,3 +351,4 @@ namespace Micromouse
 		}
 	}
 }
+

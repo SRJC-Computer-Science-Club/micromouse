@@ -35,6 +35,7 @@ void setup() {
     }
 
 	Serial.println();
+	randomSeed(analogRead(0));
 
 	Micromouse::Controller cont;
 	}

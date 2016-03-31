@@ -1,4 +1,5 @@
 #pragma once
+#include "MouseBot.h"
 
 
 namespace Micromouse
@@ -12,7 +13,28 @@ namespace Micromouse
 
 	private:
 
+		void runState();
+		void updateState();
 
+		//this is a blocking function
+		// blinks the led 'reps' number of times
+		int blinkLED(int reps = 1, int timeOn = 80, int timeOff = 50);
+
+		// this is a blocking function
+		// perfomrs a countdown and blinks the led
+		void blinkLEDCountdown(int sec);
+
+
+		void waitForButton();
+
+		enum states { NONE, MAP_MAZE, RUN_MAZE, SELECT_SPEED, NONE_4, CAL_SENSORS, CAL_MOTOR, RESET_MAZE };
+
+
+		MouseBot mouse;
+
+		states state;
+
+		bool doneMap = false;
 	};
 
 }

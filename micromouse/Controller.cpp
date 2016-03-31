@@ -3,6 +3,7 @@
 #include <vector>
 
 #ifdef __MK20DX256__ // Teensy compile
+#include "WProgram.h"
 #else // pc compile
 #include <iostream>
 #endif
@@ -12,6 +13,8 @@ int buttonFlag;
 const int SWITCH_A_PIN = 0; // defined in RobotIO.h
 const int SWITCH_B_PIN =1;
 const int SWITCH_C_PIN =2;
+
+const int LED_PIN = 2;
 
 namespace Micromouse
 {
@@ -48,8 +51,8 @@ namespace Micromouse
 #ifdef __MK20DX256__ // Teensy compile
 
 		intState = digitalRead(SWITCH_C_PIN);
-		intState << 1; state += digitalRead(SWITCH_B_PIN);
-		intState << 1; state += digitalRead(SWITCH_A_PIN);
+		intState << 1; intState += digitalRead(SWITCH_B_PIN);
+		intState << 1; intState += digitalRead(SWITCH_A_PIN);
 
 #else // pc compile
 		log(INFO) <<
@@ -171,7 +174,7 @@ namespace Micromouse
 
 		for (; reps >= 2; reps--)
 		{
-			delay(timeOff)
+			delay(timeOff);
 
 			digitalWrite(LED_PIN, HIGH);
 			delay(timeOn);

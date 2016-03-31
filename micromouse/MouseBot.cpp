@@ -78,6 +78,12 @@ namespace Micromouse
 		this->position = pos;
 	}
 
+	void MouseBot::resetToOrigin()
+	{
+		position = PositionVector(0, 0);
+		facing = N;
+	}
+
 
 
 
@@ -86,7 +92,7 @@ namespace Micromouse
 
 	void MouseBot::mapMaze()
 	{
-		log(DEBUG2) << "Starting Mapping";
+		log(DEBUG1) << "Map Maze";
 
 		maze.setOpen(true, position);
 		maze.addNode(position);
@@ -137,6 +143,7 @@ namespace Micromouse
 #endif
 
 		//temp for testing
+		Path * path2 = maze.findPath(PositionVector(0, 0), PositionVector(0, 0));
 		Path * path = maze.findPath(PositionVector(0, 0), PositionVector(16, 16));
 		for (int i = 0; i < path->size(); i++)
 		{
@@ -145,6 +152,18 @@ namespace Micromouse
 		}
 
 
+	}
+
+	void MouseBot::runMaze()
+	{
+		log(DEBUG1) << "Run Maze";
+		assert(position == PositionVector(0, 0));
+
+		robotIO.followPath(maze.findPath(position, PositionVector(NUM_NODES_W / 2, NUM_NODES_H / 2)));
+	}
+
+	void MouseBot::returnToStart()
+	{
 	}
 
 	void MouseBot::lookAround()
@@ -349,6 +368,26 @@ namespace Micromouse
 				rotateLeft();
 			}
 		}
+	}
+
+	int MouseBot::incrementSpeed()
+	{
+		speed = speed % MAX_SPEED + 1;
+		log(INFO) << "Mouse Speed: " << speed;
+		return 0;
+	}
+	int MouseBot::getSpeed()
+	{
+		return speed;
+	}
+	void MouseBot::setSpeed( int spd )
+	{
+		speed = spd;
+		assert(speed > 0 && speed <= MAX_SPEED);
+	}
+	void MouseBot::CalibrateSensors()
+	{
+		robotIO.calibrateIRSensors();
 	}
 }
 

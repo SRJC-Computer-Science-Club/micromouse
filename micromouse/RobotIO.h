@@ -2,6 +2,8 @@
 
 #include "IRSensor.h"
 #include "Vector.h"
+#include "Path.h"
+
 
 namespace Micromouse
 {

@@ -1,5 +1,5 @@
 #include "micromouse/Logger.h"
-const LogLevel LOG_LEVEL = LOG_ALL;
+const LogLevel LOG_LEVEL = DEBUG3;
 
 #include <iostream>
 #include <cstdlib>

@@ -51,6 +51,14 @@ namespace Micromouse
         return !isWallinDirection(E);
     }
 
+
+	void RobotIO::followPath(Path * path)
+	{
+		// TODO implement
+
+		delete path;
+	}
+
     
     bool RobotIO::isWallinDirection( direction dir )
     {

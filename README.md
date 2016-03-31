@@ -15,6 +15,11 @@
 
 basic example of this workflow: https://www.youtube.com/watch?v=oFYyTZwMyAg
 
+
+## Program flow
+
+![alt branches](https://github.com/SRJC-Computer-Science-Club/micromouse/blob/dev/Charts/flow%20v02.png)
+
 ## Project Divisions
 
 ### Pathfinding

@@ -6,19 +6,22 @@ Author GitHub:	joshuasrjc
 \*********************************/
 
 #include "VirtualMaze.h"
-#include <stdlib.h>
 #include <assert.h>
 
-using namespace std;
+#ifdef __MK20DX256__ //this is the Teensy signature
+#include <Arduino.h>//random
+#else
+#include <stdlib.h> //rand
+#endif
 
 namespace Micromouse
 {
 	// CONSTRUCTOR //
 	VirtualMaze::VirtualMaze(int width, int height) :
-		width(width),
-		height(height),
 		open(FlagMatrix(width, height)),
-		explored(FlagMatrix(width, height))
+		explored(FlagMatrix(width, height)),
+		width(width),
+		height(height)
 	{
 		assert(width % 4 == 3 && height % 4 == 3);
 	}
@@ -98,13 +101,18 @@ namespace Micromouse
 		exploreRegion(PositionVector(width / 2 - 2, height / 2 - 2), 5, 5);
 
 		//path contains every position where a random direction was picked.
-		vector<PositionVector*> path;
+		std::vector<PositionVector*> path;
 		path.push_back(new PositionVector(0, 0));
 
 		//Generates the maze
 		while (!path.empty())
 		{
+#ifdef __MK20DX256__ //this is the Teensy signature
+			int r = random(path.size());
+#else
 			int r = rand() % path.size();
+#endif
+
 			PositionVector* temp = path[r];
 			path[r] = path.back();
 			path.pop_back();
@@ -164,7 +172,7 @@ namespace Micromouse
 		}
 	}
 
-	direction VirtualMaze::randomPossibleDirection(PositionVector pos, vector<PositionVector*>& path)
+	direction VirtualMaze::randomPossibleDirection(PositionVector pos, std::vector<PositionVector*>& path)
 	{
 		direction possibleDirections[4];
 		int numPossibleDirections = 0;
@@ -201,7 +209,11 @@ namespace Micromouse
 		}
 		else
 		{
+#ifdef __MK20DX256__ //this is the Teensy signature
+			int r = random(numPossibleDirections);
+#else
 			int r = rand() % numPossibleDirections;
+#endif
 			return possibleDirections[r];
 		}
 	}
@@ -211,7 +223,11 @@ namespace Micromouse
 		w /= 2; //DO NOT SIMPLIFY: w/2 needs to round down to the nearest int w;
 		h /= 2; //DO NOT SIMPLIFY: h/2 needs to round down to the nearest int h;
 		int numWallsInPerimeter = 2*( w + h );
+#ifdef __MK20DX256__ //this is the Teensy signature
+		int r = random(numWallsInPerimeter);
+#else
 		int r = rand() % numWallsInPerimeter;
+#endif
 		int x, y;
 
 		if (r < 2*w)
@@ -232,11 +248,19 @@ namespace Micromouse
 	void VirtualMaze::destroyRandomWall()
 	{
 		int x;
+#ifdef __MK20DX256__ //this is the Teensy signature
+		int y = random(height);
+#else
 		int y = rand() % height;
+#endif
 
 		if (y % 2 == 0)
 		{
+#ifdef __MK20DX256__ //this is the Teensy signature
+			x = 2 * (random((width - 1) / 2)) + 1;
+#else
 			x = 2 * (rand() % ((width - 1) / 2)) + 1;
+#endif
 			PositionVector pos(x, y);
 			if (!isExplored(x, y) && getNumAdjacentWalls(pos + N) > 1 && getNumAdjacentWalls(pos + S) > 1)
 			{
@@ -249,7 +273,11 @@ namespace Micromouse
 		}
 		else
 		{
+#ifdef __MK20DX256__ //this is the Teensy signature
+			x = 2 * random((width + 1) / 2);
+#else
 			x = 2 * (rand() % ((width + 1) / 2));
+#endif
 			PositionVector pos(x, y);
 			if (!isExplored(x, y) && getNumAdjacentWalls(pos + E) > 1 && getNumAdjacentWalls(pos + W) > 1)
 			{
@@ -272,11 +300,14 @@ namespace Micromouse
 		return n;
 	}
 
-	ostream& operator<<(ostream& out, const VirtualMaze& maze)
+
+#ifdef __MK20DX256__ //this is the Teensy signature
+#else
+	std::ostream& operator<<(std::ostream& out, const VirtualMaze& maze)
 	{
-		out << endl << "+ ";
+		out << std::endl << "+ ";
 		for (int x = 0; x < maze.getWidth(); x++) out << "- ";
-		out << "+" << endl;
+		out << "+" << std::endl;
 
 		for (int y = maze.getHeight() - 1; y >= 0; y--)
 		{
@@ -310,13 +341,14 @@ namespace Micromouse
 					out << "+ ";
 				}
 			}
-			out << "|" << endl;
+			out << "|" << std::endl;
 		}
 
 		out << "+ ";
 		for (int x = 0; x < maze.getWidth(); x++) out << "- ";
-		out << "+" << endl;
+		out << "+" << std::endl;
 
 		return out;
 	}
+#endif
 }

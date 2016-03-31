@@ -8,10 +8,16 @@ Author GitHub:	joshuasrjc
 #pragma once
 #include "Vector.h"
 #include "RobotIO.h"
-#include "VirtualMaze.h"
-#include "Maze.h"
 #include <stack>
 #include "IRSensor.h"
+#include "Path.h"
+#include "Maze.h"
+
+
+#ifdef __MK20DX256__ //this is the Teensy signature
+#else
+#include "VirtualMaze.h"
+#endif
 
 namespace Micromouse
 {
@@ -19,9 +25,7 @@ namespace Micromouse
 	class MouseBot
 	{
 	public:
-		MouseBot();								// Uses a default position of (0,0)
-		MouseBot(int x, int y);					// Sets the position to (x,y)
-		MouseBot(PositionVector pos);
+		MouseBot(int x = 0, int y = 0);					// Sets the position to (x,y)
 		~MouseBot();
 
 		PositionVector getPos();				// Returns the position of the mouse
@@ -58,9 +62,14 @@ namespace Micromouse
 		direction pickPossibleDirection();
 
 		Maze maze;
+
+#ifdef __MK20DX256__ //this is the Teensy signature
+#else
 		VirtualMaze* virtualMaze;
+#endif
+
 		RobotIO robotIO;
-		stack<direction> movementHistory;
+		std::stack<direction> movementHistory;
 
 		PositionVector position = PositionVector(0,0);
 		direction facing = N;

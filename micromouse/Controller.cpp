@@ -1,22 +1,21 @@
 #include "Controller.h"
-#include "VirtualMaze.h"
 #include "Logger.h"
 #include "MouseBot.h"
+#include <vector>
 
-using namespace std;
+
 
 namespace Micromouse
 {
 
 	Controller::Controller()
 	{
-		//VirtualMaze maze = VirtualMaze(31, 31);
-		//maze.generateRandomMaze();
+		log(INFO) << "Starting Program"; //log to console only
 
-		MouseBot mouse = MouseBot(PositionVector(0,0));
+		MouseBot mouse(0,0);
 		mouse.mapMaze();
 
-		//logC( DEBUG1 ) << maze; //log to console only
+		logC( DEBUG1 ) << "End Program"; //log to console only
 	}
 
 

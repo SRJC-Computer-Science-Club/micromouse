@@ -6,7 +6,11 @@
 #endif
 
 namespace Micromouse {
+    
+    extern const int BUTTON_PIN;
 
+    extern const int BUTTON_PIN = 10;
+    
 	//IR SENSORS/////////////////////////
 
 	IRSenor::IRSenor(int pin, int minRange, int maxRange):
@@ -83,7 +87,7 @@ namespace Micromouse {
 
 		for (int i = calibrationSize - 1; i >= 0; i--)
 		{
-			log(DEBUG3) << "calibrationData[ " << i << " ]= " << calibrationData[i] << " , val = " << val;
+			log(DEBUG4) << "calibrationData[ " << i << " ]= " << calibrationData[i] << " , val = " << val;
 
 			if (val < calibrationData[i])
 			{
@@ -91,15 +95,17 @@ namespace Micromouse {
 					i * calibrationInterval + calibrationStart,
 					(i + 1) * calibrationInterval + calibrationStart, val);
 
-				log(DEBUG2) << "Measured Distance: " << dist;
+				log(DEBUG4) << "Measured Distance: " << dist;
 
 				return dist;
 			}
 
-			log(DEBUG2) << "Measured Distance*: " << MIN_RANGE;
+			log(DEBUG4) << "Measured Distance*: " << MIN_RANGE;
 
 			return MIN_RANGE;
 		}
+        // to complile with Xcode win archit.
+        return 666;
 	}
 
 
@@ -116,6 +122,8 @@ namespace Micromouse {
 
 	void IRSenor::defaultCalibration()
 	{
+		calibrationData = new int[10];
+
 		if (MIN_RANGE == 40)
 		{
 			calibrationData[0] = 517; //40mm

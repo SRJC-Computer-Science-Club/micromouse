@@ -5,6 +5,8 @@ Author Name:	Joshua Murphy
 Author GitHub:	joshuasrjc
 \*********************************/
 
+
+
 #include "MouseBot.h"
 #include <stack>
 #include "Logger.h"
@@ -13,30 +15,29 @@ namespace Micromouse
 {
 	/**** CONSTRUCTORS ****/
 
-	MouseBot::MouseBot()
-	{
-		MouseBot::MouseBot(0,0);
-	}
-
 	MouseBot::MouseBot(int x, int y)
 	{
-		MouseBot(PositionVector(x, y));
-	}
+		log(DEBUG2) << "Creating MouseBot at (" << x << ", " << y << ")";
 
-	MouseBot::MouseBot(PositionVector pos)
-	{
-		setPos(pos);
+		setPos(x, y);
 
 #ifdef __MK20DX256__
 		// If compiled for Teensy
 
-		robotIO = RobotIO();
-
+		//robotIO = RobotIO();
+		// 1. the default constructor is implicitly called since 
+		//the variable was of type RobotIO, and not RobotIO*, but
+		// this alone would not cause an error
+		//
+		// 2. RobotIO contains constants which makes the = operator not work because it knows it can't copy the consts 
+		// giving this error
+		//MouseBot.cpp:33: error: use of deleted function 'Micromouse::RobotIO& Micromouse::RobotIO::operator=(const Micromouse::RobotIO&)'
+		// i made the constants static as they should be to avoid this
 #else
 		// If compiled for PC
-
 		virtualMaze = new VirtualMaze(NUM_NODES_W, NUM_NODES_H);
 		virtualMaze->generateRandomMaze();
+
 		logC(INFO) << "Randomly generated a virtual maze:\n";
 		logC(INFO) << *virtualMaze << "\n";
 #endif
@@ -44,6 +45,11 @@ namespace Micromouse
 
 	MouseBot::~MouseBot()
 	{
+#ifdef __MK20DX256__
+		// If compiled for Teensy
+#else
+		delete virtualMaze;
+#endif
 	}
 
 
@@ -80,11 +86,13 @@ namespace Micromouse
 
 	void MouseBot::mapMaze()
 	{
+		log(DEBUG2) << "Starting Mapping";
+
 		maze.setOpen(true, position);
 		maze.addNode(position);
 		maze.setExplored(true, position);
 
-		stack<PositionVector*> choicePositions = stack<PositionVector*>();
+		std::stack<PositionVector*> choicePositions = std::stack<PositionVector*>();
 		choicePositions.push(new PositionVector(position));
 		lookAround();
 		
@@ -101,8 +109,8 @@ namespace Micromouse
 			}
 
 			delete pos;
-
-			//logC(DEBUG1) << "Number of possible directions: " << numPossibleDirections();
+	
+			logC(DEBUG3) << "Number of possible directions: " << numPossibleDirections();
 			while (numPossibleDirections() > 0)
 			{
 				if (numPossibleDirections() > 1)
@@ -111,7 +119,7 @@ namespace Micromouse
 				}
 				direction dir = pickPossibleDirection();
 				rotateToFaceDirection(dir);
-				//logC(DEBUG1) << "Traveled " << dir;
+				logC(DEBUG3) << "Traveled " << dir;
 				moveForward();
 				lookAround();
 				moveForward();
@@ -119,12 +127,30 @@ namespace Micromouse
 			}
 		}
 
+
 		logC(INFO) << "Mapped maze:\n";
+
+#ifdef __MK20DX256__
+		// If compiled for Teensy
+#else
 		logC(INFO) << maze;
+#endif
+
+		//temp for testing
+		Path * path = maze.findPath(PositionVector(0, 0), PositionVector(16, 16));
+		for (int i = 0; i < path->size(); i++)
+		{
+			log(DEBUG2) << "Dir: " << path->peekStep().dir() << " Mag: " << path->peekStep().mag();
+			path->popStep();
+		}
+
+
 	}
 
 	void MouseBot::lookAround()
 	{
+		logC(DEBUG4) << "lookAround()";
+
 		if (isClearForward())
 		{
 			PositionVector pos = position + (facing + N);
@@ -150,11 +176,13 @@ namespace Micromouse
 
 	bool MouseBot::isPossibleDirection(direction dir)
 	{
+		logC(DEBUG4) << "isPossibleDirection()";
 		return maze.isInsideMaze(position + dir) && maze.isOpen(position + dir) && !maze.isExplored((position + dir) + dir);
 	}
 
 	int MouseBot::numPossibleDirections()
 	{
+		logC(DEBUG4) << "numPossibleDirections()";
 		int n = 0;
 		if (isPossibleDirection(N)) n++;
 		if (isPossibleDirection(E)) n++;
@@ -165,10 +193,13 @@ namespace Micromouse
 
 	direction MouseBot::pickPossibleDirection()
 	{
+		logC(DEBUG4) << "pickPossibleDirection()";
 		if (isPossibleDirection(N)) return N;
 		if (isPossibleDirection(E)) return E;
 		if (isPossibleDirection(S)) return S;
 		if (isPossibleDirection(W)) return W;
+        // to complile with Xcode win archit.
+        return NONE;
 	}
 
 	bool MouseBot::isClearForward()
@@ -184,9 +215,7 @@ namespace Micromouse
 
 		PositionVector pos = position + (facing + N);
 		return virtualMaze->isInsideMaze(pos) && virtualMaze->isOpen(pos);
-
 #endif
-
 	}
 
 	bool MouseBot::isClearRight()
@@ -202,9 +231,7 @@ namespace Micromouse
 
 		PositionVector pos = position + (facing + E);
 		return virtualMaze->isInsideMaze(pos) && virtualMaze->isOpen(pos);
-
 #endif
-
 	}
 
 	bool MouseBot::isClearLeft()
@@ -220,9 +247,7 @@ namespace Micromouse
 
 		PositionVector pos = position + (facing + W);
 		return virtualMaze->isInsideMaze(pos) && virtualMaze->isOpen(pos);
-
 #endif
-
 	}
 
 
@@ -326,3 +351,4 @@ namespace Micromouse
 		}
 	}
 }
+

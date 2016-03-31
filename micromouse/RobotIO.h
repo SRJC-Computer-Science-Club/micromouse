@@ -34,6 +34,10 @@ namespace Micromouse
 		bool isClearRight(); // Returns false if the range-finder sensors detect a wall to the right of the bot. Otherwise, returns true.
 		bool isClearLeft(); // Returns false if the range-finder sensors detect a wall to the left of the bot. Otherwise, returns true.
 
+		void followPath(Path * path);
+
+		void calibrateIRSensors();
+
 	private:
 
         bool isWallinDirection( direction dir );

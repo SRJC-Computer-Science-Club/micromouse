@@ -122,6 +122,7 @@ namespace Micromouse {
 
 	void IRSenor::defaultCalibration()
 	{
+		calibrationSize = 10;
 		calibrationData = new int[10];
 
 		if (MIN_RANGE == 40)
@@ -138,6 +139,19 @@ namespace Micromouse {
 			calibrationData[9] = 84; //310mm
 		}
 		//TODO add default calibration for 2-15cm sensor
+		if (MIN_RANGE == 20)
+		{
+			calibrationData[0] = 517; //40mm
+			calibrationData[1] = 338; //70mm
+			calibrationData[2] = 236; //100mm
+			calibrationData[3] = 188; //130mm
+			calibrationData[4] = 152; //160mm
+			calibrationData[5] = 129; //190mm
+			calibrationData[6] = 116; //220mm
+			calibrationData[7] = 100; //250mm
+			calibrationData[8] = 92; //280mm
+			calibrationData[9] = 84; //310mm
+		}
 	}
 }
 

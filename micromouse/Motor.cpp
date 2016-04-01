@@ -17,7 +17,7 @@ namespace Micromouse
 	void Motor::initPins()
 	{
 		pinMode(fwdPin, OUTPUT);
-		pinMose(bwdPin, OUTPUT);
+		pinMode(bwdPin, OUTPUT);
 		pinMode(pwmPin, OUTPUT);
 	}
 
@@ -34,7 +34,9 @@ namespace Micromouse
 			// Calculate deltaTime
 			currentTime = micros();
 			double deltaTime = (double)(currentTime - lastTime) / 1000000; // 1 Million microseconds in a second.
-			lastTime = currentTime();
+			lastTime = currentTime;
+
+			counts -= encoder.read();
 
 			// targetSpeed should have the same sign as counts. (+ or -)
 			if (counts > 0)
@@ -46,7 +48,25 @@ namespace Micromouse
 				targetSpeed = targetSpeed < 0 ? targetSpeed : -targetSpeed;
 			}
 
+			// Move speed towards targetSpeed
 			speed += (targetSpeed / rampTime) * deltaTime;
+
+			// Constrain speed between -1 and 1
+			speed = speed > 1 ? 1 : speed;
+			speed = speed < -1 ? -1 : speed;
+
+			if (speed >= 0)
+			{
+				digitalWrite(fwdPin, HIGH);
+				digitalWrite(bwdPin, LOW);
+				analogWrite( pwmPin, (int)(255 * speed) );
+			}
+			else
+			{
+				digitalWrite(bwdPin, HIGH);
+				digitalWrite(fwdPin, LOW);
+				analogWrite( pwmPin, (int)(255 * (-speed)) );
+			}
 		}
 	}
 

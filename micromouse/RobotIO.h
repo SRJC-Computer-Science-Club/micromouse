@@ -2,6 +2,7 @@
 
 #include "IRSensor.h"
 #include "Vector.h"
+#include "Motor.h"
 
 namespace Micromouse
 {
@@ -48,6 +49,7 @@ namespace Micromouse
 		bool isClearLeft(); // Returns false if the range-finder sensors detect a wall to the left of the bot. Otherwise, returns true.
 
 	private:
+		
 
         bool isWallinDirection( direction dir );
 	

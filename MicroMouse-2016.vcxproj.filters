@@ -48,7 +48,7 @@
     <ClCompile Include="micromouse\IRSensor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Motor.cpp">
+    <ClCompile Include="micromouse\Motor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -86,7 +86,7 @@
     <ClInclude Include="micromouse\IRSensor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Motor.h">
+    <ClInclude Include="micromouse\Motor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

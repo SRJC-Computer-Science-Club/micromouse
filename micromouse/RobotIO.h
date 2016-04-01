@@ -1,8 +1,8 @@
 #pragma once
 
+#include "Motor.h"
 #include "IRSensor.h"
 #include "Vector.h"
-#include "Motor.h"
 
 namespace Micromouse
 {

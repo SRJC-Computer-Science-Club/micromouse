@@ -6,10 +6,10 @@ Author GitHub:	joshuasrjc
 \*********************************/
 
 #pragma once
+#include "Motor.h"
 #include "Vector.h"
 #include "RobotIO.h"
 #include <stack>
-#include "IRSensor.h"
 #include "Path.h"
 #include "Maze.h"
 

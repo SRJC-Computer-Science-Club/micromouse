@@ -4,7 +4,9 @@
 #include "Logger.h"
 
 #ifdef __MK20DX256__ //this is the Teensy signature
-#include <Arduino.h>//random
+// ### This line causes a lot of problems. It seems to conflict with #include <Encoder.h> ###
+// ### I'm not sure what it's for, so for now it's commented out.
+//#include <Arduino.h>//random
 #endif
 
 namespace Micromouse

@@ -2,7 +2,7 @@
 
 #ifdef __MK20DX256__
 // If compiled for Teensy
-#include "Encoder.h"
+#include <Encoder.h>
 
 namespace Micromouse
 {

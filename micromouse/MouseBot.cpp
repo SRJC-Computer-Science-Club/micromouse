@@ -8,7 +8,6 @@ Author GitHub:	joshuasrjc
 
 
 #include "MouseBot.h"
-#include <stack>
 #include "Logger.h"
 
 namespace Micromouse

@@ -12,22 +12,22 @@ namespace Micromouse
 	const int IR_RIGHT_PIN = 23;
 
 	const int MOTOR_RIGHT_FWD_PIN = 11;
-	const int MOTOR_RIGHT_BACK_PIN = 12;
+	const int MOTOR_RIGHT_BWD_PIN = 12;
 	const int MOTOR_RIGHT_PWM_PIN = 9;
+	const int ENCODER_RIGHT_FWD_PIN = 8;
+	const int ENCODER_RIGHT_BWD_PIN = 7;
 
 	const int MOTOR_LEFT_FWD_PIN = 16;
-	const int MOTOR_LEFT_BACK_PIN = 17;
+	const int MOTOR_LEFT_BWD_PIN = 17;
 	const int MOTOR_LEFT_PWM_PIN = 10;
-
 	const int ENCODER_LEFT_FWD_PIN = 20;
-	const int ENCODER_LEFT_BACK_PIN = 21;
-	const int ENCODER_RIGHT_FWD_PIN = 8;
-	const int ENCODER_RIGHT_BACK_PIN = 7;
+	const int ENCODER_LEFT_BWD_PIN = 21;
+
 
 	const int BUTTON_PIN = 6;
-	const int switch_A_PIN = 0;
-	const int switch_B_PIN = 2;
-	const int switch_C_PIN = 4;
+	const int SWITCH_A_PIN = 0;
+	const int SWITCH_B_PIN = 2;
+	const int SWITCH_C_PIN = 4;
 
 	const int LED_PIN = 13;
 

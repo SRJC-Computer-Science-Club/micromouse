@@ -6,7 +6,7 @@ Author GitHub:	joshuasrjc
 \*********************************/
 
 #pragma once
-#include "Motor.h"
+#include "Motor.h" //For some reason, this needs to be here for it to compile on Teensy.
 #include "Vector.h"
 #include "RobotIO.h"
 #include <stack>

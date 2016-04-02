@@ -3,7 +3,7 @@ namespace Micromouse
 {
 #ifdef __MK20DX256__ 
 
-#include <Wire.h>
+//#include <Wire.h>
 #include <SPI.h>
 #include <math.h>
 #include <Adafruit_LSM9DS0.h>

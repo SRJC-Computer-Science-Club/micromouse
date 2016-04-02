@@ -59,19 +59,16 @@ void loop()
   while(true){
     for( int x = 0 ; x < 100 ; x++ )
     {
-    lsm.read();
-    x_integrator += ( (int)lsm.gyroData.z + 418);
-    Serial.println((int)lsm.gyroData.z + 418);//Serial.print("    ");Serial.println(x_integrator);
-     delay(10);
+      lsm.read();
+      x_integrator += ( (int)lsm.gyroData.z + 445);
+      //Serial.println((int)lsm.gyroData.z );//Serial.print("    ");Serial.println(x_integrator);
+      delay(1);
     }
-
-    degree = (int)(( x_integrator / 32767.0f)*245 )%360;
+    //while(true){
+    //}
+   degree = (int)(( x_integrator / 32767.0f)*60 )%360;
   
-  // Serial.println(degree); 
+  Serial.println(degree); 
     
   }
-    
-    
-
-  
 }

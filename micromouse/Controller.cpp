@@ -13,7 +13,8 @@ namespace Micromouse
 		log(INFO) << "Starting Program"; //log to console only
 
 		MouseBot mouse(0,0);
-		mouse.mapMaze();
+		mouse.testMotors();
+		//mouse.mapMaze();
 
 		logC( DEBUG1 ) << "End Program"; //log to console only
 	}

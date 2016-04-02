@@ -26,9 +26,13 @@ namespace Micromouse
 		//The actual speed of the motor will be the product of speed and maxSpeed ( see setMaxSpeed()).
 		void setMovement(float speed);
 
+		//maxSpeed should be a float between 0 and 1;
 		//Sets the maximum speed of the motor.
 		//All speeds given will be multiplied by this factor.
 		void setMaxSpeed(float maxSpeed);
+
+		//Returns the maxSpeed of the motor.
+		float getMaxSpeed() const;
 
 		//Turns off the motor and brakes.
 		void brake();
@@ -37,7 +41,7 @@ namespace Micromouse
 		void coast();
 		
 		//Returns the number of encoder counts since resetCounts() was last called.
-		int getCounts() const;
+		int getCounts();
 
 		//Returns the number of encoder counts since resetCounts() was last called.
 		//Then resets the encoder count.

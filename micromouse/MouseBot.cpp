@@ -281,6 +281,13 @@ namespace Micromouse
 		movementHistory.pop();
 	}
 
+	void MouseBot::testMotors()
+	{
+#ifdef __MK20DX256__
+		robotIO.testMotors();
+#endif
+	}
+
 	void MouseBot::moveForward()
 	{
 		move(facing);

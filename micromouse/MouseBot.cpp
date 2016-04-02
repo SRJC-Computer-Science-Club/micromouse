@@ -8,7 +8,6 @@ Author GitHub:	joshuasrjc
 
 
 #include "MouseBot.h"
-#include <stack>
 #include "Logger.h"
 
 namespace Micromouse
@@ -280,6 +279,13 @@ namespace Micromouse
 		rotateToFaceDirection(dir + S);
 		moveForward();
 		movementHistory.pop();
+	}
+
+	void MouseBot::testMotors()
+	{
+#ifdef __MK20DX256__
+		robotIO.testMotors();
+#endif
 	}
 
 	void MouseBot::moveForward()

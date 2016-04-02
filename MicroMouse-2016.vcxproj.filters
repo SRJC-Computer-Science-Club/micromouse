@@ -48,7 +48,11 @@
     <ClCompile Include="micromouse\IRSensor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Magnetometer.cpp">
+=======
+    <ClCompile Include="micromouse\Motor.cpp">
+>>>>>>> origin/joshua_motor_class
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -86,7 +90,11 @@
     <ClInclude Include="micromouse\IRSensor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="Magnetometer.h">
+=======
+    <ClInclude Include="micromouse\Motor.h">
+>>>>>>> origin/joshua_motor_class
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

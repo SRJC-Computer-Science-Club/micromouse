@@ -143,7 +143,7 @@ namespace Micromouse
 #endif
 
 		//temp for testing
-		Path * path2 = maze.findPath(PositionVector(0, 0), PositionVector(0, 0));
+		//Path * path2 = maze.findPath(PositionVector(0, 0), PositionVector(0, 0));
 		Path * path = maze.findPath(PositionVector(0, 0), PositionVector(16, 16));
 		for (int i = 0; i < path->size(); i++)
 		{

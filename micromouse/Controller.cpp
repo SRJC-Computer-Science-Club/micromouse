@@ -1,6 +1,6 @@
+#include <vector> //must come first for some reason
 #include "Controller.h"
 #include "Logger.h"
-#include <vector>
 
 #ifdef __MK20DX256__ // Teensy compile
 #include "WProgram.h"
@@ -51,8 +51,8 @@ namespace Micromouse
 #ifdef __MK20DX256__ // Teensy compile
 
 		intState = digitalRead(SWITCH_C_PIN);
-		intState << 1; intState += digitalRead(SWITCH_B_PIN);
-		intState << 1; intState += digitalRead(SWITCH_A_PIN);
+		intState <<= 1; intState += digitalRead(SWITCH_B_PIN);
+		intState <<= 1; intState += digitalRead(SWITCH_A_PIN);
 
 #else // pc compile
 		log(INFO) <<

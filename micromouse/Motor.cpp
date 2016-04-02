@@ -22,15 +22,47 @@ namespace Micromouse
 		pinMode(pwmPin, OUTPUT);
 	}
 
-	void Motor::moveMotor(int counts, float targetSpeed, float rampTime)
+	void Motor::setMovement(float speed)
 	{
-		encoder.write(0);
 
+	}
+
+	void Motor::setMaxSpeed(float maxSpeed)
+	{
+
+	}
+
+	void Motor::brake()
+	{
+
+	}
+
+	void Motor::coast()
+	{
+
+	}
+
+	int Motor::getCounts() const
+	{
+
+	}
+
+	int Motor::resetCounts()
+	{
+
+	}
+
+	/*
+	void Motor::move(int counts, float targetSpeed, float rampTime)
+	{
 		double speed = 0;
+
+		encoder.write(0);
 		
 		unsigned long startTime = micros();
 		float timePassed = 0;
-		while (counts != 0)
+		bool forward = counts >= 0;
+		while ((forward && counts > 0) || (!forward && counts < 0))
 		{
 			// Calculate timePassed
 			timePassed = (micros() - startTime) / 1000000.0f;
@@ -44,6 +76,8 @@ namespace Micromouse
 				speed = targetSpeed / rampTime * timePassed;
 			}
 
+			// Constrain speed < targetSpeed, then give it the same sign as counts.
+			speed = speed > targetSpeed ? targetSpeed : speed;
 			speed = counts > 0 ? speed : -speed;
 
 			if (speed >= 0)
@@ -60,15 +94,17 @@ namespace Micromouse
 			}
 
 			counts -= encoder.read();
+			encoder.write(0);
 
-			logC(DEBUG4) << counts;
+			//logC(DEBUG1) << "Counts: " << counts;
+			//logC(DEBUG1) << "Speed: " << speed;
 		}
 
 		digitalWrite(fwdPin, HIGH);
 		digitalWrite(bwdPin, HIGH);
 		analogWrite(pwmPin, 0);
 	}
-
+	*/
 }
 
 #endif

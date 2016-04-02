@@ -17,8 +17,8 @@ namespace Micromouse
 	const int ENCODER_RIGHT_FWD_PIN = 8;
 	const int ENCODER_RIGHT_BWD_PIN = 7;
 
-	const int MOTOR_LEFT_FWD_PIN = 16;
-	const int MOTOR_LEFT_BWD_PIN = 17;
+	const int MOTOR_LEFT_FWD_PIN = 17;
+	const int MOTOR_LEFT_BWD_PIN = 16;
 	const int MOTOR_LEFT_PWM_PIN = 10;
 	const int ENCODER_LEFT_FWD_PIN = 20;
 	const int ENCODER_LEFT_BWD_PIN = 21;
@@ -49,8 +49,25 @@ namespace Micromouse
 		bool isClearLeft(); // Returns false if the range-finder sensors detect a wall to the left of the bot. Otherwise, returns true.
 
 	private:
-		
+#ifdef __MK20DX256__
+		Motor rightMotor = Motor
+		(
+			MOTOR_RIGHT_FWD_PIN,
+			MOTOR_RIGHT_BWD_PIN,
+			MOTOR_RIGHT_PWM_PIN,
+			ENCODER_RIGHT_FWD_PIN,
+			ENCODER_RIGHT_BWD_PIN
+		);
 
+		Motor leftMotor = Motor
+		(
+			MOTOR_LEFT_FWD_PIN,
+			MOTOR_LEFT_BWD_PIN,
+			MOTOR_LEFT_PWM_PIN,
+			ENCODER_LEFT_FWD_PIN,
+			ENCODER_LEFT_BWD_PIN
+		);
+#endif
         bool isWallinDirection( direction dir );
 	
 		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };

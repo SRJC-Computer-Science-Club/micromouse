@@ -146,6 +146,11 @@ namespace Micromouse
 	// ## NOT YET IMPLEMENTED ## 
 	void RobotIO::moveForward()
 	{
+#ifdef __MK20DX256__
+		digitalWrite(LED_PIN, HIGH);
+		leftMotor.move(1433, 0.5f, 2);
+		digitalWrite(LED_PIN, LOW);
+#endif
 
 	}
 

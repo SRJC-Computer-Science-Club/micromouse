@@ -15,6 +15,10 @@ namespace Micromouse
 
 	RobotIO::RobotIO()
 	{
+#ifdef __MK20DX256__
+		pinMode(BUTTON_PIN, INPUT);
+#endif
+
 		initSensors();
 	}
 
@@ -142,6 +146,40 @@ namespace Micromouse
 
 
 	/**** MOTORS ****/
+
+	void RobotIO::testMotors()
+	{
+#ifdef __MK20DX256__
+		rightMotor.setMaxSpeed(0.2f);
+		leftMotor.setMaxSpeed(0.2f);
+
+		rightMotor.setMovement(1.0f);
+		delay(1000);
+		rightMotor.brake();
+		delay(1000);
+		leftMotor.setMovement(1.0f);
+		delay(1000);
+		leftMotor.brake();
+		delay(1000);
+		rightMotor.setMovement(-1.0f);
+		delay(1000);
+		rightMotor.coast();
+		delay(1000);
+		leftMotor.setMovement(-1.0f);
+		delay(1000);
+		leftMotor.coast();
+		delay(1000);
+
+		rightMotor.setMaxSpeed(1.0f);
+		leftMotor.setMaxSpeed(1.0f);
+
+		leftMotor.setMovement(1.0f);
+		rightMotor.setMovement(1.0f);
+		delay(2000);
+		leftMotor.brake();
+		rightMotor.brake();
+#endif
+	}
 
 	// ## NOT YET IMPLEMENTED ##
 	void RobotIO::moveForward()

@@ -149,10 +149,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Magnetometer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="micromouse\Controller.cpp" />
     <ClCompile Include="micromouse\FlagMatrix.cpp" />
+    <ClCompile Include="micromouse\Magnetometer.cpp" />
     <ClCompile Include="micromouse\Maze.cpp" />
     <ClCompile Include="micromouse\Motor.cpp" />
     <ClCompile Include="micromouse\MouseBot.cpp" />
@@ -164,10 +164,10 @@
     <ClCompile Include="micromouse\VirtualMaze.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Magnetometer.h" />
     <ClInclude Include="micromouse\Controller.h" />
     <ClInclude Include="micromouse\FlagMatrix.h" />
     <ClInclude Include="micromouse\Logger.h" />
+    <ClInclude Include="micromouse\Magnetometer.h" />
     <ClInclude Include="micromouse\Maze.h" />
     <ClInclude Include="micromouse\Motor.h" />
     <ClInclude Include="micromouse\MouseBot.h" />

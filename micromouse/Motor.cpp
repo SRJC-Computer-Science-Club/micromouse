@@ -1,4 +1,5 @@
 #include "Motor.h"
+#include "Logger.h"
 
 #ifdef __MK20DX256__
 
@@ -27,33 +28,23 @@ namespace Micromouse
 
 		double speed = 0;
 		
-		unsigned long lastTime = micros();
-		unsigned long currentTime = micros();
+		unsigned long startTime = micros();
+		float timePassed = 0;
 		while (counts != 0)
 		{
-			// Calculate deltaTime
-			currentTime = micros();
-			double deltaTime = (double)(currentTime - lastTime) / 1000000; // 1 Million microseconds in a second.
-			lastTime = currentTime;
+			// Calculate timePassed
+			timePassed = (micros() - startTime) / 1000000.0f;
 
-			counts -= encoder.read();
-
-			// targetSpeed should have the same sign as counts. (+ or -)
-			if (counts > 0)
+			if (rampTime == 0)
 			{
-				targetSpeed = targetSpeed > 0 ? targetSpeed : -targetSpeed;
+				speed = targetSpeed;
 			}
-			if (counts < 0)
+			else
 			{
-				targetSpeed = targetSpeed < 0 ? targetSpeed : -targetSpeed;
+				speed = targetSpeed / rampTime * timePassed;
 			}
 
-			// Move speed towards targetSpeed
-			speed += (targetSpeed / rampTime) * deltaTime;
-
-			// Constrain speed between -1 and 1
-			speed = speed > 1 ? 1 : speed;
-			speed = speed < -1 ? -1 : speed;
+			speed = counts > 0 ? speed : -speed;
 
 			if (speed >= 0)
 			{
@@ -67,7 +58,15 @@ namespace Micromouse
 				digitalWrite(fwdPin, LOW);
 				analogWrite( pwmPin, (int)(255 * (-speed)) );
 			}
+
+			counts -= encoder.read();
+
+			logC(DEBUG4) << counts;
 		}
+
+		digitalWrite(fwdPin, HIGH);
+		digitalWrite(bwdPin, HIGH);
+		analogWrite(pwmPin, 0);
 	}
 
 }

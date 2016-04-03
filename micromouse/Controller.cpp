@@ -31,10 +31,10 @@ namespace Micromouse
 			{
 				runState();
 			}
-
 			waitForButton();
 			buttonFlag = false;
 		}
+
 
 		logC( DEBUG1 ) << "End Program"; //log to console only
 	}

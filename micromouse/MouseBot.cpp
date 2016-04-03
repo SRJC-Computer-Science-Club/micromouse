@@ -8,7 +8,6 @@ Author GitHub:	joshuasrjc
 
 
 #include "MouseBot.h"
-#include <stack>
 #include "Logger.h"
 
 namespace Micromouse
@@ -94,10 +93,6 @@ namespace Micromouse
 	{
 		log(DEBUG1) << "Map Maze";
 
-		maze.setOpen(true, position);
-		maze.addNode(position);
-		maze.setExplored(true, position);
-
 		std::stack<PositionVector*> choicePositions = std::stack<PositionVector*>();
 		choicePositions.push(new PositionVector(position));
 		lookAround();
@@ -127,7 +122,6 @@ namespace Micromouse
 				rotateToFaceDirection(dir);
 				logC(DEBUG3) << "Traveled " << dir;
 				moveForward();
-				lookAround();
 				moveForward();
 				lookAround();
 			}
@@ -169,6 +163,9 @@ namespace Micromouse
 	void MouseBot::lookAround()
 	{
 		logC(DEBUG4) << "lookAround()";
+		maze.addNode(position);
+		maze.setOpen(true, position);
+		maze.setExplored(true, position);
 
 		if (isClearForward())
 		{
@@ -301,6 +298,13 @@ namespace Micromouse
 		rotateToFaceDirection(dir + S);
 		moveForward();
 		movementHistory.pop();
+	}
+
+	void MouseBot::testMotors()
+	{
+#ifdef __MK20DX256__
+		robotIO.testMotors();
+#endif
 	}
 
 	void MouseBot::moveForward()

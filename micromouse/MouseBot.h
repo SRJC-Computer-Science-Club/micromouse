@@ -62,7 +62,7 @@ namespace Micromouse
 		int getSpeed();
 		void setSpeed( int spd );
 
-		void CalibrateSensors();
+		void CalibrateIRSensors();
 
 	private:
 		const int MAX_SPEED = 8;

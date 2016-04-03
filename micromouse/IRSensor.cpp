@@ -14,10 +14,11 @@ namespace Micromouse {
 	//IR SENSORS/////////////////////////
 
 	IRSenor::IRSenor(int pin, int minRange, int maxRange):
-		PIN(pin),
+		DATA_PIN(pin),
 		MIN_RANGE(minRange),
 		MAX_RANGE(maxRange)
 	{
+		initPins();
 		defaultCalibration();
 	}
 
@@ -59,7 +60,7 @@ namespace Micromouse {
 
 			for (int x = 0; x < sampleSize; x++)
 			{
-				calibrationData[i] += analogRead(PIN);
+				calibrationData[i] += analogRead(DATA_PIN);
 				delay(1);
 			}
 
@@ -76,10 +77,10 @@ namespace Micromouse {
 	}
 
 
-	int IRSenor::getDistance()
+	float IRSenor::getDistance()
 	{
 #ifdef __MK20DX256__ //this is the Teensy signature
-		int val = analogRead(PIN);
+		int val = analogRead(DATA_PIN);
 #else
 		// false analog value used while on pc
 		int val = 300;
@@ -119,6 +120,13 @@ namespace Micromouse {
 
 
 
+
+	void IRSenor::initPins()
+	{
+#ifdef __MK20DX256__ //this is the Teensy signature
+		pinMode(DATA_PIN, OUTPUT);
+#endif
+	}
 
 	void IRSenor::defaultCalibration()
 	{

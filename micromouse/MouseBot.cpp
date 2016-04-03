@@ -389,7 +389,7 @@ namespace Micromouse
 		speed = spd;
 		assert(speed > 0 && speed <= MAX_SPEED);
 	}
-	void MouseBot::CalibrateSensors()
+	void MouseBot::CalibrateIRSensors()
 	{
 		robotIO.calibrateIRSensors();
 	}

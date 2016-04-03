@@ -57,6 +57,15 @@ namespace Micromouse
 		void calibrateIRSensors();
 
 	private:
+		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };
+
+        bool isWallinDirection( direction dir );
+		void initIRSensors();
+		void initPins();
+
+		IRSenor* IRSensors[4];
+
+	
 #ifdef __MK20DX256__
 		Motor rightMotor = Motor
 		(
@@ -76,12 +85,5 @@ namespace Micromouse
 			ENCODER_LEFT_BWD_PIN
 		);
 #endif
-        bool isWallinDirection( direction dir );
-	
-		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };
-
-		void initSensors();
-
-		IRSenor* IRSensors[4];
 	};
 }

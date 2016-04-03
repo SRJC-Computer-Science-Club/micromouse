@@ -10,11 +10,12 @@
 
 int buttonFlag;
 
-const int SWITCH_A_PIN = 0; // defined in RobotIO.h
-const int SWITCH_B_PIN =1;
-const int SWITCH_C_PIN =2;
+extern int SWITCH_A_PIN; // defined in RobotIO.h
+extern int SWITCH_B_PIN;
+extern int SWITCH_C_PIN;
 
-const int LED_PIN = 2;
+extern int LED_PIN;
+extern int BUTTON_PIN;
 
 namespace Micromouse
 {

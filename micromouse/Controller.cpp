@@ -1,6 +1,6 @@
-#include <vector> //must come first for some reason
 #include "Controller.h"
 #include "Logger.h"
+#include <vector> //must come first for some reason
 
 #ifdef __MK20DX256__ // Teensy compile
 #include "WProgram.h"

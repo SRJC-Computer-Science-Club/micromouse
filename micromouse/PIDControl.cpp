@@ -6,59 +6,59 @@
 //  Copyright © 2016 Yikealo Abraha. All rights reserved.
 //
 
-#include "PIDControl.hpp"
-#include "stdlib.h"
+#include "PIDControl.h"
 
 
-PIDControl::PIDControl(float kp,float ki, float kd)
-{
-    ErroSum=0;
-    ErrorDifference=0;
-    Kd=kd;
-    Kp=kp;
-    Ki=ki;
-}
-
-
-
-float PIDControl::getCorrection(float error)
-{
-    ErroSum+=error;
-    ErrorDifference=lastError-error;
-    return Ki * error + Ki * ErroSum + Kd * ErrorDifference;
-}
+namespace Micromouse {
+	PIDControl::PIDControl(float kp, float ki, float kd)
+	{
+		ErroSum = 0;
+		ErrorDifference = 0;
+		Kd = kd;
+		Kp = kp;
+		Ki = ki;
+	}
 
 
 
-
-
-void PIDControl::setKp(float kp)
-{
-    Kp=kp;
-}
-
-
-
-
-void PIDControl::setKi(float ki)
-{
-    Ki=ki;
-}
-
-
-
-
-void PIDControl::setKd(float kd)
-{
-    Kd=kd;
-}
+	float PIDControl::getCorrection(float error)
+	{
+		ErroSum += error;
+		ErrorDifference = lastError - error;
+		return Ki * error + Ki * ErroSum + Kd * ErrorDifference;
+	}
 
 
 
 
 
-void PIDControl::reset()
-{
-    ErroSum=0;
-    ErrorDifference=0;
+	void PIDControl::setKp(float kp)
+	{
+		Kp = kp;
+	}
+
+
+
+
+	void PIDControl::setKi(float ki)
+	{
+		Ki = ki;
+	}
+
+
+
+
+	void PIDControl::setKd(float kd)
+	{
+		Kd = kd;
+	}
+
+
+
+
+	void PIDControl::reset()
+	{
+		ErroSum = 0;
+		ErrorDifference = 0;
+	}
 }

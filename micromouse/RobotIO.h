@@ -42,7 +42,7 @@ namespace Micromouse
 		RobotIO();
 		~RobotIO();
 
-		void testMotors();
+		void testMotors(); //temp
 
 		void moveForward(); // ## NOT YET IMPLEMENTED ## Moves the bot forward by half a cell ( 9 cm ).
 		void rotateRight(); // ## NOT YET IMPLEMENTED ## Rotates the bot in place 45 degrees to the right.

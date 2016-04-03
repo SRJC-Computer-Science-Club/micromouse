@@ -76,7 +76,7 @@ namespace Micromouse
 		int numPossibleDirections();
 		direction pickPossibleDirection();
 
-		Maze maze;
+		Maze* maze;
 
 		int speed = 1;
 

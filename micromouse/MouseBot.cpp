@@ -19,19 +19,10 @@ namespace Micromouse
 		log(DEBUG2) << "Creating MouseBot at (" << x << ", " << y << ")";
 
 		setPos(x, y);
+		maze = new Maze();
 
 #ifdef __MK20DX256__
-		// If compiled for Teensy
 
-		//robotIO = RobotIO();
-		// 1. the default constructor is implicitly called since 
-		//the variable was of type RobotIO, and not RobotIO*, but
-		// this alone would not cause an error
-		//
-		// 2. RobotIO contains constants which makes the = operator not work because it knows it can't copy the consts 
-		// giving this error
-		//MouseBot.cpp:33: error: use of deleted function 'Micromouse::RobotIO& Micromouse::RobotIO::operator=(const Micromouse::RobotIO&)'
-		// i made the constants static as they should be to avoid this
 #else
 		// If compiled for PC
 		virtualMaze = new VirtualMaze(NUM_NODES_W, NUM_NODES_H);
@@ -44,6 +35,7 @@ namespace Micromouse
 
 	MouseBot::~MouseBot()
 	{
+		delete maze;
 #ifdef __MK20DX256__
 		// If compiled for Teensy
 #else
@@ -99,7 +91,7 @@ namespace Micromouse
 		
 		while (!choicePositions.empty())
 		{
-			//logC(DEBUG1) << maze;
+			//logC(DEBUG1) << *maze;
 
 			PositionVector* pos = choicePositions.top();
 			choicePositions.pop();
@@ -133,12 +125,12 @@ namespace Micromouse
 #ifdef __MK20DX256__
 		// If compiled for Teensy
 #else
-		logC(INFO) << maze;
+		logC(INFO) << *maze;
 #endif
 
 		//temp for testing
 		//Path * path2 = maze.findPath(PositionVector(0, 0), PositionVector(0, 0));
-		Path * path = maze.findPath(PositionVector(0, 0), PositionVector(16, 16));
+		Path * path = maze->findPath(PositionVector(0, 0), PositionVector(16, 16));
 		for (int i = 0; i < path->size(); i++)
 		{
 			log(DEBUG2) << "Dir: " << path->peekStep().dir() << " Mag: " << path->peekStep().mag();
@@ -153,7 +145,7 @@ namespace Micromouse
 		log(DEBUG1) << "Run Maze";
 		assert(position == PositionVector(0, 0));
 
-		robotIO.followPath(maze.findPath(position, PositionVector(NUM_NODES_W / 2, NUM_NODES_H / 2)));
+		robotIO.followPath(maze->findPath(position, PositionVector(NUM_NODES_W / 2, NUM_NODES_H / 2)));
 	}
 
 	void MouseBot::returnToStart()
@@ -163,37 +155,37 @@ namespace Micromouse
 	void MouseBot::lookAround()
 	{
 		logC(DEBUG4) << "lookAround()";
-		maze.addNode(position);
-		maze.setOpen(true, position);
-		maze.setExplored(true, position);
+		maze->addNode(position);
+		maze->setOpen(true, position);
+		maze->setExplored(true, position);
 
 		if (isClearForward())
 		{
 			PositionVector pos = position + (facing + N);
-			maze.setOpen(true, pos);
-			maze.addNode(pos);
+			maze->setOpen(true, pos);
+			maze->addNode(pos);
 		}
 		if (isClearRight())
 		{
 			PositionVector pos = position + (facing + E);
-			maze.setOpen(true, pos);
-			maze.addNode(pos);
+			maze->setOpen(true, pos);
+			maze->addNode(pos);
 		}
 		if (isClearLeft())
 		{
 			PositionVector pos = position + (facing + W);
-			maze.setOpen(true, pos);
-			maze.addNode(pos);
+			maze->setOpen(true, pos);
+			maze->addNode(pos);
 		}
-		maze.setExplored(true, position + (facing + N));
-		maze.setExplored(true, position + (facing + E));
-		maze.setExplored(true, position + (facing + W));
+		maze->setExplored(true, position + (facing + N));
+		maze->setExplored(true, position + (facing + E));
+		maze->setExplored(true, position + (facing + W));
 	}
 
 	bool MouseBot::isPossibleDirection(direction dir)
 	{
 		logC(DEBUG4) << "isPossibleDirection()";
-		return maze.isInsideMaze(position + dir) && maze.isOpen(position + dir) && !maze.isExplored((position + dir) + dir);
+		return maze->isInsideMaze(position + dir) && maze->isOpen(position + dir) && !maze->isExplored((position + dir) + dir);
 	}
 
 	int MouseBot::numPossibleDirections()

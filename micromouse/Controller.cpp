@@ -86,6 +86,7 @@ namespace Micromouse
 		case MAP_MAZE:
 			blinkLEDCountdown(3);
 
+			mouse.resetToOrigin();
 			mouse.mapMaze();
 
 			if (buttonFlag)
@@ -105,7 +106,6 @@ namespace Micromouse
 		case RUN_MAZE:
 			if (doneMap)
 			{
-
 				blinkLEDCountdown(3);
 
 				mouse.resetToOrigin();
@@ -128,6 +128,7 @@ namespace Micromouse
 			}
 			else
 			{
+				log(WARN) << "Must map before Run";
 				state = NONE;
 			}
 
@@ -148,7 +149,8 @@ namespace Micromouse
 
 
 		case CAL_SENSORS:
-			mouse.CalibrateSensors();
+			mouse.CalibrateIRSensors();
+			state = NONE;
 			break;
 
 
@@ -159,7 +161,9 @@ namespace Micromouse
 
 		case RESET_MAZE:
 			doneMap = false;
+			log(INFO) << "Maze Reset";
 			//TODO
+			state = NONE;
 			break;
 		}
 

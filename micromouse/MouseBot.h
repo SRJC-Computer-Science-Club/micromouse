@@ -32,12 +32,18 @@ namespace Micromouse
 		direction getFacing();					// Return the direction the mouse is facing.
 		void setPos(int x, int y);				// Sets the position to (x,y)
 		void setPos(PositionVector pos);		// Sets the position to pos
+		void resetToOrigin();
+
 
 		//Maps out the maze. If on Teensey, it uses the sensors and motors to map a physical maze.
 		//Otherwise, it generates a random, virtual maze and uses it to simulate mapping.
 		//The mouse will visit every cell.
 		//Currently, the mouse ends in a random cell. Later, this function should return the mouse to the start.
 		void mapMaze();
+
+		void runMaze();
+
+		void returnToStart();
 
 		bool isClearForward();					// Returns true if there isn't a wall in front of the mouse. Uses a virtual maze for debugging on PC, otherwise it uses the bot's hardware.
 		bool isClearRight();					// Returns true if there isn't a wall to the right of the mouse. Uses a virtual maze for debugging on PC, otherwise it uses the bot's hardware.
@@ -51,7 +57,15 @@ namespace Micromouse
 		void rotateRight();						// Rotates the mouse in place to the right by 90 degrees.
 		void rotateToFaceDirection(direction dir); // Rotates the mouse in place until it reaches the given direction.
 
+
+		int incrementSpeed();
+		int getSpeed();
+		void setSpeed( int spd );
+
+		void CalibrateIRSensors();
+
 	private:
+		const int MAX_SPEED = 8;
 
 		void move(direction dir);
 		void followPath(Path* path);
@@ -62,7 +76,9 @@ namespace Micromouse
 		int numPossibleDirections();
 		direction pickPossibleDirection();
 
-		Maze maze;
+		Maze* maze;
+
+		int speed = 1;
 
 #ifdef __MK20DX256__ //this is the Teensy signature
 #else

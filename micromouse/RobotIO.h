@@ -3,6 +3,8 @@
 #include "Motor.h"
 #include "IRSensor.h"
 #include "Vector.h"
+#include "Path.h"
+
 
 namespace Micromouse
 {
@@ -40,7 +42,7 @@ namespace Micromouse
 		RobotIO();
 		~RobotIO();
 
-		void testMotors();
+		void testMotors(); //temp
 
 		void moveForward(); // ## NOT YET IMPLEMENTED ## Moves the bot forward by half a cell ( 9 cm ).
 		void rotateRight(); // ## NOT YET IMPLEMENTED ## Rotates the bot in place 45 degrees to the right.
@@ -50,7 +52,20 @@ namespace Micromouse
 		bool isClearRight(); // Returns false if the range-finder sensors detect a wall to the right of the bot. Otherwise, returns true.
 		bool isClearLeft(); // Returns false if the range-finder sensors detect a wall to the left of the bot. Otherwise, returns true.
 
+		void followPath(Path * path);
+
+		void calibrateIRSensors();
+
 	private:
+		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };
+
+        bool isWallinDirection( direction dir );
+		void initIRSensors();
+		void initPins();
+
+		IRSenor* IRSensors[4];
+
+	
 #ifdef __MK20DX256__
 		Motor rightMotor = Motor
 		(
@@ -70,12 +85,5 @@ namespace Micromouse
 			ENCODER_LEFT_BWD_PIN
 		);
 #endif
-        bool isWallinDirection( direction dir );
-	
-		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };
-
-		void initSensors();
-
-		IRSenor* IRSensors[4];
 	};
 }

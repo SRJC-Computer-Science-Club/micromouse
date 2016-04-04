@@ -15,11 +15,13 @@ namespace Micromouse
 
 	RobotIO::RobotIO()
 	{
-#ifdef __MK20DX256__
-		pinMode(BUTTON_PIN, INPUT);
-#endif
+		initPins();
+		initIRSensors();
 
-		initSensors();
+#ifdef __MK20DX256__
+		rightMotor.setMaxSpeed(0.2f);
+		leftMotor.setMaxSpeed(0.2f);
+#endif
 	}
 
 	RobotIO::~RobotIO()
@@ -36,26 +38,29 @@ namespace Micromouse
 
 	/**** SENSORS ****/
 
-	// ## NOT YET IMPLEMENTED ##
 	bool RobotIO::isClearForward()
 	{
-		return true;
 		return !isWallinDirection(N);
 	}
 
-	// ## NOT YET IMPLEMENTED ##
 	bool RobotIO::isClearRight()
 	{
-		return true;
 		return !isWallinDirection(W);
 	}
 
-	// ## NOT YET IMPLEMENTED ##
 	bool RobotIO::isClearLeft()
 	{
-		return true;
         return !isWallinDirection(E);
     }
+
+
+
+	void RobotIO::followPath(Path * path)
+	{
+		// TODO implement
+
+		delete path;
+	}
 
 
     bool RobotIO::isWallinDirection( direction dir )
@@ -99,7 +104,7 @@ namespace Micromouse
 
                 case N:
                 {
-                    int dist = IRSensors[ FRONT_LEFT ]->getDistance();
+                    int dist = (int) IRSensors[ FRONT_LEFT ]->getDistance();
 
                     if ( dist < 120 && abs( dist - IRSensors[ FRONT_RIGHT]->getDistance() ) < 30 )
                     {
@@ -110,7 +115,7 @@ namespace Micromouse
 
                 case NW:
                 {
-                    int dist = IRSensors[ FRONT_LEFT ]->getDistance();
+                    int dist = (int) IRSensors[ FRONT_LEFT ]->getDistance();
 
                     if ( dist < 150 && dist > 110 )
                     {
@@ -120,7 +125,7 @@ namespace Micromouse
                 }
                 case NE:
                 {
-                    int dist = IRSensors[ FRONT_RIGHT ]->getDistance();
+                    int dist = (int) IRSensors[ FRONT_RIGHT ]->getDistance();
 
                     if ( dist < 150 && dist > 110 )
                     {
@@ -207,11 +212,29 @@ namespace Micromouse
 
 	/**** INITIALIZATIONS ****/
 
-	void RobotIO::initSensors()
+	void RobotIO::initIRSensors()
 	{
-		IRSensors[LEFT] = new IRSenor(IR_LEFT_PIN, 40, 300);
-		IRSensors[RIGHT] = new IRSenor(IR_RIGHT_PIN, 40, 300);
-		IRSensors[FRONT_LEFT] = new IRSenor(IR_FRONT_LEFT_PIN, 40, 300);
-		IRSensors[FRONT_RIGHT] = new IRSenor(IR_FRONT_RIGHT_PIN, 40, 300);
+		IRSensors[LEFT] = new IRSenor(IR_LEFT_PIN, 20, 150);
+		IRSensors[RIGHT] = new IRSenor(IR_RIGHT_PIN, 20, 150);
+		IRSensors[FRONT_LEFT] = new IRSenor(IR_FRONT_LEFT_PIN, 20, 150);
+		IRSensors[FRONT_RIGHT] = new IRSenor(IR_FRONT_RIGHT_PIN, 20, 150);
+	}
+
+	void RobotIO::initPins()
+	{
+#ifdef __MK20DX256__ // Teensy compile
+		pinMode(BUTTON_PIN, INPUT_PULLUP);
+		pinMode(SWITCH_A_PIN, INPUT_PULLUP);
+		pinMode(SWITCH_B_PIN, INPUT_PULLUP); 
+		pinMode(SWITCH_C_PIN, INPUT_PULLUP);
+#endif
+	}
+
+	void RobotIO::calibrateIRSensors()
+	{
+		IRSensors[LEFT]->calibrate(20, 20);
+		IRSensors[RIGHT]->calibrate(20, 20);
+		IRSensors[FRONT_LEFT]->calibrate(20, 20);
+		IRSensors[FRONT_RIGHT]->calibrate(20, 20);
 	}
 }

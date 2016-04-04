@@ -25,14 +25,15 @@ namespace Micromouse
 
 		// returns the distance in mm
 		// will return a value between MIN_RANGE and MAX_RANGE
-		int getDistance(); 
+		float getDistance(); 
 
 
 	private:
+		void initPins();
 		void defaultCalibration();
 		float interpolate(int x1, int x2, int y1, int y2, int x);
 
-		const int PIN; //pin to read analog data
+		const int DATA_PIN; //pin to read analog data
 		const int MIN_RANGE; //min distance for sensor in mm
 		const int MAX_RANGE; //max distance for sensor in mm
 

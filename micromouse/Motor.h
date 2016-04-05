@@ -2,6 +2,7 @@
 #ifdef __MK20DX256__
 // If compiled for Teensy
 #include <Encoder.h>
+#endif
 
 namespace Micromouse
 {
@@ -55,9 +56,9 @@ namespace Micromouse
 		int bwdPin;			//Backward pin
 		int pwmPin;			//Pulse-width modulation pin (for speed control)
 
+#ifdef __MK20DX256__
 		Encoder encoder;
+#endif
 	};
 
 }
-
-#endif

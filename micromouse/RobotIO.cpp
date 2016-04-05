@@ -217,26 +217,26 @@ namespace Micromouse
 			leftmotorValue=1;
 			rightmotorValue=1;
 
-			if (!isClearRight() && IRSensors[RIGHT].getDistance()>50)
+			if (!isClearRight() && IRSensors[RIGHT]->getDistance()>50)
 			{
-				rightmotorValue+=pidcontroller.getCorrection(40-IRSensors[RIGHT].getDistance());
+				rightmotorValue+=pidcontroller.getCorrection(40-IRSensors[RIGHT]->getDistance());
 				rightMotor.setMovement(rightmotorValue);
 			}
-			else if(!isClearRight() && IRSensors[RIGHT].getDistance()<30)
+			else if(!isClearRight() && IRSensors[RIGHT]->getDistance()<30)
 			{
-				leftmotorValue+=pidcontroller.getCorrection(IRSensors[RIGHT].getDistance()-40);
+				leftmotorValue+=pidcontroller.getCorrection(IRSensors[RIGHT]->getDistance()-40);
 				leftMotor.setMovement(leftmotorValue);
 
 			}
 			else if (!isClearLeft() && IRSensors[RIGHT].getDistance()>50)
 			{
-				leftmotorValue+=pidcontroller.getCorrection(40-IRSensors[LEFT].getDistance());
+				leftmotorValue+=pidcontroller.getCorrection(40-IRSensors[LEFT]->getDistance());
 				leftMotor.setMovement(leftmotorValue);
 
 			}
-			else if(!isClearLeft() &&  IRSensors[RIGHT].getDistance()<30)
+			else if(!isClearLeft() &&  IRSensors[RIGHT]->getDistance()<30)
 			{
-				leftmotorValue+=pidcontroller.getCorrection(40-IRSensors[LEFT].getDistance());
+				leftmotorValue+=pidcontroller.getCorrection(40-IRSensors[LEFT]->getDistance());
 				leftMotor.setMovement(leftmotorValue);
 
 			}

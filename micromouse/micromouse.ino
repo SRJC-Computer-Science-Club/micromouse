@@ -1,5 +1,5 @@
 #include <Encoder.h>
-
+#include <EEPROM.h>
 //dont ask
 namespace std {
   void __throw_bad_alloc()

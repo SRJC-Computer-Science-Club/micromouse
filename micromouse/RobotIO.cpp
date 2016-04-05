@@ -218,6 +218,14 @@ namespace Micromouse
 		IRSensors[RIGHT] = new IRSenor(IR_RIGHT_PIN, 20, 150);
 		IRSensors[FRONT_LEFT] = new IRSenor(IR_FRONT_LEFT_PIN, 20, 150);
 		IRSensors[FRONT_RIGHT] = new IRSenor(IR_FRONT_RIGHT_PIN, 20, 150);
+
+		//TODO check if load fails
+		IRSensors[LEFT]->loadCalibration(IR_LEFT_MEMORY);
+		IRSensors[RIGHT]->loadCalibration(IR_RIGHT_MEMORY);
+		IRSensors[FRONT_LEFT]->loadCalibration(IR_FRONT_LEFT_MEMORY);
+		IRSensors[FRONT_RIGHT]->loadCalibration(IR_FRONT_RIGHT_MEMORY);
+
+
 	}
 
 	void RobotIO::initPins()
@@ -236,5 +244,13 @@ namespace Micromouse
 		IRSensors[RIGHT]->calibrate(20, 20);
 		IRSensors[FRONT_LEFT]->calibrate(20, 20);
 		IRSensors[FRONT_RIGHT]->calibrate(20, 20);
+
+		//TODO check if calibrations were good/ ask to save
+		IRSensors[LEFT]->saveCalibration(IR_LEFT_MEMORY);
+		IRSensors[RIGHT]->saveCalibration(IR_RIGHT_MEMORY);
+		IRSensors[FRONT_LEFT]->saveCalibration(IR_FRONT_LEFT_MEMORY);
+		IRSensors[FRONT_RIGHT]->saveCalibration(IR_FRONT_RIGHT_MEMORY);
+
+
 	}
 }

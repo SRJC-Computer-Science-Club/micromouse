@@ -33,6 +33,12 @@ namespace Micromouse
 
 	const int LED_PIN = 13;
 
+	//Memory.h
+	extern const int IR_FRONT_LEFT_MEMORY;
+	extern const int IR_FRONT_RIGHT_MEMORY;
+	extern const int IR_LEFT_MEMORY;
+	extern const int IR_RIGHT_MEMORY;
+
 
 	//A class that contains functions and constants used to communicate with the IO pins of the Teensey 3.2 Microcontroller.
 	// ## NOT YET IMPLEMENTED ##

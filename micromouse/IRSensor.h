@@ -1,5 +1,6 @@
 #pragma once
 #include <assert.h>
+#include "Memory.h"
 
 namespace Micromouse
 {
@@ -22,6 +23,8 @@ namespace Micromouse
 		~IRSenor();
 
 		bool calibrate( int calibrationStart, int calibrationInterval );
+		bool loadCalibration( int address );
+		void saveCalibration( int address );
 
 		// returns the distance in mm
 		// will return a value between MIN_RANGE and MAX_RANGE

@@ -3,6 +3,7 @@
 #include "Vector.h"
 #include "Logger.h"
 #include "PIDController"
+#include "MouseBot"
 
 #ifdef __MK20DX256__ //this is the Teensy signature
 // ### This line causes a lot of problems. It seems to conflict with #include <Encoder.h> ###
@@ -186,7 +187,6 @@ namespace Micromouse
 	void RobotIO::moveForward(int node)
 	{
 		#ifdef __MK20DX256__
-		PIDController pidcontroller;
 		int countsNeeded=node*4807;
 		float leftmotorValue;
 		float rightmotorValue;
@@ -249,7 +249,6 @@ namespace Micromouse
 	void RobotIO::rotateLeft()
 	{
 		#ifdef __MK20DX256__
-		PIDController pidcontroller;
 		float leftmotorValue=-1.0f;
 		float rightmotorValue=1.0f;
 		rightMotor.resetCounts();
@@ -280,7 +279,6 @@ namespace Micromouse
 	void RobotIO::rotateRight()
 	{
 		#ifdef __MK20DX256__
-		PIDController pidcontroller;
 		float leftmotorValue=1.0f;
 		float rightmotorValue=-1.0f;
 		rightMotor.resetCounts();
@@ -309,6 +307,37 @@ namespace Micromouse
 	}
 
 
+
+
+
+
+void followPath(Path path)
+{
+	assert(path.empty());
+	//TODO I am assuming that the micromouse is looking in the direction
+	//of the first Path
+
+
+	while(!path.empty())
+	{
+		rotateTo(path.peekStep().dir());
+		moveForward(path.popStep().mag());
+
+	}
+
+
+
+}
+
+
+
+
+
+Void rotateTo(dir direction)
+{
+
+
+}
 
 
 

@@ -2,6 +2,8 @@
 
 #include "IRSensor.h"
 #include "Vector.h"
+#include "PIDController"
+#include "Path"
 
 namespace Micromouse
 {
@@ -9,7 +11,7 @@ namespace Micromouse
 #ifdef __MK20DX256__ //this is the Teensy signature
 
 	//comment line below to test compile, remove #error when pins have been set
-	//#error define correct pin numbers 
+	//#error define correct pin numbers
 #endif
     const int IR_LEFT_PIN = 1;
     const int IR_RIGHT_PIN = 2;
@@ -33,11 +35,11 @@ namespace Micromouse
 		bool isClearForward(); // Returns false if the range-finder sensors detect a wall in front of the bot. Otherwise, returns true.
 		bool isClearRight(); // Returns false if the range-finder sensors detect a wall to the right of the bot. Otherwise, returns true.
 		bool isClearLeft(); // Returns false if the range-finder sensors detect a wall to the left of the bot. Otherwise, returns true.
-
+        void followPath(Path path); //
 	private:
 
         bool isWallinDirection( direction dir );
-	
+
 		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };
 
 		void initSensors();

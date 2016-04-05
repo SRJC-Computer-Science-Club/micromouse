@@ -154,6 +154,7 @@
     <ClCompile Include="micromouse\FlagMatrix.cpp" />
     <ClCompile Include="micromouse\Magnetometer.cpp" />
     <ClCompile Include="micromouse\Maze.cpp" />
+    <ClCompile Include="micromouse\Memory.cpp" />
     <ClCompile Include="micromouse\Motor.cpp" />
     <ClCompile Include="micromouse\MouseBot.cpp" />
     <ClCompile Include="micromouse\Node.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="micromouse\Logger.h" />
     <ClInclude Include="micromouse\Magnetometer.h" />
     <ClInclude Include="micromouse\Maze.h" />
+    <ClInclude Include="micromouse\Memory.h" />
     <ClInclude Include="micromouse\Motor.h" />
     <ClInclude Include="micromouse\MouseBot.h" />
     <ClInclude Include="micromouse\Node.h" />

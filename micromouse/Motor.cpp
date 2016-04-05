@@ -1,29 +1,34 @@
 #include "Motor.h"
 #include "Logger.h"
 
-#ifdef __MK20DX256__
-
 namespace Micromouse
 {
 	Motor::Motor(int fwdPin, int bwdPin, int pwmPin, int fwdEncoderPin, int bwdEncoderPin)
 		:
 		fwdPin(fwdPin),
 		bwdPin(bwdPin),
-		pwmPin(pwmPin),
-		encoder(Encoder(fwdEncoderPin, bwdEncoderPin))
+		pwmPin(pwmPin)
+#ifdef __MK20DX256__
+		, encoder(Encoder(fwdEncoderPin, bwdEncoderPin))
+#endif
 	{
 		initPins();
 	}
 
 	void Motor::initPins()
 	{
+
+#ifdef __MK20DX256__
 		pinMode(fwdPin, OUTPUT);
 		pinMode(bwdPin, OUTPUT);
 		pinMode(pwmPin, OUTPUT);
+#endif
 	}
 
 	void Motor::setMovement(float speed)
 	{
+
+#ifdef __MK20DX256__
 		if (speed > 1 || speed < -1)
 		{
 			logC(WARN) << "In setMovement, speed was not between -1 and 1";
@@ -44,16 +49,19 @@ namespace Micromouse
 			digitalWrite(bwdPin, HIGH);
 			analogWrite(pwmPin, (int)( 255 * (-speed) ));
 		}
+#endif
 	}
 
 	void Motor::setMaxSpeed(float maxSpeed)
 	{
+#ifdef __MK20DX256__
 		if (maxSpeed < 0 || maxSpeed > 1)
 		{
 			logC(WARN) << "Motor was given a maxSpeed that is not between 0 and 1.";
 			maxSpeed = maxSpeed < 0 ? 0 : 1;
 		}
 		this->maxSpeed = maxSpeed;
+#endif
 	}
 
 	float Motor::getMaxSpeed() const
@@ -63,30 +71,39 @@ namespace Micromouse
 
 	void Motor::brake()
 	{
+#ifdef __MK20DX256__
 		digitalWrite(fwdPin, HIGH);
 		digitalWrite(bwdPin, HIGH);
 		analogWrite(pwmPin, 0);
+#endif
 	}
 
 	void Motor::coast()
 	{
+#ifdef __MK20DX256__
 		digitalWrite(fwdPin, LOW);
 		digitalWrite(bwdPin, LOW);
 		analogWrite(pwmPin, 0);
+#endif
 	}
 
 	int Motor::getCounts()
 	{
+#ifdef __MK20DX256__
 		return encoder.read();
+#endif
+		return 0;
 	}
 
 	int Motor::resetCounts()
 	{
+#ifdef __MK20DX256__
 		int counts = encoder.read();
 		encoder.write(0);
 		return counts;
+#endif
+		return 0;
 	}
-
 	/*
 	void Motor::move(int counts, float targetSpeed, float rampTime)
 	{
@@ -141,5 +158,3 @@ namespace Micromouse
 	}
 	*/
 }
-
-#endif

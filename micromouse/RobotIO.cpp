@@ -13,6 +13,10 @@
 
 namespace Micromouse
 {
+#ifndef __MK20DX256__
+	void delay(int n) {}
+#endif
+
 	/**** CONSTRUCTORS ****/
 
 	RobotIO::RobotIO()
@@ -157,7 +161,6 @@ namespace Micromouse
 
 	void RobotIO::testMotors()
 	{
-#ifdef __MK20DX256__
 		rightMotor.setMaxSpeed(0.2f);
 		leftMotor.setMaxSpeed(0.2f);
 
@@ -186,13 +189,11 @@ namespace Micromouse
 		delay(2000);
 		leftMotor.brake();
 		rightMotor.brake();
-#endif
 	}
 
 	// ## NOT YET IMPLEMENTED ##
 	void RobotIO::moveForward(int node)
 	{
-		#ifdef __MK20DX256__
 		int countsNeeded=node*4807;
 		float leftmotorValue;
 		float rightmotorValue;
@@ -204,11 +205,11 @@ namespace Micromouse
 
         //This is the fast run portion of the path. the mouse will move as fast as it can until it reach
         // 90% of the path then it will enter the slow run until the destination
-		while (rightmotor.getCounts<0.9*countsNeeded||leftMotor.getCounts<0.9*countsNeeded)
+		while (rightMotor.getCounts<0.9*countsNeeded||leftMotor.getCounts<0.9*countsNeeded)
 		{
 			//This slowes down the top speed when it getts close to the target
 			//since we dont want to over shoot
-			if(rightrightmotor.getCounts>0.9*countsNeeded||leftMotor.getCounts>0.9*countsNeeded)
+			if(rightMotor.getCounts>0.9*countsNeeded||leftMotor.getCounts>0.9*countsNeeded)
 			{
 				leftMotor.setMaxSpeed(0.2f);
 				rightMotor.setMaxSpeed(0.2f);
@@ -246,8 +247,6 @@ namespace Micromouse
 
 		leftMotor.brake();
 		rightMotor.brake();
-
-#endif
 
 	}
 

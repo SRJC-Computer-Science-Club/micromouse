@@ -50,7 +50,7 @@ namespace Micromouse
 
 		void testMotors(); //temp
 
-		void moveForward(); // ## NOT YET IMPLEMENTED ## Moves the bot forward by half a cell ( 9 cm ).
+		void moveForward(int numNodes); // ## NOT YET IMPLEMENTED ## Moves the bot forward by half a cell ( 9 cm ).
         
         void moveForward(int magnitude); // Unsure of status.
         
@@ -81,8 +81,6 @@ namespace Micromouse
 
 		IRSenor* IRSensors[4];
 
-	
-#ifdef __MK20DX256__
 		Motor rightMotor = Motor
 		(
 			MOTOR_RIGHT_FWD_PIN,
@@ -100,6 +98,5 @@ namespace Micromouse
 			ENCODER_LEFT_FWD_PIN,
 			ENCODER_LEFT_BWD_PIN
 		);
-#endif
 	};
 }

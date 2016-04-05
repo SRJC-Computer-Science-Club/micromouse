@@ -1,5 +1,7 @@
 #include "Magnetometer.h"
 #include "RobotIO.h"
+#include "Logger.h"
+
 namespace Micromouse
 {
 	float Magnetometer::getDegrees()
@@ -14,51 +16,42 @@ namespace Micromouse
 		float degree = (offset + mag) * 57.296;
 		return degree;
 	}
+	
 #else
-		return 0.0f;
+		return degree;
 	}
 #endif
+	/*direction Magnetometer::getHeading()
+	{
+		return direction();
+	}
+	*/
+
+		//Magnetometer::heading = direction((int)(Magnetometer::getDegrees() + 22.5) / 45);
+		//return direction(heading);
+
+
 	
+
+
+
+
+
 	
-
-
-
-
-
-	void setupSensor()
+	void Magnetometer::initSensor()
 	{
 #ifdef __MK20DX256__ 
+
 		//the magnetometer sensitivity
 		lsm.setupMag(lsm.LSM9DS0_MAGGAIN_12GAUSS);
-#endif
-	}
-
-
-
-
-
-	
-
-	void setup()
-	{
-#ifdef __MK20DX256__ 
-
-#ifndef ESP8266
-		while (!Serial);     // will pause Zero, Leonardo, etc until serial console opens
-#endif
-		//Serial.begin(9600);
-		pinMode(7, INPUT);
-		Serial.print("LSM raw read demo");
 
 		// Try to initialise and warn if we couldn't detect the chip
 		if (!lsm.begin())
-		{
-			Serial.println("Oops ... unable to initialize the LSM9DS0. Check your wiring!");
+		{  
+			log(ERROR) << "Oops ... unable to initialize the LSM9DS0. Check your wiring!";
 			while (1);
 		}
-		Serial.println("Found LSM9DS0 9DOF");
-		Serial.println("");
-		Serial.println("");
+
 #endif
 	}
 
@@ -68,6 +61,7 @@ namespace Micromouse
 
 	Magnetometer::Magnetometer()
 	{
+		initSensor();
 	}
 
 	Magnetometer::~Magnetometer()

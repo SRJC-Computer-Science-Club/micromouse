@@ -14,14 +14,17 @@ namespace Micromouse
 {
 	class Magnetometer
 	{
+
+	public:
+		float getDegrees();
+		//direction getHeading();
+		Magnetometer();
+		~Magnetometer();
 	private:
 		float mag = 0;
 		float degree = 0;
 		float offset = 0;
-	public:
-		float getDegrees();
-		Magnetometer();
-		~Magnetometer();
+		void initSensor();
 	};
 	
 }

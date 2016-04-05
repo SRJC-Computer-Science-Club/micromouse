@@ -244,5 +244,13 @@ namespace Micromouse
 		IRSensors[RIGHT]->calibrate(20, 20);
 		IRSensors[FRONT_LEFT]->calibrate(20, 20);
 		IRSensors[FRONT_RIGHT]->calibrate(20, 20);
+
+		//TODO check if calibrations were good/ ask to save
+		IRSensors[LEFT]->saveCalibration(IR_LEFT_MEMORY);
+		IRSensors[RIGHT]->saveCalibration(IR_RIGHT_MEMORY);
+		IRSensors[FRONT_LEFT]->saveCalibration(IR_FRONT_LEFT_MEMORY);
+		IRSensors[FRONT_RIGHT]->saveCalibration(IR_FRONT_RIGHT_MEMORY);
+
+
 	}
 }

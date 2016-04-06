@@ -13,6 +13,12 @@ namespace Micromouse
 	class Magnetometer
 	{
 
+		// this class represents the magnetometer that is part of the LSM9DS0 9DOF sensor
+		// it uses the x and y components of the vector returned by the magnetometer library
+		// it calculates the heading of the mouse based on the x and y components
+		// zero should be called as part of the calibration process, 
+		// the mouse should be facing 'North' relative to the maze when called and should not be touched or moved
+
 	public:
 		Magnetometer();
 		~Magnetometer();

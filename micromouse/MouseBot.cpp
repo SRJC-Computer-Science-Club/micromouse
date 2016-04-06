@@ -297,7 +297,7 @@ namespace Micromouse
 #endif
 	}
 
-	void MouseBot::moveForward(float numNodes)
+	void MouseBot::moveForward(int numNodes)
 	{
 		for (int i = 0; i < numNodes; i++)
 		{

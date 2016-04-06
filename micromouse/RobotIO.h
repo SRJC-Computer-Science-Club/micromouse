@@ -13,8 +13,6 @@ namespace Micromouse
 	const int IR_LEFT_PIN = 22;
 	const int IR_RIGHT_PIN = 23;
 
-	const int MAGNETOMETER_PIN;
-
 	const int MOTOR_RIGHT_FWD_PIN = 11;
 	const int MOTOR_RIGHT_BWD_PIN = 12;
 	const int MOTOR_RIGHT_PWM_PIN = 9;
@@ -27,6 +25,8 @@ namespace Micromouse
 	const int ENCODER_LEFT_FWD_PIN = 20;
 	const int ENCODER_LEFT_BWD_PIN = 21;
 
+	const int NINE_DOF_SDA_PIN = 18;
+	const int NINE_DOF_SCL_PIN = 19;
 
 	const int BUTTON_PIN = 6;
 	const int SWITCH_A_PIN = 0;
@@ -92,8 +92,9 @@ namespace Micromouse
 			ENCODER_LEFT_FWD_PIN,
 			ENCODER_LEFT_BWD_PIN
 		);
-		Magnetometer magnetometer = Magnetometer();
 #endif
+
+		Magnetometer magnetometer = Magnetometer();
 		
 		
 	};

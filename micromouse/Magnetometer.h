@@ -34,7 +34,7 @@ namespace Micromouse
 
 	private:
 		void initSensor();
-		float getDegreesRaw(); // returns the degree without the offset
+		float getHeadingRaw(); // returns the degree without the offset
 
 		float offset;
 

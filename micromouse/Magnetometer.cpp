@@ -29,21 +29,9 @@ namespace Micromouse
 
 	direction Magnetometer::getDirection()
 	{
-		direction heading = NONE;
-
-		return heading;
+		return (direction)((int)(getDegrees() - 22.5) / 45);
 	}
-	/*direction Magnetometer::getHeading()
-	{
-		direction heading;
-		//Magnetometer::heading = direction((int)(Magnetometer::getDegrees() + 22.5) / 45);
-		//return direction(heading);
-
-		return direction();
-	}
-	*/
-
-		
+	
 
 
 	

@@ -13,6 +13,8 @@ namespace Micromouse
 	const int IR_LEFT_PIN = 22;
 	const int IR_RIGHT_PIN = 23;
 
+	const int MAGNETOMETER_PIN;
+
 	const int MOTOR_RIGHT_FWD_PIN = 11;
 	const int MOTOR_RIGHT_BWD_PIN = 12;
 	const int MOTOR_RIGHT_PWM_PIN = 9;

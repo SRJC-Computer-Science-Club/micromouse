@@ -8,19 +8,22 @@ namespace Micromouse
 #ifdef __MK20DX256__ 
 		float offset = 0;
 		lsm.read();
-		float mag = atan2(lsm.magData.y, lsm.magData.x);
+		float magnet = atan2(lsm.magData.y, lsm.magData.x);
 		
 		//// Set starting posistion
 		//if (BUTTON_PIN == HIGH) {
 			//offset = -mag;
 		//}
 		
-		float degree = (offset + mag) * 57.296;
+		float degree = (offset + magnet) * 57.296f;
 		return degree;
 #endif
 		return 0.00f;
 	}
-
+	float getDegreesRaw()
+	{
+		lsm.read();
+	}
 	/*direction Magnetometer::getHeading()
 	{
 		return direction();

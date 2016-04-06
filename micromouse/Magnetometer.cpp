@@ -4,10 +4,12 @@
 namespace Micromouse
 {
 	float Magnetometer::getDegrees()
-	{/*
+	{
+		float degree = 0.00f;
 #ifdef __MK20DX256__ 
 		float offset = 0;
-		sensorREAD.read();
+	 	getDegreesRaw();
+
 		float magnet = atan2(sensorREAD.magData.y, sensorREAD.magData.x);
 		
 		//// Set starting posistion
@@ -15,15 +17,25 @@ namespace Micromouse
 			//offset = -mag;
 		//}
 		
-		float degree = (offset + magnet) * 57.296f;
+		degree = (offset + magnet) * 57.296f;
+#else
 		return degree;
 #endif
-*/
-		return 0.00f;
 	}
+
+
+	void Magnetometer::setNorth()
+	{
+	}
+
+
 	float Magnetometer::getDegreesRaw()
 	{
+#ifdef __MK20DX256__ 
+
 		//sensorREAD.read();
+#endif
+
 		return 0.00f;
 	}
 
@@ -68,9 +80,7 @@ namespace Micromouse
 
 
 
-#ifdef __MK20DX256__ 
-
-	Micromouse::Magnetometer::Magnetometer(MAGNETOMETER_NINE_DOF_SDA_PIN, MAGNETOMETER_NINE_DOF_SCL_PIN)
+	Magnetometer::Magnetometer(const int MAGNETOMETER_NINE_DOF_SDA_PIN, const int MAGNETOMETER_NINE_DOF_SCL_PIN)
 	{
 #ifdef __MK20DX256__ 
 
@@ -78,13 +88,6 @@ namespace Micromouse
 
 #endif
 	}
-
-
-#else
-	Magnetometer::Magnetometer()
-	{
-	}
-#endif
 
 
 

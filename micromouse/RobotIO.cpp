@@ -31,7 +31,6 @@ namespace Micromouse
 			delete IRSensors[i];
 		}
 	}
-	Magnetometer test;
 	
 
 	/**** SENSORS ****/

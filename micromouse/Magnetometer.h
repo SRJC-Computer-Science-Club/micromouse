@@ -10,16 +10,16 @@ namespace Micromouse
 
 	public:
 		//Gets degrees IE returns '56' degrees from north
+		//Magnetometer test
+		//test.getDegrees();
 		float getDegrees();
+		void setNorth();
 		//TODO function to get direction 
 		//direction getHeading();
 		
 		//initialised the sensor to read data when object is created
-#ifdef __MK20DX256__
-		Magnetometer(MAGNETOMETER_NINE_DOF_SDA_PIN, MAGNETOMETER_NINE_DOF_SCL_PIN);
-#else
-		Magnetometer();
-#endif
+		Magnetometer(const int MAGNETOMETER_NINE_DOF_SDA_PIN, const int MAGNETOMETER_NINE_DOF_SCL_PIN);
+
 		~Magnetometer();
 	private:
 		void initSensor();

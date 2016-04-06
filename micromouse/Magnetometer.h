@@ -2,7 +2,7 @@
 #include "Vector.h"
 #ifdef __MK20DX256__
 #include <math.h>
-#include <Adafruit_LSM9DS0.h>
+#include "Adafruit_LSM9DS0.h"
 #endif
 namespace Micromouse
 {
@@ -10,9 +10,11 @@ namespace Micromouse
 	{
 
 	public:
-		//Gets degrees IE returns '56' degrees from north
-		//Magnetometer test
-		//test.getDegrees();
+		//how to define magnetometer object
+		//#include "Magnetometer.h"
+		//Magnetometer OBJECTNAME = Magnetometer(18,19);
+		//OBJECTNAME.getDegrees();
+
 		float getDegrees();
 		void initDirection();
 		//TODO function to get direction 

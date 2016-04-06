@@ -15,11 +15,7 @@ namespace Micromouse
 		//direction getHeading();
 		
 		//initialised the sensor to read data when object is created
-#ifdef __MK20DX256__
-		Magnetometer(MAGNETOMETER_NINE_DOF_SDA_PIN, MAGNETOMETER_NINE_DOF_SCL_PIN);
-#else
 		Magnetometer();
-#endif
 		~Magnetometer();
 	private:
 		void initSensor();

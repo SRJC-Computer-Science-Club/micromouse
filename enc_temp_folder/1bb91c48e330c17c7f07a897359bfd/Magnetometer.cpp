@@ -68,23 +68,16 @@ namespace Micromouse
 
 
 
-#ifdef __MK20DX256__ 
 
-	Micromouse::Magnetometer::Magnetometer(MAGNETOMETER_NINE_DOF_SDA_PIN, MAGNETOMETER_NINE_DOF_SCL_PIN)
-	{
-#ifdef __MK20DX256__ 
-
-		initSensor();
-
-#endif
-	}
-
-
-#else
 	Magnetometer::Magnetometer()
 	{
-	}
+#ifdef __MK20DX256__ 
+
+	initSensor();
+
 #endif
+	}
+
 
 
 

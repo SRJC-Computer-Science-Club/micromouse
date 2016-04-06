@@ -1,5 +1,7 @@
 #include "Controller.h"
 #include "Logger.h"
+#include "Magnetometer.h"
+
 #include <vector> //must come first for some reason
 
 #ifdef __MK20DX256__ // Teensy compile
@@ -19,11 +21,12 @@ extern int BUTTON_PIN;
 
 namespace Micromouse
 {
-
+	
 	Controller::Controller()
 	{
 		log(INFO) << "Starting Program"; //log to console only
-		
+		Magnetometer magnet = Magnetometer(18,19);
+		magnet.getDegrees();
 		while (true)
 		{
 			updateState();

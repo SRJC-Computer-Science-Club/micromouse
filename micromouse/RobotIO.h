@@ -99,10 +99,10 @@ namespace Micromouse
 		
 #endif
 		Magnetometer magnetometer = Magnetometer
-			(
-				MAGNETOMETER_NINE_DOF_SDA_PIN,
-				MAGNETOMETER_NINE_DOF_SCL_PIN
-				);
+		(
+			MAGNETOMETER_NINE_DOF_SDA_PIN,
+			MAGNETOMETER_NINE_DOF_SCL_PIN
+		);
 		
 	};
 }

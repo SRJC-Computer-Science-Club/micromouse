@@ -14,7 +14,7 @@ namespace Micromouse
 		//Magnetometer test
 		//test.getDegrees();
 		float getDegrees();
-		void setNorth();
+		void initDirection();
 		//TODO function to get direction 
 		direction getDirection();
 		
@@ -23,9 +23,7 @@ namespace Micromouse
 
 		~Magnetometer();
 	private:
-		float offset = 0.00f;
-		float magnet = 0.00f;
-		float degree = 0.00f;
+		float initialDirection = 0.0f;
 		void initSensor();
 		float getDegreesRaw();
 

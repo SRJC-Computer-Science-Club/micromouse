@@ -6,43 +6,31 @@ namespace Micromouse
 
 	float Magnetometer::getDegrees()
 	{
-#ifdef __MK20DX256__ 
-
-		sensorREAD.read();
-
-		magnet = atan2(sensorREAD.magData.y, sensorREAD.magData.x);
-		setNorth();
-		
-		degree = (offset + magnet) * 57.296f;
-#else
-		return degree;
-#endif
+		return getDegreesRaw() - initialDirection;
 	}
 
 
-	void Magnetometer::setNorth()
+	void Magnetometer::initDirection()
 	{
+		initialDirection = getDegreesRaw();
 	}
-
 
 	float Magnetometer::getDegreesRaw()
 	{
 #ifdef __MK20DX256__ 
 		sensorREAD.read();
-
-		magnet = atan2(sensorREAD.magData.y, sensorREAD.magData.x);
-		setNorth();
-
-		degree = magnet * 57.296f;
-#else
-		return degree;
+		float degrees = atan2(sensorREAD.magData.y, sensorREAD.magData.x);
+		degrees *= 57.296f;
+		return degrees;
 #endif
+		return 0.0f;
 	}
 
 
 	direction Magnetometer::getDirection()
 	{
-		direction heading;
+		direction heading = NONE;
+
 		return heading;
 	}
 	/*direction Magnetometer::getHeading()
@@ -67,6 +55,7 @@ namespace Micromouse
 	
 	void Magnetometer::initSensor()
 	{
+		initDirection();
 #ifdef __MK20DX256__ 
 
 

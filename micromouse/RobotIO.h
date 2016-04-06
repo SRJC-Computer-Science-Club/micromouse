@@ -86,6 +86,7 @@ namespace Micromouse
 
 		IRSenor* IRSensors[4];
 
+
 		Motor rightMotor = Motor
 		(
 			MOTOR_RIGHT_FWD_PIN,
@@ -104,15 +105,12 @@ namespace Micromouse
 			ENCODER_LEFT_BWD_PIN
 		);
 		
-#endif
+
 		Magnetometer magnetometer = Magnetometer
 		(
 			MAGNETOMETER_NINE_DOF_SDA_PIN,
 			MAGNETOMETER_NINE_DOF_SCL_PIN
 		);
 		PIDControl pidcontroller = PIDControl(1, 1, 1);
-		
-		Magnetometer magnetometer = Magnetometer();
-#endif
 	};
 }

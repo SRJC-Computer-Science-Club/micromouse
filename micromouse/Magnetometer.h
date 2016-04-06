@@ -15,15 +15,24 @@ namespace Micromouse
 
 	/*How to use Magnetometer objects
 	first include the magnetometer header file
+
 		#include "Magnetometer.h"
+
 	Then to delare an object use the syntax
+
 		Magnetometer  NAME = Magnetometer(18,19);
+
 	or
+
 		Magnetometer  NAME = Magnetometer(MAGNETOMETER_NINE_DOF_SDA_PIN, MAGNETOMETER_NINE_DOF_SCL_PIN);
+
 	To call get direction 
+
 		NAME.getDegrees();
+
 	or to get the direction the robot it facing 
-	Name.getDirection();
+
+		NAME.getDirection();
 
 
 	NOTES

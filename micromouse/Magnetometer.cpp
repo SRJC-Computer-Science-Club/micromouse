@@ -3,19 +3,15 @@
 
 namespace Micromouse
 {
+
 	float Magnetometer::getDegrees()
 	{
-		float degree = 0.00f;
 #ifdef __MK20DX256__ 
-		float offset = 0;
-	 	getDegreesRaw();
 
-		float magnet = atan2(sensorREAD.magData.y, sensorREAD.magData.x);
-		
-		//// Set starting posistion
-		//if (BUTTON_PIN == HIGH) {
-			//offset = -mag;
-		//}
+		sensorREAD.read();
+
+		magnet = atan2(sensorREAD.magData.y, sensorREAD.magData.x);
+		setNorth();
 		
 		degree = (offset + magnet) * 57.296f;
 #else
@@ -32,16 +28,26 @@ namespace Micromouse
 	float Magnetometer::getDegreesRaw()
 	{
 #ifdef __MK20DX256__ 
+		sensorREAD.read();
 
-		//sensorREAD.read();
+		magnet = atan2(sensorREAD.magData.y, sensorREAD.magData.x);
+		setNorth();
+
+		degree = magnet * 57.296f;
+#else
+		return degree;
 #endif
-
-		return 0.00f;
 	}
 
 
+	direction Magnetometer::getDirection()
+	{
+		direction heading;
+		return heading;
+	}
 	/*direction Magnetometer::getHeading()
 	{
+		direction heading;
 		//Magnetometer::heading = direction((int)(Magnetometer::getDegrees() + 22.5) / 45);
 		//return direction(heading);
 

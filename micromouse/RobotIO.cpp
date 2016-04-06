@@ -31,14 +31,12 @@ namespace Micromouse
 			delete IRSensors[i];
 		}
 	}
-	Magnetometer test;
 	
 
 	/**** SENSORS ****/
 
 	bool RobotIO::isClearForward()
 	{
-		
 		return !isWallinDirection(N);
 	}
 

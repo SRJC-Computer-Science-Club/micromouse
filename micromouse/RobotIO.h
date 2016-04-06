@@ -50,10 +50,7 @@ namespace Micromouse
 
 		void testMotors(); //temp
 
-		void moveForward(int numNodes); // ## NOT YET IMPLEMENTED ## Moves the bot forward by half a cell ( 9 cm ).
-        
-        void moveForward(int magnitude); // Unsure of status.
-        
+		void moveForward(float numNodes); //Moves the bot forward by the given number of nodes (each node is 9cm, or half a cell).
         
         void rotateTo(direction dir);
 		void rotateRight(); // ## NOT YET IMPLEMENTED ## Rotates the bot in place 45 degrees to the right.
@@ -98,5 +95,7 @@ namespace Micromouse
 			ENCODER_LEFT_FWD_PIN,
 			ENCODER_LEFT_BWD_PIN
 		);
+
+		PIDControl pidcontroller = PIDControl(1, 1, 1);
 	};
 }

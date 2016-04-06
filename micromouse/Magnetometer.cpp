@@ -5,10 +5,8 @@ namespace Micromouse
 {
 	Magnetometer::Magnetometer()
 	{
-#ifdef __MK20DX256__ 
 		initSensor();
-#endif
-}
+	}
 
 
 	Magnetometer::~Magnetometer()
@@ -37,19 +35,16 @@ namespace Micromouse
 
 	float Magnetometer::getHeading()
 	{
-		float degree = getDegreesRaw();
-		degree += offset;
-		degree *= 57.296f;
-		return degree;
+		return getHeadingRaw() + offset;
 	}
 
 
 
-	float Magnetometer::getDegreesRaw()
+	float Magnetometer::getHeadingRaw()
 	{
 #ifdef __MK20DX256__ 
 		lsm.read();
-		return  atan2(lsm.magData.y, lsm.magData.x);
+		return  atan2(lsm.magData.y, lsm.magData.x) * 57.296f;
 #else
 		return 0.0f;
 #endif
@@ -70,7 +65,7 @@ namespace Micromouse
 
 		for (int i = 0; i < 50; i++)
 		{
-			degSum += getDegreesRaw();
+			degSum += getHeadingRaw();
 #ifdef __MK20DX256__ 
 			delay(1);
 #endif

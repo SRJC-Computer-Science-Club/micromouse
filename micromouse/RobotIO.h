@@ -5,6 +5,8 @@
 #include "Vector.h"
 #include "PIDControl.h"
 #include "Path.h"
+#include "Magnetometer.h"
+
 
 namespace Micromouse
 {
@@ -12,6 +14,8 @@ namespace Micromouse
 	const int IR_FRONT_RIGHT_PIN = 15;
 	const int IR_LEFT_PIN = 22;
 	const int IR_RIGHT_PIN = 23;
+
+	const int MAGNETOMETER_PIN;
 
 	const int MOTOR_RIGHT_FWD_PIN = 11;
 	const int MOTOR_RIGHT_BWD_PIN = 12;
@@ -95,7 +99,10 @@ namespace Micromouse
 			ENCODER_LEFT_FWD_PIN,
 			ENCODER_LEFT_BWD_PIN
 		);
-
+		
 		PIDControl pidcontroller = PIDControl(1, 1, 1);
+		
+		Magnetometer magnetometer = Magnetometer();
+#endif
 	};
 }

@@ -6,7 +6,7 @@
 //  Copyright © 2016 Yikealo Abraha. All rights reserved.
 //
 
-#include "PIDControl.hpp"
+#include "PIDControl.h"
 #include "stdlib.h"
 
 
@@ -21,12 +21,16 @@ PIDControl::PIDControl(float kp,float ki, float kd)
 
 
 
+
+
+
 float PIDControl::getCorrection(float error)
 {
     ErroSum+=error;
     ErrorDifference=lastError-error;
     return Ki * error + Ki * ErroSum + Kd * ErrorDifference;
 }
+
 
 
 
@@ -40,6 +44,7 @@ void PIDControl::setKp(float kp)
 
 
 
+
 void PIDControl::setKi(float ki)
 {
     Ki=ki;
@@ -48,10 +53,13 @@ void PIDControl::setKi(float ki)
 
 
 
+
+
 void PIDControl::setKd(float kd)
 {
     Kd=kd;
 }
+
 
 
 

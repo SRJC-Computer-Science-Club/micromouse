@@ -1,5 +1,6 @@
 #include "IRSensor.h"
 #include "Logger.h"
+#include "RobotIO.h"
 #include <assert.h>
 #ifdef __MK20DX256__ //this is the Teensy signature
 #include "WProgram.h"
@@ -8,16 +9,15 @@
 namespace Micromouse {
     
     extern const int BUTTON_PIN;
-
-    extern const int BUTTON_PIN = 10;
     
 	//IR SENSORS/////////////////////////
 
 	IRSenor::IRSenor(int pin, int minRange, int maxRange):
-		PIN(pin),
+		DATA_PIN(pin),
 		MIN_RANGE(minRange),
 		MAX_RANGE(maxRange)
 	{
+		initPins();
 		defaultCalibration();
 	}
 
@@ -33,7 +33,8 @@ namespace Micromouse {
 		assert(calibrationInterval > 0);
 		this->calibrationStart = calibrationStart;
 		this->calibrationInterval = calibrationInterval;
-		this->calibrationSize = MAX_RANGE - calibrationStart / calibrationInterval + 10;
+		calibrationSize = MAX_RANGE - calibrationStart / calibrationInterval + 10;
+		assert(calibrationSize <= 17);
 
 		delete[] calibrationData;
 		calibrationData = new int[calibrationSize];
@@ -59,7 +60,7 @@ namespace Micromouse {
 
 			for (int x = 0; x < sampleSize; x++)
 			{
-				calibrationData[i] += analogRead(PIN);
+				calibrationData[i] += analogRead(DATA_PIN);
 				delay(1);
 			}
 
@@ -71,15 +72,55 @@ namespace Micromouse {
 		log(WARN) << "performed pseudo calibration instead";
 		defaultCalibration();
 #endif
-
+		//TODO return true and false on success/failure or change to void function
 		return false;
 	}
 
 
-	int IRSenor::getDistance()
+
+	bool IRSenor::loadCalibration(int address)
+	{
+		int size = Memory::read(address++);
+
+		if (size > 0 )
+		{
+			calibrationSize = size;
+			calibrationStart = Memory::read(address++);
+			calibrationInterval = Memory::read(address++);
+
+
+			delete[] calibrationData;
+			calibrationData = new int[calibrationSize];
+
+			for (int i = 0; i < calibrationSize; i++)
+			{
+				calibrationData[i] = Memory::read(address++);
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	void IRSenor::saveCalibration(int address)
+	{
+		Memory::write(address++, calibrationSize);
+		Memory::write(address++, calibrationStart);
+		Memory::write(address++, calibrationInterval);
+
+		for (int i = 0; i < calibrationSize; i++)
+		{
+			Memory::write(address++, calibrationData[i]);
+		}
+	}
+
+
+
+	float IRSenor::getDistance()
 	{
 #ifdef __MK20DX256__ //this is the Teensy signature
-		int val = analogRead(PIN);
+		int val = analogRead(DATA_PIN);
 #else
 		// false analog value used while on pc
 		int val = 300;
@@ -104,8 +145,8 @@ namespace Micromouse {
 
 			return MIN_RANGE;
 		}
-        // to complile with Xcode win archit.
-        return 666;
+
+		return -1;//code should never reach here
 	}
 
 
@@ -120,11 +161,36 @@ namespace Micromouse {
 
 
 
+	void IRSenor::initPins()
+	{
+#ifdef __MK20DX256__ //this is the Teensy signature
+		pinMode(DATA_PIN, OUTPUT);
+#endif
+	}
+
 	void IRSenor::defaultCalibration()
 	{
+		calibrationSize = 10;
+		calibrationInterval = 15;
+		calibrationStart = MIN_RANGE;
 		calibrationData = new int[10];
 
-		if (MIN_RANGE == 40)
+		//if (MIN_RANGE == 40)
+		//{
+		//	calibrationData[0] = 517; //40mm
+		//	calibrationData[1] = 338; //70mm
+		//	calibrationData[2] = 236; //100mm
+		//	calibrationData[3] = 188; //130mm
+		//	calibrationData[4] = 152; //160mm
+		//	calibrationData[5] = 129; //190mm
+		//	calibrationData[6] = 116; //220mm
+		//	calibrationData[7] = 100; //250mm
+		//	calibrationData[8] = 92; //280mm
+		//	calibrationData[9] = 84; //310mm
+		//}
+
+		//TODO add default calibration for 2-15cm sensor this is false data
+		if (MIN_RANGE == 20)
 		{
 			calibrationData[0] = 517; //40mm
 			calibrationData[1] = 338; //70mm
@@ -137,7 +203,6 @@ namespace Micromouse {
 			calibrationData[8] = 92; //280mm
 			calibrationData[9] = 84; //310mm
 		}
-		//TODO add default calibration for 2-15cm sensor
 	}
 }
 

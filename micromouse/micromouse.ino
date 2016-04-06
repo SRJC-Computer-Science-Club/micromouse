@@ -1,3 +1,5 @@
+#include <Encoder.h>
+#include <EEPROM.h>
 //dont ask
 namespace std {
   void __throw_bad_alloc()
@@ -31,14 +33,18 @@ void setup() {
     for (int i = 10; i > 0; i--)
     {
 	    Serial.print(i);
-	    delay(800);
+	    delay(20);
     }
 
-	Serial.println();
-	randomSeed(analogRead(0));
-
-	Micromouse::Controller cont;
+	//Serial.println();
+	 pinMode(13, OUTPUT);
+   randomSeed(analogRead(0));
+  
+  digitalWrite(13, HIGH);
+  Micromouse::Controller cont;
+  digitalWrite(13, LOW);
 	}
 
-void loop() {}
+void loop() {
+  }
 

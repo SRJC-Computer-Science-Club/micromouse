@@ -6,10 +6,10 @@ Author GitHub:	joshuasrjc
 \*********************************/
 
 #pragma once
+#include "Motor.h" //For some reason, this needs to be here for it to compile on Teensy.
 #include "Vector.h"
 #include "RobotIO.h"
 #include <stack>
-#include "IRSensor.h"
 #include "Path.h"
 #include "Maze.h"
 
@@ -32,6 +32,8 @@ namespace Micromouse
 		direction getFacing();					// Return the direction the mouse is facing.
 		void setPos(int x, int y);				// Sets the position to (x,y)
 		void setPos(PositionVector pos);		// Sets the position to pos
+		void resetToOrigin();
+
 
 		//Maps out the maze. If on Teensey, it uses the sensors and motors to map a physical maze.
 		//Otherwise, it generates a random, virtual maze and uses it to simulate mapping.
@@ -39,18 +41,29 @@ namespace Micromouse
 		//Currently, the mouse ends in a random cell. Later, this function should return the mouse to the start.
 		void mapMaze();
 
+		void runMaze();
+
+		void returnToStart();
+
 		bool isClearForward();					// Returns true if there isn't a wall in front of the mouse. Uses a virtual maze for debugging on PC, otherwise it uses the bot's hardware.
 		bool isClearRight();					// Returns true if there isn't a wall to the right of the mouse. Uses a virtual maze for debugging on PC, otherwise it uses the bot's hardware.
 		bool isClearLeft();						// Returns true if there isn't a wall to the left of the mouse. Uses a virtual maze for debugging on PC, otherwise it uses the bot's hardware.
 
-		void moveForward();						// Moves the mouse forward by 1 node (1/2 cell)
-		void turnLeft();						// Moves the mouse forward and to the left, turning 90 degrees.
-		void turnRight();						// Moves the mouse forward and to the right, turning 90 degrees.
+		void testMotors();
+		void moveForward(int numNodes);			// Moves the mouse forward by the given number of nodes.
 		void rotateLeft();						// Rotates the mouse in place to the left by 90 degrees.
 		void rotateRight();						// Rotates the mouse in place to the right by 90 degrees.
 		void rotateToFaceDirection(direction dir); // Rotates the mouse in place until it reaches the given direction.
 
+
+		int incrementSpeed();
+		int getSpeed();
+		void setSpeed( int spd );
+
+		void CalibrateIRSensors();
+
 	private:
+		const int MAX_SPEED = 8;
 
 		void move(direction dir);
 		void followPath(Path* path);
@@ -61,7 +74,9 @@ namespace Micromouse
 		int numPossibleDirections();
 		direction pickPossibleDirection();
 
-		Maze maze;
+		Maze* maze;
+
+		int speed = 1;
 
 #ifdef __MK20DX256__ //this is the Teensy signature
 #else

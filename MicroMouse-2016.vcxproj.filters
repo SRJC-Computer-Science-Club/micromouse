@@ -48,6 +48,15 @@
     <ClCompile Include="micromouse\IRSensor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="micromouse\Motor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="micromouse\PIDControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="micromouse\Memory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="micromouse\Controller.h">
@@ -81,6 +90,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="micromouse\IRSensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="micromouse\Motor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="micromouse\PIDControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="micromouse\Memory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

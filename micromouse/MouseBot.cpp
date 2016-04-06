@@ -304,14 +304,16 @@ namespace Micromouse
 			move(facing);
 		}
 
+		float magnitude = numNodes;
+
 		if (facing == NE || facing == SE || facing == SW || facing == NW)
 		{
-			numNodes *= SQRT_OF_TWO;
+			magnitude *= SQRT_OF_TWO;
 		}
 
 #ifdef __MK20DX256__
 		// If compiled for Teensy
-		robotIO.moveForward(numNodes);
+		robotIO.moveForward(magnitude);
 
 #endif
 

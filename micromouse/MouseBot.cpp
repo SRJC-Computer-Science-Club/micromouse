@@ -10,6 +10,8 @@ Author GitHub:	joshuasrjc
 #include "MouseBot.h"
 #include "Logger.h"
 
+#define SQRT_OF_TWO (1.414213f)
+
 namespace Micromouse
 {
 	/**** CONSTRUCTORS ****/
@@ -113,8 +115,7 @@ namespace Micromouse
 				direction dir = pickPossibleDirection();
 				rotateToFaceDirection(dir);
 				logC(DEBUG3) << "Traveled " << dir;
-				moveForward();
-				moveForward();
+				moveForward(2);
 				lookAround();
 			}
 		}
@@ -276,10 +277,7 @@ namespace Micromouse
 		{
 			DirectionVector dir = path->popStep();
 			rotateToFaceDirection(dir.dir());
-			for (int i = 0; i < dir.mag(); i++)
-			{
-				moveForward();
-			}
+			moveForward(dir.mag());
 		}
 	}
 
@@ -288,7 +286,7 @@ namespace Micromouse
 		direction dir = movementHistory.top();
 		movementHistory.pop();
 		rotateToFaceDirection(dir + S);
-		moveForward();
+		moveForward(1);
 		movementHistory.pop();
 	}
 
@@ -299,31 +297,26 @@ namespace Micromouse
 #endif
 	}
 
-	void MouseBot::moveForward()
+	void MouseBot::moveForward(int numNodes)
 	{
-		move(facing);
+		for (int i = 0; i < numNodes; i++)
+		{
+			move(facing);
+		}
+
+		float magnitude = numNodes;
+
+		if (facing == NE || facing == SE || facing == SW || facing == NW)
+		{
+			magnitude *= SQRT_OF_TWO;
+		}
 
 #ifdef __MK20DX256__
 		// If compiled for Teensy
-
-		robotIO.moveForward();
+		robotIO.moveForward(magnitude);
 
 #endif
 
-	}
-
-	void MouseBot::turnLeft()
-	{
-		facing = facing + NW;
-		moveForward();
-		facing = facing + NW;
-	}
-
-	void MouseBot::turnRight()
-	{
-		facing = facing + NE;
-		moveForward();
-		facing = facing + NE;
 	}
 
 	void MouseBot::rotateLeft()

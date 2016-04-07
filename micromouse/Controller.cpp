@@ -19,11 +19,11 @@ extern int BUTTON_PIN;
 
 namespace Micromouse
 {
-
+	
 	Controller::Controller()
 	{
 		log(INFO) << "Starting Program"; //log to console only
-		
+
 		while (true)
 		{
 			updateState();

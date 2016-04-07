@@ -3,15 +3,23 @@
 #include "Motor.h"
 #include "IRSensor.h"
 #include "Vector.h"
+#include "PIDControl.h"
 #include "Path.h"
+#include "Magnetometer.h"
 
 
 namespace Micromouse
 {
+	
+	
+
 	const int IR_FRONT_LEFT_PIN = 14;
 	const int IR_FRONT_RIGHT_PIN = 15;
 	const int IR_LEFT_PIN = 22;
 	const int IR_RIGHT_PIN = 23;
+
+	const int MAGNETOMETER_NINE_DOF_SDA_PIN = 18;
+	const int MAGNETOMETER_NINE_DOF_SCL_PIN = 19;
 
 	const int MOTOR_RIGHT_FWD_PIN = 11;
 	const int MOTOR_RIGHT_BWD_PIN = 12;
@@ -50,14 +58,21 @@ namespace Micromouse
 
 		void testMotors(); //temp
 
-		void moveForward(); // ## NOT YET IMPLEMENTED ## Moves the bot forward by half a cell ( 9 cm ).
+		void moveForward(float numNodes); //Moves the bot forward by the given number of nodes (each node is 9cm, or half a cell).
+        
+        void rotateTo(direction dir);
 		void rotateRight(); // ## NOT YET IMPLEMENTED ## Rotates the bot in place 45 degrees to the right.
 		void rotateLeft(); // ## NOT YET IMPLEMENTED ## Rotates the bot in place 45 degrees to the left.
 
-		bool isClearForward(); // Returns false if the range-finder sensors detect a wall in front of the bot. Otherwise, returns true.
-		bool isClearRight(); // Returns false if the range-finder sensors detect a wall to the right of the bot. Otherwise, returns true.
-		bool isClearLeft(); // Returns false if the range-finder sensors detect a wall to the left of the bot. Otherwise, returns true.
+        // Returns false if the range-finder sensors detect a wall in the respective derection.
+		bool isClearForward();
+		bool isClearRight();
+		bool isClearLeft();
 
+        // You might want to change this to take a pointer becuase people have been using the pointer dummy function
+        void followPath(Path path);
+	
+        // dummy fucntion left in to avoid destroying other functionality;
 		void followPath(Path * path);
 
 		void calibrateIRSensors();
@@ -71,8 +86,7 @@ namespace Micromouse
 
 		IRSenor* IRSensors[4];
 
-	
-#ifdef __MK20DX256__
+
 		Motor rightMotor = Motor
 		(
 			MOTOR_RIGHT_FWD_PIN,
@@ -90,6 +104,9 @@ namespace Micromouse
 			ENCODER_LEFT_FWD_PIN,
 			ENCODER_LEFT_BWD_PIN
 		);
-#endif
+		
+		Magnetometer magnetometer = Magnetometer();
+
+		PIDControl pidcontroller = PIDControl(1, 1, 1);
 	};
 }

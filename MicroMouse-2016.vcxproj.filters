@@ -57,6 +57,12 @@
     <ClCompile Include="micromouse\Memory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="micromouse\Magnetometer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="micromouse\Adafruit_LSM9DS0.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="micromouse\Controller.h">
@@ -99,6 +105,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="micromouse\Memory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="micromouse\Magnetometer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="micromouse\Adafruit_LSM9DS0.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

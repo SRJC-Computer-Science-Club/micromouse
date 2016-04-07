@@ -12,6 +12,7 @@
   Written by Kevin Townsend for Adafruit Industries.  
   BSD license, all text above must be included in any redistribution
  ***************************************************************************/
+#ifdef __MK20DX256__
 #ifndef __LSM9DS0_H__
 #define __LSM9DS0_H__
 
@@ -268,5 +269,7 @@ class Adafruit_LSM9DS0
     void getTempSensor  ( sensor_t* sensor );
 
 };
+
+#endif
 
 #endif

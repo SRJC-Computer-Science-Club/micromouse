@@ -12,6 +12,8 @@
   Written by Kevin Townsend for Adafruit Industries.  
   BSD license, all text above must be included in any redistribution
  ***************************************************************************/
+#ifdef __MK20DX256__
+
 #include "Adafruit_LSM9DS0.h"
 
 /***************************************************************************
@@ -551,3 +553,5 @@ void Adafruit_LSM9DS0::getTempSensor(sensor_t* sensor) {
   sensor->min_value   = 0.0;  // ToDo
   sensor->resolution  = 0.0;  // ToDo
 }
+
+#endif

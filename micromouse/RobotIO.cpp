@@ -231,8 +231,8 @@ namespace Micromouse
 	{		//centimeters represents how much farther the bot needs to travel.
 			//The function will loop until centimeters is within DISTANCE_TOLERANCE
 
-		leftMotor.setMaxSpeed(1.0f);
-		rightMotor.setMaxSpeed(1.0f);
+		leftMotor.setMaxSpeed(0.25f);
+		rightMotor.setMaxSpeed(0.25f);
 		leftMotor.resetCounts();
 		rightMotor.resetCounts();
 

@@ -31,10 +31,7 @@ namespace Micromouse
 			delete IRSensors[i];
 		}
 	}
-
-
-
-
+	
 
 	/**** SENSORS ****/
 

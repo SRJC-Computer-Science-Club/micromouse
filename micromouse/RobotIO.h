@@ -4,7 +4,7 @@
 #include "IRSensor.h"
 #include "Vector.h"
 #include "Path.h"
-
+#include "Magnetometer.h"
 
 namespace Micromouse
 {
@@ -25,6 +25,8 @@ namespace Micromouse
 	const int ENCODER_LEFT_FWD_PIN = 20;
 	const int ENCODER_LEFT_BWD_PIN = 21;
 
+	const int NINE_DOF_SDA_PIN = 18;
+	const int NINE_DOF_SCL_PIN = 19;
 
 	const int BUTTON_PIN = 6;
 	const int SWITCH_A_PIN = 0;
@@ -91,5 +93,9 @@ namespace Micromouse
 			ENCODER_LEFT_BWD_PIN
 		);
 #endif
+
+		Magnetometer magnetometer = Magnetometer();
+		
+		
 	};
 }

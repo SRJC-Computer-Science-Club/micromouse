@@ -1,5 +1,10 @@
 #include <Encoder.h>
 #include <EEPROM.h>
+
+#include <Wire.h>
+#include <SPI.h>
+#include <Adafruit_LSM9DS0.h>
+#include <Adafruit_Sensor.h> 
 //dont ask
 namespace std {
   void __throw_bad_alloc()

@@ -62,7 +62,6 @@ namespace Micromouse
 		initDirection();
 
 	#ifdef __MK20DX256__ 
-
 		//Set magnetometer sensitivity
 		sensorREAD.setupMag(sensorREAD.LSM9DS0_MAGGAIN_12GAUSS);
 
@@ -85,7 +84,7 @@ namespace Micromouse
 
 
 
-	Magnetometer::Magnetometer(const int MAGNETOMETER_NINE_DOF_SDA_PIN, const int MAGNETOMETER_NINE_DOF_SCL_PIN)
+	Magnetometer::Magnetometer()
 	{
 
 	#ifdef __MK20DX256__ 

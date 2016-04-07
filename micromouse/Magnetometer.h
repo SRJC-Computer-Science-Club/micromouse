@@ -50,7 +50,7 @@ namespace Micromouse
 		direction getDirection();
 
 		//initialised the sensor to read data when object is created
-		Magnetometer(const int MAGNETOMETER_NINE_DOF_SDA_PIN, const int MAGNETOMETER_NINE_DOF_SCL_PIN);
+		Magnetometer();
 		~Magnetometer();
 
 	private:

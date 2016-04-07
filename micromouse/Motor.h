@@ -14,14 +14,6 @@ namespace Micromouse
 	public:
 		Motor(int fwdPin, int bwdPin, int pwmPin, int fwdEncoderPin, int bwdEncoderPin);
 
-		//Moves the motor for a number of encoder counts.
-		//One encoder count is equal to 1/16 rotation.
-		//If counts is negative, the motor will move backwards.
-		//The motor will accelerate linearly until speed is reached, for rampTime seconds.
-		//Then the motor will deccelerate linearly until it stops, for rampTime seconds.
-		//speed should be between 0 and 1. With 1 being the maximum speed of the motor.
-		//void move(int counts, float targetSpeed, float rampTime);
-
 		//speed should be a value between -1 and 1.
 		//Positive speeds move the motor forward. Negative speeds move it backward.
 		//The actual speed of the motor will be the product of speed and maxSpeed ( see setMaxSpeed()).
@@ -40,7 +32,7 @@ namespace Micromouse
 
 		//Turns off the motor and coasts.
 		void coast();
-		
+
 		//Returns the number of encoder counts since resetCounts() was last called.
 		int getCounts();
 

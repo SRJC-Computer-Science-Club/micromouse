@@ -17,12 +17,9 @@ namespace Micromouse
 	{
 		initPins();
 		initIRSensors();
-
-#ifdef __MK20DX256__
-		rightMotor.setMaxSpeed(0.2f);
-		leftMotor.setMaxSpeed(0.2f);
-#endif
 	}
+
+
 
 	RobotIO::~RobotIO()
 	{
@@ -36,6 +33,9 @@ namespace Micromouse
 
 
 
+
+
+
 	/**** SENSORS ****/
 
 	bool RobotIO::isClearForward()
@@ -43,10 +43,14 @@ namespace Micromouse
 		return !isWallinDirection(N);
 	}
 
+
+
 	bool RobotIO::isClearRight()
 	{
 		return !isWallinDirection(W);
 	}
+
+
 
 	bool RobotIO::isClearLeft()
 	{
@@ -61,6 +65,7 @@ namespace Micromouse
 
 		delete path;
 	}
+
 
 
     bool RobotIO::isWallinDirection( direction dir )
@@ -147,6 +152,36 @@ namespace Micromouse
 
 
 
+	float RobotIO::estimateHeadingError()
+	{
+		float rightDist = IRSensors[RIGHT]->getDistance();
+		float leftDist = IRSensors[LEFT]->getDistance();
+		bool rightWall = leftDist < WALL_DISTANCE * 1.25f;
+		bool leftWall = rightDist < WALL_DISTANCE * 1.25f;
+
+		if (rightWall && leftWall)
+		{
+			return leftDist - rightDist;
+		}
+		else if (rightWall && !leftWall)
+		{
+			return 2 * (WALL_DISTANCE - rightDist);
+		}
+		else if (leftWall && !rightWall)
+		{
+			return 2 * (leftDist - WALL_DISTANCE);
+		}
+		else // (!rightWall && !leftWall)
+		{
+			// TODO: Use magnetometer
+			return 0.0f;
+		}
+	}
+
+
+
+
+
 
 
 
@@ -154,6 +189,8 @@ namespace Micromouse
 
 	void RobotIO::testMotors()
 	{
+		moveForward(180.0f);
+/*
 #ifdef __MK20DX256__
 		rightMotor.setMaxSpeed(0.2f);
 		leftMotor.setMaxSpeed(0.2f);
@@ -184,14 +221,65 @@ namespace Micromouse
 		leftMotor.brake();
 		rightMotor.brake();
 #endif
-	}
-
-	// ## NOT YET IMPLEMENTED ##
-	void RobotIO::moveForward()
-	{
-
+*/
 
 	}
+
+
+
+	void RobotIO::moveForward(float millimeters)
+	{		//centimeters represents how much farther the bot needs to travel.
+			//The function will loop until centimeters is within DISTANCE_TOLERANCE
+
+		leftMotor.setMaxSpeed(1.0f);
+		rightMotor.setMaxSpeed(1.0f);
+		leftMotor.resetCounts();
+		rightMotor.resetCounts();
+
+		distPID.start(millimeters);
+		headingPID.start(estimateHeadingError());
+
+		while (millimeters > DISTANCE_TOLERANCE || millimeters < -DISTANCE_TOLERANCE)
+		{
+
+			//Get distance traveled in cm since last cycle (average of two encoders)
+			float traveled = leftMotor.resetCounts() + rightMotor.resetCounts(); //resetCounts() also returns counts
+			traveled /= 2;
+			traveled /= COUNTS_PER_MM;
+
+			//Decrease distance to go by the estimated amount traveled
+			millimeters -= traveled;
+
+			//Get correction speed
+			float speed = distPID.getCorrection(millimeters);
+
+			//Get rotational correction speed
+			float rotSpeed = headingPID.getCorrection(estimateHeadingError());
+
+			//Disables heading correction.
+			rotSpeed = 0.0f;
+
+			if (rotSpeed < 0)
+			{
+				//Move forward while turning right.
+				rightMotor.setMovement(speed * (1.0f + 2 * rotSpeed));
+
+				leftMotor.setMovement(speed);
+			}
+			else
+			{
+				//Move forward while turning left.
+				leftMotor.setMovement(speed * (1.0f - 2 * rotSpeed));
+
+				rightMotor.setMovement(speed);
+			}
+		}
+
+		leftMotor.brake();
+		rightMotor.brake();
+	}
+
+
 
 	// ## NOT YET IMPLEMENTED ##
 	void RobotIO::rotateLeft()
@@ -199,11 +287,15 @@ namespace Micromouse
 
 	}
 
+
+
 	// ## NOT YET IMPLEMENTED ##
 	void RobotIO::rotateRight()
 	{
 
 	}
+
+
 
 
 
@@ -228,6 +320,8 @@ namespace Micromouse
 
 	}
 
+
+
 	void RobotIO::initPins()
 	{
 #ifdef __MK20DX256__ // Teensy compile
@@ -237,6 +331,8 @@ namespace Micromouse
 		pinMode(SWITCH_C_PIN, INPUT_PULLUP);
 #endif
 	}
+
+
 
 	void RobotIO::calibrateIRSensors()
 	{

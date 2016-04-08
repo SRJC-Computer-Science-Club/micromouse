@@ -228,8 +228,12 @@ namespace Micromouse
 
 
 	void RobotIO::moveForward(float millimeters)
-	{		//centimeters represents how much farther the bot needs to travel.
-			//The function will loop until centimeters is within DISTANCE_TOLERANCE
+	{
+		//centimeters represents how much farther the bot needs to travel.
+		//The function will loop until centimeters is within DISTANCE_TOLERANCE
+
+		PIDController distPID = PIDController(15.0f, 5.0f, 0.25f);
+		PIDController headingPID = PIDController(1, 1, 1);
 
 		leftMotor.setMaxSpeed(0.25f);
 		rightMotor.setMaxSpeed(0.25f);

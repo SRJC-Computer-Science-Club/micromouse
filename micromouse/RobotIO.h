@@ -13,8 +13,8 @@ namespace Micromouse
 	//360 / (3.35 * PI)
 	const float COUNTS_PER_MM = 3.42064355302;
 
-	//How close the robot needs to be to the target distance (in cm).
-	const float DISTANCE_TOLERANCE = 0.25f;
+	//How close the robot needs to be to the target distance (in mm).
+    const float DISTANCE_TOLERANCE = 2.5;
 
 	//The expected distance'between a left/right sensor and the wall (in mm).
 	const float WALL_DISTANCE = 50.0f;

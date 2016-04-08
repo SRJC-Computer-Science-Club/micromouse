@@ -9,12 +9,17 @@
 
 namespace Micromouse
 {
+	const float MM_BETWEEN_WHEELS = 90.f;
+
 	//Number of encoder counts per centimeters traveled.
 	//360 / (3.35 * PI)
 	const float COUNTS_PER_MM = 3.42064355302;
 
-	//How close the robot needs to be to the target distance (in mm).
+	//How close the robot needs to be to the target distance (in mm) when moving forward.
     const float DISTANCE_TOLERANCE = 2.5;
+
+	//How close the robot needs to be to the target angle (in degrees) when rotating.
+	const float ANGLE_TOLERANCE = 1.0f;
 
 	//The expected distance'between a left/right sensor and the wall (in mm).
 	const float WALL_DISTANCE = 50.0f;
@@ -64,9 +69,9 @@ namespace Micromouse
 		//Moves the bot forward by the given number of millimeters.
 		void moveForward(float millimeters);
 
-		void rotateRight(); // ## NOT YET IMPLEMENTED ## Rotates the bot in place 45 degrees to the right.
-
-		void rotateLeft(); // ## NOT YET IMPLEMENTED ## Rotates the bot in place 45 degrees to the left.
+		//Rotates the bot in place by the given number of degrees.
+		//Positive values turn the bot to the right. Negative values turn it to the left.
+		void rotate(float degrees);
 
 		bool isClearForward(); // Returns false if the range-finder sensors detect a wall in front of the bot. Otherwise, returns true.
 		bool isClearRight(); // Returns false if the range-finder sensors detect a wall to the right of the bot. Otherwise, returns true.

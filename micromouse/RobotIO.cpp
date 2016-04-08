@@ -11,6 +11,8 @@
 
 namespace Micromouse
 {
+#define PI (3.141592f)
+
 	/**** CONSTRUCTORS ****/
 
 	RobotIO::RobotIO()
@@ -284,19 +286,28 @@ namespace Micromouse
 	}
 
 
-
-	// ## NOT YET IMPLEMENTED ##
-	void RobotIO::rotateLeft()
+	void RobotIO::rotate(float degrees)
 	{
+		PIDController anglePID = PIDController(15.0f, 5.0f, 0.25f);
+		anglePID.start(degrees);
+		float angleCorrection = anglePID.getCorrection(degrees);
 
-	}
+		leftMotor.resetCounts();
+		rightMotor.resetCounts();
 
+		while (degrees > ANGLE_TOLERANCE || degrees < -ANGLE_TOLERANCE || angleCorrection > 0.1f)
+		{
+			int counts = (leftMotor.resetCounts() - rightMotor.resetCounts()) / 2;
+			degrees -= counts / COUNTS_PER_MM / (MM_BETWEEN_WHEELS/2) * (180/PI);
 
+			angleCorrection = anglePID.getCorrection(degrees);
 
-	// ## NOT YET IMPLEMENTED ##
-	void RobotIO::rotateRight()
-	{
+			leftMotor.setMovement(angleCorrection);
+			rightMotor.setMovement(angleCorrection);
+		}
 
+		leftMotor.brake();
+		rightMotor.brake();
 	}
 
 

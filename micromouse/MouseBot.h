@@ -53,8 +53,7 @@ namespace Micromouse
 
 		void testMotors();
 		void moveForward(int numNodes);			// Moves the mouse forward by 1 node (1/2 cell)
-		void rotateLeft();						// Rotates the mouse in place to the left by 90 degrees.
-		void rotateRight();						// Rotates the mouse in place to the right by 90 degrees.
+		void rotate(direction dir);				// Rotates the mouse in place by the given direction.
 		void rotateToFaceDirection(direction dir); // Rotates the mouse in place until it reaches the given direction.
 
 

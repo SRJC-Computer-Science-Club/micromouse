@@ -104,8 +104,5 @@ namespace Micromouse
 			ENCODER_LEFT_FWD_PIN,
 			ENCODER_LEFT_BWD_PIN
 		);
-
-		PIDController distPID = PIDController(15.0f, 5.0f, 0.25f);
-		PIDController headingPID = PIDController(1, 1, 1);
 	};
 }

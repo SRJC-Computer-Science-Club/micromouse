@@ -150,7 +150,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="micromouse\Adafruit_LSM9DS0.cpp" />
     <ClCompile Include="micromouse\Controller.cpp" />
     <ClCompile Include="micromouse\FlagMatrix.cpp" />
     <ClCompile Include="micromouse\Magnetometer.cpp" />
@@ -167,7 +166,6 @@
     <ClCompile Include="micromouse\VirtualMaze.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="micromouse\Adafruit_LSM9DS0.h" />
     <ClInclude Include="micromouse\Controller.h" />
     <ClInclude Include="micromouse\FlagMatrix.h" />
     <ClInclude Include="micromouse\Logger.h" />

@@ -77,6 +77,8 @@ namespace Micromouse
 
 		void calibrateIRSensors();
 
+		void testMagnetometer();
+
 	private:
 		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };
 

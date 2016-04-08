@@ -189,6 +189,14 @@ namespace Micromouse
 		rightMotor.brake();
 	}
 
+
+	void RobotIO::testMagnetometer()
+	{
+		
+		log(DEBUG1) << "Magnatometer Degrees: " << magnetometer.getDegrees();
+
+	}
+
 	// ## NOT YET IMPLEMENTED ##
 	void RobotIO::moveForward(float node)
 	{

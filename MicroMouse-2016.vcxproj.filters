@@ -51,7 +51,7 @@
     <ClCompile Include="micromouse\Motor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="micromouse\PIDControl.cpp">
+    <ClCompile Include="micromouse\PIDController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="micromouse\Memory.cpp">
@@ -95,7 +95,7 @@
     <ClInclude Include="micromouse\Motor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="micromouse\PIDControl.h">
+    <ClInclude Include="micromouse\PIDController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="micromouse\Memory.h">

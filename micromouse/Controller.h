@@ -12,6 +12,8 @@ namespace Micromouse
 
 
 	private:
+		void debug();
+		void runMainLoop();
 
 		void runState();
 		void updateState();

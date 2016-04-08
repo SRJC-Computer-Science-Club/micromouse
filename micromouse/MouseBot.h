@@ -21,6 +21,8 @@ Author GitHub:	joshuasrjc
 
 namespace Micromouse
 {
+	const float MM_PER_NODE = 90.0f;
+
 	//A class to be used for keeping track of the robot's position, as well as an interface to the I/O of the robot.
 	class MouseBot
 	{
@@ -50,9 +52,7 @@ namespace Micromouse
 		bool isClearLeft();						// Returns true if there isn't a wall to the left of the mouse. Uses a virtual maze for debugging on PC, otherwise it uses the bot's hardware.
 
 		void testMotors();
-		void moveForward();						// Moves the mouse forward by 1 node (1/2 cell)
-		void turnLeft();						// Moves the mouse forward and to the left, turning 90 degrees.
-		void turnRight();						// Moves the mouse forward and to the right, turning 90 degrees.
+		void moveForward(int numNodes);			// Moves the mouse forward by 1 node (1/2 cell)
 		void rotateLeft();						// Rotates the mouse in place to the left by 90 degrees.
 		void rotateRight();						// Rotates the mouse in place to the right by 90 degrees.
 		void rotateToFaceDirection(direction dir); // Rotates the mouse in place until it reaches the given direction.

@@ -17,25 +17,29 @@ extern int SWITCH_C_PIN;
 extern int LED_PIN;
 extern int BUTTON_PIN;
 
+//comment / uncomment to turn off / on the debug function.
+#define MICROMOUSE_DEBUG_MODE
+
 namespace Micromouse
 {
+	void Controller::debug()
+	{
+		// DEBUG CODE GOES IN HERE!
+
+		mouse.testMotors();
+
+		// DEBUG CODE GOES IN HERE!
+	}
 
 	Controller::Controller()
 	{
 		log(INFO) << "Starting Program"; //log to console only
-		
-		while (true)
-		{
-			updateState();
-			
-			while (!buttonFlag && state != NONE )
-			{
-				runState();
-			}
-			waitForButton();
-			buttonFlag = false;
-		}
 
+		#ifdef MICROMOUSE_DEBUG_MODE
+			debug();
+		#else
+			runMainLoop();
+		#endif
 
 		logC( DEBUG1 ) << "End Program"; //log to console only
 	}
@@ -43,6 +47,22 @@ namespace Micromouse
 
 	Controller::~Controller()
 	{
+	}
+
+
+	void Controller::runMainLoop()
+	{
+		while (true)
+		{
+			updateState();
+
+			while (!buttonFlag && state != NONE)
+			{
+				runState();
+			}
+			waitForButton();
+			buttonFlag = false;
+		}
 	}
 
 

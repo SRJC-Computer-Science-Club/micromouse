@@ -2,12 +2,23 @@
 
 #include "Motor.h"
 #include "IRSensor.h"
+#include "PIDController.h"
 #include "Vector.h"
 #include "Path.h"
 
 
 namespace Micromouse
 {
+	//Number of encoder counts per centimeters traveled.
+	//360 / (3.35 * PI)
+	const float COUNTS_PER_MM = 3.42064355302;
+
+	//How close the robot needs to be to the target distance (in cm).
+	const float DISTANCE_TOLERANCE = 0.25f;
+
+	//The expected distance'between a left/right sensor and the wall (in mm).
+	const float WALL_DISTANCE = 50.0f;
+
 	const int IR_FRONT_LEFT_PIN = 14;
 	const int IR_FRONT_RIGHT_PIN = 15;
 	const int IR_LEFT_PIN = 22;
@@ -50,8 +61,11 @@ namespace Micromouse
 
 		void testMotors(); //temp
 
-		void moveForward(); // ## NOT YET IMPLEMENTED ## Moves the bot forward by half a cell ( 9 cm ).
+		//Moves the bot forward by the given number of millimeters.
+		void moveForward(float millimeters);
+
 		void rotateRight(); // ## NOT YET IMPLEMENTED ## Rotates the bot in place 45 degrees to the right.
+
 		void rotateLeft(); // ## NOT YET IMPLEMENTED ## Rotates the bot in place 45 degrees to the left.
 
 		bool isClearForward(); // Returns false if the range-finder sensors detect a wall in front of the bot. Otherwise, returns true.
@@ -66,13 +80,13 @@ namespace Micromouse
 		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };
 
         bool isWallinDirection( direction dir );
+		float estimateHeadingError();
+
 		void initIRSensors();
 		void initPins();
 
 		IRSenor* IRSensors[4];
 
-	
-#ifdef __MK20DX256__
 		Motor rightMotor = Motor
 		(
 			MOTOR_RIGHT_FWD_PIN,
@@ -90,6 +104,8 @@ namespace Micromouse
 			ENCODER_LEFT_FWD_PIN,
 			ENCODER_LEFT_BWD_PIN
 		);
-#endif
+
+		PIDController distPID = PIDController(15.0f, 5.0f, 0.25f);
+		PIDController headingPID = PIDController(1, 1, 1);
 	};
 }

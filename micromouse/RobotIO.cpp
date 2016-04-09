@@ -295,14 +295,14 @@ namespace Micromouse
 		leftMotor.setMaxSpeed(0.2f);
 		rightMotor.setMaxSpeed(0.2f);
 
-		PIDController anglePID = PIDController(25.0f, 60.0f, 2.0f);
+		PIDController anglePID = PIDController(25.0f, 25.0f, 2.0f);
 		anglePID.start(degrees);
 		float angleCorrection = anglePID.getCorrection(degrees);
 
 		leftMotor.resetCounts();
 		rightMotor.resetCounts();
 
-		while (degrees > ANGLE_TOLERANCE || degrees < -ANGLE_TOLERANCE || angleCorrection > 0.2f)
+		while (degrees > ANGLE_TOLERANCE || degrees < -ANGLE_TOLERANCE || angleCorrection > 0.3f)
 		{
 			int counts = (leftMotor.resetCounts() - rightMotor.resetCounts()) / 2;
 			degrees -= counts / COUNTS_PER_MM / (MM_BETWEEN_WHEELS/2) * (180/PI);

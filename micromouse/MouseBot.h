@@ -52,6 +52,7 @@ namespace Micromouse
 		bool isClearLeft();						// Returns true if there isn't a wall to the left of the mouse. Uses a virtual maze for debugging on PC, otherwise it uses the bot's hardware.
 
 		void testMotors();
+		void testMagnetometer();
 		void moveForward(int numNodes);			// Moves the mouse forward by 1 node (1/2 cell)
 		void rotateLeft();						// Rotates the mouse in place to the left by 90 degrees.
 		void rotateRight();						// Rotates the mouse in place to the right by 90 degrees.

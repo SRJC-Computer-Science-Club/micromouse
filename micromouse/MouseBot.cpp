@@ -294,6 +294,15 @@ namespace Micromouse
 	{
 #ifdef __MK20DX256__
 		robotIO.testMotors();
+
+#endif
+	}
+
+	void MouseBot::testMagnetometer()
+	{
+#ifdef __MK20DX256__
+		robotIO.testMagnetometer();
+
 #endif
 	}
 

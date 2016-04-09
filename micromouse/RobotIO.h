@@ -5,6 +5,8 @@
 #include "PIDController.h"
 #include "Vector.h"
 #include "Path.h"
+#include "Magnetometer.h"
+#include "Logger.h"
 
 
 namespace Micromouse
@@ -63,6 +65,7 @@ namespace Micromouse
 
 		void testMotors(); //temp
 
+		void testMagnetometer();//temp
 		//Moves the bot forward by the given number of millimeters.
 		void moveForward(float millimeters);
 
@@ -77,6 +80,7 @@ namespace Micromouse
 		void followPath(Path * path);
 
 		void calibrateIRSensors();
+
 
 	private:
 		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };
@@ -106,5 +110,8 @@ namespace Micromouse
 			ENCODER_LEFT_FWD_PIN,
 			ENCODER_LEFT_BWD_PIN
 		);
+
+		Magnetometer magnetometer = Magnetometer();
+
 	};
 }

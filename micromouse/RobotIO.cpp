@@ -19,7 +19,7 @@ namespace Micromouse
 		initIRSensors();
 	}
 
-
+	
 
 	RobotIO::~RobotIO()
 	{
@@ -190,6 +190,7 @@ namespace Micromouse
 	void RobotIO::testMotors()
 	{
 		moveForward(180.0f);
+		
 /*
 #ifdef __MK20DX256__
 		rightMotor.setMaxSpeed(0.2f);
@@ -225,6 +226,9 @@ namespace Micromouse
 
 	}
 
+	void RobotIO::testMagnetometer() {
+		log(DEBUG1) << " Magnetometer : " << magnetometer.getDegrees();
+	}
 
 
 	void RobotIO::moveForward(float millimeters)

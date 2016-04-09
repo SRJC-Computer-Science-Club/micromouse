@@ -124,12 +124,14 @@ namespace Micromouse {
 		int val = analogRead(DATA_PIN);
 #else
 		// false analog value used while on pc
-		int val = 300;
+		int val = rand() % 500;
 #endif
+
+		log(DEBUG3) << "Analog Value: " << val;
 
 		for (int i = calibrationSize - 1; i >= 0; i--)
 		{
-			log(DEBUG4) << "calibrationData[ " << i << " ]= " << calibrationData[i] << " , val = " << val;
+			log(DEBUG4) << "calibrationData[ " << i << " ]: " << calibrationData[i] << " , Analog Value: " << val;
 
 			if (val < calibrationData[i])
 			{
@@ -137,17 +139,19 @@ namespace Micromouse {
 					i * calibrationInterval + calibrationStart,
 					(i + 1) * calibrationInterval + calibrationStart, val);
 
-				log(DEBUG4) << "Measured Distance: " << dist;
+				log(DEBUG3) << "Measured Distance: " << dist;
 
 				return dist;
 			}
-
-			log(DEBUG4) << "Measured Distance*: " << MIN_RANGE;
-
-			return MIN_RANGE;
 		}
 
-		return -1;//code should never reach here
+			log(DEBUG3) << "Measured Distance*: " << MIN_RANGE;
+			return MIN_RANGE;
+	}
+
+	void IRSensor::debug()
+	{
+		getDistance();
 	}
 
 

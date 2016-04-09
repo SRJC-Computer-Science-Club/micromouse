@@ -65,6 +65,7 @@ namespace Micromouse
 		~RobotIO();
 
 		void testMotors(); //temp
+		void testIR();
 
 		//Moves the bot forward by the given number of millimeters.
 		void moveForward(float millimeters);

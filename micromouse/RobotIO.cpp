@@ -233,6 +233,22 @@ namespace Micromouse
 
 	}
 
+	void RobotIO::testIR()
+	{
+		for (int i = 0; i < 100; i++)
+		{
+			IRSensors[RIGHT]->debug();
+			//IRSensors[LEFT]->debug();
+			//IRSensors[FRONT_LEFT]->debug();
+			//IRSensors[FRONT_RIGHT]->debug();
+#ifdef __MK20DX256__ //Teensy
+			delay(300);
+#endif
+
+
+		}
+	}
+
 
 
 	void RobotIO::moveForward(float millimeters)

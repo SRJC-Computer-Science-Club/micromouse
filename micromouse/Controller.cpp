@@ -26,6 +26,7 @@ namespace Micromouse
 	{
 		// DEBUG CODE GOES IN HERE!
 
+		mouse.testIR();
 		mouse.testMotors();
 
 		// DEBUG CODE GOES IN HERE!

@@ -30,6 +30,8 @@ namespace Micromouse
 		// will return a value between MIN_RANGE and MAX_RANGE
 		float getDistance(); 
 
+		void debug();
+
 
 	private:
 		void initPins();

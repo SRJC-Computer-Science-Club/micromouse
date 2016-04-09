@@ -237,7 +237,9 @@ namespace Micromouse
 	{
 		//IRSensors[RIGHT]->calibrate(20, 20);
 		//IRSensors[RIGHT]->saveCalibration(IR_RIGHT_MEMORY);
-		//IRSensors[RIGHT]->saveCalibration(IR_LEFT_MEMORY);
+
+		//IRSensors[LEFT]->calibrate(20, 20);
+		//IRSensors[LEFT]->saveCalibration(IR_LEFT_MEMORY);
 
 	//	IRSensors[LEFT]->calibrate(20, 20);
 	//	IRSensors[LEFT]->saveCalibration(IR_FRONT_LEFT_MEMORY);
@@ -364,12 +366,20 @@ namespace Micromouse
 		IRSensors[FRONT_LEFT] = new IRSensor(IR_FRONT_LEFT_PIN, 20, 150);
 		IRSensors[FRONT_RIGHT] = new IRSensor(IR_FRONT_RIGHT_PIN, 20, 150);
 
+
 		//TODO check if load fails
-		log(DEBUG3) << "Load right";
-		IRSensors[RIGHT]->loadCalibration(IR_FRONT_RIGHT_MEMORY);//todo change back
 		delay(1000);
+
+		log(DEBUG3) << "Load right";
+		IRSensors[RIGHT]->loadCalibration(IR_RIGHT_MEMORY);//todo change back
+
+		delay(1000);
+
 		log(DEBUG3) << "Load left";
-		IRSensors[LEFT]->loadCalibration(IR_FRONT_LEFT_MEMORY);
+		IRSensors[LEFT]->loadCalibration(IR_LEFT_MEMORY);
+
+		delay(1000);
+
 		//IRSensors[FRONT_LEFT]->loadCalibration(IR_FRONT_LEFT_MEMORY);
 		//IRSensors[FRONT_RIGHT]->loadCalibration(IR_FRONT_RIGHT_MEMORY);
 

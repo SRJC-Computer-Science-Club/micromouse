@@ -110,6 +110,10 @@ namespace Micromouse {
 				address += 4;
 					log(DEBUG2) << "loading " << i << "  " << temp;
 				calibrationData[i] = temp;
+#ifdef __MK20DX256__ //this is the Teensy signature
+				delay(20);
+#endif
+
 			}
 
 			return true;

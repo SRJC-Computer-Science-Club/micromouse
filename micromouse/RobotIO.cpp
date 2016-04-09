@@ -330,10 +330,10 @@ namespace Micromouse
 
 	void RobotIO::initIRSensors()
 	{
-		IRSensors[LEFT] = new IRSenor(IR_LEFT_PIN, 20, 150);
-		IRSensors[RIGHT] = new IRSenor(IR_RIGHT_PIN, 20, 150);
-		IRSensors[FRONT_LEFT] = new IRSenor(IR_FRONT_LEFT_PIN, 20, 150);
-		IRSensors[FRONT_RIGHT] = new IRSenor(IR_FRONT_RIGHT_PIN, 20, 150);
+		IRSensors[LEFT] = new IRSensor(IR_LEFT_PIN, 20, 150);
+		IRSensors[RIGHT] = new IRSensor(IR_RIGHT_PIN, 20, 150);
+		IRSensors[FRONT_LEFT] = new IRSensor(IR_FRONT_LEFT_PIN, 20, 150);
+		IRSensors[FRONT_RIGHT] = new IRSensor(IR_FRONT_RIGHT_PIN, 20, 150);
 
 		//TODO check if load fails
 		IRSensors[LEFT]->loadCalibration(IR_LEFT_MEMORY);

@@ -90,7 +90,7 @@ namespace Micromouse
 		void initIRSensors();
 		void initPins();
 
-		IRSenor* IRSensors[4];
+		IRSensor* IRSensors[4];
 
 		Motor rightMotor = Motor
 		(

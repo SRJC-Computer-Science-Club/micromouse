@@ -17,7 +17,7 @@ extern int SWITCH_C_PIN;
 extern int LED_PIN;
 extern int BUTTON_PIN;
 
-//comment / uncomment to turn off / on the debug function.
+//comment / uncomment to turn off / on the debug function. 
 #define MICROMOUSE_DEBUG_MODE
 
 namespace Micromouse
@@ -25,8 +25,11 @@ namespace Micromouse
 	void Controller::debug()
 	{
 		// DEBUG CODE GOES IN HERE!
+		log(INFO) << " Magnometer Test ";
 
-		mouse.testMotors();
+		mouse.testMagnetometer();
+		
+		//mouse.testMotors();
 
 		// DEBUG CODE GOES IN HERE!
 	}

@@ -223,11 +223,15 @@ namespace Micromouse
 		rightMotor.brake();
 #endif
 */
-
 	}
 
+
 	void RobotIO::testMagnetometer() {
-		log(DEBUG1) << " Magnetometer : " << magnetometer.getDegrees();
+		for (int i = 0; i < 100; i++)
+		{
+			log(DEBUG1) << "Magnetometer : " << magnetometer.getDegrees();
+		}
+
 	}
 
 

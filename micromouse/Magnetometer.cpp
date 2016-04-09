@@ -1,6 +1,6 @@
 #include "Magnetometer.h"
 #include "Logger.h"
-
+#include <cstdlib>
 
 
 namespace Micromouse
@@ -32,13 +32,15 @@ namespace Micromouse
 	#ifdef __MK20DX256__ 
 
 			sensorREAD.read();
+
 			float degrees = atan2(sensorREAD.magData.y, sensorREAD.magData.x);
 			degrees *= 57.296f;
 			return degrees;
-
+#else
+			float random = (float) (rand() % 100);
+			return random;
 	#endif
-
-			return 0.0f;
+			//			return 0.0f;
 	}
 
 

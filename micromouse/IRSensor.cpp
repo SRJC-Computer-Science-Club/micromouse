@@ -18,6 +18,7 @@ namespace Micromouse {
 		MAX_RANGE(maxRange)
 	{
 		initPins();
+		calibrationData = new int[1];
 		defaultCalibration();
 	}
 
@@ -170,10 +171,11 @@ namespace Micromouse {
 
 	void IRSensor::defaultCalibration()
 	{
-		calibrationSize = 10;
-		calibrationInterval = 15;
+		calibrationSize = 14;
+		calibrationInterval = 10;
 		calibrationStart = MIN_RANGE;
-		calibrationData = new int[10];
+		delete[] calibrationData;
+		calibrationData = new int[calibrationSize];
 
 		//if (MIN_RANGE == 40)
 		//{
@@ -192,16 +194,20 @@ namespace Micromouse {
 		//TODO add default calibration for 2-15cm sensor this is false data
 		if (MIN_RANGE == 20)
 		{
-			calibrationData[0] = 517; //40mm
-			calibrationData[1] = 338; //70mm
-			calibrationData[2] = 236; //100mm
-			calibrationData[3] = 188; //130mm
-			calibrationData[4] = 152; //160mm
-			calibrationData[5] = 129; //190mm
-			calibrationData[6] = 116; //220mm
-			calibrationData[7] = 100; //250mm
-			calibrationData[8] = 92; //280mm
-			calibrationData[9] = 84; //310mm
+			calibrationData[0] = 550; //20mm
+			calibrationData[1] = 422; //30mm
+			calibrationData[2] = 336; //400mm
+			calibrationData[3] = 271; //50mm
+			calibrationData[4] = 216; //60mm
+			calibrationData[5] = 172; //70mm
+			calibrationData[6] = 119; //80mm
+			calibrationData[7] = 88;  //90mm
+			calibrationData[8] = 61;  //100mm
+			calibrationData[9] = 37;  //120mm
+			calibrationData[10] = 19; //130mm
+			calibrationData[11] = 13; //140mm
+			calibrationData[12] = 7;  //150mm
+			calibrationData[13] = 5;  //160mm
 		}
 	}
 }

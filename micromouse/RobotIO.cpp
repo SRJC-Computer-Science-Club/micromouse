@@ -194,10 +194,11 @@ namespace Micromouse
 
 	void RobotIO::testMotors()
 	{
-		rotate(90.0f);
-		//moveForward(180.0f);
-/*
 #ifdef __MK20DX256__
+		//rotate(90.0f);
+		delay(2000);
+		moveForward(180.0f);
+/*
 		rightMotor.setMaxSpeed(0.2f);
 		leftMotor.setMaxSpeed(0.2f);
 
@@ -226,8 +227,9 @@ namespace Micromouse
 		delay(2000);
 		leftMotor.brake();
 		rightMotor.brake();
+		*/
 #endif
-*/
+
 
 	}
 
@@ -238,30 +240,45 @@ namespace Micromouse
 		//centimeters represents how much farther the bot needs to travel.
 		//The function will loop until centimeters is within DISTANCE_TOLERANCE
 
-		PIDController distPID = PIDController(15.0f, 5.0f, 0.25f);
+		float leftmm = millimeters;
+		float rightmm = millimeters;
+
+		PIDController leftPID = PIDController(30.0f, 10.0f, 0.0f);
+		PIDController rightPID = PIDController(30.0f, 10.0f, 0.0f);
 		PIDController headingPID = PIDController(1, 1, 1);
 
 		leftMotor.setMaxSpeed(0.25f);
-		rightMotor.setMaxSpeed(0.25f);
+		rightMotor.setMaxSpeed(0.2f);
 		leftMotor.resetCounts();
 		rightMotor.resetCounts();
 
-		distPID.start(millimeters);
+
+		leftPID.start(millimeters);
+		rightPID.start(millimeters);
 		headingPID.start(estimateHeadingError());
 
-		while (millimeters > DISTANCE_TOLERANCE || millimeters < -DISTANCE_TOLERANCE)
-		{
+		float leftSpeed = 1.0f;
+		float rightSpeed = 1.0f;
 
+		while
+		(
+			leftmm > DISTANCE_TOLERANCE || leftmm < -DISTANCE_TOLERANCE ||
+			rightmm > DISTANCE_TOLERANCE || rightmm < -DISTANCE_TOLERANCE ||
+			leftSpeed > 0.2f || rightSpeed > 0.2f)
+		{
 			//Get distance traveled in cm since last cycle (average of two encoders)
-			float traveled = leftMotor.resetCounts() + rightMotor.resetCounts(); //resetCounts() also returns counts
-			traveled /= 2;
-			traveled /= COUNTS_PER_MM;
+			float leftTraveled = leftMotor.resetCounts();
+			float rightTraveled = rightMotor.resetCounts();
+			logC(INFO) << rightTraveled;
+			leftTraveled /= COUNTS_PER_MM;
+			rightTraveled /= COUNTS_PER_MM;
 
 			//Decrease distance to go by the estimated amount traveled
-			millimeters -= traveled;
+			leftmm -= leftTraveled;
+			rightmm -= rightTraveled;
 
-			//Get correction speed
-			float speed = distPID.getCorrection(millimeters);
+			leftSpeed = leftPID.getCorrection(leftmm);
+			rightSpeed = rightPID.getCorrection(rightmm);
 
 			//Get rotational correction speed
 			float rotSpeed = headingPID.getCorrection(estimateHeadingError());
@@ -272,16 +289,16 @@ namespace Micromouse
 			if (rotSpeed < 0)
 			{
 				//Move forward while turning right.
-				rightMotor.setMovement(speed * (1.0f + 2 * rotSpeed));
+				rightMotor.setMovement(rightSpeed * (1.0f + 2 * rotSpeed));
 
-				leftMotor.setMovement(speed);
+				leftMotor.setMovement(leftSpeed);
 			}
 			else
 			{
 				//Move forward while turning left.
-				leftMotor.setMovement(speed * (1.0f - 2 * rotSpeed));
+				leftMotor.setMovement(leftSpeed * (1.0f - 2 * rotSpeed));
 
-				rightMotor.setMovement(speed);
+				rightMotor.setMovement(rightSpeed);
 			}
 		}
 

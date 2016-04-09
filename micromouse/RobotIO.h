@@ -16,7 +16,7 @@ namespace Micromouse
 	const float COUNTS_PER_MM = 3.42064355302;
 
 	//How close the robot needs to be to the target distance (in mm) when moving forward.
-    const float DISTANCE_TOLERANCE = 2.5;
+    const float DISTANCE_TOLERANCE = 5.0;
 
 	//How close the robot needs to be to the target angle (in degrees) when rotating.
 	const float ANGLE_TOLERANCE = 1.0f;
@@ -29,11 +29,11 @@ namespace Micromouse
 	const int IR_LEFT_PIN = 22;
 	const int IR_RIGHT_PIN = 23;
 
-	const int MOTOR_RIGHT_FWD_PIN = 11;
-	const int MOTOR_RIGHT_BWD_PIN = 12;
+	const int MOTOR_RIGHT_FWD_PIN = 12;
+	const int MOTOR_RIGHT_BWD_PIN = 11;
 	const int MOTOR_RIGHT_PWM_PIN = 9;
-	const int ENCODER_RIGHT_FWD_PIN = 8;
-	const int ENCODER_RIGHT_BWD_PIN = 7;
+	const int ENCODER_RIGHT_FWD_PIN = 7;
+	const int ENCODER_RIGHT_BWD_PIN = 8;
 
 	const int MOTOR_LEFT_FWD_PIN = 17;
 	const int MOTOR_LEFT_BWD_PIN = 16;

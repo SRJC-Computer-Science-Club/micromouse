@@ -16,11 +16,11 @@ namespace Micromouse
 
 	// when not compiled on a teensy getDistance will always return the same value
 
-	class IRSenor
+	class IRSensor
 	{
 	public:
-		IRSenor(int pin, int minRange, int maxRange);
-		~IRSenor();
+		IRSensor(int pin, int minRange, int maxRange);
+		~IRSensor();
 
 		bool calibrate( int calibrationStart, int calibrationInterval );
 		bool loadCalibration( int address );

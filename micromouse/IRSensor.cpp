@@ -73,7 +73,6 @@ namespace Micromouse {
 			log(INFO) << "analogRead: " << calibrationData[i];
 		}
 
-		saveCalibration(160);
 #else
 		log(WARN) << "performed pseudo calibration instead";
 		defaultCalibration();
@@ -86,16 +85,19 @@ namespace Micromouse {
 
 	bool IRSensor::loadCalibration(int address)
 	{
-		int size = Memory::read(address++);
+		int size = Memory::read(address);
+		address += 4;
 		log(DEBUG2) << "load size: " << size;
 
 		if (size > 0 )
 		{
 			//int temp = size;
 			calibrationSize = size;
-			calibrationStart = Memory::read(address++);
+			calibrationStart = Memory::read(address);
+			address += 4;
 			log(DEBUG2) << "calibrationStart : " << calibrationStart;
-			calibrationInterval = Memory::read(address++);
+			calibrationInterval = Memory::read(address);
+			address += 4;
 			log(DEBUG2) << "calibrationInterval : " << calibrationInterval;
 
 
@@ -104,7 +106,8 @@ namespace Micromouse {
 
 			for (int i = 0; i < calibrationSize; i++)
 			{
-				int temp = Memory::read(address++);
+				int temp = Memory::read(address);
+				address += 4;
 					log(DEBUG2) << "loading " << i << "  " << temp;
 				calibrationData[i] = temp;
 			}
@@ -117,13 +120,17 @@ namespace Micromouse {
 
 	void IRSensor::saveCalibration(int address)
 	{
-		Memory::write(address++, calibrationSize);
-		Memory::write(address++, calibrationStart);
-		Memory::write(address++, calibrationInterval);
+		Memory::write(address, calibrationSize);
+		address += 4;
+		Memory::write(address, calibrationStart);
+		address += 4;
+		Memory::write(address, calibrationInterval);
+		address += 4;
 
 		for (int i = 0; i < calibrationSize; i++)
 		{
-			Memory::write(address++, calibrationData[i]);
+			Memory::write(address, calibrationData[i]);
+			address += 4;
 		}
 	}
 
@@ -138,7 +145,7 @@ namespace Micromouse {
 		int val = rand() % 500;
 #endif
 
-		log(DEBUG3) << "Analog Value: " << val;
+		//log(DEBUG3) << "Analog Value: " << val;
 
 		for (int i = calibrationSize - 1; i >= 0; i--)
 		{

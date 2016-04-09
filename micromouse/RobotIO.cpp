@@ -11,7 +11,10 @@
 
 namespace Micromouse
 {
-#define PI (3.141592f)
+#ifndef __MK20DX256__
+#define PI (3.141592f) //Already defined on Arduino
+#endif
+
 
 	/**** CONSTRUCTORS ****/
 
@@ -191,7 +194,8 @@ namespace Micromouse
 
 	void RobotIO::testMotors()
 	{
-		moveForward(180.0f);
+		rotate(90.0f);
+		//moveForward(180.0f);
 /*
 #ifdef __MK20DX256__
 		rightMotor.setMaxSpeed(0.2f);
@@ -288,14 +292,17 @@ namespace Micromouse
 
 	void RobotIO::rotate(float degrees)
 	{
-		PIDController anglePID = PIDController(15.0f, 5.0f, 0.25f);
+		leftMotor.setMaxSpeed(0.2f);
+		rightMotor.setMaxSpeed(0.2f);
+
+		PIDController anglePID = PIDController(25.0f, 60.0f, 2.0f);
 		anglePID.start(degrees);
 		float angleCorrection = anglePID.getCorrection(degrees);
 
 		leftMotor.resetCounts();
 		rightMotor.resetCounts();
 
-		while (degrees > ANGLE_TOLERANCE || degrees < -ANGLE_TOLERANCE || angleCorrection > 0.1f)
+		while (degrees > ANGLE_TOLERANCE || degrees < -ANGLE_TOLERANCE || angleCorrection > 0.2f)
 		{
 			int counts = (leftMotor.resetCounts() - rightMotor.resetCounts()) / 2;
 			degrees -= counts / COUNTS_PER_MM / (MM_BETWEEN_WHEELS/2) * (180/PI);
@@ -304,6 +311,8 @@ namespace Micromouse
 
 			leftMotor.setMovement(angleCorrection);
 			rightMotor.setMovement(angleCorrection);
+
+			logC(INFO) << degrees;
 		}
 
 		leftMotor.brake();

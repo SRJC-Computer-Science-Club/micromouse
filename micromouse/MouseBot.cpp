@@ -10,10 +10,11 @@ Author GitHub:	joshuasrjc
 #include "MouseBot.h"
 #include "Logger.h"
 
-#define SQRT_OF_TWO (1.414213f)
 
 namespace Micromouse
 {
+#define SQRT_OF_TWO (1.414213f)
+
 	/**** CONSTRUCTORS ****/
 
 	MouseBot::MouseBot(int x, int y)

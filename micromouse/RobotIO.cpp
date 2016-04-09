@@ -235,14 +235,16 @@ namespace Micromouse
 
 	void RobotIO::testIR()
 	{
-		for (int i = 0; i < 100; i++)
+		//IRSensors[RIGHT]->calibrate(20, 20);
+
+		for (int i = 0; i < 2000; i++)
 		{
 			IRSensors[RIGHT]->debug();
 			//IRSensors[LEFT]->debug();
 			//IRSensors[FRONT_LEFT]->debug();
 			//IRSensors[FRONT_RIGHT]->debug();
 #ifdef __MK20DX256__ //Teensy
-			delay(300);
+			delay(100);
 #endif
 
 
@@ -357,10 +359,10 @@ namespace Micromouse
 		IRSensors[FRONT_RIGHT] = new IRSensor(IR_FRONT_RIGHT_PIN, 20, 150);
 
 		//TODO check if load fails
-		IRSensors[LEFT]->loadCalibration(IR_LEFT_MEMORY);
+		//IRSensors[LEFT]->loadCalibration(IR_LEFT_MEMORY);
 		IRSensors[RIGHT]->loadCalibration(IR_RIGHT_MEMORY);
-		IRSensors[FRONT_LEFT]->loadCalibration(IR_FRONT_LEFT_MEMORY);
-		IRSensors[FRONT_RIGHT]->loadCalibration(IR_FRONT_RIGHT_MEMORY);
+		//IRSensors[FRONT_LEFT]->loadCalibration(IR_FRONT_LEFT_MEMORY);
+		//IRSensors[FRONT_RIGHT]->loadCalibration(IR_FRONT_RIGHT_MEMORY);
 
 
 	}

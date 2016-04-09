@@ -36,7 +36,9 @@ namespace Micromouse
 	private:
 		void initPins();
 		void defaultCalibration();
-		float interpolate(int x1, int x2, int y1, int y2, int x);
+		int interpolate(int x1, int x2, int y1, int y2, int x);
+
+		int test = 0;
 
 		const int DATA_PIN; //pin to read analog data
 		const int MIN_RANGE; //min distance for sensor in mm

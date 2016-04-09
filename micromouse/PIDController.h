@@ -43,7 +43,7 @@ namespace Micromouse
 		long micros();
 
 		typedef std::chrono::steady_clock::time_point time_point;
-		time_point initalTime = std::chrono::high_resolution_clock::now();
+		time_point initialTime = std::chrono::high_resolution_clock::now();
 #endif
 
 		bool started = false;

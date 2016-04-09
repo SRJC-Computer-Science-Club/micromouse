@@ -13,8 +13,8 @@ namespace Micromouse
 	//360 / (3.35 * PI)
 	const float COUNTS_PER_MM = 3.42064355302;
 
-	//How close the robot needs to be to the target distance (in cm).
-	const float DISTANCE_TOLERANCE = 0.25f;
+	//How close the robot needs to be to the target distance (in mm).
+    const float DISTANCE_TOLERANCE = 2.5;
 
 	//The expected distance'between a left/right sensor and the wall (in mm).
 	const float WALL_DISTANCE = 50.0f;
@@ -23,6 +23,9 @@ namespace Micromouse
 	const int IR_FRONT_RIGHT_PIN = 15;
 	const int IR_LEFT_PIN = 22;
 	const int IR_RIGHT_PIN = 23;
+
+	const int MAGNETOMETER_NINE_DOF_SDA_PIN = 18;
+	const int MAGNETOMETER_NINE_DOF_SCL_PIN = 19;
 
 	const int MOTOR_RIGHT_FWD_PIN = 11;
 	const int MOTOR_RIGHT_BWD_PIN = 12;
@@ -35,7 +38,6 @@ namespace Micromouse
 	const int MOTOR_LEFT_PWM_PIN = 10;
 	const int ENCODER_LEFT_FWD_PIN = 20;
 	const int ENCODER_LEFT_BWD_PIN = 21;
-
 
 	const int BUTTON_PIN = 6;
 	const int SWITCH_A_PIN = 0;
@@ -85,7 +87,7 @@ namespace Micromouse
 		void initIRSensors();
 		void initPins();
 
-		IRSenor* IRSensors[4];
+		IRSensor* IRSensors[4];
 
 		Motor rightMotor = Motor
 		(
@@ -104,8 +106,5 @@ namespace Micromouse
 			ENCODER_LEFT_FWD_PIN,
 			ENCODER_LEFT_BWD_PIN
 		);
-
-		PIDController distPID = PIDController(15.0f, 5.0f, 0.25f);
-		PIDController headingPID = PIDController(1, 1, 1);
 	};
 }

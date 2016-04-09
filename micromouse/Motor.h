@@ -40,7 +40,6 @@ namespace Micromouse
 		//Then resets the encoder count.
 		int resetCounts();
 	private:
-		void initPins();
 
 		float maxSpeed = 1.0f;
 

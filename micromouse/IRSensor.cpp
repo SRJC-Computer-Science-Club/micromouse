@@ -12,22 +12,21 @@ namespace Micromouse {
     
 	//IR SENSORS/////////////////////////
 
-	IRSenor::IRSenor(int pin, int minRange, int maxRange):
+	IRSensor::IRSensor(int pin, int minRange, int maxRange):
 		DATA_PIN(pin),
 		MIN_RANGE(minRange),
 		MAX_RANGE(maxRange)
 	{
-		initPins();
 		defaultCalibration();
 	}
 
 
-	IRSenor::~IRSenor()
+	IRSensor::~IRSensor()
 	{
 		delete[] calibrationData;
 	}
 
-	bool IRSenor::calibrate( int calibrationStart, int calibrationInterval )
+	bool IRSensor::calibrate( int calibrationStart, int calibrationInterval )
 	{
 		assert(calibrationStart >= MIN_RANGE);
 		assert(calibrationInterval > 0);
@@ -78,7 +77,7 @@ namespace Micromouse {
 
 
 
-	bool IRSenor::loadCalibration(int address)
+	bool IRSensor::loadCalibration(int address)
 	{
 		int size = Memory::read(address++);
 
@@ -103,7 +102,7 @@ namespace Micromouse {
 		return false;
 	}
 
-	void IRSenor::saveCalibration(int address)
+	void IRSensor::saveCalibration(int address)
 	{
 		Memory::write(address++, calibrationSize);
 		Memory::write(address++, calibrationStart);
@@ -117,7 +116,7 @@ namespace Micromouse {
 
 
 
-	float IRSenor::getDistance()
+	float IRSensor::getDistance()
 	{
 #ifdef __MK20DX256__ //this is the Teensy signature
 		int val = analogRead(DATA_PIN);
@@ -153,7 +152,7 @@ namespace Micromouse {
 
 
 
-	float IRSenor::interpolate(int x1, int x2, int y1, int y2, int x)
+	float IRSensor::interpolate(int x1, int x2, int y1, int y2, int x)
 	{
 		return(float(x - x1) / (x2 - x1)*(y2 - y1) + y1);
 	}
@@ -161,14 +160,7 @@ namespace Micromouse {
 
 
 
-	void IRSenor::initPins()
-	{
-#ifdef __MK20DX256__ //this is the Teensy signature
-		pinMode(DATA_PIN, OUTPUT);
-#endif
-	}
-
-	void IRSenor::defaultCalibration()
+	void IRSensor::defaultCalibration()
 	{
 		calibrationSize = 10;
 		calibrationInterval = 15;

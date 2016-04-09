@@ -39,9 +39,9 @@ namespace Micromouse
 
 		float pCorrection = P * currentError;
 		float iCorrection = I * totalError;
-		float dCorrention = D * (currentError - lastError) / deltaTime / 10000.0f;
+		float dCorrection = D * (currentError - lastError) / deltaTime / 10000.0f;
 
-		float sum = pCorrection + iCorrection + dCorrention;
+		float sum = pCorrection + iCorrection + dCorrection;
 		sum /= 1000.0f;
 
 		//Total is bound between -1 and 1
@@ -71,7 +71,7 @@ namespace Micromouse
 	{
 		using namespace std::chrono;
 		
-		return duration_cast<microseconds>(high_resolution_clock::now() - initalTime).count();
+		return duration_cast<microseconds>(high_resolution_clock::now() - initialTime).count();
 	}
 #endif
 

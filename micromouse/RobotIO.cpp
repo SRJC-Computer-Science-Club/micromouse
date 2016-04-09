@@ -228,8 +228,12 @@ namespace Micromouse
 
 
 	void RobotIO::moveForward(float millimeters)
-	{		//centimeters represents how much farther the bot needs to travel.
-			//The function will loop until centimeters is within DISTANCE_TOLERANCE
+	{
+		//centimeters represents how much farther the bot needs to travel.
+		//The function will loop until centimeters is within DISTANCE_TOLERANCE
+
+		PIDController distPID = PIDController(15.0f, 5.0f, 0.25f);
+		PIDController headingPID = PIDController(1, 1, 1);
 
 		leftMotor.setMaxSpeed(0.25f);
 		rightMotor.setMaxSpeed(0.25f);
@@ -306,10 +310,10 @@ namespace Micromouse
 
 	void RobotIO::initIRSensors()
 	{
-		IRSensors[LEFT] = new IRSenor(IR_LEFT_PIN, 20, 150);
-		IRSensors[RIGHT] = new IRSenor(IR_RIGHT_PIN, 20, 150);
-		IRSensors[FRONT_LEFT] = new IRSenor(IR_FRONT_LEFT_PIN, 20, 150);
-		IRSensors[FRONT_RIGHT] = new IRSenor(IR_FRONT_RIGHT_PIN, 20, 150);
+		IRSensors[LEFT] = new IRSensor(IR_LEFT_PIN, 20, 150);
+		IRSensors[RIGHT] = new IRSensor(IR_RIGHT_PIN, 20, 150);
+		IRSensors[FRONT_LEFT] = new IRSensor(IR_FRONT_LEFT_PIN, 20, 150);
+		IRSensors[FRONT_RIGHT] = new IRSensor(IR_FRONT_RIGHT_PIN, 20, 150);
 
 		//TODO check if load fails
 		IRSensors[LEFT]->loadCalibration(IR_LEFT_MEMORY);
@@ -325,10 +329,33 @@ namespace Micromouse
 	void RobotIO::initPins()
 	{
 #ifdef __MK20DX256__ // Teensy compile
+
+		pinMode(MOTOR_RIGHT_FWD_PIN, OUTPUT);
+		pinMode(MOTOR_RIGHT_BWD_PIN, OUTPUT);
+		pinMode(MOTOR_RIGHT_PWM_PIN, OUTPUT);
+		pinMode(ENCODER_RIGHT_FWD_PIN, INPUT);
+		pinMode(ENCODER_RIGHT_BWD_PIN, INPUT);
+
+		pinMode(MOTOR_LEFT_FWD_PIN, OUTPUT);
+		pinMode(MOTOR_LEFT_BWD_PIN, OUTPUT);
+		pinMode(MOTOR_LEFT_PWM_PIN, OUTPUT);
+		pinMode(ENCODER_LEFT_FWD_PIN, INPUT);
+		pinMode(ENCODER_LEFT_FWD_PIN, INPUT);
+
+		pinMode(MAGNETOMETER_NINE_DOF_SDA_PIN, INPUT);
+		pinMode(MAGNETOMETER_NINE_DOF_SCL_PIN, INPUT);
+
+		pinMode(IR_FRONT_LEFT_PIN, INPUT);
+		pinMode(IR_FRONT_RIGHT_PIN, INPUT);
+		pinMode(IR_LEFT_PIN, INPUT);
+		pinMode(IR_RIGHT_PIN, INPUT);
+
 		pinMode(BUTTON_PIN, INPUT_PULLUP);
 		pinMode(SWITCH_A_PIN, INPUT_PULLUP);
 		pinMode(SWITCH_B_PIN, INPUT_PULLUP); 
 		pinMode(SWITCH_C_PIN, INPUT_PULLUP);
+
+		pinMode(LED_PIN, OUTPUT);
 #endif
 	}
 

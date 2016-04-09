@@ -17,7 +17,6 @@ namespace Micromouse {
 		MIN_RANGE(minRange),
 		MAX_RANGE(maxRange)
 	{
-		initPins();
 		defaultCalibration();
 	}
 
@@ -160,13 +159,6 @@ namespace Micromouse {
 
 
 
-
-	void IRSensor::initPins()
-	{
-#ifdef __MK20DX256__ //this is the Teensy signature
-		pinMode(DATA_PIN, OUTPUT);
-#endif
-	}
 
 	void IRSensor::defaultCalibration()
 	{

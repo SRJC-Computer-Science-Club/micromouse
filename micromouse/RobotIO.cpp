@@ -279,8 +279,8 @@ namespace Micromouse
 
 		PIDController headingPID = PIDController(1, 1, 1);
 
-		leftMotor.setMaxSpeed(.5f);
-		rightMotor.setMaxSpeed(.5f);
+		leftMotor.setMaxSpeed(.2f);
+		rightMotor.setMaxSpeed(.2f);
 		leftMotor.resetCounts();
 		rightMotor.resetCounts();
 
@@ -294,12 +294,12 @@ namespace Micromouse
 		float rightSpeed = 1.0f;
 
 		Timer timer;
-		
+
 		while
-		(
-			leftmm > DISTANCE_TOLERANCE || leftmm < -DISTANCE_TOLERANCE ||
-			rightmm > DISTANCE_TOLERANCE || rightmm < -DISTANCE_TOLERANCE ||
-			leftSpeed > 0.2f || rightSpeed > 0.2f)
+			(
+				leftmm > DISTANCE_TOLERANCE || leftmm < -DISTANCE_TOLERANCE ||
+				rightmm > DISTANCE_TOLERANCE || rightmm < -DISTANCE_TOLERANCE ||
+				leftSpeed > 0.2f || rightSpeed > 0.2f)
 		{
 			float deltaTime = timer.getDeltaTime();
 			//Get distance traveled in cm since last cycle (average of two encoders)
@@ -339,17 +339,17 @@ namespace Micromouse
 			float rotSpeed = headingPID.getCorrection(estimateHeadingError());
 
 			//Disables heading correction.
-			//rotSpeed = 0.0f;
+			rotSpeed = 0.0f;
 
 			//Move forward while turning right.
 
 			if (rotSpeed < 0)
 			{
-				leftSpeed *= 1 + 2*rotSpeed;
+				leftSpeed *= 1 + 2 * rotSpeed;
 			}
 			else
 			{
-				rightSpeed *= 1 - 2*rotSpeed;
+				rightSpeed *= 1 - 2 * rotSpeed;
 			}
 
 			rightMotor.setMovement(rightSpeed);

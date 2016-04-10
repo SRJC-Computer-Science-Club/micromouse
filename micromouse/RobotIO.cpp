@@ -263,9 +263,7 @@ namespace Micromouse
 			((
 				leftmm > DISTANCE_TOLERANCE || leftmm < -DISTANCE_TOLERANCE ||
 				rightmm > DISTANCE_TOLERANCE || rightmm < -DISTANCE_TOLERANCE ||
-				leftSpeed > 0.2f || rightSpeed > 0.2f
-				)&&(frontLeftIRDist > FRONT_LEFT_WALL_DISTANCE || frontRightIRDist > FRONT_RIGHT_WALL_DISTANCE)
-				)
+				leftSpeed > 0.2f || rightSpeed > 0.2f))
 		{
 			float deltaTime = timer.getDeltaTime();
 

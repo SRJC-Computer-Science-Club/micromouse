@@ -152,9 +152,10 @@ namespace Micromouse
 	void MouseBot::runMaze()
 	{
 		log(DEBUG1) << "Run Maze";
-		assert(position == PositionVector(0, 0));
+		//assert(position == PositionVector(0, 0));
 
-		robotIO.followPath(maze->findPath(position, PositionVector(NUM_NODES_W / 2, NUM_NODES_H / 2)));
+		followPath(maze->findPath(position, PositionVector(0 /*NUM_NODES_W / 2*/, 0 /*NUM_NODES_H / 2*/)));
+		followPath(maze->findPath(position, PositionVector( /*NUM_NODES_W / 2*/16 , 16 /*NUM_NODES_H / 2*/)));
 	}
 
 	void MouseBot::returnToStart()

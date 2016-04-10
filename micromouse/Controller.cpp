@@ -30,6 +30,7 @@ namespace Micromouse
 		//delay(2000);
 #endif
 		mouse.mapMaze();
+		mouse.runMaze();
 		//mouse.testIR();
 		//mouse.testMotors();
 		//mouse.testRotate();

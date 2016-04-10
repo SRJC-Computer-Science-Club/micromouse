@@ -9,7 +9,7 @@
 
 namespace Micromouse
 {
-	const float MM_BETWEEN_WHEELS = 63.5f;
+	const float MM_BETWEEN_WHEELS = 69.0f;
 
 	//Number of encoder counts per centimeters traveled.
 	//360 / (3.35 * PI)

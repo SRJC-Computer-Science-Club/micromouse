@@ -117,8 +117,8 @@ namespace Micromouse
 	{
 		float rightDist = IRSensors[RIGHT]->getDistance();
 		float leftDist = IRSensors[LEFT]->getDistance();
-		bool rightWall = leftDist < WALL_DISTANCE * 1.5f;
-		bool leftWall = rightDist < WALL_DISTANCE * 1.5f;
+		bool rightWall = leftDist < WALL_DISTANCE * 1.85f;
+		bool leftWall = rightDist < WALL_DISTANCE * 1.85f;
 
 		if (rightWall && leftWall)
 		{
@@ -126,12 +126,12 @@ namespace Micromouse
 		}
 		else if (rightWall && !leftWall)
 		{
-			//return 2 * (WALL_DISTANCE - rightDist);
+			//return (WALL_DISTANCE - rightDist);
 			return 0;
 		}
 		else if (leftWall && !rightWall)
 		{
-			//return 2 * (leftDist - WALL_DISTANCE);
+			//return (leftDist - WALL_DISTANCE);
 			return 0;
 		}
 		else // (!rightWall && !leftWall)
@@ -211,8 +211,8 @@ namespace Micromouse
 
 		for (int i = 0; i < 2000; i++)
 		{
-			logC(INFO) << "RIGHT:  " << IRSensors[RIGHT]->getDistance();
-			logC(INFO) << "LEFT:   " << IRSensors[LEFT]->getDistance();
+			logC(INFO) << "FWD RIGHT:  " << IRSensors[FRONT_RIGHT]->getDistance();
+			logC(INFO) << "FWD LEFT:   " << IRSensors[FRONT_LEFT]->getDistance();
 			//IRSensors[FRONT_LEFT]->debug();
 			//IRSensors[FRONT_RIGHT]->debug();
 #ifdef __MK20DX256__ //Teensy
@@ -237,7 +237,7 @@ namespace Micromouse
 
 		PIDController speedPID = PIDController(30.0f, 1.0f, 1.0f);
 
-		PIDController headingPID = PIDController(0.5f, 0.0f, 0.2f);
+		PIDController headingPID = PIDController(0.4f, 0.01f, 0.2f);
 
 		//leftMotor.setMaxSpeed(.2125f);
 		leftMotor.setMaxSpeed(.17f);
@@ -254,15 +254,25 @@ namespace Micromouse
 		float leftSpeed = 1.0f;
 		float rightSpeed = 1.0f;
 
+		float frontLeftIRDist = 200.0f;
+		float frontRightIRDist = 200.0f;
+
 		Timer timer;
 
 		while
-			(
+			((
 				leftmm > DISTANCE_TOLERANCE || leftmm < -DISTANCE_TOLERANCE ||
 				rightmm > DISTANCE_TOLERANCE || rightmm < -DISTANCE_TOLERANCE ||
-				leftSpeed > 0.2f || rightSpeed > 0.2f)
+				leftSpeed > 0.2f || rightSpeed > 0.2f
+				)&&(frontLeftIRDist > FRONT_LEFT_WALL_DISTANCE || frontRightIRDist > FRONT_RIGHT_WALL_DISTANCE)
+				&&(frontLeftIRDist > 20.0f && frontRightIRDist > 20.0f)
+				)
 		{
 			float deltaTime = timer.getDeltaTime();
+
+			//Get distance from the front of the bot to the wall.
+			frontRightIRDist = IRSensors[FRONT_RIGHT]->getDistance();
+			frontLeftIRDist = IRSensors[FRONT_LEFT]->getDistance();
 
 			//Get distance traveled in cm since last cycle (average of two encoders)
 			float leftTraveled = leftMotor.resetCounts();
@@ -306,20 +316,20 @@ namespace Micromouse
 			float rotSpeed = headingPID.getCorrection(rotError);
 
 			//Disables heading correction.
-			//rotSpeed = 0.0f;
+			rotSpeed = 0.0f;
 
 			//Move forward while turning right.
 
 			if (rotSpeed < 0)
 			{
 				float c = (1 + 3 * rotSpeed);
-				c < 0.3f ? 0.3f : c;
+				c < 0.75 ? 0.75 : c;
 				rightSpeed *= c; //cos(PI * rotSpeed);
 			}
 			else
 			{
 				float c = (1 - 3 * rotSpeed);
-				c < 0.3f ? 0.3f : c;
+				c < 0.75 ? 0.75 : c;
 				leftSpeed *= c; //cos(PI * rotSpeed);
 			}
 

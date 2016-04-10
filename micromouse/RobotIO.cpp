@@ -248,12 +248,12 @@ namespace Micromouse
 
 		for (int i = 0; i < 2000; i++)
 		{
-			//IRSensors[RIGHT]->debug();
-			//IRSensors[LEFT]->debug();
+			logC(INFO) << "RIGHT:  " << IRSensors[RIGHT]->getDistance();
+			logC(INFO) << "RIGHT:  " << IRSensors[LEFT]->getDistance();
 			//IRSensors[FRONT_LEFT]->debug();
 			//IRSensors[FRONT_RIGHT]->debug();
 #ifdef __MK20DX256__ //Teensy
-			delay(100);
+			delay(500);
 #endif
 
 

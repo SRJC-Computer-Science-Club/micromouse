@@ -237,7 +237,7 @@ namespace Micromouse
 
 		PIDController speedPID = PIDController(30.0f, 1.0f, 1.0f);
 
-		PIDController headingPID = PIDController(0.4f, 0.01f, 0.2f);
+		PIDController headingPID = PIDController(0.5f, 0.01f, 0.2f);
 
 		//leftMotor.setMaxSpeed(.2125f);
 		leftMotor.setMaxSpeed(.17f);
@@ -265,7 +265,6 @@ namespace Micromouse
 				rightmm > DISTANCE_TOLERANCE || rightmm < -DISTANCE_TOLERANCE ||
 				leftSpeed > 0.2f || rightSpeed > 0.2f
 				)&&(frontLeftIRDist > FRONT_LEFT_WALL_DISTANCE || frontRightIRDist > FRONT_RIGHT_WALL_DISTANCE)
-				&&(frontLeftIRDist > 20.0f && frontRightIRDist > 20.0f)
 				)
 		{
 			float deltaTime = timer.getDeltaTime();

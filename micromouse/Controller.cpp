@@ -29,8 +29,8 @@ namespace Micromouse
 		delay(2000);
 #endif
 
-		mouse.testIR();
-	//	mouse.testMotors();
+		//mouse.testIR();
+		mouse.testMotors();
 
 		// DEBUG CODE GOES IN HERE!
 	}

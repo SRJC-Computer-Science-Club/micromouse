@@ -249,7 +249,7 @@ namespace Micromouse
 
 		for (int i = 0; i < 2000; i++)
 		{
-			IRSensors[RIGHT]->debug();
+			//IRSensors[RIGHT]->debug();
 			//IRSensors[LEFT]->debug();
 			//IRSensors[FRONT_LEFT]->debug();
 			//IRSensors[FRONT_RIGHT]->debug();

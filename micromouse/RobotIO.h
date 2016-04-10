@@ -22,7 +22,7 @@ namespace Micromouse
 	const float ANGLE_TOLERANCE = 3.0f;
 
 	//The expected distance'between a left/right sensor and the wall (in mm).
-	const float WALL_DISTANCE = 50.0f;
+	const float WALL_DISTANCE = 55.0f;
 
 	const int IR_FRONT_LEFT_PIN = 14;
 	const int IR_FRONT_RIGHT_PIN = 15;

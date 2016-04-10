@@ -162,12 +162,12 @@ namespace Micromouse
 	{
 		float rightDist = IRSensors[RIGHT]->getDistance();
 		float leftDist = IRSensors[LEFT]->getDistance();
-		bool rightWall = leftDist < WALL_DISTANCE * 1.25f;
-		bool leftWall = rightDist < WALL_DISTANCE * 1.25f;
+		bool rightWall = leftDist < WALL_DISTANCE * 1.5f;
+		bool leftWall = rightDist < WALL_DISTANCE * 1.5f;
 
 		if (rightWall && leftWall)
 		{
-			return leftDist - rightDist;
+			return (leftDist - rightDist);
 		}
 		else if (rightWall && !leftWall)
 		{
@@ -248,12 +248,12 @@ namespace Micromouse
 
 		for (int i = 0; i < 2000; i++)
 		{
-			//IRSensors[RIGHT]->debug();
-			//IRSensors[LEFT]->debug();
+			logC(INFO) << "RIGHT:  " << IRSensors[RIGHT]->getDistance();
+			logC(INFO) << "RIGHT:  " << IRSensors[LEFT]->getDistance();
 			//IRSensors[FRONT_LEFT]->debug();
 			//IRSensors[FRONT_RIGHT]->debug();
 #ifdef __MK20DX256__ //Teensy
-			delay(100);
+			delay(500);
 #endif
 
 
@@ -359,18 +359,18 @@ namespace Micromouse
 			float rotSpeed = headingPID.getCorrection(rotError);
 
 			//Disables heading correction.
-			//rotSpeed = 0.0f;
+			rotSpeed = 0.0f;
 			rotSpeed = -rotSpeed;
 
 			//Move forward while turning right.
 
 			if (rotSpeed < 0)
 			{
-				leftSpeed *= 1 + 2 * rotSpeed;
+				leftSpeed *= cos(PI * rotSpeed / 2.0f);
 			}
 			else
 			{
-				rightSpeed *= 1 - 2 * rotSpeed;
+				rightSpeed *= cos(PI * rotSpeed / 2.0f);
 			}
 
 			rightMotor.setMovement(rightSpeed);

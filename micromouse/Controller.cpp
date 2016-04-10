@@ -25,8 +25,7 @@ namespace Micromouse
 	void Controller::debug()
 	{
 		// DEBUG CODE GOES IN HERE!
-		log(INFO) << " Magnometer Test ";
-
+		log(DEBUG1) << " Magnometer Test ";
 		mouse.testMagnetometer();
 		
 		//mouse.testMotors();

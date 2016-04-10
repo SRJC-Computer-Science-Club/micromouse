@@ -35,12 +35,14 @@ namespace Micromouse
 
 			float degrees = atan2(sensorREAD.magData.y, sensorREAD.magData.x);
 			degrees *= 57.296f;
+			Serial.print(degrees);
 			return degrees;
 #else
-			float random = (float) (rand() % 100);
-			return random;
+		float random = (float) (rand() % 1001);
+		return random;
+		//return 0.0f;
 	#endif
-			//			return 0.0f;
+			//	return 0.0f;
 	}
 
 

@@ -273,9 +273,9 @@ namespace Micromouse
 		PIDController leftDistPID = PIDController(80.0f, 30.0f, 14.0f);
 		PIDController rightDistPID = PIDController(80.0f, 30.0f, 14.0f);
 
-		PIDController speedPID = PIDController(30.0f, 1.0f, 1.0f);
+		PIDController speedPID = PIDController(80.0f, 1.0f, 20.0f);
 
-		PIDController headingPID = PIDController(0.5f, 0.0f, 0.2f);
+		PIDController headingPID = PIDController(0.75f, 0.0f, 0.2f);
 
 		leftMotor.setMaxSpeed(.2f);
 		rightMotor.setMaxSpeed(.2f);
@@ -347,11 +347,11 @@ namespace Micromouse
 
 			if (rotSpeed < 0)
 			{
-				leftSpeed *= cos(PI * rotSpeed / 2.0f);
+				leftSpeed *= cos(PI * rotSpeed);
 			}
 			else
 			{
-				rightSpeed *= cos(PI * rotSpeed / 2.0f);
+				rightSpeed *= cos(PI * rotSpeed);
 			}
 
 			rightMotor.setMovement(rightSpeed);

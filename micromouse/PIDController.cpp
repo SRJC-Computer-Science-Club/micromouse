@@ -38,8 +38,8 @@ namespace Micromouse
 		totalError += currentError * deltaTime;
 		
 		//totalError is bounded between -MAX_I_ERROR and +MAX_I_ERROR
-		totalError = totalError < -MAX_I_ERROR ? -MAX_I_ERROR : totalError;
-		totalError = totalError > MAX_I_ERROR ? MAX_I_ERROR : totalError;
+		totalError = totalError < -maxIntegralError ? -maxIntegralError : totalError;
+		totalError = totalError > maxIntegralError ? maxIntegralError : totalError;
 
 		float pCorrection = P * currentError;
 		float iCorrection = I * totalError;

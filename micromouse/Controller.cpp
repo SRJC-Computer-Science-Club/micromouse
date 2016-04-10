@@ -29,9 +29,10 @@ namespace Micromouse
 #ifdef __MK20DX256__ // Teensy compile
 		//delay(2000);
 #endif
-
+		//mouse.mapMaze();
 		//mouse.testIR();
-		mouse.testMotors();
+		//mouse.testMotors();
+		mouse.testRotate();
 
 		// DEBUG CODE GOES IN HERE!
 	}

@@ -303,6 +303,11 @@ namespace Micromouse
 		robotIO.testIR();
 	}
 
+	void MouseBot::testRotate()
+	{
+		robotIO.testRotate();
+	}
+
 	void MouseBot::moveForward(int numNodes)
 	{
 		for (int i = 0; i < numNodes; i++)

@@ -266,6 +266,25 @@ namespace Micromouse
 		}
 	}
 
+	void RobotIO::testRotate()
+	{
+		rotate( 90 );
+#ifdef __MK20DX256__ //Teensy
+		delay(1000);
+#endif
+		rotate(-90);
+
+#ifdef __MK20DX256__ //Teensy
+		delay(1000);
+#endif
+		rotate(45);
+
+#ifdef __MK20DX256__ //Teensy
+		delay(1000);
+#endif
+		rotate(-45);
+
+	}
 
 
 	void RobotIO::moveForward(float millimeters)
@@ -351,6 +370,10 @@ namespace Micromouse
 
 			//Disables heading correction.
 			//rotSpeed = 0.0f;
+<<<<<<< HEAD
+=======
+			rotSpeed = -rotSpeed;
+>>>>>>> refs/remotes/origin/benji_rotate
 
 			//Move forward while turning right.
 
@@ -384,24 +407,75 @@ namespace Micromouse
 		leftMotor.setMaxSpeed(0.2f);
 		rightMotor.setMaxSpeed(0.2f);
 
-		PIDController anglePID = PIDController(25.0f, 25.0f, 2.0f);
+		PIDController speedPID = PIDController(30.f, 2.0f, 1.0f , 100.0f);
+
+		PIDController anglePID = PIDController(97.0f, 42.0f , 14.0f, 50.0f);
+
+
 		anglePID.start(degrees);
+		speedPID.start(0);
 		float angleCorrection = anglePID.getCorrection(degrees);
 
 		leftMotor.resetCounts();
 		rightMotor.resetCounts();
 
+		float leftTraveled;
+		float rightTraveled;
+
+		float deltaTime;
+
+		float actualLeftSpeed;
+		float actualRightSpeed;
+
+		float rightSpeed, leftSpeed;
+		
+
+		Timer timer;
 		while (degrees > ANGLE_TOLERANCE || degrees < -ANGLE_TOLERANCE || angleCorrection > 0.3f)
 		{
-			int counts = (leftMotor.resetCounts() - rightMotor.resetCounts()) / 2;
-			degrees -= counts / COUNTS_PER_MM / (MM_BETWEEN_WHEELS/2) * (180/PI);
+			leftTraveled = leftMotor.resetCounts();
+			rightTraveled = rightMotor.resetCounts();
+
+			int counts = (leftTraveled - rightTraveled) / 2;
+			degrees -= counts * (180 / PI) / COUNTS_PER_MM / (MM_BETWEEN_WHEELS/2);
+			delayMicroseconds(1500);
+			leftTraveled /= COUNTS_PER_MM;
+			rightTraveled /= COUNTS_PER_MM;
+
+			deltaTime = timer.getDeltaTime();
+
+			actualLeftSpeed = leftTraveled / deltaTime;
+			actualRightSpeed = rightTraveled / deltaTime;
+
+
 
 			angleCorrection = anglePID.getCorrection(degrees);
 
-			leftMotor.setMovement(angleCorrection);
-			rightMotor.setMovement(angleCorrection);
 
-			logC(INFO) << degrees;
+			leftSpeed = -angleCorrection;
+			rightSpeed = angleCorrection;
+
+			float speedCorrection = speedPID.getCorrection( actualRightSpeed - actualLeftSpeed );
+
+			if (rightSpeed < 0.25f || leftSpeed < 0.25f)
+			{
+				speedCorrection = 0.0f;
+			}
+
+			if (speedCorrection < 0)
+			{
+				rightSpeed += speedCorrection;
+			}
+			else
+			{
+				leftSpeed -= speedCorrection;
+			}
+
+			leftMotor.setMovement(rightSpeed);
+			rightMotor.setMovement(leftSpeed);
+
+
+			//logC(INFO) << degrees;
 		}
 
 		leftMotor.brake();
@@ -427,7 +501,7 @@ namespace Micromouse
 
 		//TODO check if load fails
 #ifdef __MK20DX256__ // Teensy compile
-		delay(1000);
+		delay(300);
 #endif
 
 
@@ -435,14 +509,28 @@ namespace Micromouse
 		IRSensors[RIGHT]->loadCalibration(IR_RIGHT_MEMORY);//todo change back
 
 #ifdef __MK20DX256__ // Teensy compile
-		delay(1000);
+		delay(300);
 #endif
 
 		log(DEBUG3) << "Load left";
 		IRSensors[LEFT]->loadCalibration(IR_LEFT_MEMORY);
 
 #ifdef __MK20DX256__ // Teensy compile
-		delay(1000);
+		delay(300);
+#endif
+
+		log(DEBUG3) << "Load front right";
+		IRSensors[FRONT_RIGHT]->loadCalibration(IR_LEFT_MEMORY);
+
+#ifdef __MK20DX256__ // Teensy compile
+		delay(300);
+#endif
+
+		log(DEBUG3) << "Load front left";
+		IRSensors[FRONT_LEFT]->loadCalibration(IR_LEFT_MEMORY);
+
+#ifdef __MK20DX256__ // Teensy compile
+		delay(300);
 #endif
 
 		//IRSensors[FRONT_LEFT]->loadCalibration(IR_FRONT_LEFT_MEMORY);

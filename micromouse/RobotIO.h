@@ -19,7 +19,7 @@ namespace Micromouse
     const float DISTANCE_TOLERANCE = 5.0;
 
 	//How close the robot needs to be to the target angle (in degrees) when rotating.
-	const float ANGLE_TOLERANCE = 1.0f;
+	const float ANGLE_TOLERANCE = 3.0f;
 
 	//The expected distance'between a left/right sensor and the wall (in mm).
 	const float WALL_DISTANCE = 55.0f;
@@ -69,6 +69,7 @@ namespace Micromouse
 
 		void testMotors(); //temp
 		void testIR();
+		void testRotate();
 
 		//Moves the bot forward by the given number of millimeters.
 		void moveForward(float millimeters);

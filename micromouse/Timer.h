@@ -10,6 +10,8 @@
 #define __ProjectTempwork__DeltaTime__
 #ifndef __MK20DX256__
 #include <chrono>
+#else 
+#include "arduino.h"
 #endif
 #include <stdio.h>
 

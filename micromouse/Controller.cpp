@@ -25,11 +25,16 @@ namespace Micromouse
 	void Controller::debug()
 	{
 		// DEBUG CODE GOES IN HERE!
+#ifdef __MK20DX256__ // Teensy compile
+		delay(2000);
+#endif
 		//log(DEBUG1) << " Magnometer Test ";
 		//Magnetometer mag = Magnetometer();
-	//	mag.testMagnetometer();
-		
+		//mag.testMagnetometer();
+
 		//mouse.testMotors();
+		//mouse.testIR();
+		mouse.testMotors();
 
 		// DEBUG CODE GOES IN HERE!
 	}

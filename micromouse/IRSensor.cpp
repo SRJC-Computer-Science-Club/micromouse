@@ -17,6 +17,8 @@ namespace Micromouse {
 		MIN_RANGE(minRange),
 		MAX_RANGE(maxRange)
 	{
+		initPins();
+		calibrationData = new int[1];
 		defaultCalibration();
 	}
 
@@ -32,7 +34,7 @@ namespace Micromouse {
 		assert(calibrationInterval > 0);
 		this->calibrationStart = calibrationStart;
 		this->calibrationInterval = calibrationInterval;
-		calibrationSize = MAX_RANGE - calibrationStart / calibrationInterval + 10;
+		calibrationSize = ( MAX_RANGE - calibrationStart ) / calibrationInterval + 1;
 		assert(calibrationSize <= 17);
 
 		delete[] calibrationData;
@@ -41,7 +43,7 @@ namespace Micromouse {
 		log(INFO) << "Begin IR calibration";
 
 #ifdef __MK20DX256__ //this is the Teensy signature
-		int sampleSize = 20;
+		int sampleSize = 6;
 		for (int i = 0; i < calibrationSize; i++)
 		{
 			log(INFO) << "distance: " << (i * calibrationInterval + calibrationStart);
@@ -49,24 +51,28 @@ namespace Micromouse {
 			//TODO use interrupts
 			while (!digitalRead(BUTTON_PIN))
 			{
-				delay(1);
+				delay(10);
 			}
 			while (digitalRead(BUTTON_PIN))
 			{
-				delay(1);
+				delay(10);
 			}
 
+			calibrationData[i] = 0;
 
 			for (int x = 0; x < sampleSize; x++)
 			{
 				calibrationData[i] += analogRead(DATA_PIN);
-				delay(1);
+				log(INFO) << "analogRead: " << calibrationData[i];
+
+				delay(30);
 			}
 
 			calibrationData[i] /= sampleSize;
 			
 			log(INFO) << "analogRead: " << calibrationData[i];
 		}
+
 #else
 		log(WARN) << "performed pseudo calibration instead";
 		defaultCalibration();
@@ -79,21 +85,35 @@ namespace Micromouse {
 
 	bool IRSensor::loadCalibration(int address)
 	{
-		int size = Memory::read(address++);
+		int size = Memory::read(address);
+		address += 4;
+		log(DEBUG2) << "load size: " << size;
 
 		if (size > 0 )
 		{
+			//int temp = size;
 			calibrationSize = size;
-			calibrationStart = Memory::read(address++);
-			calibrationInterval = Memory::read(address++);
+			calibrationStart = Memory::read(address);
+			address += 4;
+			log(DEBUG2) << "calibrationStart : " << calibrationStart;
+			calibrationInterval = Memory::read(address);
+			address += 4;
+			log(DEBUG2) << "calibrationInterval : " << calibrationInterval;
 
 
-			delete[] calibrationData;
-			calibrationData = new int[calibrationSize];
+			//delete[] calibrationData;
+		//	calibrationData = new int[calibrationSize];
 
 			for (int i = 0; i < calibrationSize; i++)
 			{
-				calibrationData[i] = Memory::read(address++);
+				int temp = Memory::read(address);
+				address += 4;
+					log(DEBUG2) << "loading " << i << "  " << temp;
+				calibrationData[i] = temp;
+#ifdef __MK20DX256__ //this is the Teensy signature
+				delay(20);
+#endif
+
 			}
 
 			return true;
@@ -104,13 +124,17 @@ namespace Micromouse {
 
 	void IRSensor::saveCalibration(int address)
 	{
-		Memory::write(address++, calibrationSize);
-		Memory::write(address++, calibrationStart);
-		Memory::write(address++, calibrationInterval);
+		Memory::write(address, calibrationSize);
+		address += 4;
+		Memory::write(address, calibrationStart);
+		address += 4;
+		Memory::write(address, calibrationInterval);
+		address += 4;
 
 		for (int i = 0; i < calibrationSize; i++)
 		{
-			Memory::write(address++, calibrationData[i]);
+			Memory::write(address, calibrationData[i]);
+			address += 4;
 		}
 	}
 
@@ -122,50 +146,65 @@ namespace Micromouse {
 		int val = analogRead(DATA_PIN);
 #else
 		// false analog value used while on pc
-		int val = 300;
+		int val = rand() % 500;
 #endif
+
+		log(DEBUG3) << "Analog Value: " << val;
 
 		for (int i = calibrationSize - 1; i >= 0; i--)
 		{
-			log(DEBUG4) << "calibrationData[ " << i << " ]= " << calibrationData[i] << " , val = " << val;
+			log(DEBUG4) << "cs: " << calibrationStart << "ci " << calibrationInterval;
+			log(DEBUG4) << "calibrationData[ " << i << " ]: " << calibrationData[i] << " , Analog Value: " << val;
 
 			if (val < calibrationData[i])
 			{
-				float dist = interpolate(calibrationData[i], calibrationData[i + 1],
+				int dist = interpolate(calibrationData[i], calibrationData[i + 1],
 					i * calibrationInterval + calibrationStart,
 					(i + 1) * calibrationInterval + calibrationStart, val);
 
-				log(DEBUG4) << "Measured Distance: " << dist;
+				log(DEBUG3) << "Measured Distance: " << dist;
 
 				return dist;
 			}
-
-			log(DEBUG4) << "Measured Distance*: " << MIN_RANGE;
-
-			return MIN_RANGE;
 		}
 
-		return -1;//code should never reach here
+			log(DEBUG3) << "Measured Distance*: " << MIN_RANGE;
+			return MIN_RANGE;
 	}
 
-
-
-
-
-	float IRSensor::interpolate(int x1, int x2, int y1, int y2, int x)
+	void IRSensor::debug()
 	{
-		return(float(x - x1) / (x2 - x1)*(y2 - y1) + y1);
+		getDistance();
 	}
 
 
 
+
+
+	int IRSensor::interpolate(int x1, int x2, int y1, int y2, int x)
+	{
+		log(DEBUG4) << x1 << " " << x2 << " " << y1 << " " << y2 << " " << x;
+ 
+		return( float(x - x1) / (x2 - x1) * (y2 - y1) + y1);
+	}
+
+
+
+
+	void IRSensor::initPins()
+	{
+#ifdef __MK20DX256__ //this is the Teensy signature
+		pinMode(DATA_PIN, INPUT);
+#endif
+	}
 
 	void IRSensor::defaultCalibration()
 	{
-		calibrationSize = 10;
-		calibrationInterval = 15;
+		calibrationSize = 14;
+		calibrationInterval = 10;
 		calibrationStart = MIN_RANGE;
-		calibrationData = new int[10];
+		delete[] calibrationData;
+		calibrationData = new int[calibrationSize];
 
 		//if (MIN_RANGE == 40)
 		//{
@@ -184,16 +223,20 @@ namespace Micromouse {
 		//TODO add default calibration for 2-15cm sensor this is false data
 		if (MIN_RANGE == 20)
 		{
-			calibrationData[0] = 517; //40mm
-			calibrationData[1] = 338; //70mm
-			calibrationData[2] = 236; //100mm
-			calibrationData[3] = 188; //130mm
-			calibrationData[4] = 152; //160mm
-			calibrationData[5] = 129; //190mm
-			calibrationData[6] = 116; //220mm
-			calibrationData[7] = 100; //250mm
-			calibrationData[8] = 92; //280mm
-			calibrationData[9] = 84; //310mm
+			calibrationData[0] = 550; //20mm
+			calibrationData[1] = 422; //30mm
+			calibrationData[2] = 336; //40mm
+			calibrationData[3] = 271; //50mm
+			calibrationData[4] = 216; //60mm
+			calibrationData[5] = 172; //70mm
+			calibrationData[6] = 119; //80mm
+			calibrationData[7] = 88;  //90mm
+			calibrationData[8] = 61;  //100mm
+			calibrationData[9] = 37;  //120mm
+			calibrationData[10] = 19; //130mm
+			calibrationData[11] = 13; //140mm
+			calibrationData[12] = 7;  //150mm
+			calibrationData[13] = 5;  //160mm
 		}
 	}
 }

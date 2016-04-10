@@ -11,12 +11,17 @@
 
 namespace Micromouse
 {
+	const float MM_BETWEEN_WHEELS = 90.f;
+
 	//Number of encoder counts per centimeters traveled.
 	//360 / (3.35 * PI)
 	const float COUNTS_PER_MM = 3.42064355302;
 
-	//How close the robot needs to be to the target distance (in mm).
-    const float DISTANCE_TOLERANCE = 2.5;
+	//How close the robot needs to be to the target distance (in mm) when moving forward.
+    const float DISTANCE_TOLERANCE = 5.0;
+
+	//How close the robot needs to be to the target angle (in degrees) when rotating.
+	const float ANGLE_TOLERANCE = 1.0f;
 
 	//The expected distance'between a left/right sensor and the wall (in mm).
 	const float WALL_DISTANCE = 50.0f;
@@ -26,20 +31,18 @@ namespace Micromouse
 	const int IR_LEFT_PIN = 22;
 	const int IR_RIGHT_PIN = 23;
 
-	const int MAGNETOMETER_NINE_DOF_SDA_PIN = 18;
-	const int MAGNETOMETER_NINE_DOF_SCL_PIN = 19;
-
-	const int MOTOR_RIGHT_FWD_PIN = 11;
-	const int MOTOR_RIGHT_BWD_PIN = 12;
+	const int MOTOR_RIGHT_FWD_PIN = 12;
+	const int MOTOR_RIGHT_BWD_PIN = 11;
 	const int MOTOR_RIGHT_PWM_PIN = 9;
 	const int ENCODER_RIGHT_FWD_PIN = 8;
-	const int ENCODER_RIGHT_BWD_PIN = 7;
+	const int ENCODER_RIGHT_BWD_PIN = 5;
 
 	const int MOTOR_LEFT_FWD_PIN = 17;
 	const int MOTOR_LEFT_BWD_PIN = 16;
 	const int MOTOR_LEFT_PWM_PIN = 10;
 	const int ENCODER_LEFT_FWD_PIN = 20;
 	const int ENCODER_LEFT_BWD_PIN = 21;
+
 
 	const int BUTTON_PIN = 6;
 	const int SWITCH_A_PIN = 0;
@@ -64,13 +67,14 @@ namespace Micromouse
 		~RobotIO();
 
 		void testMotors(); //temp
+		void testIR();
 
 		//Moves the bot forward by the given number of millimeters.
 		void moveForward(float millimeters);
 
-		void rotateRight(); // ## NOT YET IMPLEMENTED ## Rotates the bot in place 45 degrees to the right.
-
-		void rotateLeft(); // ## NOT YET IMPLEMENTED ## Rotates the bot in place 45 degrees to the left.
+		//Rotates the bot in place by the given number of degrees.
+		//Positive values turn the bot to the right. Negative values turn it to the left.
+		void rotate(float degrees);
 
 		bool isClearForward(); // Returns false if the range-finder sensors detect a wall in front of the bot. Otherwise, returns true.
 		bool isClearRight(); // Returns false if the range-finder sensors detect a wall to the right of the bot. Otherwise, returns true.

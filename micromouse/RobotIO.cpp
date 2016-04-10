@@ -11,6 +11,11 @@
 
 namespace Micromouse
 {
+#ifndef __MK20DX256__
+#define PI (3.141592f) //Already defined on Arduino
+#endif
+
+
 	/**** CONSTRUCTORS ****/
 
 	RobotIO::RobotIO()
@@ -165,11 +170,13 @@ namespace Micromouse
 		}
 		else if (rightWall && !leftWall)
 		{
-			return 2 * (WALL_DISTANCE - rightDist);
+			//return 2 * (WALL_DISTANCE - rightDist);
+			return 0.0f;
 		}
 		else if (leftWall && !rightWall)
 		{
-			return 2 * (leftDist - WALL_DISTANCE);
+			//return 2 * (leftDist - WALL_DISTANCE);
+			return 0.0f;
 		}
 		else // (!rightWall && !leftWall)
 		{
@@ -189,10 +196,15 @@ namespace Micromouse
 
 	void RobotIO::testMotors()
 	{
+
 		moveForward(180.0f);
 		
 /*
 #ifdef __MK20DX256__
+		//rotate(90.0f);
+		delay(2000);
+		moveForward(1080.0f);
+/*
 		rightMotor.setMaxSpeed(0.2f);
 		leftMotor.setMaxSpeed(0.2f);
 
@@ -221,8 +233,34 @@ namespace Micromouse
 		delay(2000);
 		leftMotor.brake();
 		rightMotor.brake();
+		
 #endif
 */
+
+	}
+
+	void RobotIO::testIR()
+	{
+		//IRSensors[RIGHT]->calibrate(20, 20);
+		//IRSensors[RIGHT]->saveCalibration(IR_RIGHT_MEMORY);
+
+		//IRSensors[LEFT]->calibrate(20, 20);
+		//IRSensors[LEFT]->saveCalibration(IR_LEFT_MEMORY);
+
+	//	IRSensors[LEFT]->calibrate(20, 20);
+	//	IRSensors[LEFT]->saveCalibration(IR_FRONT_LEFT_MEMORY);
+
+
+		for (int i = 0; i < 2000; i++)
+		{
+			//IRSensors[RIGHT]->debug();
+			//IRSensors[LEFT]->debug();
+			//IRSensors[FRONT_LEFT]->debug();
+			//IRSensors[FRONT_RIGHT]->debug();
+#ifdef __MK20DX256__ //Teensy
+			delay(100);
+#endif
+		}
 	}
 
 
@@ -234,51 +272,54 @@ namespace Micromouse
 		//centimeters represents how much farther the bot needs to travel.
 		//The function will loop until centimeters is within DISTANCE_TOLERANCE
 
-		PIDController distPID = PIDController(15.0f, 5.0f, 0.25f);
+		float leftmm = millimeters;
+		float rightmm = millimeters;
+
+		PIDController leftPID = PIDController(30.0f, 1.0f, 5.0f);
+		PIDController rightPID = PIDController(30.0f, 1.0f, 5.0f);
 		PIDController headingPID = PIDController(1, 1, 1);
 
 		leftMotor.setMaxSpeed(0.25f);
-		rightMotor.setMaxSpeed(0.25f);
+		rightMotor.setMaxSpeed(0.2f);
 		leftMotor.resetCounts();
 		rightMotor.resetCounts();
 
-		distPID.start(millimeters);
+
+		leftPID.start(millimeters);
+		rightPID.start(millimeters);
 		headingPID.start(estimateHeadingError());
 
-		while (millimeters > DISTANCE_TOLERANCE || millimeters < -DISTANCE_TOLERANCE)
-		{
+		float leftSpeed = 1.0f;
+		float rightSpeed = 1.0f;
 
+		while
+		(
+			leftmm > DISTANCE_TOLERANCE || leftmm < -DISTANCE_TOLERANCE ||
+			rightmm > DISTANCE_TOLERANCE || rightmm < -DISTANCE_TOLERANCE ||
+			leftSpeed > 0.2f || rightSpeed > 0.2f)
+		{
 			//Get distance traveled in cm since last cycle (average of two encoders)
-			float traveled = leftMotor.resetCounts() + rightMotor.resetCounts(); //resetCounts() also returns counts
-			traveled /= 2;
-			traveled /= COUNTS_PER_MM;
+			float leftTraveled = leftMotor.resetCounts();
+			float rightTraveled = rightMotor.resetCounts();
+			leftTraveled /= COUNTS_PER_MM;
+			rightTraveled /= COUNTS_PER_MM;
 
 			//Decrease distance to go by the estimated amount traveled
-			millimeters -= traveled;
+			leftmm -= leftTraveled;
+			rightmm -= rightTraveled;
 
-			//Get correction speed
-			float speed = distPID.getCorrection(millimeters);
+			leftSpeed = leftPID.getCorrection(leftmm);
+			rightSpeed = rightPID.getCorrection(rightmm);
 
 			//Get rotational correction speed
 			float rotSpeed = headingPID.getCorrection(estimateHeadingError());
 
 			//Disables heading correction.
-			rotSpeed = 0.0f;
+			//rotSpeed = 0.0f;
 
-			if (rotSpeed < 0)
-			{
-				//Move forward while turning right.
-				rightMotor.setMovement(speed * (1.0f + 2 * rotSpeed));
-
-				leftMotor.setMovement(speed);
-			}
-			else
-			{
-				//Move forward while turning left.
-				leftMotor.setMovement(speed * (1.0f - 2 * rotSpeed));
-
-				rightMotor.setMovement(speed);
-			}
+			//Move forward while turning right.
+			rightMotor.setMovement(rightSpeed);
+			leftMotor.setMovement(leftSpeed);
 		}
 
 		leftMotor.brake();
@@ -286,19 +327,33 @@ namespace Micromouse
 	}
 
 
-
-	// ## NOT YET IMPLEMENTED ##
-	void RobotIO::rotateLeft()
+	void RobotIO::rotate(float degrees)
 	{
+		leftMotor.setMaxSpeed(0.2f);
+		rightMotor.setMaxSpeed(0.2f);
 
-	}
+		PIDController anglePID = PIDController(25.0f, 25.0f, 2.0f);
+		anglePID.start(degrees);
+		float angleCorrection = anglePID.getCorrection(degrees);
 
+		leftMotor.resetCounts();
+		rightMotor.resetCounts();
 
+		while (degrees > ANGLE_TOLERANCE || degrees < -ANGLE_TOLERANCE || angleCorrection > 0.3f)
+		{
+			int counts = (leftMotor.resetCounts() - rightMotor.resetCounts()) / 2;
+			degrees -= counts / COUNTS_PER_MM / (MM_BETWEEN_WHEELS/2) * (180/PI);
 
-	// ## NOT YET IMPLEMENTED ##
-	void RobotIO::rotateRight()
-	{
+			angleCorrection = anglePID.getCorrection(degrees);
 
+			leftMotor.setMovement(angleCorrection);
+			rightMotor.setMovement(angleCorrection);
+
+			logC(INFO) << degrees;
+		}
+
+		leftMotor.brake();
+		rightMotor.brake();
 	}
 
 
@@ -317,11 +372,29 @@ namespace Micromouse
 		IRSensors[FRONT_LEFT] = new IRSensor(IR_FRONT_LEFT_PIN, 20, 150);
 		IRSensors[FRONT_RIGHT] = new IRSensor(IR_FRONT_RIGHT_PIN, 20, 150);
 
+
 		//TODO check if load fails
+#ifdef __MK20DX256__ // Teensy compile
+		delay(1000);
+#endif
+
+
+		log(DEBUG3) << "Load right";
+		IRSensors[RIGHT]->loadCalibration(IR_RIGHT_MEMORY);//todo change back
+
+#ifdef __MK20DX256__ // Teensy compile
+		delay(1000);
+#endif
+
+		log(DEBUG3) << "Load left";
 		IRSensors[LEFT]->loadCalibration(IR_LEFT_MEMORY);
-		IRSensors[RIGHT]->loadCalibration(IR_RIGHT_MEMORY);
-		IRSensors[FRONT_LEFT]->loadCalibration(IR_FRONT_LEFT_MEMORY);
-		IRSensors[FRONT_RIGHT]->loadCalibration(IR_FRONT_RIGHT_MEMORY);
+
+#ifdef __MK20DX256__ // Teensy compile
+		delay(1000);
+#endif
+
+		//IRSensors[FRONT_LEFT]->loadCalibration(IR_FRONT_LEFT_MEMORY);
+		//IRSensors[FRONT_RIGHT]->loadCalibration(IR_FRONT_RIGHT_MEMORY);
 
 
 	}
@@ -331,33 +404,10 @@ namespace Micromouse
 	void RobotIO::initPins()
 	{
 #ifdef __MK20DX256__ // Teensy compile
-
-		pinMode(MOTOR_RIGHT_FWD_PIN, OUTPUT);
-		pinMode(MOTOR_RIGHT_BWD_PIN, OUTPUT);
-		pinMode(MOTOR_RIGHT_PWM_PIN, OUTPUT);
-		pinMode(ENCODER_RIGHT_FWD_PIN, INPUT);
-		pinMode(ENCODER_RIGHT_BWD_PIN, INPUT);
-
-		pinMode(MOTOR_LEFT_FWD_PIN, OUTPUT);
-		pinMode(MOTOR_LEFT_BWD_PIN, OUTPUT);
-		pinMode(MOTOR_LEFT_PWM_PIN, OUTPUT);
-		pinMode(ENCODER_LEFT_FWD_PIN, INPUT);
-		pinMode(ENCODER_LEFT_FWD_PIN, INPUT);
-
-		pinMode(MAGNETOMETER_NINE_DOF_SDA_PIN, INPUT);
-		pinMode(MAGNETOMETER_NINE_DOF_SCL_PIN, INPUT);
-
-		pinMode(IR_FRONT_LEFT_PIN, INPUT);
-		pinMode(IR_FRONT_RIGHT_PIN, INPUT);
-		pinMode(IR_LEFT_PIN, INPUT);
-		pinMode(IR_RIGHT_PIN, INPUT);
-
 		pinMode(BUTTON_PIN, INPUT_PULLUP);
 		pinMode(SWITCH_A_PIN, INPUT_PULLUP);
 		pinMode(SWITCH_B_PIN, INPUT_PULLUP); 
 		pinMode(SWITCH_C_PIN, INPUT_PULLUP);
-
-		pinMode(LED_PIN, OUTPUT);
 #endif
 	}
 

@@ -148,6 +148,12 @@ namespace Micromouse
 		// int y = pos.y() + dir / 3 - 1;
 		//if (x >= 0 && x < NUM_NODES_W && y >= 0 && y < NUM_NODES_H) { return maze[x][y]; }
 
+		if ( dir == NW || dir == SW || dir == SE || dir == NE )
+		{
+			return nullptr;
+		}
+
+
 		pos = pos + dir;
 
 		if (pos.x() >= 0 && pos.x() < NUM_NODES_W && pos.y() >= 0 && pos.y() < NUM_NODES_H) 

@@ -384,16 +384,16 @@ namespace Micromouse
 
 	void RobotIO::rotate(float degrees)
 	{
-		Timer timer;
-		leftMotor.setMaxSpeed(0.10f);
-		rightMotor.setMaxSpeed(0.10f);
+		leftMotor.setMaxSpeed(0.2f);
+		rightMotor.setMaxSpeed(0.2f);
 
-		PIDController anglePID = PIDController(100.0f, 35.0f, 8.0f , 100.0f);
+		PIDController speedPID = PIDController(30.f, 2.0f, 1.0f , 100.0f);
 
-		PIDController speedPID = PIDController(100.0f, 35.0f, 8.0f, 100.0f);
+		PIDController anglePID = PIDController(97.0f, 42.0f , 14.0f, 50.0f);
 
 
 		anglePID.start(degrees);
+		speedPID.start(0);
 		float angleCorrection = anglePID.getCorrection(degrees);
 
 		leftMotor.resetCounts();
@@ -410,11 +410,15 @@ namespace Micromouse
 		float rightSpeed, leftSpeed;
 		
 
+		Timer timer;
 		while (degrees > ANGLE_TOLERANCE || degrees < -ANGLE_TOLERANCE || angleCorrection > 0.3f)
 		{
 			leftTraveled = leftMotor.resetCounts();
 			rightTraveled = rightMotor.resetCounts();
 
+			int counts = (leftTraveled - rightTraveled) / 2;
+			degrees -= counts * (180 / PI) / COUNTS_PER_MM / (MM_BETWEEN_WHEELS/2);
+			delayMicroseconds(1500);
 			leftTraveled /= COUNTS_PER_MM;
 			rightTraveled /= COUNTS_PER_MM;
 
@@ -424,16 +428,14 @@ namespace Micromouse
 			actualRightSpeed = rightTraveled / deltaTime;
 
 
-			int counts = (leftTraveled - rightTraveled) / 2;
-			degrees -= counts / COUNTS_PER_MM / (MM_BETWEEN_WHEELS/2) * (180/PI);
 
 			angleCorrection = anglePID.getCorrection(degrees);
 
 
-			leftSpeed = angleCorrection;
-			rightSpeed = -angleCorrection;
+			leftSpeed = -angleCorrection;
+			rightSpeed = angleCorrection;
 
-			float speedCorrection = speedPID.getCorrection(actualLeftSpeed - actualRightSpeed);
+			float speedCorrection = speedPID.getCorrection( actualRightSpeed - actualLeftSpeed );
 
 			if (rightSpeed < 0.25f || leftSpeed < 0.25f)
 			{
@@ -442,11 +444,11 @@ namespace Micromouse
 
 			if (speedCorrection < 0)
 			{
-				rightSpeed -= speedCorrection;
+				rightSpeed += speedCorrection;
 			}
 			else
 			{
-				leftSpeed += speedCorrection;
+				leftSpeed -= speedCorrection;
 			}
 
 			leftMotor.setMovement(rightSpeed);

@@ -392,10 +392,33 @@ namespace Micromouse
 	void RobotIO::initPins()
 	{
 #ifdef __MK20DX256__ // Teensy compile
+
+		pinMode(MOTOR_RIGHT_FWD_PIN, OUTPUT);
+		pinMode(MOTOR_RIGHT_BWD_PIN, OUTPUT);
+		pinMode(MOTOR_RIGHT_PWM_PIN, OUTPUT);
+		pinMode(ENCODER_RIGHT_FWD_PIN, INPUT);
+		pinMode(ENCODER_RIGHT_BWD_PIN, INPUT);
+
+		pinMode(MOTOR_LEFT_FWD_PIN, OUTPUT);
+		pinMode(MOTOR_LEFT_BWD_PIN, OUTPUT);
+		pinMode(MOTOR_LEFT_PWM_PIN, OUTPUT);
+		pinMode(ENCODER_LEFT_FWD_PIN, INPUT);
+		pinMode(ENCODER_LEFT_FWD_PIN, INPUT);
+
+		pinMode(MAGNETOMETER_NINE_DOF_SDA_PIN, INPUT);
+		pinMode(MAGNETOMETER_NINE_DOF_SCL_PIN, INPUT);
+
+		pinMode(IR_FRONT_LEFT_PIN, INPUT);
+		pinMode(IR_FRONT_RIGHT_PIN, INPUT);
+		pinMode(IR_LEFT_PIN, INPUT);
+		pinMode(IR_RIGHT_PIN, INPUT);
+
 		pinMode(BUTTON_PIN, INPUT_PULLUP);
 		pinMode(SWITCH_A_PIN, INPUT_PULLUP);
 		pinMode(SWITCH_B_PIN, INPUT_PULLUP); 
 		pinMode(SWITCH_C_PIN, INPUT_PULLUP);
+
+		pinMode(LED_PIN, OUTPUT);
 #endif
 	}
 

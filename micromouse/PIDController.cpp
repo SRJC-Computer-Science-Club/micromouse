@@ -39,7 +39,7 @@ namespace Micromouse
 
 		float pCorrection = P * currentError;
 		float iCorrection = I * totalError;
-		float dCorrection = D * (currentError - lastError) / deltaTime / 10000.0f;
+		float dCorrection = D * (currentError - lastError);
 
 		float sum = pCorrection + iCorrection + dCorrection;
 		sum /= 1000.0f;

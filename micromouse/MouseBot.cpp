@@ -10,10 +10,11 @@ Author GitHub:	joshuasrjc
 #include "MouseBot.h"
 #include "Logger.h"
 
-#define SQRT_OF_TWO (1.414213f)
 
 namespace Micromouse
 {
+#define SQRT_OF_TWO (1.414213f)
+
 	/**** CONSTRUCTORS ****/
 
 	MouseBot::MouseBot(int x, int y)
@@ -297,6 +298,11 @@ namespace Micromouse
 #endif
 	}
 
+	void MouseBot::testIR()
+	{
+		robotIO.testIR();
+	}
+
 	void MouseBot::moveForward(int numNodes)
 	{
 		for (int i = 0; i < numNodes; i++)
@@ -320,44 +326,25 @@ namespace Micromouse
 
 	}
 
-	void MouseBot::rotateLeft()
+	void MouseBot::rotate(direction dir)
 	{
-		facing = facing + W;
+		facing = facing + dir;
 
-#ifdef __MK20DX256__
-		// If compiled for Teensy
-
-		robotIO.rotateLeft();
-
-#endif
-	}
-
-	void MouseBot::rotateRight()
-	{
-		facing = facing + E;
-
-#ifdef __MK20DX256__
-		// If compiled for Teensy
-
-		robotIO.rotateRight();
-
-#endif
+		switch (dir)
+		{
+		case NE:	robotIO.rotate(45);		break;
+		case E:		robotIO.rotate(90);		break;
+		case SE:	robotIO.rotate(135);	break;
+		case S:		robotIO.rotate(180);	break;
+		case SW:	robotIO.rotate(-135);	break;
+		case W:		robotIO.rotate(-90);	break;
+		case NW:	robotIO.rotate(-45);	break;
+		}
 	}
 
 	void MouseBot::rotateToFaceDirection(direction dir)
 	{
-		while (facing != dir)
-		{
-			direction temp = dir - facing;
-			if (temp == NE || temp == E || temp == SE)
-			{
-				rotateRight();
-			}
-			else
-			{
-				rotateLeft();
-			}
-		}
+		rotate(dir - facing);
 	}
 
 	int MouseBot::incrementSpeed()

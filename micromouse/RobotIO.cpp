@@ -167,7 +167,7 @@ namespace Micromouse
 
 		if (rightWall && leftWall)
 		{
-			return leftDist - rightDist;
+			return (leftDist - rightDist);
 		}
 		else if (rightWall && !leftWall)
 		{
@@ -340,18 +340,18 @@ namespace Micromouse
 			float rotSpeed = headingPID.getCorrection(rotError);
 
 			//Disables heading correction.
-			//rotSpeed = 0.0f;
+			rotSpeed = 0.0f;
 			rotSpeed = -rotSpeed;
 
 			//Move forward while turning right.
 
 			if (rotSpeed < 0)
 			{
-				leftSpeed *= 1 + 2 * rotSpeed;
+				leftSpeed *= cos(PI * rotSpeed / 2.0f);
 			}
 			else
 			{
-				rightSpeed *= 1 - 2 * rotSpeed;
+				rightSpeed *= cos(PI * rotSpeed / 2.0f);
 			}
 
 			rightMotor.setMovement(rightSpeed);

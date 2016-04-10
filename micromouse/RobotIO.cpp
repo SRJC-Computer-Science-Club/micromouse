@@ -226,21 +226,7 @@ namespace Micromouse
 	}
 
 
-	void RobotIO::testMagnetometer() {
-		for (int i = 0; i < 100; i++)
-		{
-			//log(INFO) << magnetometer.getDegrees();
-			//log(INFO) << magnetometer.getDirection();
-			#ifdef __MK20DX256__
-					Serial.println(magnetometer.getDirection());
-			#else
-				log(INFO) << magnetometer.getDirection();
-			#endif
-
-
-		}
-
-	}
+	
 
 
 	void RobotIO::moveForward(float millimeters)

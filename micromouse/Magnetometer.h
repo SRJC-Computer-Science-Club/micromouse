@@ -1,5 +1,7 @@
 #pragma once
 #include "Vector.h"
+#include "Logger.h"
+#include <cstdlib>
 
 #ifdef __MK20DX256__
 
@@ -48,7 +50,7 @@ namespace Micromouse
 		float getDegrees();
 		void initDirection();
 		direction getDirection();
-
+		void testMagnetometer();
 		//initialised the sensor to read data when object is created
 		Magnetometer();
 		~Magnetometer();

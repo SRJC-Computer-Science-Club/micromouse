@@ -298,13 +298,6 @@ namespace Micromouse
 #endif
 	}
 
-	void MouseBot::testMagnetometer()
-	{
-//#ifdef __MK20DX256__
-		robotIO.testMagnetometer();
-
-//#endif
-	}
 
 	void MouseBot::moveForward(int numNodes)
 	{

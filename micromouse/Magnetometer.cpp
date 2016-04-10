@@ -1,10 +1,21 @@
 #include "Magnetometer.h"
-#include "Logger.h"
-#include <cstdlib>
-
 
 namespace Micromouse
 {
+
+	void Magnetometer::testMagnetometer() {
+		for (int i = 0; i < 100; i++)
+		{
+			//log(INFO) << magnetometer.getDegrees();
+			//log(INFO) << magnetometer.getDirection();
+		#ifdef __MK20DX256__
+			log(DEBUG3) << " Magnetometer : " << getDirection();
+		#else
+			log(DEBUG3) << " Magnetometer : "  << getDirection();
+		#endif
+		}
+
+	}
 	float Magnetometer::getDegrees()
 	{
 		return getDegreesRaw() - initialDirection;

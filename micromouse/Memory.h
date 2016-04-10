@@ -19,9 +19,9 @@ namespace Micromouse {
 	3-19: CalibrationData[]
 	*/
 	const int IR_FRONT_LEFT_MEMORY = 100;//-119
-	const int IR_FRONT_RIGHT_MEMORY = 120;//-139
-	const int IR_LEFT_MEMORY = 140;//-159
-	const int IR_RIGHT_MEMORY = 160;//-179
+	const int IR_FRONT_RIGHT_MEMORY = 200;//-139
+	const int IR_LEFT_MEMORY = 300;//-159
+	const int IR_RIGHT_MEMORY = 400;//-179
 
 
 	//180-511 unreserved

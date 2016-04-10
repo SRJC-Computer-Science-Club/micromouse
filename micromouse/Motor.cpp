@@ -12,8 +12,18 @@ namespace Micromouse
 		, encoder(Encoder(fwdEncoderPin, bwdEncoderPin))
 #endif
 	{
+		initPins();
 	}
 
+	void Motor::initPins()
+	{
+
+#ifdef __MK20DX256__
+		pinMode(fwdPin, OUTPUT);
+		pinMode(bwdPin, OUTPUT);
+		pinMode(pwmPin, OUTPUT);
+#endif
+	}
 
 	void Motor::setMovement(float speed)
 	{

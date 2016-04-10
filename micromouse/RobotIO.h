@@ -44,6 +44,7 @@ namespace Micromouse
 	const int ENCODER_LEFT_FWD_PIN = 20;
 	const int ENCODER_LEFT_BWD_PIN = 21;
 
+
 	const int BUTTON_PIN = 6;
 	const int SWITCH_A_PIN = 0;
 	const int SWITCH_B_PIN = 2;
@@ -67,6 +68,7 @@ namespace Micromouse
 		~RobotIO();
 
 		void testMotors(); //temp
+		void testIR();
 
 		//Moves the bot forward by the given number of millimeters.
 		void moveForward(float millimeters);

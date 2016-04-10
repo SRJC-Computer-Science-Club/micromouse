@@ -171,11 +171,13 @@ namespace Micromouse
 		}
 		else if (rightWall && !leftWall)
 		{
-			return 2 * (WALL_DISTANCE - rightDist);
+			//return 2 * (WALL_DISTANCE - rightDist);
+			return 0.0f;
 		}
 		else if (leftWall && !rightWall)
 		{
-			return 2 * (leftDist - WALL_DISTANCE);
+			//return 2 * (leftDist - WALL_DISTANCE);
+			return 0.0f;
 		}
 		else // (!rightWall && !leftWall)
 		{
@@ -232,6 +234,32 @@ namespace Micromouse
 #endif
 
 
+	}
+
+	void RobotIO::testIR()
+	{
+		//IRSensors[RIGHT]->calibrate(20, 20);
+		//IRSensors[RIGHT]->saveCalibration(IR_RIGHT_MEMORY);
+
+		//IRSensors[LEFT]->calibrate(20, 20);
+		//IRSensors[LEFT]->saveCalibration(IR_LEFT_MEMORY);
+
+	//	IRSensors[LEFT]->calibrate(20, 20);
+	//	IRSensors[LEFT]->saveCalibration(IR_FRONT_LEFT_MEMORY);
+
+
+		for (int i = 0; i < 2000; i++)
+		{
+			//IRSensors[RIGHT]->debug();
+			//IRSensors[LEFT]->debug();
+			//IRSensors[FRONT_LEFT]->debug();
+			//IRSensors[FRONT_RIGHT]->debug();
+#ifdef __MK20DX256__ //Teensy
+			delay(100);
+#endif
+
+
+		}
 	}
 
 
@@ -311,7 +339,7 @@ namespace Micromouse
 			float rotSpeed = headingPID.getCorrection(estimateHeadingError());
 
 			//Disables heading correction.
-			rotSpeed = 0.0f;
+			//rotSpeed = 0.0f;
 
 			//Move forward while turning right.
 
@@ -378,12 +406,29 @@ namespace Micromouse
 		IRSensors[FRONT_LEFT] = new IRSensor(IR_FRONT_LEFT_PIN, 20, 150);
 		IRSensors[FRONT_RIGHT] = new IRSensor(IR_FRONT_RIGHT_PIN, 20, 150);
 
-		//TODO check if load fails
-		IRSensors[LEFT]->loadCalibration(IR_LEFT_MEMORY);
-		IRSensors[RIGHT]->loadCalibration(IR_RIGHT_MEMORY);
-		IRSensors[FRONT_LEFT]->loadCalibration(IR_FRONT_LEFT_MEMORY);
-		IRSensors[FRONT_RIGHT]->loadCalibration(IR_FRONT_RIGHT_MEMORY);
 
+		//TODO check if load fails
+#ifdef __MK20DX256__ // Teensy compile
+		delay(1000);
+#endif
+
+
+		log(DEBUG3) << "Load right";
+		IRSensors[RIGHT]->loadCalibration(IR_RIGHT_MEMORY);//todo change back
+
+#ifdef __MK20DX256__ // Teensy compile
+		delay(1000);
+#endif
+
+		log(DEBUG3) << "Load left";
+		IRSensors[LEFT]->loadCalibration(IR_LEFT_MEMORY);
+
+#ifdef __MK20DX256__ // Teensy compile
+		delay(1000);
+#endif
+
+		//IRSensors[FRONT_LEFT]->loadCalibration(IR_FRONT_LEFT_MEMORY);
+		//IRSensors[FRONT_RIGHT]->loadCalibration(IR_FRONT_RIGHT_MEMORY);
 
 	}
 
@@ -392,29 +437,10 @@ namespace Micromouse
 	void RobotIO::initPins()
 	{
 #ifdef __MK20DX256__ // Teensy compile
-
-		pinMode(MOTOR_RIGHT_FWD_PIN, OUTPUT);
-		pinMode(MOTOR_RIGHT_BWD_PIN, OUTPUT);
-		pinMode(MOTOR_RIGHT_PWM_PIN, OUTPUT);
-
-		pinMode(MOTOR_LEFT_FWD_PIN, OUTPUT);
-		pinMode(MOTOR_LEFT_BWD_PIN, OUTPUT);
-		pinMode(MOTOR_LEFT_PWM_PIN, OUTPUT);
-
-		pinMode(MAGNETOMETER_NINE_DOF_SDA_PIN, INPUT);
-		pinMode(MAGNETOMETER_NINE_DOF_SCL_PIN, INPUT);
-
-		pinMode(IR_FRONT_LEFT_PIN, INPUT);
-		pinMode(IR_FRONT_RIGHT_PIN, INPUT);
-		pinMode(IR_LEFT_PIN, INPUT);
-		pinMode(IR_RIGHT_PIN, INPUT);
-
 		pinMode(BUTTON_PIN, INPUT_PULLUP);
 		pinMode(SWITCH_A_PIN, INPUT_PULLUP);
 		pinMode(SWITCH_B_PIN, INPUT_PULLUP); 
 		pinMode(SWITCH_C_PIN, INPUT_PULLUP);
-
-		pinMode(LED_PIN, OUTPUT);
 #endif
 	}
 

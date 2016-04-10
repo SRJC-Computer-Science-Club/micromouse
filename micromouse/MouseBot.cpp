@@ -298,6 +298,11 @@ namespace Micromouse
 #endif
 	}
 
+	void MouseBot::testIR()
+	{
+		robotIO.testIR();
+	}
+
 	void MouseBot::moveForward(int numNodes)
 	{
 		for (int i = 0; i < numNodes; i++)

@@ -1,0 +1,3 @@
+[submodule "micromouse/Adafruit_LSM9DS0_Library"]
+	path = micromouse/Adafruit_LSM9DS0_Library
+	url = https://github.com/adafruit/Adafruit_LSM9DS0_Library.git

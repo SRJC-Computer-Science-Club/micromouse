@@ -24,7 +24,7 @@ namespace Micromouse
 		initIRSensors();
 	}
 
-
+	
 
 	RobotIO::~RobotIO()
 	{
@@ -196,6 +196,10 @@ namespace Micromouse
 
 	void RobotIO::testMotors()
 	{
+
+		moveForward(180.0f);
+		
+/*
 #ifdef __MK20DX256__
 		//rotate(90.0f);
 		delay(2000);
@@ -229,9 +233,9 @@ namespace Micromouse
 		delay(2000);
 		leftMotor.brake();
 		rightMotor.brake();
-		*/
+		
 #endif
-
+*/
 
 	}
 
@@ -256,11 +260,11 @@ namespace Micromouse
 #ifdef __MK20DX256__ //Teensy
 			delay(100);
 #endif
-
-
 		}
 	}
 
+
+	
 
 
 	void RobotIO::moveForward(float millimeters)

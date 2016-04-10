@@ -17,7 +17,7 @@ extern int SWITCH_C_PIN;
 extern int LED_PIN;
 extern int BUTTON_PIN;
 
-//comment / uncomment to turn off / on the debug function.
+//comment / uncomment to turn off / on the debug function. 
 #define MICROMOUSE_DEBUG_MODE
 
 namespace Micromouse
@@ -28,7 +28,11 @@ namespace Micromouse
 #ifdef __MK20DX256__ // Teensy compile
 		delay(2000);
 #endif
+		//log(DEBUG1) << " Magnometer Test ";
+		//Magnetometer mag = Magnetometer();
+		//mag.testMagnetometer();
 
+		//mouse.testMotors();
 		//mouse.testIR();
 		mouse.testMotors();
 

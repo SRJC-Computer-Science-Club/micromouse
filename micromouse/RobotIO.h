@@ -5,6 +5,8 @@
 #include "PIDController.h"
 #include "Vector.h"
 #include "Path.h"
+#include "Magnetometer.h"
+#include "Logger.h"
 
 
 namespace Micromouse
@@ -81,6 +83,7 @@ namespace Micromouse
 		void followPath(Path * path);
 
 		void calibrateIRSensors();
+
 
 	private:
 		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };

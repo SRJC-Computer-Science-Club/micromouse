@@ -368,17 +368,24 @@ namespace Micromouse
 
 
 		//TODO check if load fails
+#ifdef __MK20DX256__ // Teensy compile
 		delay(1000);
+#endif
+
 
 		log(DEBUG3) << "Load right";
 		IRSensors[RIGHT]->loadCalibration(IR_RIGHT_MEMORY);//todo change back
 
+#ifdef __MK20DX256__ // Teensy compile
 		delay(1000);
+#endif
 
 		log(DEBUG3) << "Load left";
 		IRSensors[LEFT]->loadCalibration(IR_LEFT_MEMORY);
 
+#ifdef __MK20DX256__ // Teensy compile
 		delay(1000);
+#endif
 
 		//IRSensors[FRONT_LEFT]->loadCalibration(IR_FRONT_LEFT_MEMORY);
 		//IRSensors[FRONT_RIGHT]->loadCalibration(IR_FRONT_RIGHT_MEMORY);

@@ -1,8 +1,8 @@
 //
 //  DeltaTime.h
-//  ProjectTempwork
+//  MicroMouse
 //
-//  Created by Seaney Shell on 4/9/16.
+//  Created by Seaney Shell ( github username RosyMapleMoth) on 4/9/16.
 //  Copyright (c) 2016 SRJCCSC. All rights reserved.
 //
 
@@ -14,7 +14,7 @@
 #endif /* defined(__ProjectTempwork__DeltaTime__) */
 namespace Micromouse
 {
-    class DeltaTime
+    class Timer
     {
     public:
         DeltaTime();
@@ -24,7 +24,7 @@ namespace Micromouse
         void start();
         
         // returns current time from last start or reset.
-        float getMagnitude();
+        float getDeltaTime();
         
         // returns the current time from last start or restart, sets that time to zero.
         float reset();

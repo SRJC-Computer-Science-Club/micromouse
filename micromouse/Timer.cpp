@@ -1,9 +1,10 @@
 //
 //  DeltaTime.cpp
-//  ProjectTempwork
+//  MicroMouse
 //
-//  Created by Seaney Shell on 4/9/16.
+//  Created by Seaney Shell ( github username RosyMapleMoth) on 4/9/16.
 //  Copyright (c) 2016 SRJCCSC. All rights reserved.
+//
 //
 #pragma once
 #ifdef __MK20DX256__
@@ -15,21 +16,21 @@
 namespace Micromouse
 {
 
-    DeltaTime::DeltaTime()
+    Timer::DeltaTime()
     {
         start();
     }
     
     
     
-    DeltaTime::~DeltaTime()
+    Timer::~DeltaTime()
     {
         
     }
 
     
     // can be used tore init time
-    void DeltaTime::start()
+    void Timer::start()
     {
 #ifdef __MK20DX256__
         initTime = micros();
@@ -38,7 +39,7 @@ namespace Micromouse
     
     
     
-    float DeltaTime::getMagnitude()
+    float Timer::getDeltaTime()
     {
 #ifdef __MK20DX256__
         return (initTime - micros());
@@ -47,7 +48,7 @@ namespace Micromouse
 #endif
     }
     
-    float DeltaTime::reset()
+    float Timer::reset()
     {
 #ifdef __MK20DX256__
         return (initTime - micros());

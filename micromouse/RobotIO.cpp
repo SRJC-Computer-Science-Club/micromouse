@@ -359,7 +359,7 @@ namespace Micromouse
 			float rotSpeed = headingPID.getCorrection(rotError);
 
 			//Disables heading correction.
-			rotSpeed = 0.0f;
+			//rotSpeed = 0.0f;
 			rotSpeed = -rotSpeed;
 
 			//Move forward while turning right.
@@ -384,10 +384,10 @@ namespace Micromouse
 
 	void RobotIO::rotate(float degrees)
 	{
-		leftMotor.setMaxSpeed(0.12f);
-		rightMotor.setMaxSpeed(0.12f);
+		leftMotor.setMaxSpeed(0.10f);
+		rightMotor.setMaxSpeed(0.10f);
 
-		PIDController anglePID = PIDController(80.0f, 35.0f, 5.0f , 300.0f);
+		PIDController anglePID = PIDController(100.0f, 35.0f, 8.0f , 100.0f);
 		anglePID.start(degrees);
 		float angleCorrection = anglePID.getCorrection(degrees);
 
@@ -430,7 +430,7 @@ namespace Micromouse
 
 		//TODO check if load fails
 #ifdef __MK20DX256__ // Teensy compile
-		delay(1000);
+		delay(300);
 #endif
 
 
@@ -438,14 +438,28 @@ namespace Micromouse
 		IRSensors[RIGHT]->loadCalibration(IR_RIGHT_MEMORY);//todo change back
 
 #ifdef __MK20DX256__ // Teensy compile
-		delay(1000);
+		delay(300);
 #endif
 
 		log(DEBUG3) << "Load left";
 		IRSensors[LEFT]->loadCalibration(IR_LEFT_MEMORY);
 
 #ifdef __MK20DX256__ // Teensy compile
-		delay(1000);
+		delay(300);
+#endif
+
+		log(DEBUG3) << "Load front right";
+		IRSensors[FRONT_RIGHT]->loadCalibration(IR_LEFT_MEMORY);
+
+#ifdef __MK20DX256__ // Teensy compile
+		delay(300);
+#endif
+
+		log(DEBUG3) << "Load front left";
+		IRSensors[FRONT_LEFT]->loadCalibration(IR_LEFT_MEMORY);
+
+#ifdef __MK20DX256__ // Teensy compile
+		delay(300);
 #endif
 
 		//IRSensors[FRONT_LEFT]->loadCalibration(IR_FRONT_LEFT_MEMORY);

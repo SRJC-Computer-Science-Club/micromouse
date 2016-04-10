@@ -6,55 +6,40 @@
 //  Copyright (c) 2016 SRJCCSC. All rights reserved.
 //
 //
-#pragma once
-#ifdef __MK20DX256__
-#include <Arduino.h>//random
-#else
-#endif
-#include "DeltaTime.h"
+#include "Timer.h"
+
 
 namespace Micromouse
 {
 
-    Timer::DeltaTime()
+    Timer::Timer()
     {
         start();
-    }
-    
-    
-    
-    Timer::~DeltaTime()
-    {
-        
     }
 
     
     // can be used tore init time
     void Timer::start()
     {
-#ifdef __MK20DX256__
-        initTime = micros();
-#endif
+        lastTime = micros();
     }
     
     
     
     float Timer::getDeltaTime()
     {
-#ifdef __MK20DX256__
-        return (initTime - micros());
-#else
-        return (initTime);
-#endif
+        long currentTime = micros();
+        float deltaTime = (currentTime - lastTime) / 1000000.0f;
+        lastTime = currentTime;
+        return deltaTime;
     }
     
-    float Timer::reset()
+#ifndef __MK20DX256__
+    long Timer::micros()
     {
-#ifdef __MK20DX256__
-        return (initTime - micros());
-        initTime = micros();
-#else
-        return initTime;
-#endif
+        using namespace std::chrono;
+        
+        return duration_cast<microseconds>(high_resolution_clock::now() - initialTime).count();
     }
+#endif
 }

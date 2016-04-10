@@ -8,7 +8,9 @@
 
 #ifndef __ProjectTempwork__DeltaTime__
 #define __ProjectTempwork__DeltaTime__
-
+#ifndef __MK20DX256__
+#include <chrono>
+#endif
 #include <stdio.h>
 
 #endif /* defined(__ProjectTempwork__DeltaTime__) */
@@ -17,21 +19,25 @@ namespace Micromouse
     class Timer
     {
     public:
-        DeltaTime();
-        ~DeltaTime();
+        Timer();
     
         // start counting from current time.
         void start();
         
-        // returns current time from last start or reset.
+        // returns current time from last start() or getDeltaTime().
         float getDeltaTime();
-        
-        // returns the current time from last start or restart, sets that time to zero.
-        float reset();
     
     
     private:
-        float initTime;
+        
+#ifndef __MK20DX256__
+        // If on PC
+        long micros();
+        
+        typedef std::chrono::steady_clock::time_point time_point;
+        time_point initialTime = std::chrono::high_resolution_clock::now();
+#endif
+        float lastTime;
     
     
     

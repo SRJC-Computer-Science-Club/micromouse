@@ -170,11 +170,13 @@ namespace Micromouse
 		}
 		else if (rightWall && !leftWall)
 		{
-			return 2 * (WALL_DISTANCE - rightDist);
+			//return 2 * (WALL_DISTANCE - rightDist);
+			return 0.0f;
 		}
 		else if (leftWall && !rightWall)
 		{
-			return 2 * (leftDist - WALL_DISTANCE);
+			//return 2 * (leftDist - WALL_DISTANCE);
+			return 0.0f;
 		}
 		else // (!rightWall && !leftWall)
 		{
@@ -197,7 +199,7 @@ namespace Micromouse
 #ifdef __MK20DX256__
 		//rotate(90.0f);
 		delay(2000);
-		moveForward(180.0f);
+		moveForward(1080.0f);
 /*
 		rightMotor.setMaxSpeed(0.2f);
 		leftMotor.setMaxSpeed(0.2f);
@@ -248,7 +250,7 @@ namespace Micromouse
 		for (int i = 0; i < 2000; i++)
 		{
 			IRSensors[RIGHT]->debug();
-			IRSensors[LEFT]->debug();
+			//IRSensors[LEFT]->debug();
 			//IRSensors[FRONT_LEFT]->debug();
 			//IRSensors[FRONT_RIGHT]->debug();
 #ifdef __MK20DX256__ //Teensy
@@ -269,8 +271,8 @@ namespace Micromouse
 		float leftmm = millimeters;
 		float rightmm = millimeters;
 
-		PIDController leftPID = PIDController(30.0f, 10.0f, 0.0f);
-		PIDController rightPID = PIDController(30.0f, 10.0f, 0.0f);
+		PIDController leftPID = PIDController(30.0f, 1.0f, 5.0f);
+		PIDController rightPID = PIDController(30.0f, 1.0f, 5.0f);
 		PIDController headingPID = PIDController(1, 1, 1);
 
 		leftMotor.setMaxSpeed(0.25f);
@@ -309,7 +311,7 @@ namespace Micromouse
 			float rotSpeed = headingPID.getCorrection(estimateHeadingError());
 
 			//Disables heading correction.
-			rotSpeed = 0.0f;
+			//rotSpeed = 0.0f;
 
 			//Move forward while turning right.
 			rightMotor.setMovement(rightSpeed);

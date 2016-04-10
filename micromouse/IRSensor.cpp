@@ -149,7 +149,7 @@ namespace Micromouse {
 		int val = rand() % 500;
 #endif
 
-		//log(DEBUG3) << "Analog Value: " << val;
+		log(DEBUG3) << "Analog Value: " << val;
 
 		for (int i = calibrationSize - 1; i >= 0; i--)
 		{
@@ -194,7 +194,7 @@ namespace Micromouse {
 	void IRSensor::initPins()
 	{
 #ifdef __MK20DX256__ //this is the Teensy signature
-		pinMode(DATA_PIN, OUTPUT);
+		pinMode(DATA_PIN, INPUT);
 #endif
 	}
 

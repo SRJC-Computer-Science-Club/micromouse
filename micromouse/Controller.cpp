@@ -30,7 +30,7 @@ namespace Micromouse
 #endif
 
 		mouse.testIR();
-		//mouse.testMotors();
+	//	mouse.testMotors();
 
 		// DEBUG CODE GOES IN HERE!
 	}

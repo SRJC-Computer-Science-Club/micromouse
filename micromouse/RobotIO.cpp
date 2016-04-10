@@ -171,13 +171,11 @@ namespace Micromouse
 		}
 		else if (rightWall && !leftWall)
 		{
-			//return 2 * (WALL_DISTANCE - rightDist);
-			return 0.0f;
+			return 2 * (WALL_DISTANCE - rightDist);
 		}
 		else if (leftWall && !rightWall)
 		{
-			//return 2 * (leftDist - WALL_DISTANCE);
-			return 0.0f;
+			return 2 * (leftDist - WALL_DISTANCE);
 		}
 		else // (!rightWall && !leftWall)
 		{
@@ -277,7 +275,7 @@ namespace Micromouse
 
 		PIDController speedPID = PIDController(30.0f, 1.0f, 1.0f);
 
-		PIDController headingPID = PIDController(1, 1, 1);
+		PIDController headingPID = PIDController(0.5f, 0.0f, 0.2f);
 
 		leftMotor.setMaxSpeed(.2f);
 		rightMotor.setMaxSpeed(.2f);
@@ -302,6 +300,7 @@ namespace Micromouse
 				leftSpeed > 0.2f || rightSpeed > 0.2f)
 		{
 			float deltaTime = timer.getDeltaTime();
+
 			//Get distance traveled in cm since last cycle (average of two encoders)
 			float leftTraveled = leftMotor.resetCounts();
 			float rightTraveled = rightMotor.resetCounts();
@@ -336,10 +335,13 @@ namespace Micromouse
 			}
 
 			//Get rotational correction speed
-			float rotSpeed = headingPID.getCorrection(estimateHeadingError());
+			float rotError = estimateHeadingError();
+			//logC(DEBUG1) << "Rotational Error: " << rotError;
+			float rotSpeed = headingPID.getCorrection(rotError);
 
 			//Disables heading correction.
-			rotSpeed = 0.0f;
+			//rotSpeed = 0.0f;
+			rotSpeed = -rotSpeed;
 
 			//Move forward while turning right.
 

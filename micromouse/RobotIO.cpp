@@ -269,7 +269,6 @@ namespace Micromouse
 			//Get distance traveled in cm since last cycle (average of two encoders)
 			float leftTraveled = leftMotor.resetCounts();
 			float rightTraveled = rightMotor.resetCounts();
-			logC(INFO) << rightTraveled;
 			leftTraveled /= COUNTS_PER_MM;
 			rightTraveled /= COUNTS_PER_MM;
 
@@ -286,20 +285,9 @@ namespace Micromouse
 			//Disables heading correction.
 			rotSpeed = 0.0f;
 
-			if (rotSpeed < 0)
-			{
-				//Move forward while turning right.
-				rightMotor.setMovement(rightSpeed * (1.0f + 2 * rotSpeed));
-
-				leftMotor.setMovement(leftSpeed);
-			}
-			else
-			{
-				//Move forward while turning left.
-				leftMotor.setMovement(leftSpeed * (1.0f - 2 * rotSpeed));
-
-				rightMotor.setMovement(rightSpeed);
-			}
+			//Move forward while turning right.
+			rightMotor.setMovement(rightSpeed);
+			leftMotor.setMovement(leftSpeed);
 		}
 
 		leftMotor.brake();

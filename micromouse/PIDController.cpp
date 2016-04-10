@@ -55,6 +55,11 @@ namespace Micromouse
 		return sum;
 	}
 
+	float PIDController::getI() const
+	{
+		return totalError;
+	}
+
 	void PIDController::setConstants(float P, float I, float D)
 	{
 		this->P = P;

@@ -19,7 +19,7 @@ namespace Micromouse
 	// This class uses PID control to determine the amount of correction needed
 	class PIDController
 	{
-		const float MAX_I_ERROR = 500.0f;
+		const float MAX_I_ERROR = 50.0f;
 	public:
 		// Sets the P, I, and D constants for the controller.
 		PIDController(float P, float I, float D)
@@ -32,6 +32,8 @@ namespace Micromouse
 		// Returns the error correction.
 		// start() MUST be called before calling this function.
 		float getCorrection(float currentError);
+
+		float getI() const;
 
 		// Sets the P, I, and D constants for the controller.
 		void setConstants(float P, float I, float D);

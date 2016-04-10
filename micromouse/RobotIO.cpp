@@ -53,14 +53,14 @@ namespace Micromouse
 
 	bool RobotIO::isClearRight()
 	{
-		return !isWallinDirection(W);
+		return !isWallinDirection(E);
 	}
 
 
 
 	bool RobotIO::isClearLeft()
 	{
-        return !isWallinDirection(E);
+        return !isWallinDirection(W);
     }
 
 
@@ -80,80 +80,35 @@ namespace Micromouse
         assert( dir == W || dir ==  N || dir == E || dir == NW || dir == NE);
 
         int numOpen = 0;
+        #ifdef __MK20DX256__ //this is the Teensy signature
+        // TODO test for better intervol
+        #endif
 
-        for (int i = 0; i != 6; i++)
+        //TODO fill in distances will measured values
+        // distances now are just estimates
+        switch( dir )
         {
-            #ifdef __MK20DX256__ //this is the Teensy signature
-            // TODO test for better intervol
-            delay(1);
-            #endif
 
-            //TODO fill in distances will measured values
-            // distances now are just estimates
-            switch( dir )
+            case W:
             {
-
-                case W:
-                {
-                    if  ( IRSensors[ LEFT ]->getDistance() < 100 )
-                    {
-                        numOpen++;
-                    }
-                    break;
-
-                }
-
-                case E:
-                {
-                    if ( IRSensors[ RIGHT ]->getDistance() < 100 )
-                    {
-                        numOpen++;
-                    }
-                    break;
-
-                }
-
-                case N:
-                {
-                    int dist = (int) IRSensors[ FRONT_LEFT ]->getDistance();
-
-                    if ( dist < 120 && abs( dist - IRSensors[ FRONT_RIGHT]->getDistance() ) < 30 )
-                    {
-                        numOpen++;
-                    }
-                    break;
-                }
-
-                case NW:
-                {
-                    int dist = (int) IRSensors[ FRONT_LEFT ]->getDistance();
-
-                    if ( dist < 150 && dist > 110 )
-                    {
-                        numOpen++;
-                    }
-                    break;
-                }
-                case NE:
-                {
-                    int dist = (int) IRSensors[ FRONT_RIGHT ]->getDistance();
-
-                    if ( dist < 150 && dist > 110 )
-                    {
-                        numOpen++;
-                    }
-                    break;
-                }
-				default:
-					log(ERROR) << "NOT valid direction to check for wall";
-					break;
-
+				return IRSensors[LEFT]->getDistance() < 100;
             }
-        }
 
-        // TODO perfect the amount of tests and amount needed to give true.
-        // if only 2 or less of the 6 wall tests came out true
-		return numOpen > 2;
+            case E:
+            {
+				return IRSensors[RIGHT]->getDistance() < 100;
+            }
+
+            case N:
+            {
+                int dist = (int) IRSensors[ FRONT_LEFT ]->getDistance();
+				return (dist < 120 && abs(dist - IRSensors[FRONT_RIGHT]->getDistance()) < 30);
+            }
+
+			default:
+				log(ERROR) << "NOT valid direction to check for wall";
+				break;
+		}
     }
 
 
@@ -171,11 +126,13 @@ namespace Micromouse
 		}
 		else if (rightWall && !leftWall)
 		{
-			return 2 * (WALL_DISTANCE - rightDist);
+			//return 2 * (WALL_DISTANCE - rightDist);
+			return 0;
 		}
 		else if (leftWall && !rightWall)
 		{
-			return 2 * (leftDist - WALL_DISTANCE);
+			//return 2 * (leftDist - WALL_DISTANCE);
+			return 0;
 		}
 		else // (!rightWall && !leftWall)
 		{
@@ -266,26 +223,6 @@ namespace Micromouse
 		}
 	}
 
-	void RobotIO::testRotate()
-	{
-		rotate( 90 );
-#ifdef __MK20DX256__ //Teensy
-		delay(1000);
-#endif
-		rotate(-90);
-
-#ifdef __MK20DX256__ //Teensy
-		delay(1000);
-#endif
-		rotate(45);
-
-#ifdef __MK20DX256__ //Teensy
-		delay(1000);
-#endif
-		rotate(-45);
-
-	}
-
 
 	void RobotIO::moveForward(float millimeters)
 	{
@@ -303,8 +240,8 @@ namespace Micromouse
 		PIDController headingPID = PIDController(0.5f, 0.0f, 0.2f);
 
 		//leftMotor.setMaxSpeed(.2125f);
-		leftMotor.setMaxSpeed(.2125f);
-		rightMotor.setMaxSpeed(.2f);
+		leftMotor.setMaxSpeed(.17f);
+		rightMotor.setMaxSpeed(.16f);
 		leftMotor.resetCounts();
 		rightMotor.resetCounts();
 
@@ -376,13 +313,13 @@ namespace Micromouse
 			if (rotSpeed < 0)
 			{
 				float c = (1 + 3 * rotSpeed);
-				c < 0.75f ? 0.75f : c;
+				c < 0.3f ? 0.3f : c;
 				rightSpeed *= c; //cos(PI * rotSpeed);
 			}
 			else
 			{
 				float c = (1 - 3 * rotSpeed);
-				c < 0.75f ? 0.75f : c;
+				c < 0.3f ? 0.3f : c;
 				leftSpeed *= c; //cos(PI * rotSpeed);
 			}
 
@@ -397,15 +334,44 @@ namespace Micromouse
 		rightMotor.brake();
 	}
 
+	void RobotIO::testRotate()
+	{
+		rotate(180);
+#ifdef __MK20DX256__ //Teensy
+		delay(1000);
+#endif
+		rotate(-180);
+#ifdef __MK20DX256__ //Teensy
+		delay(1000);
+#endif
+		rotate(90);
+#ifdef __MK20DX256__ //Teensy
+		delay(1000);
+#endif
+		rotate(-90);
+
+#ifdef __MK20DX256__ //Teensy
+		delay(1000);
+#endif
+		rotate(45);
+
+#ifdef __MK20DX256__ //Teensy
+		delay(1000);
+#endif
+		rotate(-45);
+
+	}
+
 
 	void RobotIO::rotate(float degrees)
 	{
+
 		leftMotor.setMaxSpeed(0.16f);
 		rightMotor.setMaxSpeed(0.16f);
 
 		PIDController speedPID = PIDController(30.f, 2.0f, 1.0f , 100.0f);
 
-		PIDController anglePID = PIDController(150.0f, 45.0f , 10.0f, 50.0f);
+		PIDController anglePID = PIDController(150.0f, 75.0f , 10.0f, 20.0f);
 
 
 		anglePID.start(degrees);
@@ -429,7 +395,9 @@ namespace Micromouse
 		Timer timer;
 		while (degrees > ANGLE_TOLERANCE || degrees < -ANGLE_TOLERANCE || angleCorrection > 0.1f)
 		{
+#ifdef __MK20DX256__ //Teensy
 			delayMicroseconds(2000);
+#endif
 			leftTraveled = leftMotor.resetCounts();
 			rightTraveled = rightMotor.resetCounts();
 			deltaTime = timer.getDeltaTime();
@@ -473,6 +441,8 @@ namespace Micromouse
 
 			//logC(INFO) << degrees;
 		}
+
+		logC(INFO) << anglePID.getI();
 
 		leftMotor.brake();
 		rightMotor.brake();

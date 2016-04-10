@@ -10,7 +10,6 @@ Author GitHub:	joshuasrjc
 #include "MouseBot.h"
 #include "Logger.h"
 
-
 namespace Micromouse
 {
 #define SQRT_OF_TWO (1.414213f)
@@ -86,7 +85,7 @@ namespace Micromouse
 
 	void MouseBot::mapMaze()
 	{
-		log(DEBUG1) << "Map Maze";
+		log(DEBUG1) << "Mapping Maze...";
 
 		std::stack<PositionVector*> choicePositions = std::stack<PositionVector*>();
 		choicePositions.push(new PositionVector(position));
@@ -111,13 +110,21 @@ namespace Micromouse
 			{
 				if (numPossibleDirections() > 1)
 				{
+#ifdef __MK20DX256__
+					digitalWrite(LED_PIN, LOW);
+					delay(200);
+					digitalWrite(LED_PIN, HIGH);
+#endif
 					choicePositions.push(new PositionVector(position));
 				}
 				direction dir = pickPossibleDirection();
 				rotateToFaceDirection(dir);
 				logC(DEBUG3) << "Traveled " << dir;
 				moveForward(2);
-				lookAround();
+				if (!maze->isExplored(position))
+				{
+					lookAround();
+				}
 			}
 		}
 
@@ -132,13 +139,13 @@ namespace Micromouse
 
 		//temp for testing
 		//Path * path2 = maze.findPath(PositionVector(0, 0), PositionVector(0, 0));
-		Path * path = maze->findPath(PositionVector(0, 0), PositionVector(16, 16));
+		/*Path * path = maze->findPath(PositionVector(0, 0), PositionVector(16, 16));
 		for (int i = 0; i < path->size(); i++)
 		{
 			log(DEBUG2) << "Dir: " << path->peekStep().dir() << " Mag: " << path->peekStep().mag();
 			path->popStep();
 		}
-
+		*/
 
 	}
 
@@ -204,10 +211,10 @@ namespace Micromouse
 	direction MouseBot::pickPossibleDirection()
 	{
 		logC(DEBUG4) << "pickPossibleDirection()";
-		if (isPossibleDirection(N)) return N;
 		if (isPossibleDirection(E)) return E;
 		if (isPossibleDirection(S)) return S;
 		if (isPossibleDirection(W)) return W;
+		if (isPossibleDirection(N)) return N;
         // to complile with Xcode win archit.
         return NONE;
 	}
@@ -326,6 +333,7 @@ namespace Micromouse
 		// If compiled for Teensy
 
 		robotIO.moveForward(magnitude);
+		delay(500);
 
 #endif
 
@@ -335,6 +343,7 @@ namespace Micromouse
 	{
 		facing = facing + dir;
 
+#ifdef __MK20DX256__
 		switch (dir)
 		{
 		case NE:	robotIO.rotate(45);		break;
@@ -345,6 +354,8 @@ namespace Micromouse
 		case W:		robotIO.rotate(-90);	break;
 		case NW:	robotIO.rotate(-45);	break;
 		}
+		delay(200);
+#endif
 	}
 
 	void MouseBot::rotateToFaceDirection(direction dir)

@@ -10,7 +10,7 @@ namespace Micromouse
 
 	direction operator-(const direction &dir1, const direction &dir2)
 	{
-		return static_cast<direction>(((int)dir1 - (int)dir2) % 8);
+		return static_cast<direction>((64 + (int)dir1 - (int)dir2) % 8);
 	}
 
 	direction& operator++(direction& dir)

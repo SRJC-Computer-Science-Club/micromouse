@@ -87,7 +87,7 @@ namespace Micromouse
 #else
 		VirtualMaze* virtualMaze;
 #endif
-
+		int saveAddress = 512;
 		RobotIO robotIO;
 		std::stack<direction> movementHistory;
 

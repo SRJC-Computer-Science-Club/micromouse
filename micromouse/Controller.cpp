@@ -27,7 +27,7 @@ namespace Micromouse
 	{
 		// DEBUG CODE GOES IN HERE!
 #ifdef __MK20DX256__ // Teensy compile
-		delay(2000);
+		//delay(2000);
 #endif
 
 		//mouse.testIR();

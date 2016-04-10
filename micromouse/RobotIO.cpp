@@ -197,7 +197,7 @@ namespace Micromouse
 	{
 #ifdef __MK20DX256__
 		//rotate(90.0f);
-		delay(2000);
+		//delay(2000);
 		moveForward(1080.0f);
 /*
 		rightMotor.setMaxSpeed(0.2f);
@@ -273,11 +273,12 @@ namespace Micromouse
 		PIDController leftDistPID = PIDController(80.0f, 30.0f, 14.0f);
 		PIDController rightDistPID = PIDController(80.0f, 30.0f, 14.0f);
 
-		PIDController speedPID = PIDController(80.0f, 1.0f, 20.0f);
+		PIDController speedPID = PIDController(0.0f, 0.0f, 0.0f);
 
-		PIDController headingPID = PIDController(0.75f, 0.0f, 0.2f);
+		PIDController headingPID = PIDController(0.75f, 0.02f, 0.05f);
 
-		leftMotor.setMaxSpeed(.2f);
+		//leftMotor.setMaxSpeed(.2125f);
+		leftMotor.setMaxSpeed(.5f);
 		rightMotor.setMaxSpeed(.2f);
 		leftMotor.resetCounts();
 		rightMotor.resetCounts();
@@ -310,6 +311,9 @@ namespace Micromouse
 			float actualLeftSpeed = leftTraveled / deltaTime;
 			float actualRightSpeed = rightTraveled / deltaTime;
 
+			logC(INFO) << actualLeftSpeed;
+			logC(INFO) << actualRightSpeed;
+
 			//Decrease distance to go by the estimated amount traveled
 			leftmm -= leftTraveled;
 			rightmm -= rightTraveled;
@@ -319,6 +323,9 @@ namespace Micromouse
 
 			float speedError = actualLeftSpeed - actualRightSpeed;
 			float speedCorrection = speedPID.getCorrection(speedError);
+			speedCorrection *= -1;
+
+			//logC(INFO) << speedCorrection;
 
 			if (rightSpeed < 0.25f || leftSpeed < 0.25f)
 			{
@@ -341,7 +348,7 @@ namespace Micromouse
 
 			//Disables heading correction.
 			rotSpeed = 0.0f;
-			rotSpeed = -rotSpeed;
+			//rotSpeed = -rotSpeed;
 
 			//Move forward while turning right.
 

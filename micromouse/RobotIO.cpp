@@ -162,8 +162,8 @@ namespace Micromouse
 	{
 		float rightDist = IRSensors[RIGHT]->getDistance();
 		float leftDist = IRSensors[LEFT]->getDistance();
-		bool rightWall = leftDist < WALL_DISTANCE * 1.25f;
-		bool leftWall = rightDist < WALL_DISTANCE * 1.25f;
+		bool rightWall = leftDist < WALL_DISTANCE * 1.5f;
+		bool leftWall = rightDist < WALL_DISTANCE * 1.5f;
 
 		if (rightWall && leftWall)
 		{

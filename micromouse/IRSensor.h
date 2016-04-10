@@ -32,6 +32,7 @@ namespace Micromouse
 
 
 	private:
+		void initPins();
 		void defaultCalibration();
 		float interpolate(int x1, int x2, int y1, int y2, int x);
 

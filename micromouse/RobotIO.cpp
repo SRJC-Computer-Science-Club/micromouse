@@ -370,10 +370,6 @@ namespace Micromouse
 
 			//Disables heading correction.
 			//rotSpeed = 0.0f;
-<<<<<<< HEAD
-=======
-			rotSpeed = -rotSpeed;
->>>>>>> refs/remotes/origin/benji_rotate
 
 			//Move forward while turning right.
 
@@ -438,7 +434,7 @@ namespace Micromouse
 
 			int counts = (leftTraveled - rightTraveled) / 2;
 			degrees -= counts * (180 / PI) / COUNTS_PER_MM / (MM_BETWEEN_WHEELS/2);
-			delayMicroseconds(1500);
+			//delayMicroseconds(1500);
 			leftTraveled /= COUNTS_PER_MM;
 			rightTraveled /= COUNTS_PER_MM;
 

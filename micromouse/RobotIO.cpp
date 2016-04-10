@@ -400,12 +400,12 @@ namespace Micromouse
 
 	void RobotIO::rotate(float degrees)
 	{
-		leftMotor.setMaxSpeed(0.2f);
-		rightMotor.setMaxSpeed(0.2f);
+		leftMotor.setMaxSpeed(0.16f);
+		rightMotor.setMaxSpeed(0.16f);
 
 		PIDController speedPID = PIDController(30.f, 2.0f, 1.0f , 100.0f);
 
-		PIDController anglePID = PIDController(97.0f, 42.0f , 14.0f, 50.0f);
+		PIDController anglePID = PIDController(150.0f, 45.0f , 10.0f, 50.0f);
 
 
 		anglePID.start(degrees);
@@ -427,18 +427,18 @@ namespace Micromouse
 		
 
 		Timer timer;
-		while (degrees > ANGLE_TOLERANCE || degrees < -ANGLE_TOLERANCE || angleCorrection > 0.3f)
+		while (degrees > ANGLE_TOLERANCE || degrees < -ANGLE_TOLERANCE || angleCorrection > 0.1f)
 		{
+			delayMicroseconds(2000);
 			leftTraveled = leftMotor.resetCounts();
 			rightTraveled = rightMotor.resetCounts();
+			deltaTime = timer.getDeltaTime();
 
 			int counts = (leftTraveled - rightTraveled) / 2;
 			degrees -= counts * (180 / PI) / COUNTS_PER_MM / (MM_BETWEEN_WHEELS/2);
-			//delayMicroseconds(1500);
 			leftTraveled /= COUNTS_PER_MM;
 			rightTraveled /= COUNTS_PER_MM;
 
-			deltaTime = timer.getDeltaTime();
 
 			actualLeftSpeed = leftTraveled / deltaTime;
 			actualRightSpeed = rightTraveled / deltaTime;
@@ -452,7 +452,7 @@ namespace Micromouse
 			rightSpeed = angleCorrection;
 
 			float speedCorrection = speedPID.getCorrection( actualRightSpeed - actualLeftSpeed );
-
+			//speedCorrection = 0;
 			if (rightSpeed < 0.25f || leftSpeed < 0.25f)
 			{
 				speedCorrection = 0.0f;

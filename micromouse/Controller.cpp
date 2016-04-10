@@ -1,6 +1,7 @@
 #include "Controller.h"
 #include "Logger.h"
 #include <vector> //must come first for some reason
+#include "Timer.h"
 
 #ifdef __MK20DX256__ // Teensy compile
 #include "WProgram.h"

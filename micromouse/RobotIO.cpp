@@ -2,6 +2,7 @@
 #include "IRSensor.h"
 #include "Vector.h"
 #include "Logger.h"
+#include "Timer.h"
 
 #ifdef __MK20DX256__ //this is the Teensy signature
 // ### This line causes a lot of problems. It seems to conflict with #include <Encoder.h> ###
@@ -197,7 +198,7 @@ namespace Micromouse
 #ifdef __MK20DX256__
 		//rotate(90.0f);
 		delay(2000);
-		moveForward(180.0f);
+		moveForward(1080.0f);
 /*
 		rightMotor.setMaxSpeed(0.2f);
 		leftMotor.setMaxSpeed(0.2f);
@@ -243,41 +244,68 @@ namespace Micromouse
 		float leftmm = millimeters;
 		float rightmm = millimeters;
 
-		PIDController leftPID = PIDController(30.0f, 10.0f, 0.0f);
-		PIDController rightPID = PIDController(30.0f, 10.0f, 0.0f);
+		PIDController leftDistPID = PIDController(80.0f, 30.0f, 14.0f);
+		PIDController rightDistPID = PIDController(80.0f, 30.0f, 14.0f);
+
+		PIDController speedPID = PIDController(30.0f, 1.0f, 1.0f);
+
 		PIDController headingPID = PIDController(1, 1, 1);
 
-		leftMotor.setMaxSpeed(0.25f);
-		rightMotor.setMaxSpeed(0.2f);
+		leftMotor.setMaxSpeed(.5f);
+		rightMotor.setMaxSpeed(.5f);
 		leftMotor.resetCounts();
 		rightMotor.resetCounts();
 
 
-		leftPID.start(millimeters);
-		rightPID.start(millimeters);
+		leftDistPID.start(millimeters);
+		rightDistPID.start(millimeters);
+		speedPID.start(0);
 		headingPID.start(estimateHeadingError());
 
 		float leftSpeed = 1.0f;
 		float rightSpeed = 1.0f;
 
+		Timer timer;
+		
 		while
 		(
 			leftmm > DISTANCE_TOLERANCE || leftmm < -DISTANCE_TOLERANCE ||
 			rightmm > DISTANCE_TOLERANCE || rightmm < -DISTANCE_TOLERANCE ||
 			leftSpeed > 0.2f || rightSpeed > 0.2f)
 		{
+			float deltaTime = timer.getDeltaTime();
 			//Get distance traveled in cm since last cycle (average of two encoders)
 			float leftTraveled = leftMotor.resetCounts();
 			float rightTraveled = rightMotor.resetCounts();
 			leftTraveled /= COUNTS_PER_MM;
 			rightTraveled /= COUNTS_PER_MM;
 
+			float actualLeftSpeed = leftTraveled / deltaTime;
+			float actualRightSpeed = rightTraveled / deltaTime;
+
 			//Decrease distance to go by the estimated amount traveled
 			leftmm -= leftTraveled;
 			rightmm -= rightTraveled;
 
-			leftSpeed = leftPID.getCorrection(leftmm);
-			rightSpeed = rightPID.getCorrection(rightmm);
+			leftSpeed = leftDistPID.getCorrection(leftmm);
+			rightSpeed = rightDistPID.getCorrection(rightmm);
+
+			float speedError = actualLeftSpeed - actualRightSpeed;
+			float speedCorrection = speedPID.getCorrection(speedError);
+
+			if (rightSpeed < 0.25f || leftSpeed < 0.25f)
+			{
+				speedCorrection = 0.0f;
+			}
+
+			if (speedCorrection < 0)
+			{
+				rightSpeed += speedCorrection;
+			}
+			else
+			{
+				leftSpeed -= speedCorrection;
+			}
 
 			//Get rotational correction speed
 			float rotSpeed = headingPID.getCorrection(estimateHeadingError());
@@ -286,6 +314,16 @@ namespace Micromouse
 			rotSpeed = 0.0f;
 
 			//Move forward while turning right.
+
+			if (rotSpeed < 0)
+			{
+				leftSpeed *= 1 + 2*rotSpeed;
+			}
+			else
+			{
+				rightSpeed *= 1 - 2*rotSpeed;
+			}
+
 			rightMotor.setMovement(rightSpeed);
 			leftMotor.setMovement(leftSpeed);
 		}

@@ -260,6 +260,25 @@ namespace Micromouse
 		}
 	}
 
+	void RobotIO::testRotate()
+	{
+		rotate( 90 );
+#ifdef __MK20DX256__ //Teensy
+		delay(1000);
+#endif
+		rotate(-90);
+
+#ifdef __MK20DX256__ //Teensy
+		delay(1000);
+#endif
+		rotate(45);
+
+#ifdef __MK20DX256__ //Teensy
+		delay(1000);
+#endif
+		rotate(-45);
+
+	}
 
 
 	void RobotIO::moveForward(float millimeters)
@@ -365,10 +384,10 @@ namespace Micromouse
 
 	void RobotIO::rotate(float degrees)
 	{
-		leftMotor.setMaxSpeed(0.2f);
-		rightMotor.setMaxSpeed(0.2f);
+		leftMotor.setMaxSpeed(0.12f);
+		rightMotor.setMaxSpeed(0.12f);
 
-		PIDController anglePID = PIDController(25.0f, 25.0f, 2.0f);
+		PIDController anglePID = PIDController(80.0f, 35.0f, 5.0f , 300.0f);
 		anglePID.start(degrees);
 		float angleCorrection = anglePID.getCorrection(degrees);
 
@@ -383,7 +402,7 @@ namespace Micromouse
 			angleCorrection = anglePID.getCorrection(degrees);
 
 			leftMotor.setMovement(angleCorrection);
-			rightMotor.setMovement(angleCorrection);
+			rightMotor.setMovement(-angleCorrection);
 
 			logC(INFO) << degrees;
 		}

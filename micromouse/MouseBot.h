@@ -53,6 +53,7 @@ namespace Micromouse
 
 		void testMotors();
 		void testIR();
+		void testRotate();
 
 
 		void moveForward(int numNodes);			// Moves the mouse forward by 1 node (1/2 cell)

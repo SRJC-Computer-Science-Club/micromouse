@@ -9,22 +9,22 @@
 
 namespace Micromouse
 {
-	const float MM_BETWEEN_WHEELS = 69.0f;
+	const float MM_BETWEEN_WHEELS = 66.5f;
 
 	//Number of encoder counts per centimeters traveled.
 	//360 / (3.35 * PI)
 	const float COUNTS_PER_MM = 3.42064355302;
 
 	//How close the robot needs to be to the target distance (in mm) when moving forward.
-    const float DISTANCE_TOLERANCE = 5.0;
+    const float DISTANCE_TOLERANCE = 5.0f;
 
 	//How close the robot needs to be to the target angle (in degrees) when rotating.
 	const float ANGLE_TOLERANCE = 1.8f;
 
 	//The expected distance between a left/right sensor and the wall (in mm).
 	const float WALL_DISTANCE = 55.0f;
-	const float FRONT_RIGHT_WALL_DISTANCE = 50.0f;
-	const float FRONT_LEFT_WALL_DISTANCE = 60.0f;
+	const float FRONT_RIGHT_WALL_DISTANCE = 52.0f;
+	const float FRONT_LEFT_WALL_DISTANCE = 58.0f;
 
 	const int IR_FRONT_LEFT_PIN = 14;
 	const int IR_FRONT_RIGHT_PIN = 15;

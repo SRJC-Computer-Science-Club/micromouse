@@ -91,12 +91,12 @@ namespace Micromouse
 
             case W:
             {
-				return IRSensors[LEFT]->getDistance() < 100;
+				return IRSensors[LEFT]->getDistance() < 110;
             }
 
             case E:
             {
-				return IRSensors[RIGHT]->getDistance() < 100;
+				return IRSensors[RIGHT]->getDistance() < 110;
             }
 
             case N:
@@ -117,8 +117,23 @@ namespace Micromouse
 	{
 		float rightDist = IRSensors[RIGHT]->getDistance();
 		float leftDist = IRSensors[LEFT]->getDistance();
+		float frontLeftDist = IRSensors[FRONT_LEFT]->getDistance();
+		float frontRightDist = IRSensors[FRONT_RIGHT]->getDistance();
+
 		bool rightWall = leftDist < WALL_DISTANCE * 1.85f;
 		bool leftWall = rightDist < WALL_DISTANCE * 1.85f;
+		bool frontLeftWall = frontLeftDist < FRONT_LEFT_WALL_DISTANCE;
+		bool frontRightWall = frontRightDist < FRONT_RIGHT_WALL_DISTANCE;
+
+
+		if (frontLeftWall && !frontRightWall)
+		{
+			//return -4.0f;
+		}
+		else if (frontRightWall && frontLeftWall)
+		{
+			//return 4.0f;
+		}
 
 		if (rightWall && leftWall)
 		{
@@ -126,12 +141,14 @@ namespace Micromouse
 		}
 		else if (rightWall && !leftWall)
 		{
-			//return (WALL_DISTANCE - rightDist);
+			float error = WALL_DISTANCE - rightDist;
+			return error > 0 ? error : 0;
 			return 0;
 		}
 		else if (leftWall && !rightWall)
 		{
-			//return (leftDist - WALL_DISTANCE);
+			float error = leftDist - WALL_DISTANCE;
+			return error < 0 ? error : 0;
 			return 0;
 		}
 		else // (!rightWall && !leftWall)
@@ -199,11 +216,11 @@ namespace Micromouse
 
 	void RobotIO::testIR()
 	{
-		//IRSensors[RIGHT]->calibrate(20, 20);
-		//IRSensors[RIGHT]->saveCalibration(IR_RIGHT_MEMORY);
+		//IRSensors[FRONT_RIGHT]->calibrate(20, 20);
+		//IRSensors[FRONT_RIGHT]->saveCalibration(IR_FRONT_RIGHT_MEMORY);
 
-		//IRSensors[LEFT]->calibrate(20, 20);
-		//IRSensors[LEFT]->saveCalibration(IR_LEFT_MEMORY);
+		//IRSensors[FRONT_LEFT]->calibrate(20, 20);
+		//IRSensors[FRONT_LEFT]->saveCalibration(IR_FRONT_LEFT_MEMORY);
 
 	//	IRSensors[LEFT]->calibrate(20, 20);
 	//	IRSensors[LEFT]->saveCalibration(IR_FRONT_LEFT_MEMORY);
@@ -211,8 +228,8 @@ namespace Micromouse
 
 		for (int i = 0; i < 2000; i++)
 		{
-			logC(INFO) << "FWD RIGHT:  " << IRSensors[FRONT_RIGHT]->getDistance();
-			logC(INFO) << "FWD LEFT:   " << IRSensors[FRONT_LEFT]->getDistance();
+			logC(INFO) << "FWD RIGHT:  " << IRSensors[RIGHT]->getDistance();
+			logC(INFO) << "FWD LEFT:   " << IRSensors[LEFT]->getDistance();
 			//IRSensors[FRONT_LEFT]->debug();
 			//IRSensors[FRONT_RIGHT]->debug();
 #ifdef __MK20DX256__ //Teensy
@@ -232,12 +249,13 @@ namespace Micromouse
 		float leftmm = millimeters;
 		float rightmm = millimeters;
 
-		PIDController leftDistPID = PIDController(97.0f, 42.0f, 14.0f);
-		PIDController rightDistPID = PIDController(97.0f, 42.0f, 14.0f);
+		PIDController leftDistPID = PIDController(97.0f, 46.0f, 16.0f , 1000);
+		PIDController rightDistPID = PIDController(97.0f, 46.0f, 16.0f , 1000);
 
 		PIDController speedPID = PIDController(30.0f, 1.0f, 1.0f);
 
 		PIDController headingPID = PIDController(0.5f, 0.01f, 0.2f);
+		//PIDController headingPID = PIDController(1.2f, 0.03f, 0.15f,250.0f);
 
 		//leftMotor.setMaxSpeed(.2125f);
 		leftMotor.setMaxSpeed(.17f);
@@ -263,7 +281,7 @@ namespace Micromouse
 			((
 				leftmm > DISTANCE_TOLERANCE || leftmm < -DISTANCE_TOLERANCE ||
 				rightmm > DISTANCE_TOLERANCE || rightmm < -DISTANCE_TOLERANCE ||
-				leftSpeed > 0.2f || rightSpeed > 0.2f))
+				leftSpeed > 0.1f || rightSpeed > 0.1f))
 		{
 			float deltaTime = timer.getDeltaTime();
 
@@ -313,20 +331,20 @@ namespace Micromouse
 			float rotSpeed = headingPID.getCorrection(rotError);
 
 			//Disables heading correction.
-			rotSpeed = 0.0f;
+			//rotSpeed = 0.0f;
 
 			//Move forward while turning right.
 
 			if (rotSpeed < 0)
 			{
 				float c = (1 + 3 * rotSpeed);
-				c < 0.75 ? 0.75 : c;
+				c < 0.65 ? 0.65 : c;
 				rightSpeed *= c; //cos(PI * rotSpeed);
 			}
 			else
 			{
 				float c = (1 - 3 * rotSpeed);
-				c < 0.75 ? 0.75 : c;
+				c < 0.65 ? 0.65 : c;
 				leftSpeed *= c; //cos(PI * rotSpeed);
 			}
 
@@ -493,14 +511,14 @@ namespace Micromouse
 #endif
 
 		log(DEBUG3) << "Load front right";
-		IRSensors[FRONT_RIGHT]->loadCalibration(IR_LEFT_MEMORY);
+		IRSensors[FRONT_RIGHT]->loadCalibration(IR_FRONT_RIGHT_MEMORY);
 
 #ifdef __MK20DX256__ // Teensy compile
 		delay(300);
 #endif
 
 		log(DEBUG3) << "Load front left";
-		IRSensors[FRONT_LEFT]->loadCalibration(IR_LEFT_MEMORY);
+		IRSensors[FRONT_LEFT]->loadCalibration(IR_FRONT_LEFT_MEMORY);
 
 #ifdef __MK20DX256__ // Teensy compile
 		delay(300);

@@ -212,10 +212,31 @@ namespace Micromouse
 	direction MouseBot::pickPossibleDirection()
 	{
 		logC(DEBUG4) << "pickPossibleDirection()";
-		if (isPossibleDirection(E)) return E;
-		if (isPossibleDirection(S)) return S;
-		if (isPossibleDirection(W)) return W;
-		if (isPossibleDirection(N)) return N;
+		int rand = random(4);
+
+		switch (rand)
+		{
+		case 0:
+			if (isPossibleDirection(N)) return N;
+			if (isPossibleDirection(E)) return E;
+			if (isPossibleDirection(S)) return S;
+			if (isPossibleDirection(W)) return W;
+		case 1:
+			if (isPossibleDirection(E)) return E;
+			if (isPossibleDirection(N)) return N;
+			if (isPossibleDirection(S)) return S;
+			if (isPossibleDirection(W)) return W;
+		case 2:
+			if (isPossibleDirection(W)) return W;
+			if (isPossibleDirection(N)) return N;
+			if (isPossibleDirection(E)) return E;
+			if (isPossibleDirection(S)) return S;
+		default:
+			if (isPossibleDirection(E)) return E;
+			if (isPossibleDirection(W)) return W;
+			if (isPossibleDirection(N)) return N;
+			if (isPossibleDirection(S)) return S;
+		}
         // to complile with Xcode win archit.
         return NONE;
 	}

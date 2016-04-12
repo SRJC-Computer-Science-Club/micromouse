@@ -23,12 +23,14 @@ extern "C"{
 
 
 #include "Logger.h"
-const LogLevel LOG_LEVEL = ERROR;
+const LogLevel LOG_LEVEL = DEBUG2;
 
 #include "Controller.h"
 
 void setup() {
 	Serial.begin(9600);
+ pinMode(15,INPUT);
+ randomSeed(analogRead(15));
 
     for (int i = 10; i > 0; i--)
     {

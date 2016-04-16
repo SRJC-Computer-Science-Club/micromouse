@@ -4,13 +4,13 @@
 
 namespace Micromouse
 {
-
-
 	// constructors ////////////////////////////////////////////////////////
 	Node::Node( PositionVector newPos ) :
 		pos( newPos )
 	{
 	}
+
+
 
 	Node::~Node()
 	{
@@ -41,12 +41,10 @@ namespace Micromouse
 		return parent;
 	}
 
-
 	direction Node::getDir() const
 	{
 		return dir;
 	}
-
 
 	bool Micromouse::Node::isClosed()
 	{
@@ -86,6 +84,8 @@ namespace Micromouse
 	{
 		closed = true;
 	}
+
+
 
 	void Micromouse::Node::open()
 	{

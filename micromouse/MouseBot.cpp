@@ -10,6 +10,8 @@ Author GitHub:	joshuasrjc
 #include "MouseBot.h"
 #include "Logger.h"
 
+
+
 namespace Micromouse
 {
 #define SQRT_OF_TWO (1.414213f)
@@ -23,8 +25,7 @@ namespace Micromouse
 		setPos(x, y);
 		maze = new Maze();
 
-#ifdef __MK20DX256__
-
+#ifdef __MK20DX256__ // Teensy Compile
 #else
 		// If compiled for PC
 		virtualMaze = new VirtualMaze(NUM_NODES_W, NUM_NODES_H);
@@ -35,12 +36,14 @@ namespace Micromouse
 #endif
 	}
 
+
+
 	MouseBot::~MouseBot()
 	{
 		delete maze;
-#ifdef __MK20DX256__
-		// If compiled for Teensy
-#else
+
+#ifdef __MK20DX256__ // Teensy Compile
+#else // PC compile
 		delete virtualMaze;
 #endif
 	}
@@ -110,17 +113,21 @@ namespace Micromouse
 			{
 				if (numPossibleDirections() > 1)
 				{
-#ifdef __MK20DX256__
+#ifdef __MK20DX256__ // Teensy Compile
 					digitalWrite(LED_PIN, LOW);
 					delay(200);
 					digitalWrite(LED_PIN, HIGH);
 #endif
 					choicePositions.push(new PositionVector(position));
 				}
+
 				direction dir = pickPossibleDirection();
 				rotateToFaceDirection(dir);
+
 				logC(DEBUG3) << "Traveled " << dir;
+
 				moveForward(2);
+
 				if (!maze->isExplored(position))
 				{
 					lookAround();
@@ -128,12 +135,10 @@ namespace Micromouse
 			}
 		}
 
-
 		logC(INFO) << "Mapped maze:\n";
 
-#ifdef __MK20DX256__
-		// If compiled for Teensy
-#else
+#ifdef __MK20DX256__ // Teensy Compile
+#else // PC compile
 		logC(INFO) << *maze;
 #endif
 
@@ -146,25 +151,30 @@ namespace Micromouse
 			path->popStep();
 		}
 		*/
-
 	}
+
+
 
 	void MouseBot::runMaze()
 	{
 		log(DEBUG1) << "Run Maze";
-		//assert(position == PositionVector(0, 0));
 
 		followPath(maze->findPath(position, PositionVector(0 /*NUM_NODES_W / 2*/, 0 /*NUM_NODES_H / 2*/)));
 		followPath(maze->findPath(position, PositionVector( /*NUM_NODES_W / 2*/16 , 16 /*NUM_NODES_H / 2*/)));
 	}
 
+
+
 	void MouseBot::returnToStart()
 	{
 	}
 
+
+
 	void MouseBot::lookAround()
 	{
 		logC(DEBUG4) << "lookAround()";
+
 		maze->addNode(position);
 		maze->setOpen(true, position);
 		maze->setExplored(true, position);
@@ -175,46 +185,64 @@ namespace Micromouse
 			maze->setOpen(true, pos);
 			maze->addNode(pos);
 		}
+
 		if (isClearRight())
 		{
 			PositionVector pos = position + (facing + E);
 			maze->setOpen(true, pos);
 			maze->addNode(pos);
 		}
+
 		if (isClearLeft())
 		{
 			PositionVector pos = position + (facing + W);
 			maze->setOpen(true, pos);
 			maze->addNode(pos);
 		}
+
 		maze->setExplored(true, position + (facing + N));
 		maze->setExplored(true, position + (facing + E));
 		maze->setExplored(true, position + (facing + W));
 	}
 
+
+
 	bool MouseBot::isPossibleDirection(direction dir)
 	{
 		logC(DEBUG4) << "isPossibleDirection()";
+
 		return maze->isInsideMaze(position + dir) && maze->isOpen(position + dir) && !maze->isExplored((position + dir) + dir);
 	}
+
+
 
 	int MouseBot::numPossibleDirections()
 	{
 		logC(DEBUG4) << "numPossibleDirections()";
+
 		int n = 0;
+
 		if (isPossibleDirection(N)) n++;
 		if (isPossibleDirection(E)) n++;
 		if (isPossibleDirection(S)) n++;
 		if (isPossibleDirection(W)) n++;
+
 		return n;
 	}
+
+
 
 	direction MouseBot::pickPossibleDirection()
 	{
 		logC(DEBUG4) << "pickPossibleDirection()";
-		int rand = random(4);
 
-		switch (rand)
+#ifdef __MK20DX256__ // Teensy Compile
+		int rando = random(4);
+#else // PC compile
+		int rando = rand() % 4;
+#endif
+
+		switch (rando)
 		{
 		case 0:
 			if (isPossibleDirection(N)) return N;
@@ -237,54 +265,45 @@ namespace Micromouse
 			if (isPossibleDirection(N)) return N;
 			if (isPossibleDirection(S)) return S;
 		}
-        // to complile with Xcode win archit.
-        return NONE;
+
+		return NONE;
 	}
+
+
 
 	bool MouseBot::isClearForward()
 	{
-
-#ifdef __MK20DX256__
-		// If compiled for Teensy
-
+#ifdef __MK20DX256__ // Teensy Compile
 		return robotIO.isClearForward();
-
-#else
-		// If compiled for PC
-
+#else // PC compile
 		PositionVector pos = position + (facing + N);
+
 		return virtualMaze->isInsideMaze(pos) && virtualMaze->isOpen(pos);
 #endif
 	}
+
+
 
 	bool MouseBot::isClearRight()
 	{
-
-#ifdef __MK20DX256__
-		// If compiled for Teensy
-
+#ifdef __MK20DX256__ // Teensy Compile
 		return robotIO.isClearRight();
-
-#else
-		// If compiled for PC
-
+#else // PC compile
 		PositionVector pos = position + (facing + E);
+
 		return virtualMaze->isInsideMaze(pos) && virtualMaze->isOpen(pos);
 #endif
 	}
 
+
+
 	bool MouseBot::isClearLeft()
 	{
-
-#ifdef __MK20DX256__
-		// If compiled for Teensy
-
+#ifdef __MK20DX256__ // Teensy Compile
 		return robotIO.isClearLeft();
-
-#else
-		// If compiled for PC
-
+#else // PC compile
 		PositionVector pos = position + (facing + W);
+
 		return virtualMaze->isInsideMaze(pos) && virtualMaze->isOpen(pos);
 #endif
 	}
@@ -301,6 +320,8 @@ namespace Micromouse
 		movementHistory.push(dir);
 	}
 
+
+
 	void MouseBot::followPath(Path* path)
 	{
 		while (!path->empty())
@@ -311,6 +332,8 @@ namespace Micromouse
 		}
 	}
 
+
+
 	void MouseBot::backtrack()
 	{
 		direction dir = movementHistory.top();
@@ -320,22 +343,30 @@ namespace Micromouse
 		movementHistory.pop();
 	}
 
+
+
 	void MouseBot::testMotors()
 	{
-#ifdef __MK20DX256__
+#ifdef __MK20DX256__ // Teensy Compile
 		robotIO.testMotors();
 #endif
 	}
+
+
 
 	void MouseBot::testIR()
 	{
 		robotIO.testIR();
 	}
 
+
+
 	void MouseBot::testRotate()
 	{
 		robotIO.testRotate();
 	}
+
+
 
 	void MouseBot::moveForward(int numNodes)
 	{
@@ -351,21 +382,19 @@ namespace Micromouse
 			magnitude *= SQRT_OF_TWO;
 		}
 
-#ifdef __MK20DX256__
-		// If compiled for Teensy
-
+#ifdef __MK20DX256__ // Teensy Compile
 		robotIO.moveForward(magnitude);
 		delay(500);
-
 #endif
-
 	}
+
+
 
 	void MouseBot::rotate(direction dir)
 	{
 		facing = facing + dir;
 
-#ifdef __MK20DX256__
+#ifdef __MK20DX256__ // Teensy Compile
 		switch (dir)
 		{
 		case NE:	robotIO.rotate(45);		break;
@@ -380,26 +409,37 @@ namespace Micromouse
 #endif
 	}
 
+
+
 	void MouseBot::rotateToFaceDirection(direction dir)
 	{
 		rotate(dir - facing);
 	}
 
+
+
 	int MouseBot::incrementSpeed()
 	{
 		speed = speed % MAX_SPEED + 1;
 		log(INFO) << "Mouse Speed: " << speed;
+
 		return 0;
 	}
+
+
 	int MouseBot::getSpeed()
 	{
 		return speed;
 	}
+
+
 	void MouseBot::setSpeed( int spd )
 	{
 		speed = spd;
 		assert(speed > 0 && speed <= MAX_SPEED);
 	}
+
+
 	void MouseBot::CalibrateIRSensors()
 	{
 		robotIO.calibrateIRSensors();

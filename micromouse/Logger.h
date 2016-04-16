@@ -1,12 +1,11 @@
 #pragma once
 
-#ifdef __MK20DX256__ //this is the Teensy signature
-#include <Arduino.h>
-
-#else
-#include <iostream>
-#include <fstream>
-#include <sstream>
+#ifdef __MK20DX256__ // Teensy Compile
+	#include <Arduino.h>
+#else // PC compile
+	#include <iostream>
+	#include <fstream>
+	#include <sstream>
 #endif
 
 
@@ -55,7 +54,7 @@ public:
 		dest(dest)
 	{
 
-#ifdef __MK20DX256__ //this is the Teensy signature
+#ifdef __MK20DX256__ // Teensy Compile
 		switch (logLevel)
 		{
 		case DEBUG1:
@@ -111,7 +110,7 @@ public:
 	template <typename T>
 	Logger & operator<<(T const & value)
 	{
-#ifdef __MK20DX256__ //this is the Teensy signature
+#ifdef __MK20DX256__ // Teensy Compile
 		buffer += String( value );
 #else
 		buffer << value;
@@ -121,7 +120,7 @@ public:
 
 
 
-#ifdef __MK20DX256__ //this is the Teensy signature
+#ifdef __MK20DX256__ // Teensy Compile
 	void consoleOut()
 	{
 		Serial.println(buffer);
@@ -136,7 +135,7 @@ public:
 
 
 
-#ifdef __MK20DX256__ //this is the Teensy signature
+#ifdef __MK20DX256__ // Teensy Compile
 #else
 	void fileOut(const std::string & s)
 	{
@@ -144,10 +143,12 @@ public:
 	}
 #endif
 
+
+
 	// prints the log text when the object destructs
 	~Logger()
 	{
-#ifdef __MK20DX256__ //this is the Teensy signature
+#ifdef __MK20DX256__ // Teensy Compile
 		if (dest != FILE )
 		{
 			consoleOut();
@@ -170,15 +171,15 @@ public:
 			break;
 		}	
 #endif
-		
 	}
 
 private:
-#ifdef __MK20DX256__ //this is the Teensy signature
+#ifdef __MK20DX256__ // Teensy Compile
 	String buffer;
 #else
 	std::ostringstream buffer;
 #endif
+
 	outputDest dest;
 };
 

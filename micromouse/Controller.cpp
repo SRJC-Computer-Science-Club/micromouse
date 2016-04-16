@@ -1,32 +1,38 @@
 #include "Controller.h"
 #include "Logger.h"
-#include <vector> //must come first for some reason
+#include <vector>
 #include "Timer.h"
 
-#ifdef __MK20DX256__ // Teensy compile
-#include "WProgram.h"
+#ifdef __MK20DX256__ // Teensy Compile
+	#include "WProgram.h"
 #else // pc compile
-#include <iostream>
+	#include <iostream>
 #endif
 
-int buttonFlag;
 
-extern int SWITCH_A_PIN; // defined in RobotIO.h
-extern int SWITCH_B_PIN;
-extern int SWITCH_C_PIN;
-
-extern int LED_PIN;
-extern int BUTTON_PIN;
 
 //comment / uncomment to turn off / on the debug function.
 #define MICROMOUSE_DEBUG_MODE
+
+
+
+int buttonFlag;
+
+// defined in RobotIO.h
+extern int SWITCH_A_PIN; 
+extern int SWITCH_B_PIN;
+extern int SWITCH_C_PIN;
+extern int LED_PIN;
+extern int BUTTON_PIN;
+
+
 
 namespace Micromouse
 {
 	void Controller::debug()
 	{
 		// DEBUG CODE GOES IN HERE!
-#ifdef __MK20DX256__ // Teensy compile
+#ifdef __MK20DX256__ // Teensy Compile
 		//delay(2000);
 #endif
 		mouse.mapMaze();
@@ -38,9 +44,11 @@ namespace Micromouse
 		// DEBUG CODE GOES IN HERE!
 	}
 
+
+
 	Controller::Controller()
 	{
-		log(INFO) << "Starting Program"; //log to console only
+		log(INFO) << "Starting Program";
 
 		#ifdef MICROMOUSE_DEBUG_MODE
 			debug();
@@ -48,13 +56,15 @@ namespace Micromouse
 			runMainLoop();
 		#endif
 
-		logC( DEBUG1 ) << "End Program"; //log to console only
+		log(INFO) << "End Program\n\n\n\";
 	}
+
 
 
 	Controller::~Controller()
 	{
 	}
+
 
 
 	void Controller::runMainLoop()
@@ -67,21 +77,22 @@ namespace Micromouse
 			{
 				runState();
 			}
+
 			waitForButton();
 			buttonFlag = false;
 		}
 	}
 
 
+
 	void Controller::updateState()
 	{
 		int intState;
-#ifdef __MK20DX256__ // Teensy compile
 
+#ifdef __MK20DX256__ // Teensy Compile
 		intState = digitalRead(SWITCH_C_PIN);
 		intState <<= 1; intState += digitalRead(SWITCH_B_PIN);
 		intState <<= 1; intState += digitalRead(SWITCH_A_PIN);
-
 #else // pc compile
 		log(INFO) <<
 			"Choose State\n"
@@ -96,6 +107,7 @@ namespace Micromouse
 
 		std::cin >> intState;
 #endif
+
 		state = static_cast<states>(intState);
 		log(INFO) << state;
 	}
@@ -107,7 +119,7 @@ namespace Micromouse
 		switch (state)
 		{
 		case NONE:
-			break;
+		break;
 
 
 		case MAP_MAZE:
@@ -127,7 +139,7 @@ namespace Micromouse
 				return;
 			}
 
-			break;
+		break;
 
 
 		case RUN_MAZE:
@@ -150,6 +162,7 @@ namespace Micromouse
 					{
 						state = NONE;
 					}
+
 					return;
 				}
 			}
@@ -159,31 +172,29 @@ namespace Micromouse
 				state = NONE;
 			}
 
-			break;
+		break;
 
 
 		case SELECT_SPEED:
 			mouse.incrementSpeed();
 			blinkLED(mouse.getSpeed());
 			state = NONE;
-
-			break;
+		break;
 
 
 		case NONE_4:
-
-			break;
+		break;
 
 
 		case CAL_SENSORS:
 			mouse.CalibrateIRSensors();
 			state = NONE;
-			break;
+		break;
 
 
 		case CAL_MOTOR:
 			//TODO
-			break;
+		break;
 
 
 		case RESET_MAZE:
@@ -191,15 +202,15 @@ namespace Micromouse
 			log(INFO) << "Maze Reset";
 			//TODO
 			state = NONE;
-			break;
+		break;
 		}
-
 	}
+	
 
 
 	int Controller::blinkLED(int reps, int timeOn, int timeOff)
 	{
-#ifdef __MK20DX256__ // Teensy compile
+#ifdef __MK20DX256__ // Teensy Compile
 		digitalWrite(LED_PIN, HIGH);
 		delay(timeOn);
 		digitalWrite(LED_PIN, LOW);
@@ -216,6 +227,8 @@ namespace Micromouse
 		return(timeOn * reps + timeOff * (reps - 1));
 	}
 
+
+
 	void Controller::blinkLEDCountdown(int sec)
 	{
 		log(INFO) << "countdown";
@@ -223,7 +236,7 @@ namespace Micromouse
 		for (; sec > 5; sec--) //long single blinks for more than 5 seconds
 		{
 			log(INFO) << sec;
-#ifdef __MK20DX256__ // Teensy compile
+#ifdef __MK20DX256__ // Teensy Compile
 			delay(1000 - blinkLED( 1 , 200 ));
 #endif
 		}
@@ -231,15 +244,17 @@ namespace Micromouse
 		for (; sec > 0; sec--)//quick blinks for the number of seconds left
 		{
 			log(INFO) << sec;
-#ifdef __MK20DX256__ // Teensy compile
+#ifdef __MK20DX256__ // Teensy Compile
 			delay(1000 - blinkLED(sec, 80, 50));
 #endif
 		}
 	}
 
+
+
 	void Controller::waitForButton()
 	{
-#ifdef __MK20DX256__ // Teensy compile
+#ifdef __MK20DX256__ // Teensy Compile
 		while (!digitalRead(BUTTON_PIN))
 		{
 			delay(10);
@@ -249,6 +264,4 @@ namespace Micromouse
 		buttonFlag = true;
 #endif
 	}
-
-
 }

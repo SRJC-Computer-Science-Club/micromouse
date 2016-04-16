@@ -1,11 +1,10 @@
 #pragma once
 
-#ifdef __MK20DX256__
-#include <EEPROM.h>
+#ifdef __MK20DX256__ // Teensy Compile
+	#include <EEPROM.h>
 #endif
 
 namespace Micromouse {
-
 
 	//0-99 unreserved
 
@@ -32,11 +31,12 @@ namespace Micromouse {
 
 	class Memory
 	{
-	private:
-		Memory() {};//dont instantiate me
 	public:
-		//TODO use byte type??
 		static int read(int address);
 		static void write(int address, int val);
+
+	private:
+		Memory() {};//dont instantiate me
+
 	};
 }

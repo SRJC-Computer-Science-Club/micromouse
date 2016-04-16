@@ -21,8 +21,11 @@ namespace Micromouse
 	{
 	public:
 		// Sets the P, I, and D constants for the controller.
-		PIDController(float P, float I, float D, float maxIntegralError = 500.0f )
-			: P(P), I(I), D(D), maxIntegralError(maxIntegralError) {}
+		PIDController(float P, float I, float D, float maxIntegralError = 500.0f ): 
+			P(P),
+			I(I),
+			D(D),
+			maxIntegralError(maxIntegralError) {}
 
 		// Starts the controller with an initial error, and resets the total error.
 		// MUST be called before calling getCorrection().
@@ -40,8 +43,8 @@ namespace Micromouse
 	private:
 		float getDeltaTime();
 
-#ifndef __MK20DX256__
-		// If on PC
+#ifdef __MK20DX256__ // Teensy Compile
+#else // PC compile
 		long micros();
 
 		typedef std::chrono::steady_clock::time_point time_point;

@@ -6,7 +6,6 @@ const int INF = 65000;
 
 namespace Micromouse
 {
-
 	class Node
 	{
 	public:
@@ -39,7 +38,5 @@ namespace Micromouse
 		PositionVector pos;
 
 		bool closed = false;
-
-
 	};
 }

@@ -2,12 +2,12 @@
 #include "Logger.h"
 #include "RobotIO.h"
 #include <assert.h>
-#ifdef __MK20DX256__ //this is the Teensy signature
-#include "WProgram.h"
+
+#ifdef __MK20DX256__ // Teensy Compile
+	#include "WProgram.h"
 #endif
 
 namespace Micromouse {
-    
     extern const int BUTTON_PIN;
     
 	//IR SENSORS/////////////////////////
@@ -23,10 +23,13 @@ namespace Micromouse {
 	}
 
 
+
 	IRSensor::~IRSensor()
 	{
 		delete[] calibrationData;
 	}
+
+
 
 	bool IRSensor::calibrate( int calibrationStart, int calibrationInterval )
 	{
@@ -42,8 +45,9 @@ namespace Micromouse {
 
 		log(INFO) << "Begin IR calibration";
 
-#ifdef __MK20DX256__ //this is the Teensy signature
+#ifdef __MK20DX256__ // Teensy Compile
 		int sampleSize = 6;
+
 		for (int i = 0; i < calibrationSize; i++)
 		{
 			log(INFO) << "distance: " << (i * calibrationInterval + calibrationStart);
@@ -53,6 +57,7 @@ namespace Micromouse {
 			{
 				delay(10);
 			}
+
 			while (digitalRead(BUTTON_PIN))
 			{
 				delay(10);
@@ -87,6 +92,7 @@ namespace Micromouse {
 	{
 		int size = Memory::read(address);
 		address += 4;
+
 		log(DEBUG2) << "load size: " << size;
 
 		if (size > 0 )
@@ -94,12 +100,13 @@ namespace Micromouse {
 			//int temp = size;
 			calibrationSize = size;
 			calibrationStart = Memory::read(address);
-			address += 4;
 			log(DEBUG2) << "calibrationStart : " << calibrationStart;
-			calibrationInterval = Memory::read(address);
+
 			address += 4;
+			calibrationInterval = Memory::read(address);
 			log(DEBUG2) << "calibrationInterval : " << calibrationInterval;
 
+			address += 4;
 
 			//delete[] calibrationData;
 		//	calibrationData = new int[calibrationSize];
@@ -108,12 +115,11 @@ namespace Micromouse {
 			{
 				int temp = Memory::read(address);
 				address += 4;
-					log(DEBUG2) << "loading " << i << "  " << temp;
+				log(DEBUG2) << "loading " << i << "  " << temp;
 				calibrationData[i] = temp;
-#ifdef __MK20DX256__ //this is the Teensy signature
+#ifdef __MK20DX256__ // Teensy Compile
 				delay(20);
 #endif
-
 			}
 
 			return true;
@@ -142,9 +148,9 @@ namespace Micromouse {
 
 	float IRSensor::getDistance()
 	{
-#ifdef __MK20DX256__ //this is the Teensy signature
+#ifdef __MK20DX256__ // Teensy Compile
 		int val = analogRead(DATA_PIN);
-#else
+#else // PC compile
 		// false analog value used while on pc
 		int val = rand() % 500;
 #endif
@@ -168,16 +174,16 @@ namespace Micromouse {
 			}
 		}
 
-			log(DEBUG3) << "Measured Distance*: " << MIN_RANGE;
-			return MIN_RANGE;
+		log(DEBUG3) << "Measured Distance*: " << MIN_RANGE;
+		return MIN_RANGE;
 	}
+
+
 
 	void IRSensor::debug()
 	{
 		getDistance();
 	}
-
-
 
 
 
@@ -190,13 +196,14 @@ namespace Micromouse {
 
 
 
-
 	void IRSensor::initPins()
 	{
-#ifdef __MK20DX256__ //this is the Teensy signature
+#ifdef __MK20DX256__ // Teensy Compile
 		pinMode(DATA_PIN, INPUT);
 #endif
 	}
+
+
 
 	void IRSensor::defaultCalibration()
 	{

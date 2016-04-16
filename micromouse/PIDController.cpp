@@ -12,8 +12,10 @@ Author GitHub:	joshuasrjc
 #include "PIDController.h"
 #include <assert.h>
 #include "Logger.h"
-#ifndef __MK20DX256__
-#include <iostream>
+
+#ifdef __MK20DX256__ // Teensy compile
+#else // PC compile
+	#include <iostream>
 #endif
 
 
@@ -28,6 +30,8 @@ namespace Micromouse
 
 		started = true;
 	}
+
+
 
 	float PIDController::getCorrection(float currentError)
 	{
@@ -55,10 +59,14 @@ namespace Micromouse
 		return sum;
 	}
 
+
+
 	float PIDController::getI() const
 	{
 		return totalError;
 	}
+
+
 
 	void PIDController::setConstants(float P, float I, float D)
 	{
@@ -67,15 +75,21 @@ namespace Micromouse
 		this->D = D;
 	}
 
+
+
 	float PIDController::getDeltaTime()
 	{
 		long currentTime = micros();
 		float deltaTime = (currentTime - lastTime) / 1000000.0f; //1,000,000 microseconds in a second.
 		lastTime = currentTime;
+
 		return deltaTime;
 	}
 
-#ifndef __MK20DX256__
+
+
+#ifdef __MK20DX256__ // Teensy compile
+#else // PC compile
 	long PIDController::micros()
 	{
 		using namespace std::chrono;
@@ -83,7 +97,6 @@ namespace Micromouse
 		return duration_cast<microseconds>(high_resolution_clock::now() - initialTime).count();
 	}
 #endif
-
 }
 
 

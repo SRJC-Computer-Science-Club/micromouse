@@ -4,19 +4,25 @@
 #include "Logger.h"
 #include "Timer.h"
 
-#ifdef __MK20DX256__ //this is the Teensy signature
+
+
+#ifdef __MK20DX256__ // Teensy Compile
 // ### This line causes a lot of problems. It seems to conflict with #include <Encoder.h> ###
 // ### I'm not sure what it's for, so for now it's commented out.
 //#include <Arduino.h>//random
 #endif
 
-namespace Micromouse
-{
-#ifndef __MK20DX256__
-#define PI (3.141592f) //Already defined on Arduino
+
+
+#ifdef __MK20DX256__ // Teensy compile
+#else // PC compile
+	#define PI (3.141592f) //Already defined on Arduino
 #endif
 
 
+
+namespace Micromouse
+{
 	/**** CONSTRUCTORS ****/
 
 	RobotIO::RobotIO()
@@ -34,8 +40,6 @@ namespace Micromouse
 			delete IRSensors[i];
 		}
 	}
-
-
 
 
 
@@ -76,38 +80,24 @@ namespace Micromouse
 
     bool RobotIO::isWallinDirection( direction dir )
     {
-        // insure valid data
+        // ensure valid data
         assert( dir == W || dir ==  N || dir == E || dir == NW || dir == NE);
 
-        int numOpen = 0;
-        #ifdef __MK20DX256__ //this is the Teensy signature
-        // TODO test for better intervol
-        #endif
-
-        //TODO fill in distances will measured values
-        // distances now are just estimates
         switch( dir )
         {
+        case W:
+			return IRSensors[LEFT]->getDistance() < 110;
 
-            case W:
-            {
-				return IRSensors[LEFT]->getDistance() < 110;
-            }
+        case E:
+			return IRSensors[RIGHT]->getDistance() < 110;
 
-            case E:
-            {
-				return IRSensors[RIGHT]->getDistance() < 110;
-            }
+        case N:
+            int dist = (int) IRSensors[ FRONT_LEFT ]->getDistance();
 
-            case N:
-            {
-                int dist = (int) IRSensors[ FRONT_LEFT ]->getDistance();
-				return (dist < 120 && abs(dist - IRSensors[FRONT_RIGHT]->getDistance()) < 30);
-            }
+			return (dist < 120 && abs(dist - IRSensors[FRONT_RIGHT]->getDistance()) < 30);
 
-			default:
-				log(ERROR) << "NOT valid direction to check for wall";
-				break;
+		default:
+			log(ERROR) << "NOT valid direction to check for wall";
 		}
     }
 
@@ -117,11 +107,13 @@ namespace Micromouse
 	{
 		float rightDist = IRSensors[RIGHT]->getDistance();
 		float leftDist = IRSensors[LEFT]->getDistance();
+
 		float frontLeftDist = IRSensors[FRONT_LEFT]->getDistance();
 		float frontRightDist = IRSensors[FRONT_RIGHT]->getDistance();
 
 		bool rightWall = leftDist < WALL_DISTANCE * 1.85f;
 		bool leftWall = rightDist < WALL_DISTANCE * 1.85f;
+
 		bool frontLeftWall = frontLeftDist < FRONT_LEFT_WALL_DISTANCE;
 		bool frontRightWall = frontRightDist < FRONT_RIGHT_WALL_DISTANCE;
 
@@ -169,7 +161,7 @@ namespace Micromouse
 
 	void RobotIO::testMotors()
 	{
-#ifdef __MK20DX256__
+#ifdef __MK20DX256__ // Teensy Compile
 		//rotate(90.0f);
 		//delay(2000);
 		moveForward(180.0f);
@@ -210,9 +202,9 @@ namespace Micromouse
 		rightMotor.brake();
 		*/
 #endif
-
-
 	}
+
+
 
 	void RobotIO::testIR()
 	{
@@ -222,8 +214,8 @@ namespace Micromouse
 		//IRSensors[FRONT_LEFT]->calibrate(20, 20);
 		//IRSensors[FRONT_LEFT]->saveCalibration(IR_FRONT_LEFT_MEMORY);
 
-	//	IRSensors[LEFT]->calibrate(20, 20);
-	//	IRSensors[LEFT]->saveCalibration(IR_FRONT_LEFT_MEMORY);
+		//IRSensors[LEFT]->calibrate(20, 20);
+		//IRSensors[LEFT]->saveCalibration(IR_FRONT_LEFT_MEMORY);
 
 
 		for (int i = 0; i < 2000; i++)
@@ -232,18 +224,17 @@ namespace Micromouse
 			logC(INFO) << "FWD LEFT:   " << IRSensors[LEFT]->getDistance();
 			//IRSensors[FRONT_LEFT]->debug();
 			//IRSensors[FRONT_RIGHT]->debug();
-#ifdef __MK20DX256__ //Teensy
+#ifdef __MK20DX256__ // Teensy Compile
 			delay(200);
 #endif
-
-
 		}
 	}
 
 
+
 	void RobotIO::moveForward(float millimeters)
 	{
-		//centimeters represents how much farther the bot needs to travel.
+		//millimeters represents how much farther the bot needs to travel.
 		//The function will loop until centimeters is within DISTANCE_TOLERANCE
 
 		float leftmm = millimeters;
@@ -255,11 +246,13 @@ namespace Micromouse
 		PIDController speedPID = PIDController(30.0f, 1.0f, 1.0f);
 
 		PIDController headingPID = PIDController(0.5f, 0.01f, 0.2f);
+		//PIDController headingPID = PIDController(0.5f, 0.04f, 0.02f , 250.0f); i want to try this one
 		//PIDController headingPID = PIDController(1.2f, 0.03f, 0.15f,250.0f);
 
 		//leftMotor.setMaxSpeed(.2125f);
 		leftMotor.setMaxSpeed(.17f);
 		rightMotor.setMaxSpeed(.16f);
+
 		leftMotor.resetCounts();
 		rightMotor.resetCounts();
 
@@ -278,10 +271,11 @@ namespace Micromouse
 		Timer timer;
 
 		while
-			((
+			(
 				leftmm > DISTANCE_TOLERANCE || leftmm < -DISTANCE_TOLERANCE ||
 				rightmm > DISTANCE_TOLERANCE || rightmm < -DISTANCE_TOLERANCE ||
-				leftSpeed > 0.1f || rightSpeed > 0.1f))
+				leftSpeed > 0.1f || rightSpeed > 0.1f
+			)
 		{
 			float deltaTime = timer.getDeltaTime();
 
@@ -359,38 +353,42 @@ namespace Micromouse
 		rightMotor.brake();
 	}
 
+
+
 	void RobotIO::testRotate()
 	{
 		rotate(180);
-#ifdef __MK20DX256__ //Teensy
+
+#ifdef __MK20DX256__ // Teensy Compile
 		delay(1000);
 #endif
 		rotate(-180);
-#ifdef __MK20DX256__ //Teensy
+
+#ifdef __MK20DX256__ // Teensy Compile
 		delay(1000);
 #endif
 		rotate(90);
-#ifdef __MK20DX256__ //Teensy
+
+#ifdef __MK20DX256__ // Teensy Compile
 		delay(1000);
 #endif
 		rotate(-90);
 
-#ifdef __MK20DX256__ //Teensy
+#ifdef __MK20DX256__ // Teensy Compile
 		delay(1000);
 #endif
 		rotate(45);
 
-#ifdef __MK20DX256__ //Teensy
+#ifdef __MK20DX256__ // Teensy Compile
 		delay(1000);
 #endif
 		rotate(-45);
-
 	}
+
 
 
 	void RobotIO::rotate(float degrees)
 	{
-
 		leftMotor.setMaxSpeed(0.16f);
 		rightMotor.setMaxSpeed(0.16f);
 
@@ -401,26 +399,25 @@ namespace Micromouse
 
 		anglePID.start(degrees);
 		speedPID.start(0);
+
 		float angleCorrection = anglePID.getCorrection(degrees);
 
 		leftMotor.resetCounts();
 		rightMotor.resetCounts();
 
-		float leftTraveled;
-		float rightTraveled;
+		float leftTraveled, rightTraveled;
 
 		float deltaTime;
 
-		float actualLeftSpeed;
-		float actualRightSpeed;
+		float actualLeftSpeed, actualRightSpeed;
 
 		float rightSpeed, leftSpeed;
 		
-
 		Timer timer;
+
 		while (degrees > ANGLE_TOLERANCE || degrees < -ANGLE_TOLERANCE || angleCorrection > 0.1f)
 		{
-#ifdef __MK20DX256__ //Teensy
+#ifdef __MK20DX256__ // Teensy Compile
 			delayMicroseconds(2000);
 #endif
 			leftTraveled = leftMotor.resetCounts();
@@ -428,24 +425,22 @@ namespace Micromouse
 			deltaTime = timer.getDeltaTime();
 
 			int counts = (leftTraveled - rightTraveled) / 2;
+
 			degrees -= counts * (180 / PI) / COUNTS_PER_MM / (MM_BETWEEN_WHEELS/2);
 			leftTraveled /= COUNTS_PER_MM;
 			rightTraveled /= COUNTS_PER_MM;
 
-
 			actualLeftSpeed = leftTraveled / deltaTime;
 			actualRightSpeed = rightTraveled / deltaTime;
 
-
-
 			angleCorrection = anglePID.getCorrection(degrees);
-
 
 			leftSpeed = -angleCorrection;
 			rightSpeed = angleCorrection;
 
 			float speedCorrection = speedPID.getCorrection( actualRightSpeed - actualLeftSpeed );
 			//speedCorrection = 0;
+
 			if (rightSpeed < 0.25f || leftSpeed < 0.25f)
 			{
 				speedCorrection = 0.0f;
@@ -462,7 +457,6 @@ namespace Micromouse
 
 			leftMotor.setMovement(rightSpeed);
 			rightMotor.setMovement(leftSpeed);
-
 
 			//logC(INFO) << degrees;
 		}
@@ -491,7 +485,7 @@ namespace Micromouse
 
 
 		//TODO check if load fails
-#ifdef __MK20DX256__ // Teensy compile
+#ifdef __MK20DX256__ // Teensy Compile
 		delay(300);
 #endif
 
@@ -499,41 +493,40 @@ namespace Micromouse
 		log(DEBUG3) << "Load right";
 		IRSensors[RIGHT]->loadCalibration(IR_RIGHT_MEMORY);//todo change back
 
-#ifdef __MK20DX256__ // Teensy compile
+#ifdef __MK20DX256__ // Teensy Compile
 		delay(300);
 #endif
 
 		log(DEBUG3) << "Load left";
 		IRSensors[LEFT]->loadCalibration(IR_LEFT_MEMORY);
 
-#ifdef __MK20DX256__ // Teensy compile
+#ifdef __MK20DX256__ // Teensy Compile
 		delay(300);
 #endif
 
 		log(DEBUG3) << "Load front right";
 		IRSensors[FRONT_RIGHT]->loadCalibration(IR_FRONT_RIGHT_MEMORY);
 
-#ifdef __MK20DX256__ // Teensy compile
+#ifdef __MK20DX256__ // Teensy Compile
 		delay(300);
 #endif
 
 		log(DEBUG3) << "Load front left";
 		IRSensors[FRONT_LEFT]->loadCalibration(IR_FRONT_LEFT_MEMORY);
 
-#ifdef __MK20DX256__ // Teensy compile
+#ifdef __MK20DX256__ // Teensy Compile
 		delay(300);
 #endif
 
 		//IRSensors[FRONT_LEFT]->loadCalibration(IR_FRONT_LEFT_MEMORY);
 		//IRSensors[FRONT_RIGHT]->loadCalibration(IR_FRONT_RIGHT_MEMORY);
-
 	}
 
 
 
 	void RobotIO::initPins()
 	{
-#ifdef __MK20DX256__ // Teensy compile
+#ifdef __MK20DX256__ // Teensy Compile
 		pinMode(BUTTON_PIN, INPUT_PULLUP);
 		pinMode(SWITCH_A_PIN, INPUT_PULLUP);
 		pinMode(SWITCH_B_PIN, INPUT_PULLUP); 
@@ -555,7 +548,5 @@ namespace Micromouse
 		IRSensors[RIGHT]->saveCalibration(IR_RIGHT_MEMORY);
 		IRSensors[FRONT_LEFT]->saveCalibration(IR_FRONT_LEFT_MEMORY);
 		IRSensors[FRONT_RIGHT]->saveCalibration(IR_FRONT_RIGHT_MEMORY);
-
-
 	}
 }

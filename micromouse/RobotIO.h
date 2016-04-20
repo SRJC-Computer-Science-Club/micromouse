@@ -13,7 +13,7 @@ namespace Micromouse
 
 	//Number of encoder counts per centimeters traveled.
 	//360 / (3.35 * PI)
-	const float COUNTS_PER_MM = 3.42064355302;
+	const float COUNTS_PER_MM = 3.420646f;
 
 	//How close the robot needs to be to the target distance (in mm) when moving forward.
     const float DISTANCE_TOLERANCE = 5.0f;

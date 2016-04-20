@@ -92,12 +92,15 @@ namespace Micromouse
 			return IRSensors[RIGHT]->getDistance() < 110;
 
         case N:
-            int dist = (int) IRSensors[ FRONT_LEFT ]->getDistance();
+		{
+			int dist = (int)IRSensors[FRONT_LEFT]->getDistance();
 
-			return (dist < 120 && abs(dist - IRSensors[FRONT_RIGHT]->getDistance()) < 30);
+			return (dist < 120 && abs(dist - IRSensors[FRONT_RIGHT]->getDistance()) < 30); 
+		}
 
 		default:
 			log(ERROR) << "NOT valid direction to check for wall";
+			return false;
 		}
     }
 

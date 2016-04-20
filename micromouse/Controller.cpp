@@ -56,7 +56,7 @@ namespace Micromouse
 			runMainLoop();
 		#endif
 
-		log(INFO) << "End Program\n\n\n\";
+		log(INFO) << "End Program\n\n\n";
 	}
 
 

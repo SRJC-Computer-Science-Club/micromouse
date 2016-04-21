@@ -208,23 +208,23 @@ namespace Micromouse
 	
 
 
-	int Controller::blinkLED(int reps, int timeOn, int timeOff)
+	int Controller::blinkLED(int reps, int timeOff, int timeOn)
 	{
 #ifdef __MK20DX256__ // Teensy Compile
-		digitalWrite(LED_PIN, HIGH);
-		delay(timeOn);
 		digitalWrite(LED_PIN, LOW);
+		delay(timeOff);
+		digitalWrite(LED_PIN, HIGH);
 
 		for (; reps >= 2; reps--)
 		{
-			delay(timeOff);
-
-			digitalWrite(LED_PIN, HIGH);
 			delay(timeOn);
+
 			digitalWrite(LED_PIN, LOW);
+			delay(timeOff);
+			digitalWrite(LED_PIN, HIGH);
 		}
 #endif
-		return(timeOn * reps + timeOff * (reps - 1));
+		return(timeOff * reps + timeOn * (reps - 1));
 	}
 
 

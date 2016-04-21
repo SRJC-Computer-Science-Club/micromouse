@@ -21,7 +21,7 @@ namespace Micromouse
 
 		//this is a blocking function
 		// blinks the led 'reps' number of times
-		int blinkLED(int reps = 1, int timeOn = 80, int timeOff = 50);
+		int blinkLED(int reps = 1, int timeOff = 80, int timeOn = 50);
 
 		// this is a blocking function
 		// perfomrs a countdown and blinks the led

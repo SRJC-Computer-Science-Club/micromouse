@@ -8,6 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		E1B489D01CC87D9300643A24 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B489CF1CC87D9300643A24 /* main.cpp */; };
+		E1B489F71CC87E3D00643A24 /* Controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B489D91CC87E3D00643A24 /* Controller.cpp */; };
+		E1B489F81CC87E3D00643A24 /* FlagMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B489DB1CC87E3D00643A24 /* FlagMatrix.cpp */; };
+		E1B489F91CC87E3D00643A24 /* IRSensor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B489DD1CC87E3D00643A24 /* IRSensor.cpp */; };
+		E1B489FA1CC87E3D00643A24 /* Maze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B489E01CC87E3D00643A24 /* Maze.cpp */; };
+		E1B489FB1CC87E3D00643A24 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B489E21CC87E3D00643A24 /* Memory.cpp */; };
+		E1B489FC1CC87E3D00643A24 /* Motor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B489E51CC87E3D00643A24 /* Motor.cpp */; };
+		E1B489FD1CC87E3D00643A24 /* MouseBot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B489E71CC87E3D00643A24 /* MouseBot.cpp */; };
+		E1B489FE1CC87E3D00643A24 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B489E91CC87E3D00643A24 /* Node.cpp */; };
+		E1B489FF1CC87E3D00643A24 /* Path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B489EB1CC87E3D00643A24 /* Path.cpp */; };
+		E1B48A001CC87E3D00643A24 /* PIDController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B489ED1CC87E3D00643A24 /* PIDController.cpp */; };
+		E1B48A011CC87E3D00643A24 /* RobotIO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B489EF1CC87E3D00643A24 /* RobotIO.cpp */; };
+		E1B48A021CC87E3D00643A24 /* Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B489F11CC87E3D00643A24 /* Timer.cpp */; };
+		E1B48A031CC87E3D00643A24 /* Vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B489F31CC87E3D00643A24 /* Vector.cpp */; };
+		E1B48A041CC87E3D00643A24 /* VirtualMaze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B489F51CC87E3D00643A24 /* VirtualMaze.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +39,37 @@
 /* Begin PBXFileReference section */
 		E1B489CC1CC87D9300643A24 /* micromouse-xcode */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "micromouse-xcode"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1B489CF1CC87D9300643A24 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		E1B489D81CC87E3D00643A24 /* callibration_temp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = callibration_temp; path = ../../micromouse/callibration_temp; sourceTree = "<group>"; };
+		E1B489D91CC87E3D00643A24 /* Controller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Controller.cpp; path = ../../micromouse/Controller.cpp; sourceTree = "<group>"; };
+		E1B489DA1CC87E3D00643A24 /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Controller.h; path = ../../micromouse/Controller.h; sourceTree = "<group>"; };
+		E1B489DB1CC87E3D00643A24 /* FlagMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FlagMatrix.cpp; path = ../../micromouse/FlagMatrix.cpp; sourceTree = "<group>"; };
+		E1B489DC1CC87E3D00643A24 /* FlagMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlagMatrix.h; path = ../../micromouse/FlagMatrix.h; sourceTree = "<group>"; };
+		E1B489DD1CC87E3D00643A24 /* IRSensor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IRSensor.cpp; path = ../../micromouse/IRSensor.cpp; sourceTree = "<group>"; };
+		E1B489DE1CC87E3D00643A24 /* IRSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IRSensor.h; path = ../../micromouse/IRSensor.h; sourceTree = "<group>"; };
+		E1B489DF1CC87E3D00643A24 /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Logger.h; path = ../../micromouse/Logger.h; sourceTree = "<group>"; };
+		E1B489E01CC87E3D00643A24 /* Maze.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Maze.cpp; path = ../../micromouse/Maze.cpp; sourceTree = "<group>"; };
+		E1B489E11CC87E3D00643A24 /* Maze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Maze.h; path = ../../micromouse/Maze.h; sourceTree = "<group>"; };
+		E1B489E21CC87E3D00643A24 /* Memory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Memory.cpp; path = ../../micromouse/Memory.cpp; sourceTree = "<group>"; };
+		E1B489E31CC87E3D00643A24 /* Memory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Memory.h; path = ../../micromouse/Memory.h; sourceTree = "<group>"; };
+		E1B489E41CC87E3D00643A24 /* micromouse.ino */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = micromouse.ino; path = ../../micromouse/micromouse.ino; sourceTree = "<group>"; };
+		E1B489E51CC87E3D00643A24 /* Motor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Motor.cpp; path = ../../micromouse/Motor.cpp; sourceTree = "<group>"; };
+		E1B489E61CC87E3D00643A24 /* Motor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Motor.h; path = ../../micromouse/Motor.h; sourceTree = "<group>"; };
+		E1B489E71CC87E3D00643A24 /* MouseBot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MouseBot.cpp; path = ../../micromouse/MouseBot.cpp; sourceTree = "<group>"; };
+		E1B489E81CC87E3D00643A24 /* MouseBot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MouseBot.h; path = ../../micromouse/MouseBot.h; sourceTree = "<group>"; };
+		E1B489E91CC87E3D00643A24 /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Node.cpp; path = ../../micromouse/Node.cpp; sourceTree = "<group>"; };
+		E1B489EA1CC87E3D00643A24 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Node.h; path = ../../micromouse/Node.h; sourceTree = "<group>"; };
+		E1B489EB1CC87E3D00643A24 /* Path.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Path.cpp; path = ../../micromouse/Path.cpp; sourceTree = "<group>"; };
+		E1B489EC1CC87E3D00643A24 /* Path.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Path.h; path = ../../micromouse/Path.h; sourceTree = "<group>"; };
+		E1B489ED1CC87E3D00643A24 /* PIDController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PIDController.cpp; path = ../../micromouse/PIDController.cpp; sourceTree = "<group>"; };
+		E1B489EE1CC87E3D00643A24 /* PIDController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PIDController.h; path = ../../micromouse/PIDController.h; sourceTree = "<group>"; };
+		E1B489EF1CC87E3D00643A24 /* RobotIO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RobotIO.cpp; path = ../../micromouse/RobotIO.cpp; sourceTree = "<group>"; };
+		E1B489F01CC87E3D00643A24 /* RobotIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RobotIO.h; path = ../../micromouse/RobotIO.h; sourceTree = "<group>"; };
+		E1B489F11CC87E3D00643A24 /* Timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Timer.cpp; path = ../../micromouse/Timer.cpp; sourceTree = "<group>"; };
+		E1B489F21CC87E3D00643A24 /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timer.h; path = ../../micromouse/Timer.h; sourceTree = "<group>"; };
+		E1B489F31CC87E3D00643A24 /* Vector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector.cpp; path = ../../micromouse/Vector.cpp; sourceTree = "<group>"; };
+		E1B489F41CC87E3D00643A24 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = ../../micromouse/Vector.h; sourceTree = "<group>"; };
+		E1B489F51CC87E3D00643A24 /* VirtualMaze.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VirtualMaze.cpp; path = ../../micromouse/VirtualMaze.cpp; sourceTree = "<group>"; };
+		E1B489F61CC87E3D00643A24 /* VirtualMaze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VirtualMaze.h; path = ../../micromouse/VirtualMaze.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,8 +103,47 @@
 			isa = PBXGroup;
 			children = (
 				E1B489CF1CC87D9300643A24 /* main.cpp */,
+				E1B489D71CC87E2B00643A24 /* RES */,
 			);
 			path = "micromouse-xcode";
+			sourceTree = "<group>";
+		};
+		E1B489D71CC87E2B00643A24 /* RES */ = {
+			isa = PBXGroup;
+			children = (
+				E1B489D81CC87E3D00643A24 /* callibration_temp */,
+				E1B489D91CC87E3D00643A24 /* Controller.cpp */,
+				E1B489DA1CC87E3D00643A24 /* Controller.h */,
+				E1B489DB1CC87E3D00643A24 /* FlagMatrix.cpp */,
+				E1B489DC1CC87E3D00643A24 /* FlagMatrix.h */,
+				E1B489DD1CC87E3D00643A24 /* IRSensor.cpp */,
+				E1B489DE1CC87E3D00643A24 /* IRSensor.h */,
+				E1B489DF1CC87E3D00643A24 /* Logger.h */,
+				E1B489E01CC87E3D00643A24 /* Maze.cpp */,
+				E1B489E11CC87E3D00643A24 /* Maze.h */,
+				E1B489E21CC87E3D00643A24 /* Memory.cpp */,
+				E1B489E31CC87E3D00643A24 /* Memory.h */,
+				E1B489E41CC87E3D00643A24 /* micromouse.ino */,
+				E1B489E51CC87E3D00643A24 /* Motor.cpp */,
+				E1B489E61CC87E3D00643A24 /* Motor.h */,
+				E1B489E71CC87E3D00643A24 /* MouseBot.cpp */,
+				E1B489E81CC87E3D00643A24 /* MouseBot.h */,
+				E1B489E91CC87E3D00643A24 /* Node.cpp */,
+				E1B489EA1CC87E3D00643A24 /* Node.h */,
+				E1B489EB1CC87E3D00643A24 /* Path.cpp */,
+				E1B489EC1CC87E3D00643A24 /* Path.h */,
+				E1B489ED1CC87E3D00643A24 /* PIDController.cpp */,
+				E1B489EE1CC87E3D00643A24 /* PIDController.h */,
+				E1B489EF1CC87E3D00643A24 /* RobotIO.cpp */,
+				E1B489F01CC87E3D00643A24 /* RobotIO.h */,
+				E1B489F11CC87E3D00643A24 /* Timer.cpp */,
+				E1B489F21CC87E3D00643A24 /* Timer.h */,
+				E1B489F31CC87E3D00643A24 /* Vector.cpp */,
+				E1B489F41CC87E3D00643A24 /* Vector.h */,
+				E1B489F51CC87E3D00643A24 /* VirtualMaze.cpp */,
+				E1B489F61CC87E3D00643A24 /* VirtualMaze.h */,
+			);
+			name = RES;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -118,7 +202,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1B489FE1CC87E3D00643A24 /* Node.cpp in Sources */,
+				E1B489FB1CC87E3D00643A24 /* Memory.cpp in Sources */,
+				E1B48A021CC87E3D00643A24 /* Timer.cpp in Sources */,
 				E1B489D01CC87D9300643A24 /* main.cpp in Sources */,
+				E1B489F81CC87E3D00643A24 /* FlagMatrix.cpp in Sources */,
+				E1B48A001CC87E3D00643A24 /* PIDController.cpp in Sources */,
+				E1B489FF1CC87E3D00643A24 /* Path.cpp in Sources */,
+				E1B489FD1CC87E3D00643A24 /* MouseBot.cpp in Sources */,
+				E1B48A031CC87E3D00643A24 /* Vector.cpp in Sources */,
+				E1B489F91CC87E3D00643A24 /* IRSensor.cpp in Sources */,
+				E1B489F71CC87E3D00643A24 /* Controller.cpp in Sources */,
+				E1B48A041CC87E3D00643A24 /* VirtualMaze.cpp in Sources */,
+				E1B489FA1CC87E3D00643A24 /* Maze.cpp in Sources */,
+				E1B48A011CC87E3D00643A24 /* RobotIO.cpp in Sources */,
+				E1B489FC1CC87E3D00643A24 /* Motor.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

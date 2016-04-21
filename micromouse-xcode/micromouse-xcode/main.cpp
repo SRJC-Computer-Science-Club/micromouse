@@ -1,15 +1,26 @@
-//
-//  main.cpp
-//  micromouse-xcode
-//
-//  Created by Erick Sanchez on 4/20/16.
-//  Copyright © 2016 Erick Sanchez. All rights reserved.
-//
+#include "Logger.h"
+const LogLevel LOG_LEVEL = DEBUG2;
+
 
 #include <iostream>
+#include <cstdlib>
+#include <ctime> //time
+#include "Controller.h"
 
-int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
+
+
+using namespace std;
+
+
+
+int main( int argc , char** argv )
+{
+    //seed the random function
+    srand( (unsigned int)time( NULL ) );
+    
+    Micromouse::Controller routine;
+    
+    system( "pause" );
+    
     return 0;
 }

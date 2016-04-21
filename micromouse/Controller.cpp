@@ -16,7 +16,7 @@
 
 
 
-int buttonFlag;
+bool buttonFlag;
 
 // defined in RobotIO.h
 extern int SWITCH_A_PIN; 
@@ -32,13 +32,11 @@ namespace Micromouse
 	void Controller::debug()
 	{
 		// DEBUG CODE GOES IN HERE!
-#ifdef __MK20DX256__ // Teensy Compile
-		//delay(2000);
-#endif
-		mouse.mapMaze();
-		mouse.runMaze();
+
+		//mouse.mapMaze();
+		//mouse.runMaze();
 		//mouse.testIR();
-		//mouse.testMotors();
+		mouse.testMotors();
 		//mouse.testRotate();
 
 		// DEBUG CODE GOES IN HERE!
@@ -50,11 +48,10 @@ namespace Micromouse
 	{
 		log(INFO) << "Starting Program";
 
-		#ifdef MICROMOUSE_DEBUG_MODE
-			debug();
-		#else
-			runMainLoop();
-		#endif
+		initPins();
+		buttonFlag = true;
+		runMainLoop();
+
 
 		log(INFO) << "End Program\n\n\n";
 	}
@@ -69,8 +66,15 @@ namespace Micromouse
 
 	void Controller::runMainLoop()
 	{
+#ifdef __MK20DX256__ // Teensy Compile
+		digitalWrite(LED_PIN, HIGH);
+#endif
+
 		while (true)
 		{
+			waitForButton();
+			buttonFlag = false;
+			
 			updateState();
 
 			while (!buttonFlag && state != NONE)
@@ -78,8 +82,6 @@ namespace Micromouse
 				runState();
 			}
 
-			waitForButton();
-			buttonFlag = false;
 		}
 	}
 
@@ -123,16 +125,18 @@ namespace Micromouse
 
 
 		case MAP_MAZE:
-			blinkLEDCountdown(3);
+			blinkLEDCountdown(MAP_MAZE);
+			//state = NONE;
+			blinkLEDCountdown(5);
 
 			mouse.resetToOrigin();
 			mouse.mapMaze();
 
-			if (buttonFlag)
-			{
-				return;
-			}
-			else
+			//if (buttonFlag)
+			//{
+			//	return;
+			//}
+			//else
 			{
 				doneMap = true;
 				state = RUN_MAZE;
@@ -143,65 +147,78 @@ namespace Micromouse
 
 
 		case RUN_MAZE:
-			if (doneMap)
-			{
-				blinkLEDCountdown(3);
+			blinkLED(RUN_MAZE);
+			state = NONE;
+			//if (doneMap)
+			//{
+			//	blinkLEDCountdown(3);
 
-				mouse.resetToOrigin();
-				mouse.runMaze();
+			//	mouse.resetToOrigin();
+			//	mouse.runMaze();
 
-				if (buttonFlag)
-				{
-					return;
-				}
-				else
-				{
-					mouse.incrementSpeed();
+			//	if (buttonFlag)
+			//	{
+			//		return;
+			//	}
+			//	else
+			//	{
+			//		mouse.incrementSpeed();
 
-					if (mouse.getSpeed() == 1 )//full cycle
-					{
-						state = NONE;
-					}
+			//		if (mouse.getSpeed() == 1 )//full cycle
+			//		{
+			//			state = NONE;
+			//		}
 
-					return;
-				}
-			}
-			else
-			{
-				log(WARN) << "Must map before Run";
-				state = NONE;
-			}
+			//		return;
+			//	}
+			//}
+			//else
+			//{
+			//	log(WARN) << "Must map before Run";
+			//	state = NONE;
+			//}
 
 		break;
 
 
 		case SELECT_SPEED:
-			mouse.incrementSpeed();
-			blinkLED(mouse.getSpeed());
+			blinkLED(SELECT_SPEED);
 			state = NONE;
+			//mouse.incrementSpeed();
+			//blinkLED(mouse.getSpeed());
+			//state = NONE;
 		break;
 
 
 		case NONE_4:
-		break;
-
-
-		case CAL_SENSORS:
-			mouse.CalibrateIRSensors();
+			blinkLED(NONE_4);
+			debug();
 			state = NONE;
 		break;
 
 
+		case CAL_SENSORS:
+			blinkLED(CAL_SENSORS);
+			state = NONE;
+			//mouse.CalibrateIRSensors();
+			//state = NONE;
+		break;
+
+
 		case CAL_MOTOR:
+			blinkLED(CAL_MOTOR);
+			state = NONE;
 			//TODO
 		break;
 
 
 		case RESET_MAZE:
-			doneMap = false;
-			log(INFO) << "Maze Reset";
-			//TODO
+			blinkLED(RESET_MAZE);
 			state = NONE;
+			//doneMap = false;
+			//log(INFO) << "Maze Reset";
+			////TODO
+			//state = NONE;
 		break;
 		}
 	}
@@ -259,9 +276,27 @@ namespace Micromouse
 		{
 			delay(10);
 		}
+
+		while (digitalRead(BUTTON_PIN))
+		{
+			delay(10);
+		}
 #else // pc
 		system("pause");
 		buttonFlag = true;
+#endif
+	}
+
+
+
+
+	void Controller::initPins()
+	{
+#ifdef __MK20DX256__ // Teensy Compile
+		pinMode(BUTTON_PIN, INPUT_PULLUP);
+		pinMode(SWITCH_A_PIN, INPUT_PULLUP);
+		pinMode(SWITCH_B_PIN, INPUT_PULLUP);
+		pinMode(SWITCH_C_PIN, INPUT_PULLUP);
 #endif
 	}
 }

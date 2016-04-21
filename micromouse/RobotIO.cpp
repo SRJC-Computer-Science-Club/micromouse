@@ -27,7 +27,6 @@ namespace Micromouse
 
 	RobotIO::RobotIO()
 	{
-		initPins();
 		initIRSensors();
 	}
 
@@ -523,18 +522,6 @@ namespace Micromouse
 
 		//IRSensors[FRONT_LEFT]->loadCalibration(IR_FRONT_LEFT_MEMORY);
 		//IRSensors[FRONT_RIGHT]->loadCalibration(IR_FRONT_RIGHT_MEMORY);
-	}
-
-
-
-	void RobotIO::initPins()
-	{
-#ifdef __MK20DX256__ // Teensy Compile
-		pinMode(BUTTON_PIN, INPUT_PULLUP);
-		pinMode(SWITCH_A_PIN, INPUT_PULLUP);
-		pinMode(SWITCH_B_PIN, INPUT_PULLUP); 
-		pinMode(SWITCH_C_PIN, INPUT_PULLUP);
-#endif
 	}
 
 

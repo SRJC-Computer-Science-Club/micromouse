@@ -118,7 +118,7 @@ namespace Micromouse {
 				log(DEBUG2) << "loading " << i << "  " << temp;
 				calibrationData[i] = temp;
 #ifdef __MK20DX256__ // Teensy Compile
-				delay(20);
+				delay(1);
 #endif
 			}
 

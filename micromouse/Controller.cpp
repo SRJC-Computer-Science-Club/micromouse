@@ -16,7 +16,7 @@
 
 
 
-bool buttonFlag;
+extern volatile bool buttonFlag;
 
 // defined in RobotIO.h
 extern int SWITCH_A_PIN; 
@@ -50,8 +50,8 @@ namespace Micromouse
 
 		initPins();
 		buttonFlag = true;
+		blinkLED(1);
 		runMainLoop();
-
 
 		log(INFO) << "End Program\n\n\n";
 	}
@@ -63,25 +63,18 @@ namespace Micromouse
 	}
 
 
-
 	void Controller::runMainLoop()
 	{
-#ifdef __MK20DX256__ // Teensy Compile
-		digitalWrite(LED_PIN, HIGH);
-#endif
-
 		while (true)
-		{
+		{	
 			waitForButton();
-			buttonFlag = false;
-			
+
 			updateState();
 
 			while (!buttonFlag && state != NONE)
 			{
 				runState();
 			}
-
 		}
 	}
 
@@ -271,32 +264,46 @@ namespace Micromouse
 
 	void Controller::waitForButton()
 	{
+		buttonFlag = false;
 #ifdef __MK20DX256__ // Teensy Compile
-		while (!digitalRead(BUTTON_PIN))
-		{
-			delay(10);
-		}
-
-		while (digitalRead(BUTTON_PIN))
+		while (!buttonFlag)
 		{
 			delay(10);
 		}
 #else // pc
 		system("pause");
-		buttonFlag = true;
 #endif
+		buttonFlag = false;
 	}
 
 
+	void irsButtonFlag()
+	{
+#ifdef __MK20DX256__ // Teensy Compile
+		cli();
+
+		if (!buttonFlag)
+		{
+			buttonFlag = true;
+		}
+
+		Serial.println("asdf");
+
+		sei();
+#endif
+	}
 
 
 	void Controller::initPins()
 	{
 #ifdef __MK20DX256__ // Teensy Compile
 		pinMode(BUTTON_PIN, INPUT_PULLUP);
+		attachInterrupt(BUTTON_PIN, irsButtonFlag, FALLING);
 		pinMode(SWITCH_A_PIN, INPUT_PULLUP);
 		pinMode(SWITCH_B_PIN, INPUT_PULLUP);
 		pinMode(SWITCH_C_PIN, INPUT_PULLUP);
 #endif
 	}
 }
+
+

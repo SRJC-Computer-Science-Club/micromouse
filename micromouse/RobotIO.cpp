@@ -279,6 +279,7 @@ namespace Micromouse
 				leftSpeed > 0.1f || rightSpeed > 0.1f
 			)
 		{
+			BUTTONFLAG
 			float deltaTime = timer.getDeltaTime();
 
 			//Get distance from the front of the bot to the wall.
@@ -350,9 +351,12 @@ namespace Micromouse
 
 		logC(INFO) << leftDistPID.getI();
 		logC(INFO) << rightDistPID.getI();
+		
+		BUTTONEXIT;
 
 		leftMotor.brake();
 		rightMotor.brake();
+
 	}
 
 
@@ -488,7 +492,7 @@ namespace Micromouse
 
 		//TODO check if load fails
 #ifdef __MK20DX256__ // Teensy Compile
-		delay(300);
+		delay(100);
 #endif
 
 
@@ -496,29 +500,26 @@ namespace Micromouse
 		IRSensors[RIGHT]->loadCalibration(IR_RIGHT_MEMORY);//todo change back
 
 #ifdef __MK20DX256__ // Teensy Compile
-		delay(300);
+		delay(20);
 #endif
 
 		log(DEBUG3) << "Load left";
 		IRSensors[LEFT]->loadCalibration(IR_LEFT_MEMORY);
 
 #ifdef __MK20DX256__ // Teensy Compile
-		delay(300);
+		delay(20);
 #endif
 
 		log(DEBUG3) << "Load front right";
 		IRSensors[FRONT_RIGHT]->loadCalibration(IR_FRONT_RIGHT_MEMORY);
 
 #ifdef __MK20DX256__ // Teensy Compile
-		delay(300);
+		delay(20);
 #endif
 
 		log(DEBUG3) << "Load front left";
 		IRSensors[FRONT_LEFT]->loadCalibration(IR_FRONT_LEFT_MEMORY);
 
-#ifdef __MK20DX256__ // Teensy Compile
-		delay(300);
-#endif
 
 		//IRSensors[FRONT_LEFT]->loadCalibration(IR_FRONT_LEFT_MEMORY);
 		//IRSensors[FRONT_RIGHT]->loadCalibration(IR_FRONT_RIGHT_MEMORY);

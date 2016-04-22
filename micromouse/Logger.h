@@ -199,12 +199,3 @@ Logger(level , Logger::FILE )
 #define logC(level)\
 if (level <= LOG_LEVEL)\
 Logger(level , Logger::CONSOLE )
-
-extern volatile bool buttonFlag;
-
-#define BUTTONFLAG \
-if (buttonFlag) goto BUTTON_EXIT;
-
-
-#define BUTTONEXIT \
-BUTTON_EXIT:

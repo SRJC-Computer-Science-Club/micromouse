@@ -12,7 +12,7 @@ namespace Micromouse
 		~Controller();
 
 	private:
-		enum states { NONE, MAP_MAZE, RUN_MAZE, SELECT_SPEED, NONE_4, CAL_SENSORS, CAL_MOTOR, RESET_MAZE };
+		enum states { NONE, MAP_MAZE, RUN_MAZE, SELECT_SPEED, DEBUG_MODE, CAL_SENSORS, CAL_MOTOR, RESET_MAZE };
 		
 		void debug();
 		void runMainLoop();

@@ -9,6 +9,7 @@ Author GitHub:	joshuasrjc
 
 #include "MouseBot.h"
 #include "Logger.h"
+#include "ButtonFlag.h"
 
 
 
@@ -96,13 +97,18 @@ namespace Micromouse
 		
 		while (!choicePositions.empty())
 		{
+
 			//logC(DEBUG1) << *maze;
 
 			PositionVector* pos = choicePositions.top();
 			choicePositions.pop();
 
+			BUTTONFLAG
+			
 			while (position != *pos)
 			{
+				BUTTONFLAG
+
 				backtrack();
 			}
 
@@ -111,6 +117,8 @@ namespace Micromouse
 			logC(DEBUG3) << "Number of possible directions: " << numPossibleDirections();
 			while (numPossibleDirections() > 0)
 			{
+				BUTTONFLAG
+
 				if (numPossibleDirections() > 1)
 				{
 #ifdef __MK20DX256__ // Teensy Compile
@@ -133,6 +141,11 @@ namespace Micromouse
 					lookAround();
 				}
 			}
+
+			returnToStart();
+
+			BUTTONEXIT
+				return;
 		}
 
 		logC(INFO) << "Mapped maze:\n";
@@ -159,14 +172,30 @@ namespace Micromouse
 	{
 		log(DEBUG1) << "Run Maze";
 
-		followPath(maze->findPath(position, PositionVector(0 /*NUM_NODES_W / 2*/, 0 /*NUM_NODES_H / 2*/)));
-		followPath(maze->findPath(position, PositionVector( /*NUM_NODES_W / 2*/16 , 16 /*NUM_NODES_H / 2*/)));
+
+		Path* pathCenter = maze->findPath(position, PositionVector(0, 0));
+		followPath(pathCenter);
+		delete pathCenter;
+
+		returnToStart();
+	}
+
+	void MouseBot::resetMaze()
+	{
+		delete maze;
+		maze = new Maze();
 	}
 
 
 
 	void MouseBot::returnToStart()
 	{
+#ifdef __MK20DX256__ // Teensy Compile
+		delay(400);
+#endif
+		Path* pathHome = maze->findPath(position, PositionVector(0, 0));
+		followPath(pathHome);
+		delete pathHome;
 	}
 
 
@@ -326,10 +355,15 @@ namespace Micromouse
 	{
 		while (!path->empty())
 		{
+			BUTTONFLAG
+
 			DirectionVector dir = path->popStep();
 			rotateToFaceDirection(dir.dir());
 			moveForward(dir.mag());
 		}
+
+		BUTTONEXIT
+			return;
 	}
 
 

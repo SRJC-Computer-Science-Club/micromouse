@@ -2,6 +2,7 @@
 #include "Logger.h"
 #include <vector>
 #include "Timer.h"
+#include "ButtonFlag.h"
 
 #ifdef __MK20DX256__ // Teensy Compile
 	#include "WProgram.h"
@@ -118,18 +119,16 @@ namespace Micromouse
 
 
 		case MAP_MAZE:
-			blinkLEDCountdown(MAP_MAZE);
-			//state = NONE;
-			blinkLEDCountdown(5);
+			blinkLEDCountdown(3);
 
 			mouse.resetToOrigin();
 			mouse.mapMaze();
 
-			//if (buttonFlag)
-			//{
-			//	return;
-			//}
-			//else
+			if (buttonFlag)
+			{
+				return;
+			}
+			else
 			{
 				doneMap = true;
 				state = RUN_MAZE;
@@ -140,51 +139,47 @@ namespace Micromouse
 
 
 		case RUN_MAZE:
-			blinkLED(RUN_MAZE);
-			state = NONE;
-			//if (doneMap)
-			//{
-			//	blinkLEDCountdown(3);
+			if (doneMap)
+			{
+				blinkLEDCountdown(3);
 
-			//	mouse.resetToOrigin();
-			//	mouse.runMaze();
+				mouse.resetToOrigin();
+				mouse.runMaze();
 
-			//	if (buttonFlag)
-			//	{
-			//		return;
-			//	}
-			//	else
-			//	{
-			//		mouse.incrementSpeed();
+				if (buttonFlag)
+				{
+					return;
+				}
+				else
+				{
+					mouse.incrementSpeed();
 
-			//		if (mouse.getSpeed() == 1 )//full cycle
-			//		{
-			//			state = NONE;
-			//		}
+					if (mouse.getSpeed() == 1 )//full cycle
+					{
+						state = NONE;
+					}
 
-			//		return;
-			//	}
-			//}
-			//else
-			//{
-			//	log(WARN) << "Must map before Run";
-			//	state = NONE;
-			//}
+					return;
+				}
+			}
+			else
+			{
+				log(WARN) << "Must map before Run";
+				state = NONE;
+			}
 
 		break;
 
 
 		case SELECT_SPEED:
-			blinkLED(SELECT_SPEED);
+			mouse.incrementSpeed();
+			blinkLED(mouse.getSpeed());
 			state = NONE;
-			//mouse.incrementSpeed();
-			//blinkLED(mouse.getSpeed());
-			//state = NONE;
 		break;
 
 
-		case NONE_4:
-			blinkLED(NONE_4);
+		case DEBUG_MODE:
+			blinkLEDCountdown(3);
 			debug();
 			state = NONE;
 		break;
@@ -207,11 +202,10 @@ namespace Micromouse
 
 		case RESET_MAZE:
 			blinkLED(RESET_MAZE);
+			doneMap = false;
+			log(INFO) << "Maze Reset";
+			mouse.resetMaze();
 			state = NONE;
-			//doneMap = false;
-			//log(INFO) << "Maze Reset";
-			////TODO
-			//state = NONE;
 		break;
 		}
 	}
@@ -286,8 +280,6 @@ namespace Micromouse
 		{
 			buttonFlag = true;
 		}
-
-		Serial.println("asdf");
 
 		sei();
 #endif

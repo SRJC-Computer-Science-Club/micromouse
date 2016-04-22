@@ -3,6 +3,7 @@
 #include "Vector.h"
 #include "Logger.h"
 #include "Timer.h"
+#include "ButtonFlag.h"
 
 
 
@@ -222,6 +223,8 @@ namespace Micromouse
 
 		for (int i = 0; i < 2000; i++)
 		{
+			BUTTONFLAG
+
 			logC(INFO) << "FWD RIGHT:  " << IRSensors[RIGHT]->getDistance();
 			logC(INFO) << "FWD LEFT:   " << IRSensors[LEFT]->getDistance();
 			//IRSensors[FRONT_LEFT]->debug();
@@ -230,6 +233,9 @@ namespace Micromouse
 			delay(200);
 #endif
 		}
+
+		BUTTONEXIT
+			return;
 	}
 
 
@@ -280,6 +286,7 @@ namespace Micromouse
 			)
 		{
 			BUTTONFLAG
+
 			float deltaTime = timer.getDeltaTime();
 
 			//Get distance from the front of the bot to the wall.
@@ -368,11 +375,14 @@ namespace Micromouse
 #ifdef __MK20DX256__ // Teensy Compile
 		delay(1000);
 #endif
+
 		rotate(-180);
 
 #ifdef __MK20DX256__ // Teensy Compile
 		delay(1000);
 #endif
+		BUTTONFLAG
+
 		rotate(90);
 
 #ifdef __MK20DX256__ // Teensy Compile
@@ -383,12 +393,17 @@ namespace Micromouse
 #ifdef __MK20DX256__ // Teensy Compile
 		delay(1000);
 #endif
+		BUTTONFLAG
+
 		rotate(45);
 
 #ifdef __MK20DX256__ // Teensy Compile
 		delay(1000);
 #endif
 		rotate(-45);
+
+		BUTTONEXIT
+			return;
 	}
 
 
@@ -423,6 +438,8 @@ namespace Micromouse
 
 		while (degrees > ANGLE_TOLERANCE || degrees < -ANGLE_TOLERANCE || angleCorrection > 0.1f)
 		{
+			BUTTONFLAG
+
 #ifdef __MK20DX256__ // Teensy Compile
 			delayMicroseconds(2000);
 #endif
@@ -468,6 +485,8 @@ namespace Micromouse
 		}
 
 		logC(INFO) << anglePID.getI();
+
+		BUTTONEXIT
 
 		leftMotor.brake();
 		rightMotor.brake();

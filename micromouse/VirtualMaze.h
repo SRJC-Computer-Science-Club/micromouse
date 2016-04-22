@@ -10,9 +10,9 @@ Author GitHub:	joshuasrjc
 #include "FlagMatrix.h"
 #include "Vector.h"
 
-#ifdef __MK20DX256__ //this is the Teensy signature
+#ifdef __MK20DX256__ // Teensy Compile
 #else
-#include <ostream>
+	#include <ostream>
 #endif
 
 namespace Micromouse
@@ -97,7 +97,7 @@ namespace Micromouse
 		int height;
 	};
 
-#ifdef __MK20DX256__ //this is the Teensy signature
+#ifdef __MK20DX256__ // Teensy Compile
 #else
 	//Prints out a picture of the maze for debugging.
 	//Just use: log( DEBUGX ) << maze;

@@ -9,25 +9,30 @@
 
 namespace Micromouse
 {
-	const float MM_BETWEEN_WHEELS = 90.f;
+	const float MM_BETWEEN_WHEELS = 66.5f;
 
 	//Number of encoder counts per centimeters traveled.
 	//360 / (3.35 * PI)
-	const float COUNTS_PER_MM = 3.42064355302;
+	const float COUNTS_PER_MM = 3.420646f;
 
 	//How close the robot needs to be to the target distance (in mm) when moving forward.
-    const float DISTANCE_TOLERANCE = 5.0;
+    const float DISTANCE_TOLERANCE = 5.0f;
 
 	//How close the robot needs to be to the target angle (in degrees) when rotating.
-	const float ANGLE_TOLERANCE = 1.0f;
+	const float ANGLE_TOLERANCE = 1.8f;
 
-	//The expected distance'between a left/right sensor and the wall (in mm).
-	const float WALL_DISTANCE = 50.0f;
+	//The expected distance between a left/right sensor and the wall (in mm).
+	const float WALL_DISTANCE = 55.0f;
+	const float FRONT_RIGHT_WALL_DISTANCE = 52.0f;
+	const float FRONT_LEFT_WALL_DISTANCE = 58.0f;
 
 	const int IR_FRONT_LEFT_PIN = 14;
 	const int IR_FRONT_RIGHT_PIN = 15;
 	const int IR_LEFT_PIN = 22;
 	const int IR_RIGHT_PIN = 23;
+
+	const int MAGNETOMETER_NINE_DOF_SDA_PIN = 18;
+	const int MAGNETOMETER_NINE_DOF_SCL_PIN = 19;
 
 	const int MOTOR_RIGHT_FWD_PIN = 12;
 	const int MOTOR_RIGHT_BWD_PIN = 11;
@@ -66,6 +71,7 @@ namespace Micromouse
 
 		void testMotors(); //temp
 		void testIR();
+		void testRotate();
 
 		//Moves the bot forward by the given number of millimeters.
 		void moveForward(float millimeters);

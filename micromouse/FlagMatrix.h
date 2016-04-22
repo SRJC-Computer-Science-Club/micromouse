@@ -26,6 +26,8 @@ namespace Micromouse
 		int getNumBytes() const; //Returns the estimated number of bytes used by the data in the matrix. (Underestimate)
 
 	private:
+		const int NUM_BITS = 32;
+
 		struct Index
 		{
 			int byteIndex;
@@ -36,11 +38,10 @@ namespace Micromouse
 
 		int width, height;
 		int numDataMembers;
-		const int NUM_BITS = 32;
 		unsigned int* data;
 	};
 
-#ifdef __MK20DX256__ //this is the Teensy signature
+#ifdef __MK20DX256__ // Teensy Compile
 #else
 	std::ostream& operator<<(std::ostream& out, const FlagMatrix& matrix); //Printout for debugging.
 #endif

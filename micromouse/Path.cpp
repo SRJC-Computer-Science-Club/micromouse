@@ -11,11 +11,10 @@ namespace Micromouse
 	}
 
 
+
 	Path::~Path()
 	{
 	}
-
-
 
 
 	void Path::addStep( DirectionVector step )

@@ -7,8 +7,7 @@ namespace Micromouse
 {
 	// constructors //////////////////////////////////////////////////
 
-	Maze::Maze()
-		:
+	Maze::Maze():
 		open(FlagMatrix(NUM_NODES_W, NUM_NODES_H)),
 		explored(FlagMatrix(NUM_NODES_W, NUM_NODES_H))
 	{
@@ -16,10 +15,10 @@ namespace Micromouse
 	}
 
 
+
 	Maze::~Maze()
 	{
 	}
-
 
 
 
@@ -122,6 +121,8 @@ namespace Micromouse
 		return findPath( start->getPos() , end->getPos() );
 	}
 
+
+
 	// Retruns the Node at the given position.
 	Node* Maze::getNode( PositionVector pos )
 	{
@@ -138,8 +139,6 @@ namespace Micromouse
 
 
 
-
-
 	// returns a pointer to the neighbor node at direction dir from pos
 	Node * Maze::getNeighborNode( PositionVector pos , direction dir )
 	{
@@ -147,6 +146,12 @@ namespace Micromouse
 		// int x = pos.x() + dir % 3 - 1;
 		// int y = pos.y() + dir / 3 - 1;
 		//if (x >= 0 && x < NUM_NODES_W && y >= 0 && y < NUM_NODES_H) { return maze[x][y]; }
+
+		if ( dir == NW || dir == SW || dir == SE || dir == NE )
+		{
+			return nullptr;
+		}
+
 
 		pos = pos + dir;
 
@@ -172,7 +177,6 @@ namespace Micromouse
 
 
 
-
 	void Maze::setOpen(bool flag, int x, int y)
 	{
 		open.setFlag(flag, x, y);
@@ -187,6 +191,7 @@ namespace Micromouse
 	{
 		explored.setFlag(flag, x, y);
 	}
+
 	void Maze::setExplored(bool flag, PositionVector pos)
 	{
 		setExplored(flag, pos.x(), pos.y());
@@ -196,6 +201,7 @@ namespace Micromouse
 	{
 		return open.getFlag(x, y);
 	}
+
 	bool Maze::isOpen(PositionVector pos) const
 	{
 		return isOpen(pos.x(), pos.y());
@@ -220,8 +226,6 @@ namespace Micromouse
 	{
 		return isInsideMaze(pos.x(), pos.y());
 	}
-
-
 
 
 
@@ -256,7 +260,6 @@ namespace Micromouse
 
 
 
-
 	// populates the maze with Nodes
 	void Maze::initNodes()
 	{
@@ -269,17 +272,25 @@ namespace Micromouse
 		}
 	}
 
-#ifdef __MK20DX256__ //this is the Teensy signature
-#else
+
+
+#ifdef __MK20DX256__ // Teensy Compile
+#else // PC compile
 	std::ostream& operator<<(std::ostream& out, const Maze& maze)
 	{
 		out << std::endl << "+ ";
-		for (int x = 0; x < NUM_NODES_W; x++) out << "- ";
+
+		for (int x = 0; x < NUM_NODES_W; x++)
+		{
+			out << "- ";
+		}
+
 		out << "+" << std::endl;
 
 		for (int y = NUM_NODES_H - 1; y >= 0; y--)
 		{
 			out << "| ";
+
 			for (int x = 0; x < NUM_NODES_W; x++)
 			{
 				if (maze.isExplored(x, y))
@@ -313,7 +324,12 @@ namespace Micromouse
 		}
 
 		out << "+ ";
-		for (int x = 0; x < NUM_NODES_W; x++) out << "- ";
+
+		for (int x = 0; x < NUM_NODES_W; x++)
+		{
+			out << "- ";
+		}
+
 		out << "+" << std::endl;
 
 		return out;

@@ -14,9 +14,9 @@ Author GitHub:	joshuasrjc
 #include "Maze.h"
 
 
-#ifdef __MK20DX256__ //this is the Teensy signature
+#ifdef __MK20DX256__ // Teensy Compile
 #else
-#include "VirtualMaze.h"
+	#include "VirtualMaze.h"
 #endif
 
 namespace Micromouse
@@ -53,6 +53,7 @@ namespace Micromouse
 
 		void testMotors();
 		void testIR();
+		void testRotate();
 
 
 		void moveForward(int numNodes);			// Moves the mouse forward by 1 node (1/2 cell)
@@ -82,11 +83,11 @@ namespace Micromouse
 
 		int speed = 1;
 
-#ifdef __MK20DX256__ //this is the Teensy signature
+#ifdef __MK20DX256__ // Teensy Compile
 #else
 		VirtualMaze* virtualMaze;
 #endif
-
+		int saveAddress = 512;
 		RobotIO robotIO;
 		std::stack<direction> movementHistory;
 

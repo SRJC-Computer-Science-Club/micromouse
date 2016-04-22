@@ -40,7 +40,7 @@ namespace Micromouse
 	// to N.
 	direction& operator++(direction& dir);
 
-#ifdef __MK20DX256__ //this is the Teensy signature
+#ifdef __MK20DX256__ // Teensy Compile
 #else
 	std::ostream& operator<<(std::ostream& out, const direction& dir);
 #endif
@@ -98,7 +98,6 @@ namespace Micromouse
 		direction _dir;
 		int _mag;
 	};
-	
 }
 
 

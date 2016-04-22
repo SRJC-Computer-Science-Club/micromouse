@@ -7,19 +7,22 @@ namespace Micromouse {
 	{
 		assert(address >= 0 && address < 2048);
 
-#ifdef __MK20DX256__ // Teensy compile
+#ifdef __MK20DX256__ // Teensy Compile
 		int load;
 		EEPROM.get(address, load);
 		return load;
-#endif
+#else // PC compile
 		return 0;
+#endif
 	}
+
+
 
 	void Memory::write(int address, int val)
 	{
 		assert(address >= 0 && address < 2048);
 
-#ifdef __MK20DX256__ // Teensy compile
+#ifdef __MK20DX256__ // Teensy Compile
 		EEPROM.put(address, val);
 #endif
 	}

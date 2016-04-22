@@ -1,12 +1,11 @@
 #pragma once
-#ifdef __MK20DX256__
-// If compiled for Teensy
-#include <Encoder.h>
+
+#ifdef __MK20DX256__ // Teensy Compile
+	#include <Encoder.h>
 #endif
 
 namespace Micromouse
 {
-
 	//Motor is a class that can be used to set the direction and speed of a motor,
 	//and to get information from its encoder.
 	class Motor
@@ -48,9 +47,8 @@ namespace Micromouse
 		int bwdPin;			//Backward pin
 		int pwmPin;			//Pulse-width modulation pin (for speed control)
 
-#ifdef __MK20DX256__
+#ifdef __MK20DX256__ // Teensy Compile
 		Encoder encoder;
 #endif
 	};
-
 }

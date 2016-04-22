@@ -12,8 +12,10 @@ Author GitHub:	joshuasrjc
 #include "PIDController.h"
 #include <assert.h>
 #include "Logger.h"
-#ifndef __MK20DX256__
-#include <iostream>
+
+#ifdef __MK20DX256__ // Teensy compile
+#else // PC compile
+	#include <iostream>
 #endif
 
 
@@ -29,6 +31,8 @@ namespace Micromouse
 		started = true;
 	}
 
+
+
 	float PIDController::getCorrection(float currentError)
 	{
 		assert(started);
@@ -36,6 +40,10 @@ namespace Micromouse
 		float deltaTime = getDeltaTime();
 
 		totalError += currentError * deltaTime;
+		
+		//totalError is bounded between -MAX_I_ERROR and +MAX_I_ERROR
+		totalError = totalError < -maxIntegralError ? -maxIntegralError : totalError;
+		totalError = totalError > maxIntegralError ? maxIntegralError : totalError;
 
 		float pCorrection = P * currentError;
 		float iCorrection = I * totalError;
@@ -44,12 +52,21 @@ namespace Micromouse
 		float sum = pCorrection + iCorrection + dCorrection;
 		sum /= 1000.0f;
 
-		//Total is bound between -1 and 1
+		//Sum is bounded between -1 and 1
 		sum = sum < -1 ? -1 : sum;
 		sum = sum > 1 ? 1 : sum;
 
 		return sum;
 	}
+
+
+
+	float PIDController::getI() const
+	{
+		return totalError;
+	}
+
+
 
 	void PIDController::setConstants(float P, float I, float D)
 	{
@@ -58,15 +75,21 @@ namespace Micromouse
 		this->D = D;
 	}
 
+
+
 	float PIDController::getDeltaTime()
 	{
 		long currentTime = micros();
 		float deltaTime = (currentTime - lastTime) / 1000000.0f; //1,000,000 microseconds in a second.
 		lastTime = currentTime;
+
 		return deltaTime;
 	}
 
-#ifndef __MK20DX256__
+
+
+#ifdef __MK20DX256__ // Teensy compile
+#else // PC compile
 	long PIDController::micros()
 	{
 		using namespace std::chrono;
@@ -74,7 +97,6 @@ namespace Micromouse
 		return duration_cast<microseconds>(high_resolution_clock::now() - initialTime).count();
 	}
 #endif
-
 }
 
 

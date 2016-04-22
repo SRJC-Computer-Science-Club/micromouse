@@ -10,8 +10,9 @@ namespace Micromouse
 		Controller();
 		~Controller();
 
-
 	private:
+		enum states { NONE, MAP_MAZE, RUN_MAZE, SELECT_SPEED, NONE_4, CAL_SENSORS, CAL_MOTOR, RESET_MAZE };
+		
 		void debug();
 		void runMainLoop();
 
@@ -26,11 +27,7 @@ namespace Micromouse
 		// perfomrs a countdown and blinks the led
 		void blinkLEDCountdown(int sec);
 
-
 		void waitForButton();
-
-		enum states { NONE, MAP_MAZE, RUN_MAZE, SELECT_SPEED, NONE_4, CAL_SENSORS, CAL_MOTOR, RESET_MAZE };
-
 
 		MouseBot mouse;
 
@@ -38,5 +35,4 @@ namespace Micromouse
 
 		bool doneMap = false;
 	};
-
 }

@@ -8,18 +8,24 @@ namespace Micromouse
 		return static_cast<direction>(((int)dir1 + (int)dir2) % 8);
 	}
 
+
+
 	direction operator-(const direction &dir1, const direction &dir2)
 	{
-		return static_cast<direction>(((int)dir1 - (int)dir2) % 8);
+		return static_cast<direction>((64 + (int)dir1 - (int)dir2) % 8);
 	}
+
+
 
 	direction& operator++(direction& dir)
 	{ //++prefix
 		return dir = static_cast<direction>(((int)dir + 1) % 9);
 	}
 
-#ifdef __MK20DX256__ //this is the Teensy signature
-#else
+
+
+#ifdef __MK20DX256__ // Teensy Compile
+#else // PC compile
 	std::ostream& operator<<(std::ostream& out, const direction& dir)
 	{
 		switch (dir)
@@ -37,15 +43,12 @@ namespace Micromouse
 	}
 #endif
 
-	//static const Pos & UNDEFINED = Pos( 0 , -1 );
-
-
 
 
 	// PositionVector ///////////////////////////////////////////////////
 
 	PositionVector::PositionVector( int x , int y ) :
-		_x( x ) ,
+		_x( x ),
 		_y( y )
 	{
 		validateSelf();
@@ -87,7 +90,6 @@ namespace Micromouse
 	{
 		_x = x;
 		validateSelf();
-
 	}
 
 
@@ -97,7 +99,6 @@ namespace Micromouse
 		_y = y;
 		validateSelf();
 	}
-
 
 
 
@@ -115,10 +116,12 @@ namespace Micromouse
 	}
 
 
+
 	PositionVector PositionVector::operator*(int scalar)
 	{
 		return PositionVector(_x*scalar, _y*scalar);
 	}
+
 
 
 	bool PositionVector::operator==(PositionVector pos)
@@ -127,10 +130,12 @@ namespace Micromouse
 	}
 
 
+
 	bool PositionVector::operator!=(PositionVector pos)
 	{
 		return _x != pos._x || _y != pos._y;
 	}
+
 
 
 	void PositionVector::validateSelf()

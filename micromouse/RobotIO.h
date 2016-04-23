@@ -93,9 +93,9 @@ namespace Micromouse
 		
 		/* Test hard ware calibration */
 		
-		void testMotorCalibration();
-		void testIRSencorCalibration();
-		void testGyroCalibration();
+		bool checkMotors();
+		void checkIRSensors();
+		void checkGyro();
 		
 		
 		

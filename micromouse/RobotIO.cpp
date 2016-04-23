@@ -554,8 +554,8 @@ namespace Micromouse
 	}
 	
 	
-	
-	void RobotIO::testMotorCalibration()
+
+	bool RobotIO::checkMotors()
 	{
 		int startCountsRight = 0;
 		int startCountsLeft = 0;
@@ -567,19 +567,9 @@ namespace Micromouse
 		//Zero encoder value and sets encoder counts to temp var-
 		//reads value before -
 		//runs motor for 2 turns and 
-		leftMotor.resetCounts();
-		rightMotor.resetCounts();
 
 		startCountsLeft = leftMotor.getCounts();
 		startCountsRight = rightMotor.getCounts();
-
-			
-		
-		log( DEBUG2 ) << " Encoder Value Before Moving     L : " << startCountsLeft << ", R : " << startCountsRight;
-		log( DEBUG2 ) << " Moving Forward ";
-
-		leftMotor.resetCounts();
-		rightMotor.resetCounts();
 
 		leftMotor.setMovement(0.5f);
 		rightMotor.setMovement(0.5f);
@@ -589,40 +579,36 @@ namespace Micromouse
 				delay(1000);
 		#endif		
 
-		log( DEBUG2 ) << " Stoping Motors ";
-
-		leftMotor.setMovement(0.0f);
-		rightMotor.setMovement(0.0f);
+		leftMotor.brake();
+		rightMotor.brake();
 
 		encoderLeft = leftMotor.getCounts();
 		encoderRight = rightMotor.getCounts();
-		
-		if( startCountsLeft > 0){
 
-			log( DEBUG2 ) << " Left Motor is getting counts. Total counts after turn : " << finishCountsLeft;
 
-		}else if (startCountsRight > 0) {
-
-			log(DEBUG2) << " Right Motor is getting counts. Total counts after finish rotation : " << finishCountsRight;
-
-		}else if ( startCountsLeft > 0 || startCountsRight > 0){
-
-			log(DEBUG2) << " Encoder Value Before Moving     L : " << finishCountsLeft << ", R : " << finishCountsRight;
-
+		if( finishCountsLeft > 0 && finishCountsRight > 0){	
+			log(DEBUG2) << " Both Motors Working Fine";
+			return true;
+		}else if (finishCountsLeft > 0){
+			log(DEBUG2) << "Left Motor is Not getting encoder counts";
+			return false;
+		}else if (finishCountsRight > 0){
+			log(DEBUG2) << "Right Motor is Not getting encoder counts";
+			return false;
 		}else{
-
-			log( DEBUG2 ) << " Motor is NOT reading counts";
-
+			log(DEBUG2) << "Neither Motor is Getting encoder counts";
+			return false;
 		}
 	
 		//prints out the value of the encoder after two turns. -
 		// TODO  returns the total expected error
 		//Print out incoder value after the motors have -
+		//return pass or fail true or false
 	}
 	
 	
 	
-	void RobotIO::testIRSencorCalibration()
+	void RobotIO::checkIRSensors()
 	{
 		// Test the ir sensor by outputing distance of each sensor
 			log( DEBUG2 ) << " FRONT_LEFT : " << IRSensors[FRONT_LEFT]->getDistance() <<  
@@ -634,7 +620,7 @@ namespace Micromouse
 	
 	
 	
-	void testGyroCalibration()
+	void RobotIO::checkGyro()
 	{
 		
 	}

@@ -36,9 +36,9 @@ namespace Micromouse
 		//delay(2000);
 #endif
 		/*Test Hardware functions by oran*/
-		mouse.testIRCalib();
-		mouse.testMotorCalib();
-		//mouse.testGyroCalib(); //NOT INPLEMTED
+		mouse.checkIRSensorRobotIO();
+		mouse.checkMotorsRobotIO();
+		//mouse.checkGyroRobotIO(); //NOT INPLEMTED
 
 
 		//mouse.mapMaze();

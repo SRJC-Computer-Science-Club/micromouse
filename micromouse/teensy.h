@@ -10,10 +10,6 @@
 
 #ifdef __MK20DX256__ // Teensy Compile
 #include <Arduino.h>
-#else // PC compile
-#include <iostream>
-#include <fstream>
-#include <sstream>
 #endif
 
 
@@ -25,11 +21,9 @@
 #define INPUT 0;
 #define INPUT_PULLUP 2;
 
-enum purpose {OUTPUT,INPUT};
-
 void digitalWrite2(int port,int state);
 
-void anglogWrie2(int port,int value);
+void anglogWrite2(int port,int value);
 
 int analogRead2(int port);
 

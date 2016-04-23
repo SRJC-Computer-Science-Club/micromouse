@@ -28,7 +28,7 @@ void digitalWrite2(int port,int state)
 
 
 
-void anglogWrie2(int port,int value)
+void anglogWrite2(int port,int value)
 {
 
 #ifdef __MK20DX256__ // Teensy Compile
@@ -37,7 +37,7 @@ void anglogWrie2(int port,int value)
 
 #else
 
-    log(DEBUG4) <<"analogWrite " << port << " stte " << value;
+    log(DEBUG4) <<"analogWrite " << port << " state " << value;
 
 #endif
 
@@ -99,7 +99,7 @@ void pinMode2(int port,int purpose)
 #ifdef __MK20DX256__ // Teensy Compile
 
     //Iam not sure baout this
-    pinMode(port,inpurpose);
+    pinMode(port,purpose);
 
 #else
 
@@ -160,11 +160,11 @@ int random2(int value)
 {
     #ifdef __MK20DX256__ // Teensy Compile
 
-        random(value);
+       return random(value);
 
     #else
 
-    log(DEBUG4) <<"Random";
+    return rand() % value;
 
     #endif
 }

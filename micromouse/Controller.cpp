@@ -50,8 +50,7 @@ namespace Micromouse
 		log(INFO) << "Starting Program";
 
 		initPins();
-		buttonFlag = true;
-		blinkLED(1);
+		blinkLED(1); //signifies loading complete
 		runMainLoop();
 
 		log(INFO) << "End Program\n\n\n";
@@ -115,10 +114,12 @@ namespace Micromouse
 		switch (state)
 		{
 		case NONE:
+			log(DEBUG2) << "Enter the NONE state";
 		break;
 
 
 		case MAP_MAZE:
+			log(DEBUG2) << "Enter the MAP_MAZE state";
 			blinkLEDCountdown(3);
 
 			mouse.resetToOrigin();
@@ -139,6 +140,7 @@ namespace Micromouse
 
 
 		case RUN_MAZE:
+			log(DEBUG2) << "Enter the RUN_MAZE state";
 			if (doneMap)
 			{
 				blinkLEDCountdown(3);
@@ -172,6 +174,7 @@ namespace Micromouse
 
 
 		case SELECT_SPEED:
+			log(DEBUG2) << "Enter the SELECT_SPEED state";
 			mouse.incrementSpeed();
 			blinkLED(mouse.getSpeed());
 			state = NONE;
@@ -179,6 +182,7 @@ namespace Micromouse
 
 
 		case DEBUG_MODE:
+			log(DEBUG2) << "Enter the DEBUG_MODE state";
 			blinkLEDCountdown(3);
 			debug();
 			state = NONE;
@@ -186,8 +190,11 @@ namespace Micromouse
 
 
 		case CAL_SENSORS:
+			log(DEBUG2) << "Enter the CAL_SENSORS state";
 			blinkLED(CAL_SENSORS);
 			state = NONE;
+			// I dont want to mess up the calibration during testing
+			//TODO test the calbration through the controller states
 			//mouse.CalibrateIRSensors();
 			//state = NONE;
 		break;
@@ -196,7 +203,7 @@ namespace Micromouse
 		case CAL_MOTOR:
 			blinkLED(CAL_MOTOR);
 			state = NONE;
-			//TODO
+			//TODO decide if this is even something we need
 		break;
 
 
@@ -221,13 +228,15 @@ namespace Micromouse
 
 		for (; reps >= 2; reps--)
 		{
-			delay(timeOn);
+			BUTTONFLAG
 
+			delay(timeOn);
 			digitalWrite(LED_PIN, LOW);
 			delay(timeOff);
 			digitalWrite(LED_PIN, HIGH);
 		}
 #endif
+		BUTTONEXIT
 		return(timeOff * reps + timeOn * (reps - 1));
 	}
 
@@ -239,6 +248,8 @@ namespace Micromouse
 
 		for (; sec > 5; sec--) //long single blinks for more than 5 seconds
 		{
+			BUTTONFLAG
+
 			log(INFO) << sec;
 #ifdef __MK20DX256__ // Teensy Compile
 			delay(1000 - blinkLED( 1 , 200 ));
@@ -247,11 +258,16 @@ namespace Micromouse
 
 		for (; sec > 0; sec--)//quick blinks for the number of seconds left
 		{
+			BUTTONFLAG
+
 			log(INFO) << sec;
 #ifdef __MK20DX256__ // Teensy Compile
 			delay(1000 - blinkLED(sec, 80, 50));
 #endif
 		}
+
+		BUTTONEXIT
+		return;
 	}
 
 

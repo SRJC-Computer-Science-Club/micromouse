@@ -105,10 +105,14 @@ namespace Micromouse
 			PositionVector* pos = choicePositions.top();
 			choicePositions.pop();
 
-			while (position != *pos)
-			{
-				backtrack();
-			}
+			//while (position != *pos)
+			//{
+			//	backtrack();
+			//}
+
+			Path* path = maze->findPath(position, *pos);
+			followPath(path);
+
 
 			delete pos;
 	
@@ -161,10 +165,20 @@ namespace Micromouse
 
 	void MouseBot::runMaze()
 	{
+#ifdef SFML_GRAPHICS_HPP
+		color = sf::Color::Color(20, 200, 200);
+#endif
 		log(DEBUG1) << "Run Maze";
 
-		followPath(maze->findPath(position, PositionVector(0 /*NUM_NODES_W / 2*/, 0 /*NUM_NODES_H / 2*/)));
-		followPath(maze->findPath(position, PositionVector( /*NUM_NODES_W / 2*/16 , 16 /*NUM_NODES_H / 2*/)));
+		followPath(maze->findPath(position, PositionVector(0, 0)));
+
+
+#ifdef SFML_GRAPHICS_HPP
+		color = sf::Color::Color(200, 20, 200);
+#endif
+		
+		followPath(maze->findPath(PositionVector(0, 0), PositionVector( MAZE_W , MAZE_H)));
+		//followPath(maze->findPath(position, PositionVector( /*NUM_NODES_W / 2*/16 , 16 /*NUM_NODES_H / 2*/)));
 	}
 
 
@@ -245,7 +259,7 @@ namespace Micromouse
 #else // PC compile
 		int rando = rand() % 4;
 #endif
-
+		rando = 0;
 		switch (rando)
 		{
 		case 0:
@@ -328,11 +342,14 @@ namespace Micromouse
 
 	void MouseBot::followPath(Path* path)
 	{
-		while (!path->empty())
+		if (path != nullptr)
 		{
-			DirectionVector dir = path->popStep();
-			rotateToFaceDirection(dir.dir());
-			moveForward(dir.mag());
+			while (!path->empty())
+			{
+				DirectionVector dir = path->popStep();
+				rotateToFaceDirection(dir.dir());
+				moveForward(dir.mag());
+			}
 		}
 	}
 
@@ -342,8 +359,10 @@ namespace Micromouse
 	{
 		direction dir = movementHistory.top();
 		movementHistory.pop();
+		movementHistory.pop();
 		rotateToFaceDirection(dir + S);
-		moveForward(1);
+		moveForward(2);
+		movementHistory.pop();
 		movementHistory.pop();
 	}
 

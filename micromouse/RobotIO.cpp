@@ -584,9 +584,11 @@ namespace Micromouse
 		leftMotor.setMovement(0.5f);
 		rightMotor.setMovement(0.5f);
 			
-		//----------------->
-		//delay(1000);
-		
+
+		#ifdef __MK20DX256__ // Teensy Compile
+				delay(1000);
+		#endif		
+
 		log( DEBUG2 ) << " Stoping Motors ";
 
 		leftMotor.setMovement(0.0f);

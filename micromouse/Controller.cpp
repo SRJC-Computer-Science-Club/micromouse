@@ -120,6 +120,7 @@ namespace Micromouse
 
 		case MAP_MAZE:
 			log(DEBUG2) << "Enter the MAP_MAZE state";
+
 			blinkLEDCountdown(3);
 
 			mouse.resetToOrigin();
@@ -141,6 +142,7 @@ namespace Micromouse
 
 		case RUN_MAZE:
 			log(DEBUG2) << "Enter the RUN_MAZE state";
+
 			if (doneMap)
 			{
 				blinkLEDCountdown(3);
@@ -175,6 +177,7 @@ namespace Micromouse
 
 		case SELECT_SPEED:
 			log(DEBUG2) << "Enter the SELECT_SPEED state";
+
 			mouse.incrementSpeed();
 			blinkLED(mouse.getSpeed());
 			state = NONE;
@@ -191,6 +194,7 @@ namespace Micromouse
 
 		case CAL_SENSORS:
 			log(DEBUG2) << "Enter the CAL_SENSORS state";
+
 			blinkLED(CAL_SENSORS);
 			state = NONE;
 			// I dont want to mess up the calibration during testing
@@ -201,6 +205,8 @@ namespace Micromouse
 
 
 		case CAL_MOTOR:
+			log(DEBUG2) << "Enter the CAL_MOTOR state";
+
 			blinkLED(CAL_MOTOR);
 			state = NONE;
 			//TODO decide if this is even something we need
@@ -208,11 +214,14 @@ namespace Micromouse
 
 
 		case RESET_MAZE:
-			blinkLED(RESET_MAZE);
+			log(DEBUG2) << "Enter the RESET_MAZE state";
+
 			doneMap = false;
 			log(INFO) << "Maze Reset";
 			mouse.resetMaze();
 			state = NONE;
+
+			blinkLED(5);
 		break;
 		}
 	}

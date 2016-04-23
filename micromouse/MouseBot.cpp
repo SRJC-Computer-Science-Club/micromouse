@@ -145,7 +145,7 @@ namespace Micromouse
 			returnToStart();
 
 			BUTTONEXIT
-				return;
+			return;
 		}
 
 		logC(INFO) << "Mapped maze:\n";
@@ -363,7 +363,7 @@ namespace Micromouse
 		}
 
 		BUTTONEXIT
-			return;
+		return;
 	}
 
 

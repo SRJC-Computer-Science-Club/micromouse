@@ -235,7 +235,7 @@ namespace Micromouse
 		}
 
 		BUTTONEXIT
-			return;
+		return;
 	}
 
 

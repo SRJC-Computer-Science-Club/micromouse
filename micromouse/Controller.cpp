@@ -306,7 +306,7 @@ namespace Micromouse
 	{
 #ifdef __MK20DX256__ // Teensy Compile
 		pinMode(BUTTON_PIN, INPUT_PULLUP);
-		attachInterrupt(BUTTON_PIN, irsButtonFlag, FALLING);
+		attachInterrupt(BUTTON_PIN, irsButtonFlag, RISING);
 		pinMode(SWITCH_A_PIN, INPUT_PULLUP);
 		pinMode(SWITCH_B_PIN, INPUT_PULLUP);
 		pinMode(SWITCH_C_PIN, INPUT_PULLUP);

@@ -28,11 +28,11 @@ namespace Micromouse
 #ifdef __MK20DX256__ // Teensy Compile
 #else
 		// If compiled for PC
-		//virtualMaze = new VirtualMaze(NUM_NODES_W, NUM_NODES_H);
-		//virtualMaze->generateRandomMaze();
+		virtualMaze = new VirtualMaze(NUM_NODES_W, NUM_NODES_H);
+		virtualMaze->generateRandomMaze();
 
-		//logC(INFO) << "Randomly generated a virtual maze:\n";
-		//logC(INFO) << *virtualMaze << "\n";
+		logC(INFO) << "Randomly generated a virtual maze:\n";
+		logC(INFO) << *virtualMaze << "\n";
 #endif
 	}
 
@@ -313,11 +313,11 @@ namespace Micromouse
 
 
 	/**** MOVEMENT FUNCTIONS ****/
-
 	void MouseBot::move(direction dir)
 	{
 		position = position + dir;
 		movementHistory.push(dir);
+		draw();
 	}
 
 
@@ -444,5 +444,37 @@ namespace Micromouse
 	{
 		robotIO.calibrateIRSensors();
 	}
+
+
+
+
+
+
+
+#ifdef SFML_GRAPHICS_HPP
+	void MouseBot::draw()
+	{
+
+		//Window::clear();
+		virtualMaze->draw();
+		sf::Color color;
+		color = sf::Color::Color(200, 200, 30);
+		sf::CircleShape circle(4);
+		circle.setFillColor(color);
+		circle.setOrigin(4, 4);
+		circle.setPosition(position.x() * 20 + 60,(30 - position.y()) * 20 + 60);
+		//sf::sleep(sf::milliseconds(50)); // 10fps
+		renderWindow.draw(circle);
+
+		circle.setPosition(lastPosition.x() * 20 + 60, (30 - lastPosition.y()) * 20 + 60);
+		//sf::sleep(sf::milliseconds(50)); // 10fps
+		renderWindow.draw(circle);
+
+		Window::display();
+		lastPosition = position;
+	}
+#endif
+
+
 }
 

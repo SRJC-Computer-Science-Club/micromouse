@@ -12,6 +12,7 @@ Author GitHub:	joshuasrjc
 #include <stack>
 #include "Path.h"
 #include "Maze.h"
+#include "Drawable.h"
 
 
 #ifdef __MK20DX256__ // Teensy Compile
@@ -24,7 +25,11 @@ namespace Micromouse
 	const float MM_PER_NODE = 90.0f;
 
 	//A class to be used for keeping track of the robot's position, as well as an interface to the I/O of the robot.
+#ifdef SFML_GRAPHICS_HPP
+	class MouseBot : public Drawable
+#else
 	class MouseBot
+#endif
 	{
 	public:
 		MouseBot(int x = 0, int y = 0);					// Sets the position to (x,y)
@@ -67,6 +72,15 @@ namespace Micromouse
 
 		void CalibrateIRSensors();
 
+#ifdef __MK20DX256__ // Teensy Compile
+#else
+		VirtualMaze* virtualMaze;
+#endif
+
+#ifdef SFML_GRAPHICS_HPP
+		void draw(); // draws the maze to the renderWindow
+		PositionVector lastPosition = PositionVector(0, 0);
+#endif
 	private:
 		const int MAX_SPEED = 8;
 
@@ -83,10 +97,6 @@ namespace Micromouse
 
 		int speed = 1;
 
-#ifdef __MK20DX256__ // Teensy Compile
-#else
-		VirtualMaze* virtualMaze;
-#endif
 		int saveAddress = 512;
 		RobotIO robotIO;
 		std::stack<direction> movementHistory;

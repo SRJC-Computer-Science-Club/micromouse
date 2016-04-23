@@ -271,12 +271,6 @@ namespace Micromouse
 	// This is the main loop that will virtually test the mouse
 	void Controller::beginSimulation()
 	{
-		//TODO fix draw standard maze
-		//null Nodes break it
-		//Maze* maze = new Maze;
-
-		VirtualMaze cmaze = VirtualMaze(31, 31);
-		cmaze.generateRandomMaze();
 
 #ifdef SFML_GRAPHICS_HPP
 		bool drawn = false;
@@ -304,9 +298,8 @@ namespace Micromouse
 			if (!drawn) // we dont want it to draw over itself..yet
 			{
 				Window::clear();
-				//maze->draw();
-				std::cout << cmaze;
-				cmaze.draw();
+				mouse.virtualMaze->draw();
+				mouse.mapMaze();
 #endif
 				//std::cout << maze->findPath( Vector::Pos( 2 , 2 ) , Vector::Pos( 14 , 11 ) );
 #ifdef SFML_GRAPHICS_HPP

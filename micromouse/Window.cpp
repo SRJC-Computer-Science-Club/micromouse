@@ -9,6 +9,7 @@ namespace Micromouse
 	Window::Window()
 	{
 		initializeFont();
+		renderWindow.setFramerateLimit(30);
 	}
 
 

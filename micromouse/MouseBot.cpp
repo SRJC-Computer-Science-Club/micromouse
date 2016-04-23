@@ -142,10 +142,7 @@ namespace Micromouse
 				}
 			}
 
-			returnToStart();
 
-			BUTTONEXIT
-			return;
 		}
 
 		logC(INFO) << "Mapped maze:\n";
@@ -155,15 +152,10 @@ namespace Micromouse
 		logC(INFO) << *maze;
 #endif
 
-		//temp for testing
-		//Path * path2 = maze.findPath(PositionVector(0, 0), PositionVector(0, 0));
-		/*Path * path = maze->findPath(PositionVector(0, 0), PositionVector(16, 16));
-		for (int i = 0; i < path->size(); i++)
-		{
-			log(DEBUG2) << "Dir: " << path->peekStep().dir() << " Mag: " << path->peekStep().mag();
-			path->popStep();
-		}
-		*/
+		returnToStart();
+
+		BUTTONEXIT
+			return;
 	}
 
 
@@ -173,12 +165,14 @@ namespace Micromouse
 		log(DEBUG1) << "Run Maze";
 
 
-		Path* pathCenter = maze->findPath(position, PositionVector(0, 0));
+		Path* pathCenter = maze->findPath(position, PositionVector(2, 2));
 		followPath(pathCenter);
 		delete pathCenter;
 
 		returnToStart();
 	}
+
+
 
 	void MouseBot::resetMaze()
 	{
@@ -195,6 +189,7 @@ namespace Micromouse
 #endif
 		Path* pathHome = maze->findPath(position, PositionVector(0, 0));
 		followPath(pathHome);
+		rotate(S);
 		delete pathHome;
 	}
 

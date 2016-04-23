@@ -54,14 +54,15 @@ namespace Micromouse
 
 			if ( currentNode == maze[ end.x() ][ end.y() ] ) // if we are at the end node then we are done!
 			{
-//#ifdef SFML_GRAPHICS_HPP
-//				Node* temp = currentNode;
-//				while ( temp->getParent() != nullptr ) // draw the path pack to the start node
-//				{
-//					drawLine( temp->getPos() , temp->getParent()->getPos() );
-//					temp = temp->getParent();
-//				}
-//#endif
+#ifdef SFML_GRAPHICS_HPP
+				Node* temp = currentNode;
+				while ( temp->getParent() != nullptr ) // draw the path pack to the start node
+				{
+					drawLine( temp->getPos() , temp->getParent()->getPos() );
+					temp = temp->getParent();
+				}
+#endif
+				openNodes.clear();
 				return createPath( currentNode ); // create a Path object for motion control to utilize
 			}
 
@@ -286,10 +287,13 @@ namespace Micromouse
 	void Micromouse::Maze::drawLine(PositionVector begin , PositionVector end )
 	{
 		sf::Vertex line[ 2 ];
-		sf::Color color = sf::Color( 200 , 80 , 30 );
-		line[ 0 ] = sf::Vertex( sf::Vector2f( NODE_W * begin.x() + 40.0f , NODE_H * begin.y() + 40.0f ) , color );
-		line[ 1 ] = sf::Vertex( sf::Vector2f( NODE_W * end.x() + 40.0f , NODE_H * end.y() + 40.0f ) , color );
+		sf::Color color = sf::Color( 220 , 30 , 30 );
+		line[ 0 ] = sf::Vertex( sf::Vector2f( NODE_W * begin.x() + 60.0f , NODE_H * (NUM_NODES_H - 1 - begin.y()) + 60.0f ) , color );
+		line[ 1 ] = sf::Vertex( sf::Vector2f( NODE_W * end.x() + 60.0f , NODE_H *(NUM_NODES_H - 1 - end.y()) + 60.0f ) , color );
 		renderWindow.draw( line , 2 , sf::Lines );
+		Window::display();
+		renderWindow.draw(line, 2, sf::Lines);
+		Window::display();
 	}
 
 

@@ -300,6 +300,7 @@ namespace Micromouse
 				Window::clear();
 				mouse.virtualMaze->draw();
 				mouse.mapMaze();
+				mouse.runMaze();
 #endif
 				//std::cout << maze->findPath( Vector::Pos( 2 , 2 ) , Vector::Pos( 14 , 11 ) );
 #ifdef SFML_GRAPHICS_HPP
@@ -307,9 +308,6 @@ namespace Micromouse
 				Window::display();
 				drawn = true;
 			}
-
-
-			sf::sleep(sf::milliseconds(100)); // 10fps
 		}
 #endif
 	}

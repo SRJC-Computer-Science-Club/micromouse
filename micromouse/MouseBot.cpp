@@ -88,6 +88,10 @@ namespace Micromouse
 
 	void MouseBot::mapMaze()
 	{
+#ifdef SFML_GRAPHICS_HPP
+		color = sf::Color::Color(200, 200, 30);
+#endif
+
 		log(DEBUG1) << "Mapping Maze...";
 
 		std::stack<PositionVector*> choicePositions = std::stack<PositionVector*>();
@@ -457,16 +461,14 @@ namespace Micromouse
 
 		//Window::clear();
 		virtualMaze->draw();
-		sf::Color color;
-		color = sf::Color::Color(200, 200, 30);
-		sf::CircleShape circle(4);
+		sf::CircleShape circle(3);
 		circle.setFillColor(color);
 		circle.setOrigin(4, 4);
-		circle.setPosition(position.x() * 20 + 60,(30 - position.y()) * 20 + 60);
+		circle.setPosition(position.x() * 20 + 60,(NUM_NODES_H - 1 - position.y()) * 20 + 60);
 		//sf::sleep(sf::milliseconds(50)); // 10fps
 		renderWindow.draw(circle);
 
-		circle.setPosition(lastPosition.x() * 20 + 60, (30 - lastPosition.y()) * 20 + 60);
+		circle.setPosition(lastPosition.x() * 20 + 60, (NUM_NODES_H - 1 - lastPosition.y()) * 20 + 60);
 		//sf::sleep(sf::milliseconds(50)); // 10fps
 		renderWindow.draw(circle);
 

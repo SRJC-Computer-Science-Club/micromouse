@@ -9,7 +9,7 @@ namespace Micromouse
 {
 
 #ifdef SFML_GRAPHICS_HPP
-	const int NODE_W = 24 , NODE_H = 24;
+	const int NODE_W = 20 , NODE_H = 20;
 #endif
 
 

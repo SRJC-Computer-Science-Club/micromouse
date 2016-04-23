@@ -21,14 +21,14 @@ namespace Micromouse
 	sf::RenderWindow & Micromouse::Window::getRenderWindow()
 	{
 		return renderWindow;
-	}
+	}	
 
 	void Window::initializeFont()
 	{
-		if ( !font.loadFromFile( "font.ttf" ) )
+		//if ( !font.loadFromFile( "font.ttf" ) )
 		{
 			// error...
-			throw;
+		//	throw;
 		}
 	}
 

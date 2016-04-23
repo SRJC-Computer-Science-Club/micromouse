@@ -80,6 +80,7 @@ namespace Micromouse
 #ifdef SFML_GRAPHICS_HPP
 		void draw(); // draws the maze to the renderWindow
 		PositionVector lastPosition = PositionVector(0, 0);
+		sf::Color color;
 #endif
 	private:
 		const int MAX_SPEED = 8;

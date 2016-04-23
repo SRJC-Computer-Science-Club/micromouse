@@ -21,6 +21,9 @@
 
 #define HIGH 1;
 #define LOW 2;
+#define OUTPUT 1;
+#define INPUT 0;
+#define INPUT_PULLUP 2;
 
 enum purpose {OUTPUT,INPUT};
 
@@ -32,13 +35,13 @@ int analogRead2(int port);
 
 int digitalRead2(int port);
 
-void pinMode2(int,purpose);
+void pinMode2(int port,int purpose);
 
-void delay2();
+void delay2(int time);
 
-void delayMicroseconds2();
+void delayMicroseconds2(int microsecond);
 
-int random2(int min=0,int max=100);
+int random2(int value);
 
 //cli
 //sei

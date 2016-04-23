@@ -11,14 +11,14 @@
 
 void digitalWrite2(int port,int state)
 {
-    
+
 #ifdef __MK20DX256__ // Teensy Compile
-   
-    digitalWrite(port,1);
+
+    digitalWrite(port,state);
 
 #else
 
-    log(DEBUG4) <<"digitalWrite " << port << " stte " << state;
+    log(DEBUG4) <<"digitalWrite " << port << " state " << state;
 
 #endif
 
@@ -30,17 +30,17 @@ void digitalWrite2(int port,int state)
 
 void anglogWrie2(int port,int value)
 {
-    
+
 #ifdef __MK20DX256__ // Teensy Compile
-    
+
     analogWrite(port,value);
-    
+
 #else
-    
+
     log(DEBUG4) <<"analogWrite " << port << " stte " << value;
-    
+
 #endif
-    
+
 }
 
 
@@ -51,19 +51,19 @@ void anglogWrie2(int port,int value)
 
 int analogRead2(int port)
 {
-    
+
 #ifdef __MK20DX256__ // Teensy Compile
-    
+
     return analogRead(port);
-    
+
 #else
-    
+
     log(DEBUG4) <<"analogRead " << port;
-    
+
     return 0;
-    
+
 #endif
-    
+
 }
 
 
@@ -73,18 +73,18 @@ int analogRead2(int port)
 
 int digitalRead2(int port)
 {
-    
+
 #ifdef __MK20DX256__ // Teensy Compile
-    
+
     return digitalRead(port);
 #else
-    
+
     log(DEBUG4) <<"digitalRead " << port;
-    
+
     return 0;
-    
+
 #endif
-    
+
 }
 
 
@@ -93,21 +93,21 @@ int digitalRead2(int port)
 
 
 
-void pinMode2(int port,purpose inpurpose)
+void pinMode2(int port,int purpose)
 {
-    
+
 #ifdef __MK20DX256__ // Teensy Compile
-    
+
     //Iam not sure baout this
     pinMode(port,inpurpose);
-    
+
 #else
-    
-    log(DEBUG4) <<"pinMode(" << port <<"," << inpurpose<<")";
-    
+
+    log(DEBUG4) <<"pinMode(" << port <<"," << purpose<<")";
+
 #endif
 
-    
+
 }
 
 
@@ -118,17 +118,17 @@ void pinMode2(int port,purpose inpurpose)
 
 void delay2(int time)
 {
-    
+
 #ifdef __MK20DX256__ // Teensy Compile
-    
-   delay(time)
-    
+
+   delay(time);
+
 #else
-    
+
     log(DEBUG4) <<"delay for " << time;
-    
+
 #endif
-    
+
 }
 
 
@@ -143,10 +143,28 @@ void delayMicroseconds2(int microseconds)
 #ifdef __MK20DX256__ // Teensy Compile
 
     delayMicroseconds(microseconds);
-    
+
 #else
 
 log(DEBUG4) <<"delayMicroseconds for " << microseconds;
 
 #endif
+}
+
+
+
+
+
+
+int random2(int value)
+{
+    #ifdef __MK20DX256__ // Teensy Compile
+
+        random(value);
+
+    #else
+
+    log(DEBUG4) <<"Random";
+
+    #endif
 }

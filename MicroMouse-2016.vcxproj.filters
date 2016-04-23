@@ -18,66 +18,105 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Maze.cpp">
+    <ClCompile Include="micromouse\Controller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Node.cpp">
+    <ClCompile Include="micromouse\FlagMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Controller.cpp">
+    <ClCompile Include="micromouse\Maze.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Vector.cpp">
+    <ClCompile Include="micromouse\MouseBot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Path.cpp">
+    <ClCompile Include="micromouse\Node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MouseBot.cpp">
+    <ClCompile Include="micromouse\Path.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FlagMatrix.cpp">
+    <ClCompile Include="micromouse\Vector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CompactMaze.cpp">
+    <ClCompile Include="micromouse\RobotIO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Drawable.cpp">
+    <ClCompile Include="micromouse\VirtualMaze.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
+    <ClCompile Include="micromouse\IRSensor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="micromouse\Motor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="micromouse\PIDController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="micromouse\Memory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="micromouse\Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="micromouse\Drawable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="micromouse\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Maze.h">
+    <ClInclude Include="micromouse\Controller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Node.h">
+    <ClInclude Include="micromouse\FlagMatrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Controller.h">
+    <ClInclude Include="micromouse\Logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vector.h">
+    <ClInclude Include="micromouse\Maze.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Path.h">
+    <ClInclude Include="micromouse\MouseBot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MouseBot.h">
+    <ClInclude Include="micromouse\Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FlagMatrix.h">
+    <ClInclude Include="micromouse\Path.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CompactMaze.h">
+    <ClInclude Include="micromouse\Vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Drawable.h">
+    <ClInclude Include="micromouse\RobotIO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Window.h">
+    <ClInclude Include="micromouse\VirtualMaze.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="micromouse\IRSensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="micromouse\Motor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="micromouse\PIDController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="micromouse\Memory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="micromouse\Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="micromouse\Drawable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="micromouse\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -221,29 +221,42 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CompactMaze.cpp" />
-    <ClCompile Include="Controller.cpp" />
-    <ClCompile Include="Drawable.cpp" />
-    <ClCompile Include="FlagMatrix.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Maze.cpp" />
-    <ClCompile Include="MouseBot.cpp" />
-    <ClCompile Include="Path.cpp" />
-    <ClCompile Include="Vector.cpp" />
-    <ClCompile Include="Node.cpp" />
-    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="micromouse\Controller.cpp" />
+    <ClCompile Include="micromouse\FlagMatrix.cpp" />
+    <ClCompile Include="micromouse\Maze.cpp" />
+    <ClCompile Include="micromouse\Memory.cpp" />
+    <ClCompile Include="micromouse\Motor.cpp" />
+    <ClCompile Include="micromouse\MouseBot.cpp" />
+    <ClCompile Include="micromouse\Node.cpp" />
+    <ClCompile Include="micromouse\Path.cpp" />
+    <ClCompile Include="micromouse\PIDController.cpp" />
+    <ClCompile Include="micromouse\RobotIO.cpp" />
+    <ClCompile Include="micromouse\IRSensor.cpp" />
+    <ClCompile Include="micromouse\Timer.cpp" />
+    <ClCompile Include="micromouse\Vector.cpp" />
+    <ClCompile Include="micromouse\VirtualMaze.cpp" />
+    <ClCompile Include="micromouse\Drawable.cpp" />
+    <ClCompile Include="micromouse\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CompactMaze.h" />
-    <ClInclude Include="Controller.h" />
-    <ClInclude Include="Drawable.h" />
-    <ClInclude Include="FlagMatrix.h" />
-    <ClInclude Include="MouseBot.h" />
-    <ClInclude Include="Maze.h" />
-    <ClInclude Include="Path.h" />
-    <ClInclude Include="Vector.h" />
-    <ClInclude Include="Node.h" />
-    <ClInclude Include="Window.h" />
+    <ClInclude Include="micromouse\Controller.h" />
+    <ClInclude Include="micromouse\FlagMatrix.h" />
+    <ClInclude Include="micromouse\Logger.h" />
+    <ClInclude Include="micromouse\Maze.h" />
+    <ClInclude Include="micromouse\Memory.h" />
+    <ClInclude Include="micromouse\Motor.h" />
+    <ClInclude Include="micromouse\MouseBot.h" />
+    <ClInclude Include="micromouse\Node.h" />
+    <ClInclude Include="micromouse\Path.h" />
+    <ClInclude Include="micromouse\PIDController.h" />
+    <ClInclude Include="micromouse\RobotIO.h" />
+    <ClInclude Include="micromouse\IRSensor.h" />
+    <ClInclude Include="micromouse\Timer.h" />
+    <ClInclude Include="micromouse\Vector.h" />
+    <ClInclude Include="micromouse\VirtualMaze.h" />
+    <ClInclude Include="micromouse\Drawable.h" />
+    <ClInclude Include="micromouse\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

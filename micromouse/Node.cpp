@@ -4,19 +4,13 @@
 
 namespace Micromouse
 {
-
-
 	// constructors ////////////////////////////////////////////////////////
-	Node::Node( Vector::Pos newPos ) :
+	Node::Node( PositionVector newPos ) :
 		pos( newPos )
 	{
-		// TEMP randomly closes nodes
-		if ( rand() % 10 == 1 )
-		{
-			closed = true;
-		}
-
 	}
+
+
 
 	Node::~Node()
 	{
@@ -37,7 +31,7 @@ namespace Micromouse
 		return G;
 	}
 
-	Vector::Pos Node::getPos() const
+	PositionVector Node::getPos() const
 	{
 		return pos;
 	}
@@ -47,12 +41,10 @@ namespace Micromouse
 		return parent;
 	}
 
-
 	direction Node::getDir() const
 	{
-		return direction();
+		return dir;
 	}
-
 
 	bool Micromouse::Node::isClosed()
 	{
@@ -80,8 +72,9 @@ namespace Micromouse
 		parent = newParent;
 	}
 
-	void Node::setDir( direction dir )
+	void Node::setDir( direction newDir )
 	{
+		dir = newDir;
 	}
 
 
@@ -91,6 +84,8 @@ namespace Micromouse
 	{
 		closed = true;
 	}
+
+
 
 	void Micromouse::Node::open()
 	{

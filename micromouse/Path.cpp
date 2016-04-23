@@ -11,25 +11,24 @@ namespace Micromouse
 	}
 
 
+
 	Path::~Path()
 	{
 	}
 
 
-
-
-	void Path::addStep( Vector::Dir step )
+	void Path::addStep( DirectionVector step )
 	{
 		path.push( step );
 	}
 
 
 
-	Vector::Dir Path::popStep()
+	DirectionVector Path::popStep()
 	{
 		assert( !path.empty() );
 
-		Vector::Dir step = path.top();
+		DirectionVector step = path.top();
 		path.pop();
 
 		return step;
@@ -37,7 +36,7 @@ namespace Micromouse
 
 
 
-	Vector::Dir Path::peekStep()
+	DirectionVector Path::peekStep()
 	{
 		assert( !path.empty() );
 

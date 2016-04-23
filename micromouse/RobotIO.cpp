@@ -552,4 +552,88 @@ namespace Micromouse
 		IRSensors[FRONT_LEFT]->saveCalibration(IR_FRONT_LEFT_MEMORY);
 		IRSensors[FRONT_RIGHT]->saveCalibration(IR_FRONT_RIGHT_MEMORY);
 	}
+	
+	
+	
+	void RobotIO::testMotorCalibration()
+	{
+		int startCountsRight = 0;
+		int startCountsLeft = 0;
+		int finishCountsRight = 0;
+		int finishCountsLeft = 0;
+		int encoderRight = 0;
+		int encoderLeft = 0;
+
+		//Zero encoder value and sets encoder counts to temp var-
+		//reads value before -
+		//runs motor for 2 turns and 
+		leftMotor.resetCounts();
+		rightMotor.resetCounts();
+
+		startCountsLeft = leftMotor.getCounts();
+		startCountsRight = rightMotor.getCounts();
+
+			
+		
+		log( DEBUG2 ) << " Encoder Value Before Moving     L : " << startCountsLeft << ", R : " << startCountsRight;
+		log( DEBUG2 ) << " Moving Forward ";
+
+		leftMotor.resetCounts();
+		rightMotor.resetCounts();
+
+		leftMotor.setMovement(0.5f);
+		rightMotor.setMovement(0.5f);
+			
+		//----------------->
+		//delay(1000);
+		
+		log( DEBUG2 ) << " Stoping Motors ";
+
+		leftMotor.setMovement(0.0f);
+		rightMotor.setMovement(0.0f);
+
+		encoderLeft = leftMotor.getCounts();
+		encoderRight = rightMotor.getCounts();
+		
+		if( startCountsLeft > 0){
+
+			log( DEBUG2 ) << " Left Motor is getting counts. Total counts after turn : " << finishCountsLeft;
+
+		}else if (startCountsRight > 0) {
+
+			log(DEBUG2) << " Right Motor is getting counts. Total counts after finish rotation : " << finishCountsRight;
+
+		}else if ( startCountsLeft > 0 || startCountsRight > 0){
+
+			log(DEBUG2) << " Encoder Value Before Moving     L : " << finishCountsLeft << ", R : " << finishCountsRight;
+
+		}else{
+
+			log( DEBUG2 ) << " Motor is NOT reading counts";
+
+		}
+	
+		//prints out the value of the encoder after two turns. -
+		// TODO  returns the total expected error
+		//Print out incoder value after the motors have -
+	}
+	
+	
+	
+	void RobotIO::testIRSencorCalibration()
+	{
+		// Test the ir sensor by outputing distance of each sensor
+			log( DEBUG2 ) << " FRONT_LEFT : " << IRSensors[FRONT_LEFT]->getDistance() <<  
+							 " FRONT_RIGHT : " << IRSensors[FRONT_RIGHT]->getDistance() <<
+							 " LEFT : "        << IRSensors[LEFT]->getDistance() <<
+							 " RIGHT : "       << IRSensors[RIGHT]->getDistance();
+	}
+	
+	
+	
+	
+	void testGyroCalibration()
+	{
+		
+	}
 }

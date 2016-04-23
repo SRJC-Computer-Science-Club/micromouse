@@ -366,6 +366,30 @@ namespace Micromouse
 		robotIO.testRotate();
 	}
 
+	void MouseBot::testIRCalib()
+	{
+
+#ifdef __MK20DX256__ // Teensy Compile
+		robotIO.testIRSencorCalibration();
+#endif
+	}
+
+	void MouseBot::testMotorCalib()
+	{
+
+#ifdef __MK20DX256__ // Teensy Compile
+		robotIO.testMotorCalibration();
+#endif
+	}
+
+	void MouseBot::testGyroCalib()
+	{
+
+#ifdef __MK20DX256__ // Teensy Compile
+		robotIO.testGyroCalibration();
+#endif
+	}
+
 
 
 	void MouseBot::moveForward(int numNodes)

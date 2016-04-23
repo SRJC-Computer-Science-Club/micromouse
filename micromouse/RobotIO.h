@@ -68,7 +68,7 @@ namespace Micromouse
 	public:
 		RobotIO();
 		~RobotIO();
-
+	//	getDistance();
 		void testMotors(); //temp
 		void testIR();
 		void testRotate();
@@ -87,7 +87,19 @@ namespace Micromouse
 		void followPath(Path * path);
 
 		void calibrateIRSensors();
-
+		
+		
+		
+		
+		/* Test hard ware calibration */
+		
+		void testMotorCalibration();
+		void testIRSencorCalibration();
+		void testGyroCalibration();
+		
+		
+		
+		
 	private:
 		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };
 

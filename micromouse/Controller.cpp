@@ -35,8 +35,12 @@ namespace Micromouse
 #ifdef __MK20DX256__ // Teensy Compile
 		//delay(2000);
 #endif
-		mouse.mapMaze();
-		mouse.runMaze();
+		/*Test Hardware functions by oran*/
+		mouse.testIRCalib();
+		mouse.testMotorCalib();
+		//mouse.testGyroCalib(); //NOT INPLEMTED
+		//mouse.mapMaze();
+		//mouse.runMaze();
 		//mouse.testIR();
 		//mouse.testMotors();
 		//mouse.testRotate();

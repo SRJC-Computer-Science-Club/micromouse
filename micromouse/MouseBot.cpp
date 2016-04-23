@@ -28,11 +28,11 @@ namespace Micromouse
 #ifdef __MK20DX256__ // Teensy Compile
 #else
 		// If compiled for PC
-		virtualMaze = new VirtualMaze(NUM_NODES_W, NUM_NODES_H);
-		virtualMaze->generateRandomMaze();
+		//virtualMaze = new VirtualMaze(NUM_NODES_W, NUM_NODES_H);
+		//virtualMaze->generateRandomMaze();
 
-		logC(INFO) << "Randomly generated a virtual maze:\n";
-		logC(INFO) << *virtualMaze << "\n";
+		//logC(INFO) << "Randomly generated a virtual maze:\n";
+		//logC(INFO) << *virtualMaze << "\n";
 #endif
 	}
 

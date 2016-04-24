@@ -45,6 +45,8 @@ namespace Micromouse
 
 		void runMaze();
 
+		void resetMaze();
+
 		void returnToStart();
 
 		bool isClearForward();					// Returns true if there isn't a wall in front of the mouse. Uses a virtual maze for debugging on PC, otherwise it uses the bot's hardware.

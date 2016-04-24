@@ -72,9 +72,11 @@ namespace Micromouse
 		// the path is created by working backwards from end node to start node
 		Path* createPath( const Node* node );
 
-
 		// populates 'maze' with Nodes
 		void initNodes();
+
+		// returns the Nodes in maze to their initial sates
+		void resetNodes();
 		
 		// a 2D array of Nodes that represents the physical maze
 		Node* maze[ NUM_NODES_W ][ NUM_NODES_H ];

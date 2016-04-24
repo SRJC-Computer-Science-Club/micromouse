@@ -34,22 +34,7 @@ namespace Micromouse
 
 	Path * Maze::findPath( PositionVector start , PositionVector end )
 	{
-		for (size_t i = 0; i < NUM_NODES_W; i++)
-		{
-			for (size_t j = 0; j < NUM_NODES_H; j++)
-			{
-				if (maze[i][j] != nullptr)
-				{
-					maze[i][j]->setParent(nullptr);
-					maze[i][j]->setDir(NONE);
-					maze[i][j]->setG(INF);
-					maze[i][j]->setF(INF);
-					maze[i][j]->open();
-				}
-			}
-		}
-
-
+		resetNodes();
 		std::vector< Node* > openNodes;
 
 		// assume 1/2 of the maze will need to be searched on average;
@@ -295,6 +280,20 @@ namespace Micromouse
 			for ( int y = 0; y < NUM_NODES_H; y++ )
 			{
 				maze[ x ][ y ] = nullptr;
+			}
+		}
+	}
+
+	void Maze::resetNodes()
+	{
+		for (size_t i = 0; i < NUM_NODES_W; i++)
+		{
+			for (size_t j = 0; j < NUM_NODES_H; j++)
+			{
+				if (maze[i][j] != nullptr)
+				{
+					maze[i][j]->reset();
+				}
 			}
 		}
 	}

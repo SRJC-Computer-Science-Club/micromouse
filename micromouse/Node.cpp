@@ -94,6 +94,17 @@ namespace Micromouse
 
 
 
+	void Node::reset()
+	{
+		setParent(nullptr);
+		setDir(NONE);
+		setF(INF);
+		setG(INF);
+		open();
+	}
+
+
+
 
 #ifdef SFML_GRAPHICS_HPP
 

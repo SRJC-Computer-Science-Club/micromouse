@@ -41,9 +41,12 @@ namespace Micromouse
 		void close();
 		void open();
 
+		void reset();
+
 #ifdef SFML_GRAPHICS_HPP
 		void draw();
 #endif
+
 	private:
 		int G = INF; //movement cost
 		int F = INF; //movement + hueristic cost

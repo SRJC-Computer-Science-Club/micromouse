@@ -91,6 +91,17 @@ namespace Micromouse
 	{
 		closed = false;
 	}
+
+
+
+	void Node::reset()
+	{
+		setParent(nullptr);
+		setDir(NONE);
+		setF(INF);
+		setG(INF);
+		open();
+	}
 }
 
 

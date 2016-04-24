@@ -335,7 +335,10 @@ namespace Micromouse
 	{
 		position = position + dir;
 		movementHistory.push(dir);
+
+#ifdef SFML_GRAPHICS_HPP
 		draw();
+#endif
 	}
 
 

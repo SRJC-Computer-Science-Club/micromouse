@@ -105,12 +105,9 @@ namespace Micromouse
 
 			BUTTONFLAG
 			
-			while (position != *pos)
-			{
-				BUTTONFLAG
+			Path* path = maze->findPath(position, *pos);
+			followPath(path);
 
-				backtrack();
-			}
 
 			delete pos;
 	
@@ -163,7 +160,6 @@ namespace Micromouse
 	void MouseBot::runMaze()
 	{
 		log(DEBUG1) << "Run Maze";
-
 
 		Path* pathCenter = maze->findPath(position, PositionVector(2, 2));
 		followPath(pathCenter);
@@ -265,7 +261,7 @@ namespace Micromouse
 #else // PC compile
 		int rando = rand() % 4;
 #endif
-
+		rando = 0;
 		switch (rando)
 		{
 		case 0:
@@ -348,13 +344,16 @@ namespace Micromouse
 
 	void MouseBot::followPath(Path* path)
 	{
-		while (!path->empty())
+		if (path != nullptr)
 		{
-			BUTTONFLAG
+			while (!path->empty())
+			{
+				BUTTONFLAG
 
-			DirectionVector dir = path->popStep();
-			rotateToFaceDirection(dir.dir());
-			moveForward(dir.mag());
+				DirectionVector dir = path->popStep();
+				rotateToFaceDirection(dir.dir());
+				moveForward(dir.mag());
+			}
 		}
 
 		BUTTONEXIT
@@ -367,8 +366,10 @@ namespace Micromouse
 	{
 		direction dir = movementHistory.top();
 		movementHistory.pop();
+		movementHistory.pop();
 		rotateToFaceDirection(dir + S);
-		moveForward(1);
+		moveForward(2);
+		movementHistory.pop();
 		movementHistory.pop();
 	}
 

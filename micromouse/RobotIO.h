@@ -5,8 +5,9 @@
 #include "PIDController.h"
 #include "Vector.h"
 #include "Path.h"
-
-
+#ifdef __MK20DX256__ // Teensy Compile
+#include "adafruit libraries\Adafruit_LSM9DS0.h"
+#endif
 namespace Micromouse
 {
 	const float MM_BETWEEN_WHEELS = 66.5f;
@@ -96,6 +97,7 @@ namespace Micromouse
 		bool checkMotors();
 		void checkIRSensors();
 		void checkGyro();
+		bool gyroWorking();
 		
 		
 		
@@ -109,6 +111,14 @@ namespace Micromouse
 		void initIRSensors();
 		void initPins();
 
+	
+#ifdef __MK20DX256__ // Teensy Compile
+		// this should work even though those pins are assigned for different parts \\
+		   because of ada fruit handaling.
+		Adafruit_LSM9DS0 lsm = Adafruit_LSM9DS0(19, 18, 17, 16);
+#else // PC compile
+
+#endif
 		IRSensor* IRSensors[4];
 
 		Motor rightMotor = Motor

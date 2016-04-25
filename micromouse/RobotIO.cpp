@@ -6,6 +6,7 @@
 
 
 
+
 #ifdef __MK20DX256__ // Teensy Compile
 // ### This line causes a lot of problems. It seems to conflict with #include <Encoder.h> ###
 // ### I'm not sure what it's for, so for now it's commented out.
@@ -64,8 +65,8 @@ namespace Micromouse
 
 	bool RobotIO::isClearLeft()
 	{
-        return !isWallinDirection(W);
-    }
+		return !isWallinDirection(W);
+	}
 
 
 
@@ -78,31 +79,31 @@ namespace Micromouse
 
 
 
-    bool RobotIO::isWallinDirection( direction dir )
-    {
-        // ensure valid data
-        assert( dir == W || dir ==  N || dir == E || dir == NW || dir == NE);
+	bool RobotIO::isWallinDirection(direction dir)
+	{
+		// ensure valid data
+		assert(dir == W || dir == N || dir == E || dir == NW || dir == NE);
 
-        switch( dir )
-        {
-        case W:
+		switch (dir)
+		{
+		case W:
 			return IRSensors[LEFT]->getDistance() < 110;
 
-        case E:
+		case E:
 			return IRSensors[RIGHT]->getDistance() < 110;
 
-        case N:
+		case N:
 		{
 			int dist = (int)IRSensors[FRONT_LEFT]->getDistance();
 
-			return (dist < 120 && abs(dist - IRSensors[FRONT_RIGHT]->getDistance()) < 30); 
+			return (dist < 120 && abs(dist - IRSensors[FRONT_RIGHT]->getDistance()) < 30);
 		}
 
 		default:
 			log(ERROR) << "NOT valid direction to check for wall";
 			return false;
 		}
-    }
+	}
 
 
 
@@ -174,36 +175,36 @@ namespace Micromouse
 		moveForward(180.0f);
 		moveForward(180.0f);
 		moveForward(180.0f);
-/*
-		rightMotor.setMaxSpeed(0.2f);
-		leftMotor.setMaxSpeed(0.2f);
+		/*
+				rightMotor.setMaxSpeed(0.2f);
+				leftMotor.setMaxSpeed(0.2f);
 
-		rightMotor.setMovement(1.0f);
-		delay(1000);
-		rightMotor.brake();
-		delay(1000);
-		leftMotor.setMovement(1.0f);
-		delay(1000);
-		leftMotor.brake();
-		delay(1000);
-		rightMotor.setMovement(-1.0f);
-		delay(1000);
-		rightMotor.coast();
-		delay(1000);
-		leftMotor.setMovement(-1.0f);
-		delay(1000);
-		leftMotor.coast();
-		delay(1000);
+				rightMotor.setMovement(1.0f);
+				delay(1000);
+				rightMotor.brake();
+				delay(1000);
+				leftMotor.setMovement(1.0f);
+				delay(1000);
+				leftMotor.brake();
+				delay(1000);
+				rightMotor.setMovement(-1.0f);
+				delay(1000);
+				rightMotor.coast();
+				delay(1000);
+				leftMotor.setMovement(-1.0f);
+				delay(1000);
+				leftMotor.coast();
+				delay(1000);
 
-		rightMotor.setMaxSpeed(1.0f);
-		leftMotor.setMaxSpeed(1.0f);
+				rightMotor.setMaxSpeed(1.0f);
+				leftMotor.setMaxSpeed(1.0f);
 
-		leftMotor.setMovement(1.0f);
-		rightMotor.setMovement(1.0f);
-		delay(2000);
-		leftMotor.brake();
-		rightMotor.brake();
-		*/
+				leftMotor.setMovement(1.0f);
+				rightMotor.setMovement(1.0f);
+				delay(2000);
+				leftMotor.brake();
+				rightMotor.brake();
+				*/
 #endif
 	}
 
@@ -243,8 +244,8 @@ namespace Micromouse
 		float leftmm = millimeters;
 		float rightmm = millimeters;
 
-		PIDController leftDistPID = PIDController(97.0f, 46.0f, 16.0f , 1000);
-		PIDController rightDistPID = PIDController(97.0f, 46.0f, 16.0f , 1000);
+		PIDController leftDistPID = PIDController(97.0f, 46.0f, 16.0f, 1000);
+		PIDController rightDistPID = PIDController(97.0f, 46.0f, 16.0f, 1000);
 
 		PIDController speedPID = PIDController(30.0f, 1.0f, 1.0f);
 
@@ -278,7 +279,7 @@ namespace Micromouse
 				leftmm > DISTANCE_TOLERANCE || leftmm < -DISTANCE_TOLERANCE ||
 				rightmm > DISTANCE_TOLERANCE || rightmm < -DISTANCE_TOLERANCE ||
 				leftSpeed > 0.1f || rightSpeed > 0.1f
-			)
+				)
 		{
 			float deltaTime = timer.getDeltaTime();
 
@@ -395,9 +396,9 @@ namespace Micromouse
 		leftMotor.setMaxSpeed(0.16f);
 		rightMotor.setMaxSpeed(0.16f);
 
-		PIDController speedPID = PIDController(30.f, 2.0f, 1.0f , 100.0f);
+		PIDController speedPID = PIDController(30.f, 2.0f, 1.0f, 100.0f);
 
-		PIDController anglePID = PIDController(150.0f, 75.0f , 10.0f, 20.0f);
+		PIDController anglePID = PIDController(150.0f, 75.0f, 10.0f, 20.0f);
 
 
 		anglePID.start(degrees);
@@ -415,7 +416,7 @@ namespace Micromouse
 		float actualLeftSpeed, actualRightSpeed;
 
 		float rightSpeed, leftSpeed;
-		
+
 		Timer timer;
 
 		while (degrees > ANGLE_TOLERANCE || degrees < -ANGLE_TOLERANCE || angleCorrection > 0.1f)
@@ -429,7 +430,7 @@ namespace Micromouse
 
 			int counts = (leftTraveled - rightTraveled) / 2;
 
-			degrees -= counts * (180 / PI) / COUNTS_PER_MM / (MM_BETWEEN_WHEELS/2);
+			degrees -= counts * (180 / PI) / COUNTS_PER_MM / (MM_BETWEEN_WHEELS / 2);
 			leftTraveled /= COUNTS_PER_MM;
 			rightTraveled /= COUNTS_PER_MM;
 
@@ -441,7 +442,7 @@ namespace Micromouse
 			leftSpeed = -angleCorrection;
 			rightSpeed = angleCorrection;
 
-			float speedCorrection = speedPID.getCorrection( actualRightSpeed - actualLeftSpeed );
+			float speedCorrection = speedPID.getCorrection(actualRightSpeed - actualLeftSpeed);
 			//speedCorrection = 0;
 
 			if (rightSpeed < 0.25f || leftSpeed < 0.25f)
@@ -532,7 +533,7 @@ namespace Micromouse
 #ifdef __MK20DX256__ // Teensy Compile
 		pinMode(BUTTON_PIN, INPUT_PULLUP);
 		pinMode(SWITCH_A_PIN, INPUT_PULLUP);
-		pinMode(SWITCH_B_PIN, INPUT_PULLUP); 
+		pinMode(SWITCH_B_PIN, INPUT_PULLUP);
 		pinMode(SWITCH_C_PIN, INPUT_PULLUP);
 #endif
 	}
@@ -552,8 +553,8 @@ namespace Micromouse
 		IRSensors[FRONT_LEFT]->saveCalibration(IR_FRONT_LEFT_MEMORY);
 		IRSensors[FRONT_RIGHT]->saveCalibration(IR_FRONT_RIGHT_MEMORY);
 	}
-	
-	
+
+
 
 	bool RobotIO::checkMotors()
 	{
@@ -573,11 +574,11 @@ namespace Micromouse
 
 		leftMotor.setMovement(0.5f);
 		rightMotor.setMovement(0.5f);
-			
 
-		#ifdef __MK20DX256__ // Teensy Compile
-				delay(1000);
-		#endif		
+
+#ifdef __MK20DX256__ // Teensy Compile
+		delay(1000);
+#endif		
 
 		leftMotor.brake();
 		rightMotor.brake();
@@ -586,42 +587,73 @@ namespace Micromouse
 		encoderRight = rightMotor.getCounts();
 
 
-		if( finishCountsLeft > 0 && finishCountsRight > 0){	
+		if (finishCountsLeft > 0 && finishCountsRight > 0) {
 			log(DEBUG2) << " Both Motors Working Fine";
 			return true;
-		}else if (finishCountsLeft > 0){
+		}
+		else if (finishCountsLeft > 0) {
 			log(DEBUG2) << "Left Motor is Not getting encoder counts";
 			return false;
-		}else if (finishCountsRight > 0){
+		}
+		else if (finishCountsRight > 0) {
 			log(DEBUG2) << "Right Motor is Not getting encoder counts";
 			return false;
-		}else{
+		}
+		else {
 			log(DEBUG2) << "Neither Motor is Getting encoder counts";
 			return false;
 		}
-	
+
 		//prints out the value of the encoder after two turns. -
 		// TODO  returns the total expected error
 		//Print out incoder value after the motors have -
 		//return pass or fail true or false
 	}
-	
-	
-	
+
+
+
 	void RobotIO::checkIRSensors()
 	{
 		// Test the ir sensor by outputing distance of each sensor
-			log( DEBUG2 ) << " FRONT_LEFT : " << IRSensors[FRONT_LEFT]->getDistance() <<  
-							 " FRONT_RIGHT : " << IRSensors[FRONT_RIGHT]->getDistance() <<
-							 " LEFT : "        << IRSensors[LEFT]->getDistance() <<
-							 " RIGHT : "       << IRSensors[RIGHT]->getDistance();
+		log(DEBUG2) << " FRONT_LEFT : " << IRSensors[FRONT_LEFT]->getDistance() <<
+			" FRONT_RIGHT : " << IRSensors[FRONT_RIGHT]->getDistance() <<
+			" LEFT : " << IRSensors[LEFT]->getDistance() <<
+			" RIGHT : " << IRSensors[RIGHT]->getDistance();
+
 	}
-	
-	
-	
-	
+
+
+
+	bool RobotIO::gyroWorking()
+	{
+#ifdef __MK20DX256__ // Teensy Compile
+		return lsm.begin();
+#else // PC compile
+		log(INFO) << "GYRO test run in c++ environment";
+		return (true);
+#endif
+	}
+
+
+
+
 	void RobotIO::checkGyro()
 	{
-		
+#ifdef __MK20DX256__ // Teensy Compile
+		if (lsm.begin())
+		{
+			log(DEBUG2) << "Gyro data is currently working";
+			blinkLED(1);
+		}
+		else 
+		{
+			log(DEBUG2) << "Unable to gather GYRO data";
+			blinkLED(2);
+		}
+#else 
+		log(INFO) << "GYRO test run in c++ environment";
+#endif
 	}
+
+
 }

@@ -95,7 +95,7 @@ namespace Micromouse
 		{
 			int dist = (int)IRSensors[FRONT_LEFT]->getDistance();
 
-			return (dist < 120 && abs(dist - IRSensors[FRONT_RIGHT]->getDistance()) < 30); 
+			return (dist < 120 && abs(dist - IRSensors[FRONT_RIGHT]->getDistance()) < 30);
 		}
 
 		default:

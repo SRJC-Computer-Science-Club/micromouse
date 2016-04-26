@@ -70,6 +70,7 @@
 		E1B489F41CC87E3D00643A24 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = ../../micromouse/Vector.h; sourceTree = "<group>"; };
 		E1B489F51CC87E3D00643A24 /* VirtualMaze.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VirtualMaze.cpp; path = ../../micromouse/VirtualMaze.cpp; sourceTree = "<group>"; };
 		E1B489F61CC87E3D00643A24 /* VirtualMaze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VirtualMaze.h; path = ../../micromouse/VirtualMaze.h; sourceTree = "<group>"; };
+		E1B48A051CC87FEE00643A24 /* AssertionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssertionHandler.h; path = ../../micromouse/AssertionHandler.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +121,7 @@
 				E1B489DE1CC87E3D00643A24 /* IRSensor.h */,
 				E1B489DF1CC87E3D00643A24 /* Logger.h */,
 				E1B489E01CC87E3D00643A24 /* Maze.cpp */,
+				E1B48A051CC87FEE00643A24 /* AssertionHandler.h */,
 				E1B489E11CC87E3D00643A24 /* Maze.h */,
 				E1B489E21CC87E3D00643A24 /* Memory.cpp */,
 				E1B489E31CC87E3D00643A24 /* Memory.h */,

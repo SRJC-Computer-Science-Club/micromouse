@@ -113,9 +113,12 @@ namespace Micromouse
 
 	
 #ifdef __MK20DX256__ // Teensy Compile
-		// this should work even though those pins are assigned for different parts \\
-		   because of ada fruit handaling.
-		Adafruit_LSM9DS0 lsm = Adafruit_LSM9DS0(19, 18, 17, 16);
+		// this should work even though those pins are assigned for different parts 
+		 //  because of ada fruit handaling.
+		Adafruit_LSM9DS0 lsm = Adafruit_LSM9DS0(MAGNETOMETER_NINE_DOF_SDA_PIN, MAGNETOMETER_NINE_DOF_SCL_PIN);
+
+
+		//Adafruit_LSM9DS0 lsm = Adafruit_LSM9DS0(19, 18, 17, 16);
 #else // PC compile
 
 #endif

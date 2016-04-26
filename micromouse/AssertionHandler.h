@@ -9,14 +9,26 @@
 #ifndef AssertionHandler_h
 #define AssertionHandler_h
 
-#include "Logger.h"
+#include "Memory.h"
 
 #ifdef __MK20DX256__ // Teensy Compile
+
+inline static void logError( int code ) {
+    //Read and increment to the next error state, as well as validate to loop back to 1 if incremented to 21
+    int intNextIndex = Micromouse::Memory::read(Micromouse::ERROR_MEMORY) +1;
+    intNextIndex = intNextIndex > 20 ? 1 : intNextIndex;
+    
+    //Find next state address and save code as well as the most recent error state in ERROR_MEMORY
+    int intNextStateAddress = Micromouse::ERROR_MEMORY +intNextIndex * 4;
+    Micromouse::Memory::write( intNextStateAddress, code);
+    Micromouse::Memory::write( Micromouse::ERROR_MEMORY, intNextIndex);
+    
+}
 
 //Prints to concole using Logger(..) << code and metadata of the assertion
 #define assertion(condition,code) \
 ( \
-(__builtin_expect(!(condition), 0) ? (void)(Logger(ERROR)<<"("<<#condition<<")"<<" code: "<<code<<" @ "<<__FILE__<<" function -"<<__func__<<", line:"<<__LINE__) : (void)0) \
+(__builtin_expect(!(condition), 0) ? (void)(logError(code)) : (void)0) \
 )
 
 #else

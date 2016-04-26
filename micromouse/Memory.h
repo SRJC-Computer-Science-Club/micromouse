@@ -16,16 +16,15 @@ namespace Micromouse {
 	1: calibrationStart
 	2: calibrationInterval
 	3-19: CalibrationData[]
-	*/
-	const int IR_FRONT_LEFT_MEMORY = 100;//-119
-	const int IR_FRONT_RIGHT_MEMORY = 200;//-139
-	const int IR_LEFT_MEMORY = 300;//-159
-	const int IR_RIGHT_MEMORY = 400;//-179
-
+     */
+    const int IR_FRONT_LEFT_MEMORY = 100;//to 199
+    const int IR_FRONT_RIGHT_MEMORY = 200;//to 299
+    const int IR_LEFT_MEMORY = 300;//to 399
+    const int IR_RIGHT_MEMORY = 400;//to 499
 
 	//180-511 unreserved
-
-	//512-2047 map
+    
+    const int ERROR_MEMORY = 512; //to 599 carrying 20 error states at a time plus index slot at 512
 
 
 

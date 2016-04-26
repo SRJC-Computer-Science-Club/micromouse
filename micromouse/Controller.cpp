@@ -2,6 +2,7 @@
 #include "Logger.h"
 #include <vector>
 #include "Timer.h"
+#include "ButtonFlag.h"
 
 #ifdef __MK20DX256__ // Teensy Compile
 	#include "WProgram.h"
@@ -16,7 +17,7 @@
 
 
 
-int buttonFlag;
+extern volatile bool buttonFlag;
 
 // defined in RobotIO.h
 extern int SWITCH_A_PIN; 
@@ -32,13 +33,11 @@ namespace Micromouse
 	void Controller::debug()
 	{
 		// DEBUG CODE GOES IN HERE!
-#ifdef __MK20DX256__ // Teensy Compile
-		//delay(2000);
-#endif
-		mouse.mapMaze();
-		mouse.runMaze();
+
+		//mouse.mapMaze();
+		//mouse.runMaze();
 		//mouse.testIR();
-		//mouse.testMotors();
+		mouse.testMotors();
 		//mouse.testRotate();
 
 		// DEBUG CODE GOES IN HERE!
@@ -50,11 +49,9 @@ namespace Micromouse
 	{
 		log(INFO) << "Starting Program";
 
-		#ifdef MICROMOUSE_DEBUG_MODE
-			debug();
-		#else
-			runMainLoop();
-		#endif
+		initPins();
+		blinkLED(1); //signifies loading complete
+		runMainLoop();
 
 		log(INFO) << "End Program\n\n\n";
 	}
@@ -66,20 +63,18 @@ namespace Micromouse
 	}
 
 
-
 	void Controller::runMainLoop()
 	{
 		while (true)
-		{
+		{	
+			waitForButton();
+
 			updateState();
 
 			while (!buttonFlag && state != NONE)
 			{
 				runState();
 			}
-
-			waitForButton();
-			buttonFlag = false;
 		}
 	}
 
@@ -119,10 +114,13 @@ namespace Micromouse
 		switch (state)
 		{
 		case NONE:
+			log(DEBUG2) << "Enter the NONE state";
 		break;
 
 
 		case MAP_MAZE:
+			log(DEBUG2) << "Enter the MAP_MAZE state";
+
 			blinkLEDCountdown(3);
 
 			mouse.resetToOrigin();
@@ -143,6 +141,8 @@ namespace Micromouse
 
 
 		case RUN_MAZE:
+			log(DEBUG2) << "Enter the RUN_MAZE state";
+
 			if (doneMap)
 			{
 				blinkLEDCountdown(3);
@@ -176,55 +176,77 @@ namespace Micromouse
 
 
 		case SELECT_SPEED:
+			log(DEBUG2) << "Enter the SELECT_SPEED state";
+
 			mouse.incrementSpeed();
 			blinkLED(mouse.getSpeed());
 			state = NONE;
 		break;
 
 
-		case NONE_4:
+		case DEBUG_MODE:
+			log(DEBUG2) << "Enter the DEBUG_MODE state";
+			blinkLEDCountdown(3);
+			debug();
+			state = NONE;
 		break;
 
 
 		case CAL_SENSORS:
-			mouse.CalibrateIRSensors();
+			log(DEBUG2) << "Enter the CAL_SENSORS state";
+
+			blinkLED(CAL_SENSORS);
 			state = NONE;
+			// I dont want to mess up the calibration during testing
+			//TODO test the calbration through the controller states
+			//mouse.CalibrateIRSensors();
+			//state = NONE;
 		break;
 
 
 		case CAL_MOTOR:
-			//TODO
+			log(DEBUG2) << "Enter the CAL_MOTOR state";
+
+			blinkLED(CAL_MOTOR);
+			state = NONE;
+			//TODO decide if this is even something we need
 		break;
 
 
 		case RESET_MAZE:
+			log(DEBUG2) << "Enter the RESET_MAZE state";
+
 			doneMap = false;
 			log(INFO) << "Maze Reset";
-			//TODO
+			mouse.resetMaze();
 			state = NONE;
+
+			blinkLED(5);
 		break;
 		}
 	}
 	
 
 
-	int Controller::blinkLED(int reps, int timeOn, int timeOff)
+	int Controller::blinkLED(int reps, int timeOff, int timeOn)
 	{
 #ifdef __MK20DX256__ // Teensy Compile
-		digitalWrite(LED_PIN, HIGH);
-		delay(timeOn);
 		digitalWrite(LED_PIN, LOW);
+		delay(timeOff);
+		digitalWrite(LED_PIN, HIGH);
 
 		for (; reps >= 2; reps--)
 		{
-			delay(timeOff);
+			BUTTONFLAG
 
-			digitalWrite(LED_PIN, HIGH);
 			delay(timeOn);
 			digitalWrite(LED_PIN, LOW);
+			delay(timeOff);
+			digitalWrite(LED_PIN, HIGH);
 		}
 #endif
-		return(timeOn * reps + timeOff * (reps - 1));
+		BUTTONEXIT
+		return(timeOff * reps + timeOn * (reps - 1));
 	}
 
 
@@ -235,6 +257,8 @@ namespace Micromouse
 
 		for (; sec > 5; sec--) //long single blinks for more than 5 seconds
 		{
+			BUTTONFLAG
+
 			log(INFO) << sec;
 #ifdef __MK20DX256__ // Teensy Compile
 			delay(1000 - blinkLED( 1 , 200 ));
@@ -243,25 +267,60 @@ namespace Micromouse
 
 		for (; sec > 0; sec--)//quick blinks for the number of seconds left
 		{
+			BUTTONFLAG
+
 			log(INFO) << sec;
 #ifdef __MK20DX256__ // Teensy Compile
 			delay(1000 - blinkLED(sec, 80, 50));
 #endif
 		}
+
+		BUTTONEXIT
+		return;
 	}
 
 
 
 	void Controller::waitForButton()
 	{
+		buttonFlag = false;
 #ifdef __MK20DX256__ // Teensy Compile
-		while (!digitalRead(BUTTON_PIN))
+		while (!buttonFlag)
 		{
 			delay(10);
 		}
 #else // pc
 		system("pause");
-		buttonFlag = true;
+#endif
+		buttonFlag = false;
+	}
+
+
+	void irsButtonFlag()
+	{
+#ifdef __MK20DX256__ // Teensy Compile
+		cli();
+
+		if (!buttonFlag)
+		{
+			buttonFlag = true;
+		}
+
+		sei();
+#endif
+	}
+
+
+	void Controller::initPins()
+	{
+#ifdef __MK20DX256__ // Teensy Compile
+		pinMode(BUTTON_PIN, INPUT_PULLUP);
+		attachInterrupt(BUTTON_PIN, irsButtonFlag, RISING);
+		pinMode(SWITCH_A_PIN, INPUT_PULLUP);
+		pinMode(SWITCH_B_PIN, INPUT_PULLUP);
+		pinMode(SWITCH_C_PIN, INPUT_PULLUP);
 #endif
 	}
 }
+
+

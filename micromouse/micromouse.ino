@@ -32,7 +32,9 @@ const LogLevel LOG_LEVEL = DEBUG2;
 
 #define BUTTON_PIN 6
 
-volatile bool buttonFlag;
+
+// removed for now aurdino will crash wehn buttonFlag
+//volatile bool buttonFlag;
 
 
 

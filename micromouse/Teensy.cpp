@@ -1,15 +1,17 @@
 //
-//  teensy.cpp
+//  Teensy.cpp
 //  yyekalo
 //
-//  Created by Yekalo Berhane on 4/22/16.
+//  Created by Yikealo on 4/22/16.
 //  Copyright © 2016 Yikealo Abraha. All rights reserved.
 //
 
-#include "teensy.h"
+#include "Teensy.h"
 #include "Logger.h"
 
-void digitalWrite2(int port,int state)
+#ifdef __MK20DX256__
+#else
+void digitalWrite(int port,int state)
 {
 
 #ifdef __MK20DX256__ // Teensy Compile
@@ -28,7 +30,7 @@ void digitalWrite2(int port,int state)
 
 
 
-void anglogWrite2(int port,int value)
+void analogWrite(int port,int value)
 {
 
 #ifdef __MK20DX256__ // Teensy Compile
@@ -49,7 +51,7 @@ void anglogWrite2(int port,int value)
 
 
 
-int analogRead2(int port)
+int analogRead(int port)
 {
 
 #ifdef __MK20DX256__ // Teensy Compile
@@ -71,7 +73,7 @@ int analogRead2(int port)
 
 
 
-int digitalRead2(int port)
+int digitalRead(int port)
 {
 
 #ifdef __MK20DX256__ // Teensy Compile
@@ -93,7 +95,7 @@ int digitalRead2(int port)
 
 
 
-void pinMode2(int port,int purpose)
+void pinMode(int port,int purpose)
 {
 
 #ifdef __MK20DX256__ // Teensy Compile
@@ -116,7 +118,7 @@ void pinMode2(int port,int purpose)
 
 
 
-void delay2(int time)
+void delay(int time)
 {
 
 #ifdef __MK20DX256__ // Teensy Compile
@@ -138,7 +140,7 @@ void delay2(int time)
 //cli
 //sei
 
-void delayMicroseconds2(int microseconds)
+void delayMicroseconds(int microseconds)
 {
 #ifdef __MK20DX256__ // Teensy Compile
 
@@ -156,7 +158,7 @@ log(DEBUG4) <<"delayMicroseconds for " << microseconds;
 
 
 
-int random2(int value)
+int random(int value)
 {
     #ifdef __MK20DX256__ // Teensy Compile
 
@@ -168,3 +170,4 @@ int random2(int value)
 
     #endif
 }
+#endif

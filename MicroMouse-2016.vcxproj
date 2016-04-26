@@ -161,6 +161,7 @@
     <ClCompile Include="micromouse\PIDController.cpp" />
     <ClCompile Include="micromouse\RobotIO.cpp" />
     <ClCompile Include="micromouse\IRSensor.cpp" />
+    <ClCompile Include="micromouse\Teensy.cpp" />
     <ClCompile Include="micromouse\Timer.cpp" />
     <ClCompile Include="micromouse\Vector.cpp" />
     <ClCompile Include="micromouse\VirtualMaze.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="micromouse\PIDController.h" />
     <ClInclude Include="micromouse\RobotIO.h" />
     <ClInclude Include="micromouse\IRSensor.h" />
+    <ClInclude Include="micromouse\Teensy.h" />
     <ClInclude Include="micromouse\Timer.h" />
     <ClInclude Include="micromouse\Vector.h" />
     <ClInclude Include="micromouse\VirtualMaze.h" />

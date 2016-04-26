@@ -1,8 +1,8 @@
 //
-//  teensy.hpp
+//  Teensy.hpp
 //  yyekalo
 //
-//  Created by Yekalo Berhane on 4/22/16.
+//  Created by Yikealo on 4/22/16.
 //  Copyright © 2016 Yikealo Abraha. All rights reserved.
 //
 
@@ -10,7 +10,8 @@
 
 #ifdef __MK20DX256__ // Teensy Compile
 #include <Arduino.h>
-#endif
+#else
+
 
 
 
@@ -21,21 +22,23 @@
 #define INPUT 0;
 #define INPUT_PULLUP 2;
 
-void digitalWrite2(int port,int state);
+void digitalWrite(int port,int state);
 
-void anglogWrite2(int port,int value);
+void analogWrite(int port,int value);
 
-int analogRead2(int port);
+int analogRead(int port);
 
-int digitalRead2(int port);
+int digitalRead(int port);
 
-void pinMode2(int port,int purpose);
+void pinMode(int port,int purpose);
 
-void delay2(int time);
+void delay(int time);
 
-void delayMicroseconds2(int microsecond);
+void delayMicroseconds(int microsecond);
 
-int random2(int value);
+int random(int value);
 
 //cli
 //sei
+#endif
+

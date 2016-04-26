@@ -1,4 +1,4 @@
-#include <LEDController.h>
+#include "LEDController.h"
 #ifdef __MK20DX256__ // Teensy Compile
 	#include "WProgram.h"
 #else // pc compile
@@ -6,13 +6,10 @@
 #endif
 
 
-
-//comment / uncomment to turn off / on the debug function.
-#define MICROMOUSE_DEBUG_MODE
+int LED_PIN = 13;
 
 
 
-int buttonFlag;
 
 
 
@@ -25,7 +22,6 @@ namespace Micromouse
     LEDController::~LEDController()
     {
     }
-
 
 	int LEDController::blinkLED(int reps, int timeOn, int timeOff)
 	{

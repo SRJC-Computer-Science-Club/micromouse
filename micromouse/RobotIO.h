@@ -5,9 +5,13 @@
 #include "PIDController.h"
 #include "Vector.h"
 #include "Path.h"
+#include "RobotIO.h"
+#include "LEDController.h"
 #ifdef __MK20DX256__ // Teensy Compile
 #include "Adafruit_LSM9DS0.h"
 #endif
+
+
 namespace Micromouse
 {
 	const float MM_BETWEEN_WHEELS = 66.5f;
@@ -121,9 +125,10 @@ namespace Micromouse
 #else // PC compile
 
     // TODO Replace with LEDController when done
-    // Controller ledController;
 
 #endif
+
+    LEDController led;
 		IRSensor* IRSensors[4];
 
 		Motor rightMotor = Motor

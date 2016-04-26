@@ -547,8 +547,8 @@ namespace Micromouse
 
 
 
-<<<<<<< HEAD
-	void RobotIO::initPins()
+
+/*	void RobotIO::initPins()
 	{
 #ifdef __MK20DX256__ // Teensy Compile
 		pinMode(BUTTON_PIN, INPUT_PULLUP);
@@ -556,12 +556,9 @@ namespace Micromouse
 		pinMode(SWITCH_B_PIN, INPUT_PULLUP);
 		pinMode(SWITCH_C_PIN, INPUT_PULLUP);
 #endif
-	}
+	}*/
 
 
-
-=======
->>>>>>> dev
 	void RobotIO::calibrateIRSensors()
 	{
 		IRSensors[LEFT]->calibrate(20, 20);
@@ -611,39 +608,39 @@ namespace Micromouse
 
 		if (finishCountsLeft > 0 && finishCountsRight > 0) {
 			log(DEBUG2) << " Both Motors Working Fine";
-      //ledController.blinkLED(1);
+            led.blinkLED(1);
       #ifdef __MK20DX256__ // Teensy Compile
       delay(2000);
       #endif  
-      //ledController.blinkLED(1);
+            led.blinkLED(1);
      
 			return true;
 		}
 		else if (finishCountsRight > 0) {
 			log(DEBUG2) << "Left Motor is Not getting encoder counts";
-      //ledController.blinkLED(2);
+            led.blinkLED(2);
       #ifdef __MK20DX256__ // Teensy Compile
       delay(2000);
       #endif  
-      //ledController.blinkLED(1);
+            led.blinkLED(1);
 			return false;
 		}
 		else if (finishCountsLeft > 0) {
 			log(DEBUG2) << "Right Motor is Not getting encoder counts";
-      //ledController.blinkLED(1);
+      led.blinkLED(1);
       #ifdef __MK20DX256__ // Teensy Compile
       delay(2000);
       #endif  
-      //ledController.blinkLED(2);
+      led.blinkLED(2);
 			return false;
 		}
 		else {
 			log(DEBUG2) << "Neither Motor is Getting encoder counts";
-      //ledController.blinkLED(2);
+            led.blinkLED(2);
       #ifdef __MK20DX256__ // Teensy Compile
       delay(2000);
       #endif  
-      //ledController.blinkLED(2);
+            led.blinkLED(2);
 			return false;
 		}
 
@@ -686,12 +683,12 @@ namespace Micromouse
 		if (lsm.begin())
 		{
 			log(DEBUG2) << "Gyro data is currently working";
-			//ledController.blinkLED(1);
+            led.blinkLED(1);
 		}
 		else 
 		{
 			log(DEBUG2) << "Unable to gather GYRO data";
-			//ledController.blinkLED(2);
+            led.blinkLED(2);
 		}
 #else 
 		log(INFO) << "GYRO test run in c++ environment";

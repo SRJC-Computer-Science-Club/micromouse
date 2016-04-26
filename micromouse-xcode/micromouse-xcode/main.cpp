@@ -11,7 +11,7 @@ const LogLevel LOG_LEVEL = DEBUG2;
 
 using namespace std;
 
-
+volatile bool buttonFlag;
 
 int main( int argc , char** argv )
 {

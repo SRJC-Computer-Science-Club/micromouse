@@ -14,15 +14,13 @@
 #ifdef __MK20DX256__ // Teensy Compile
 
 inline static void logError( int code ) {
-    if (Micromouse::Memory::read(Micromouse::ERROR_MEMORY)) //Validate if ERROR_MEMORY has been initilized
-        Micromouse::Memory::write(Micromouse::ERROR_MEMORY, 0);
     //Read and increment to the next error state, as well as validate to loop back to 1 if incremented to 21
     int intNextIndex = Micromouse::Memory::read(Micromouse::ERROR_MEMORY) +1;
     intNextIndex = intNextIndex > 20 ? 1 : intNextIndex;
     
     //Find next state address and save code as well as the most recent error state in ERROR_MEMORY
     int intNextStateAddress = Micromouse::ERROR_MEMORY +intNextIndex * 4;
-    Micromouse::Memory::write( intNextStateAddress, 15);
+    Micromouse::Memory::write( intNextStateAddress, code);
     Micromouse::Memory::write( Micromouse::ERROR_MEMORY, intNextIndex);
     
 }

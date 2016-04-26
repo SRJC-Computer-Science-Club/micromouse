@@ -109,7 +109,6 @@ namespace Micromouse
 		float estimateHeadingError();
 
 		void initIRSensors();
-		void initPins();
 
 	
 #ifdef __MK20DX256__ // Teensy Compile

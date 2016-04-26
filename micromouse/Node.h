@@ -29,6 +29,8 @@ namespace Micromouse
 		void close();
 		void open();
 
+		void reset();
+
 	private:
 		int G = INF; //movement cost
 		int F = INF; //movement + hueristic cost

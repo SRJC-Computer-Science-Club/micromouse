@@ -6,7 +6,7 @@
 #include "Vector.h"
 #include "Path.h"
 #ifdef __MK20DX256__ // Teensy Compile
-#include "adafruit libraries\Adafruit_LSM9DS0.h"
+#include "Adafruit_LSM9DS0.h"
 #endif
 namespace Micromouse
 {
@@ -120,6 +120,9 @@ namespace Micromouse
 
 		//Adafruit_LSM9DS0 lsm = Adafruit_LSM9DS0(19, 18, 17, 16);
 #else // PC compile
+
+    // TODO Replace with LEDController when done
+    // Controller ledController;
 
 #endif
 		IRSensor* IRSensors[4];

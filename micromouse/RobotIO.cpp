@@ -589,18 +589,39 @@ namespace Micromouse
 
 		if (finishCountsLeft > 0 && finishCountsRight > 0) {
 			log(DEBUG2) << " Both Motors Working Fine";
+      //ledController.blinkLED(1);
+      #ifdef __MK20DX256__ // Teensy Compile
+      delay(2000);
+      #endif  
+      //ledController.blinkLED(1);
+     
 			return true;
 		}
-		else if (finishCountsLeft > 0) {
+		else if (finishCountsRight > 0) {
 			log(DEBUG2) << "Left Motor is Not getting encoder counts";
+      //ledController.blinkLED(2);
+      #ifdef __MK20DX256__ // Teensy Compile
+      delay(2000);
+      #endif  
+      //ledController.blinkLED(1);
 			return false;
 		}
-		else if (finishCountsRight > 0) {
+		else if (finishCountsLeft > 0) {
 			log(DEBUG2) << "Right Motor is Not getting encoder counts";
+      //ledController.blinkLED(1);
+      #ifdef __MK20DX256__ // Teensy Compile
+      delay(2000);
+      #endif  
+      //ledController.blinkLED(2);
 			return false;
 		}
 		else {
 			log(DEBUG2) << "Neither Motor is Getting encoder counts";
+      //ledController.blinkLED(2);
+      #ifdef __MK20DX256__ // Teensy Compile
+      delay(2000);
+      #endif  
+      //ledController.blinkLED(2);
 			return false;
 		}
 
@@ -643,12 +664,12 @@ namespace Micromouse
 		if (lsm.begin())
 		{
 			log(DEBUG2) << "Gyro data is currently working";
-			blinkLED(1);
+			//ledController.blinkLED(1);
 		}
 		else 
 		{
 			log(DEBUG2) << "Unable to gather GYRO data";
-			blinkLED(2);
+			//ledController.blinkLED(2);
 		}
 #else 
 		log(INFO) << "GYRO test run in c++ environment";

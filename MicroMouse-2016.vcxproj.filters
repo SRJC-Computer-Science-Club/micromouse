@@ -107,5 +107,8 @@
     <ClInclude Include="micromouse\Timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="micromouse\ButtonFlag.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

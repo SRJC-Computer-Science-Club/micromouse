@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <math.h>
 #include "Maze.h"
+#include <assert.h>
 
 namespace Micromouse
 {
@@ -33,6 +34,8 @@ namespace Micromouse
 
 	Path * Maze::findPath( PositionVector start , PositionVector end )
 	{
+		resetNodes();
+
 		std::vector< Node* > openNodes;
 
 		// assume 1/2 of the maze will need to be searched on average;
@@ -134,7 +137,8 @@ namespace Micromouse
 	// adds a new node to the maze at the given position
 	void Maze::addNode( PositionVector pos )
 	{
-		maze[ pos.x() ][ pos.y() ] = new Node( pos );
+		assert(isInsideMaze(pos));
+		maze[pos.x()][pos.y()] = new Node(pos);
 	}
 
 
@@ -268,6 +272,20 @@ namespace Micromouse
 			for ( int y = 0; y < NUM_NODES_H; y++ )
 			{
 				maze[ x ][ y ] = nullptr;
+			}
+		}
+	}
+
+	void Maze::resetNodes()
+	{
+		for (size_t i = 0; i < NUM_NODES_W; i++)
+		{
+			for (size_t j = 0; j < NUM_NODES_H; j++)
+			{
+				if (maze[i][j] != nullptr)
+				{
+					maze[i][j]->reset();
+				}
 			}
 		}
 	}

@@ -48,6 +48,11 @@ namespace Micromouse
 		sum = sum < -1 ? -1 : sum;
 		sum = sum > 1 ? 1 : sum;
 
+		if (collectingData)
+		{
+			queue.push(sum);
+		}
+
 		return sum;
 	}
 
@@ -56,6 +61,19 @@ namespace Micromouse
 		this->P = P;
 		this->I = I;
 		this->D = D;
+	}
+
+	void PIDController::collectData(int maxSize)
+	{
+		assert(maxSize > 0);
+
+		queue = DataQueue(maxSize);
+		collectingData = true;
+	}
+
+	DataQueue PIDController::getCollectedData()
+	{
+		return queue;
 	}
 
 	float PIDController::getDeltaTime()

@@ -10,6 +10,7 @@ yyekalo
 \*********************************/
 
 #pragma once
+#include "DataQueue.h"
 #ifndef __MK20DX256__
 #include <chrono>
 #endif
@@ -35,6 +36,13 @@ namespace Micromouse
 		// Sets the P, I, and D constants for the controller.
 		void setConstants(float P, float I, float D);
 
+		//Start collecting data.
+		//maxSize determines the amount of data that will be remembered.
+		void collectData(int maxSize);
+
+		//Returns the data collected by the PIDController.
+		DataQueue getCollectedData();
+
 	private:
 		float getDeltaTime();
 
@@ -55,5 +63,8 @@ namespace Micromouse
 		float D;
 
 		long lastTime;
+
+		bool collectingData = false;
+		DataQueue queue = DataQueue(0);
 	};
 }

@@ -17,6 +17,7 @@ void DataQueue::push(float element)
 	if (size > maxSize)
 	{
 		size = maxSize;
+
 		tailIndex++;
 		if (tailIndex >= maxSize)
 		{
@@ -43,8 +44,16 @@ float DataQueue::pop()
 	assert(!isEmpty());
 
 	float element = data[tailIndex];
+
 	size--;
+
 	tailIndex++;
+	if (tailIndex >= maxSize)
+	{
+		tailIndex = 0;
+	}
+
+	return element;
 }
 
 int DataQueue::getSize() const

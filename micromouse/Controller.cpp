@@ -1,5 +1,6 @@
 #include "Controller.h"
 #include "Logger.h"
+#include "DataQueue.h"
 #include <vector> //must come first for some reason
 
 #ifdef __MK20DX256__ // Teensy compile
@@ -28,6 +29,20 @@ namespace Micromouse
 #ifdef __MK20DX256__ // Teensy compile
 		delay(2000);
 #endif
+
+		DataQueue queue = DataQueue(5);
+		queue.push(1.0f);
+		queue.push(2.0f);
+		queue.push(3.0f);
+		queue.push(4.0f);
+		queue.push(5.0f);
+		queue.push(6.0f);
+		queue.push(7.0f);
+		queue.push(8.0f);
+		while (!queue.isEmpty())
+		{
+			logC(DEBUG1) << queue.pop();
+		}
 
 		//mouse.testIR();
 		mouse.testMotors();

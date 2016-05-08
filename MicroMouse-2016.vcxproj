@@ -149,9 +149,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DataQueue.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="micromouse\Controller.cpp" />
+    <ClCompile Include="micromouse\DataQueue.cpp" />
     <ClCompile Include="micromouse\FlagMatrix.cpp" />
     <ClCompile Include="micromouse\Maze.cpp" />
     <ClCompile Include="micromouse\Memory.cpp" />
@@ -166,8 +166,8 @@
     <ClCompile Include="micromouse\VirtualMaze.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DataQueue.h" />
     <ClInclude Include="micromouse\Controller.h" />
+    <ClInclude Include="micromouse\DataQueue.h" />
     <ClInclude Include="micromouse\FlagMatrix.h" />
     <ClInclude Include="micromouse\Logger.h" />
     <ClInclude Include="micromouse\Maze.h" />

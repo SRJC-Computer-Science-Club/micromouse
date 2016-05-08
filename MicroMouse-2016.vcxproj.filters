@@ -57,7 +57,7 @@
     <ClCompile Include="micromouse\Memory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DataQueue.cpp">
+    <ClCompile Include="micromouse\DataQueue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -104,7 +104,7 @@
     <ClInclude Include="micromouse\Memory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DataQueue.h">
+    <ClInclude Include="micromouse\DataQueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

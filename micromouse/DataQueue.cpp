@@ -9,7 +9,7 @@ DataQueue::DataQueue(int maxSize)
 
 void DataQueue::push(float element)
 {
-	assert(maxSize > 0);
+	assert(maxSize > 0); //Cannot push to a DataQueue with maxSize <= 0.
 
 	data[headIndex] = element;
 
@@ -34,14 +34,14 @@ void DataQueue::push(float element)
 
 float DataQueue::peek() const
 {
-	assert(!isEmpty());
+	assert(!isEmpty()); //Cannot peek at an empty DataQueue.
 
 	return data[tailIndex];
 }
 
 float DataQueue::pop()
 {
-	assert(!isEmpty());
+	assert(!isEmpty()); //Cannot pop from an empty DataQueue.
 
 	float element = data[tailIndex];
 

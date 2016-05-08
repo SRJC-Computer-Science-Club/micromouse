@@ -7,6 +7,25 @@ DataQueue::DataQueue(int maxSize)
 	data = new float[maxSize];
 }
 
+DataQueue::DataQueue(const DataQueue& queue)
+{
+	maxSize = queue.maxSize;
+	size = queue.size;
+	tailIndex = queue.tailIndex;
+	headIndex = queue.headIndex;
+
+	data = new float[maxSize];
+	for (int i = 0; i < maxSize; i++)
+	{
+		data[i] = queue.data[i];
+	}
+}
+
+DataQueue::~DataQueue()
+{
+	delete[] data;
+}
+
 void DataQueue::push(float element)
 {
 	assert(maxSize > 0); //Cannot push to a DataQueue with maxSize <= 0.

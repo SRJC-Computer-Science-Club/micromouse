@@ -7,7 +7,11 @@
 class DataQueue
 {
 public:
+	//Sets the maximum number of elements that can be stored in the queue.
 	DataQueue(int maxSize);
+
+	DataQueue(const DataQueue& queue);
+	~DataQueue();
 
 	//Push an element into the queue.
 	//Max size must be greater than zero.

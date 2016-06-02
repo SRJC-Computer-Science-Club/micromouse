@@ -1,5 +1,5 @@
 #include "Vector.h"
-#include <assert.h>
+#include "AssertionHandler.h"
 
 namespace Micromouse
 {
@@ -201,9 +201,9 @@ namespace Micromouse
 
 	void DirectionVector::validateSelf()
 	{
-		assert( _dir != NONE );
-		assert( _mag >= 0 );
-
-		assert( _mag < NUM_NODES_W || _mag < NUM_NODES_H );
+		assertion(_dir != NONE, 10);
+		assertion(_mag >= 0, 11);
+		assertion(_mag < NUM_NODES_W || _mag < NUM_NODES_H, 12);
+        
 	}
 }

@@ -1,7 +1,7 @@
 #include "IRSensor.h"
 #include "Logger.h"
 #include "RobotIO.h"
-#include <assert.h>
+#include "AssertionHandler.h"
 
 #ifdef __MK20DX256__ // Teensy Compile
 	#include "WProgram.h"
@@ -33,12 +33,12 @@ namespace Micromouse {
 
 	bool IRSensor::calibrate( int calibrationStart, int calibrationInterval )
 	{
-		assert(calibrationStart >= MIN_RANGE);
-		assert(calibrationInterval > 0);
+		assertion(calibrationStart >= MIN_RANGE, 1);
+		assertion(calibrationInterval > 0, 2);
 		this->calibrationStart = calibrationStart;
 		this->calibrationInterval = calibrationInterval;
 		calibrationSize = ( MAX_RANGE - calibrationStart ) / calibrationInterval + 1;
-		assert(calibrationSize <= 17);
+		assertion(calibrationSize <= 17, 3);
 
 		delete[] calibrationData;
 		calibrationData = new int[calibrationSize];

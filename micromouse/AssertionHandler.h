@@ -10,6 +10,7 @@
 #define AssertionHandler_h
 
 #include "Memory.h"
+#include <assert.h>
 
 #ifdef __MK20DX256__ // Teensy Compile
 

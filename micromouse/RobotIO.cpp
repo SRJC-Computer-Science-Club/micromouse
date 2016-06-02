@@ -4,7 +4,7 @@
 #include "Logger.h"
 #include "Timer.h"
 #include "ButtonFlag.h"
-
+#include "AssertionHandler.h"
 
 
 #ifdef __MK20DX256__ // Teensy Compile
@@ -81,7 +81,7 @@ namespace Micromouse
     bool RobotIO::isWallinDirection( direction dir )
     {
         // ensure valid data
-        assert( dir == W || dir ==  N || dir == E || dir == NW || dir == NE);
+        assertion(dir == W || dir ==  N || dir == E || dir == NW || dir == NE, 9);
 
         switch( dir )
         {

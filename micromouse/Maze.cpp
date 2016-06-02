@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <math.h>
 #include "Maze.h"
-#include <assert.h>
+#include "AssertionHandler.h"
 
 namespace Micromouse
 {
@@ -137,7 +137,7 @@ namespace Micromouse
 	// adds a new node to the maze at the given position
 	void Maze::addNode( PositionVector pos )
 	{
-		assert(isInsideMaze(pos));
+		assertion(isInsideMaze(pos), 4);
 		maze[pos.x()][pos.y()] = new Node(pos);
 	}
 

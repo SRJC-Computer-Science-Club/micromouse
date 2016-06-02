@@ -10,7 +10,7 @@ Author GitHub:	joshuasrjc
 #include "MouseBot.h"
 #include "Logger.h"
 #include "ButtonFlag.h"
-
+#include "AssertionHandler.h"
 
 
 namespace Micromouse
@@ -466,7 +466,7 @@ namespace Micromouse
 	void MouseBot::setSpeed( int spd )
 	{
 		speed = spd;
-		assert(speed > 0 && speed <= MAX_SPEED);
+		assertion(speed > 0 && speed <= MAX_SPEED, 5);
 	}
 
 

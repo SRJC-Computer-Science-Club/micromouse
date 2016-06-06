@@ -9,6 +9,7 @@
 #ifndef AssertionHandler_h
 #define AssertionHandler_h
 
+#include "Logger.h"
 #include "Memory.h"
 #include <assert.h>
 
@@ -29,7 +30,7 @@ inline static void logError( int code ) {
 inline static void printErrorCodes() {
     for (int error = 0; error <= 11; error += 1) {
         int address = Micromouse::ERROR_MEMORY;
-        log(Micromouse::Memory::read((error * 4) +address));
+        log(INFO) << Micromouse::Memory::read((error * 4) +address);
         
     }
     

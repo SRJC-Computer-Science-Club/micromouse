@@ -26,6 +26,15 @@ inline static void logError( int code ) {
     
 }
 
+inline static void printErrorCodes() {
+    for (int error = 0; error <= 11; error += 1) {
+        int address = Micromouse::ERROR_MEMORY;
+        log(Micromouse::Memory::read((error * 4) +address));
+        
+    }
+    
+}
+
 //Prints to concole using Logger(..) << code and metadata of the assertion
 #define assertion(condition,code) \
 ( \

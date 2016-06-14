@@ -177,6 +177,7 @@
     <ClInclude Include="micromouse\Node.h" />
     <ClInclude Include="micromouse\Path.h" />
     <ClInclude Include="micromouse\PIDController.h" />
+    <ClInclude Include="micromouse\Recorder.h" />
     <ClInclude Include="micromouse\RobotIO.h" />
     <ClInclude Include="micromouse\IRSensor.h" />
     <ClInclude Include="micromouse\Timer.h" />

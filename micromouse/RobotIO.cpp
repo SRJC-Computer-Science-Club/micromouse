@@ -4,6 +4,7 @@
 #include "Logger.h"
 #include "Timer.h"
 #include "ButtonFlag.h"
+#include "Recorder.h"
 
 
 
@@ -168,12 +169,7 @@ namespace Micromouse
 		//rotate(90.0f);
 		//delay(2000);
 		moveForward(180.0f);
-		moveForward(180.0f);
-		moveForward(180.0f);
-		moveForward(180.0f);
-		moveForward(180.0f);
-		moveForward(180.0f);
-		moveForward(180.0f);
+
 /*
 		rightMotor.setMaxSpeed(0.2f);
 		leftMotor.setMaxSpeed(0.2f);
@@ -245,6 +241,9 @@ namespace Micromouse
 		//millimeters represents how much farther the bot needs to travel.
 		//The function will loop until centimeters is within DISTANCE_TOLERANCE
 
+		Recorder<float> rec(6000);
+		Recorder<float> rec2(6000);
+
 		float leftmm = millimeters;
 		float rightmm = millimeters;
 
@@ -296,6 +295,8 @@ namespace Micromouse
 			//Get distance traveled in cm since last cycle (average of two encoders)
 			float leftTraveled = leftMotor.resetCounts();
 			float rightTraveled = rightMotor.resetCounts();
+
+
 			leftTraveled /= COUNTS_PER_MM;
 			rightTraveled /= COUNTS_PER_MM;
 
@@ -306,8 +307,23 @@ namespace Micromouse
 			leftmm -= leftTraveled;
 			rightmm -= rightTraveled;
 
+
+
+	
+
+
 			leftSpeed = leftDistPID.getCorrection(leftmm);
 			rightSpeed = rightDistPID.getCorrection(rightmm);
+
+			if (!rec.addValue(leftSpeed))
+			{
+				stopMotors();
+				rec.print();
+				
+				rec2.print();
+			}
+			rec2.addValue(leftmm);
+
 
 			float speedError = actualLeftSpeed - actualRightSpeed;
 			float speedCorrection = speedPID.getCorrection(speedError);
@@ -558,5 +574,12 @@ namespace Micromouse
 		IRSensors[RIGHT]->saveCalibration(IR_RIGHT_MEMORY);
 		IRSensors[FRONT_LEFT]->saveCalibration(IR_FRONT_LEFT_MEMORY);
 		IRSensors[FRONT_RIGHT]->saveCalibration(IR_FRONT_RIGHT_MEMORY);
+	}
+
+
+	void RobotIO::stopMotors()
+	{
+		leftMotor.brake();
+		rightMotor.brake();
 	}
 }

@@ -241,8 +241,7 @@ namespace Micromouse
 		//millimeters represents how much farther the bot needs to travel.
 		//The function will loop until centimeters is within DISTANCE_TOLERANCE
 
-		Recorder<float> rec(6000);
-		Recorder<float> rec2(6000);
+		Recorder<float> rec(6000,2);
 
 		float leftmm = millimeters;
 		float rightmm = millimeters;
@@ -314,15 +313,15 @@ namespace Micromouse
 
 			leftSpeed = leftDistPID.getCorrection(leftmm);
 			rightSpeed = rightDistPID.getCorrection(rightmm);
+			
+			rec.addValue(leftmm,1);
 
-			if (!rec.addValue(leftSpeed))
+			if (!rec.addValue(leftSpeed,0))
 			{
 				stopMotors();
 				rec.print();
-				
-				rec2.print();
 			}
-			rec2.addValue(leftmm);
+			
 
 
 			float speedError = actualLeftSpeed - actualRightSpeed;
@@ -379,6 +378,8 @@ namespace Micromouse
 
 		leftMotor.brake();
 		rightMotor.brake();
+
+		rec.print();
 
 	}
 

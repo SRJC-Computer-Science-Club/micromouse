@@ -88,6 +88,8 @@ namespace Micromouse
 
 		void calibrateIRSensors();
 
+		void stopMotors();
+
 	private:
 		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };
 

@@ -16,7 +16,7 @@
 basic example of this workflow: https://www.youtube.com/watch?v=oFYyTZwMyAg
 
 ## Program Structure
-![alt program structure](https://github.com/SRJC-Computer-Science-Club/micromouse/blob/dev/Charts/Hierarchy_Dev.PNG)
+![alt program structure](https://github.com/SRJC-Computer-Science-Club/micromouse/blob/dev/Charts/Hierarchy_Dev2.PNG)
 
 
 ## Program flow

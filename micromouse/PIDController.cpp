@@ -10,7 +10,7 @@ Author GitHub:	joshuasrjc
 \*********************************/
 
 #include "PIDController.h"
-#include <assert.h>
+#include "AssertionHandler.h"
 #include "Logger.h"
 
 #ifdef __MK20DX256__ // Teensy compile
@@ -35,7 +35,7 @@ namespace Micromouse
 
 	float PIDController::getCorrection(float currentError)
 	{
-		assert(started);
+		assertion(started, 8);
 
 		float deltaTime = getDeltaTime();
 

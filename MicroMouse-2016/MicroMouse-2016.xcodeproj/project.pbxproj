@@ -37,6 +37,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E119488C1D052D4B00D5794C /* AssertionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssertionHandler.h; path = ../../micromouse/AssertionHandler.h; sourceTree = "<group>"; };
 		E1D9B6F61CD7CB2900F1C492 /* MicroMouse-2016 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "MicroMouse-2016"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1D9B7001CD7CB4800F1C492 /* Main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Main.cpp; path = ../../Main.cpp; sourceTree = "<group>"; };
 		E1D9B7031CD7CB7E00F1C492 /* ButtonFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ButtonFlag.h; path = ../../micromouse/ButtonFlag.h; sourceTree = "<group>"; };
@@ -113,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				E1D9B7031CD7CB7E00F1C492 /* ButtonFlag.h */,
+				E119488C1D052D4B00D5794C /* AssertionHandler.h */,
 				E1D9B7041CD7CB7E00F1C492 /* callibration_temp */,
 				E1D9B7051CD7CB7E00F1C492 /* Controller.cpp */,
 				E1D9B7061CD7CB7E00F1C492 /* Controller.h */,
@@ -339,6 +341,7 @@
 				E1D9B6FF1CD7CB2900F1C492 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

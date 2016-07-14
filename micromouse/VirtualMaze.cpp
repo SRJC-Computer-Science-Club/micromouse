@@ -6,7 +6,7 @@ Author GitHub:	joshuasrjc
 \*********************************/
 
 #include "VirtualMaze.h"
-#include <assert.h>
+#include "AssertionHandler.h"
 
 #ifdef __MK20DX256__ // Teensy Compile
 	#include <Arduino.h>//random
@@ -23,7 +23,7 @@ namespace Micromouse
 		width(width),
 		height(height)
 	{
-		assert(width % 4 == 3 && height % 4 == 3);
+		assertion(width % 4 == 3 && height % 4 == 3, 13);
 	}
 
 

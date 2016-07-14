@@ -1,6 +1,5 @@
 #include "Path.h"
-#include <assert.h>
-
+#include "AssertionHandler.h"
 
 
 
@@ -26,7 +25,7 @@ namespace Micromouse
 
 	DirectionVector Path::popStep()
 	{
-		assert( !path.empty() );
+		assertion(!path.empty(), 6);
 
 		DirectionVector step = path.top();
 		path.pop();
@@ -38,7 +37,7 @@ namespace Micromouse
 
 	DirectionVector Path::peekStep()
 	{
-		assert( !path.empty() );
+		assertion(!path.empty(), 7);
 
 		return path.top();
 	}

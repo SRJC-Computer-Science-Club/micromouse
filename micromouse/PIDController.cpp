@@ -49,6 +49,12 @@ namespace Micromouse
 		float iCorrection = I * totalError;
 		float dCorrection = D * (currentError - lastError);
 
+		lastError = currentError; 
+
+		lastP_Correction = pCorrection;
+		lastI_Correction = iCorrection;
+		lastD_Correction = dCorrection;
+
 		float sum = pCorrection + iCorrection + dCorrection;
 		sum /= 1000.0f;
 
@@ -65,7 +71,6 @@ namespace Micromouse
 	{
 		return totalError;
 	}
-
 
 
 	void PIDController::setConstants(float P, float I, float D)

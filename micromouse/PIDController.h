@@ -37,6 +37,10 @@ namespace Micromouse
 
 		float getI() const;
 
+		float lastP_Correction = 0.0f;
+		float lastI_Correction = 0.0f;
+		float lastD_Correction = 0.0f;
+
 		// Sets the P, I, and D constants for the controller.
 		void setConstants(float P, float I, float D);
 

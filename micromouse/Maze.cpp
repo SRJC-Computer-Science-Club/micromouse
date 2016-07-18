@@ -35,6 +35,7 @@ namespace Micromouse
 	Path * Maze::findPath( PositionVector start , PositionVector end )
 	{
 		resetNodes();
+
 		std::vector< Node* > openNodes;
 
 		// assume 1/2 of the maze will need to be searched on average;
@@ -326,6 +327,7 @@ namespace Micromouse
 		}
 	}
 #endif
+
 
 
 

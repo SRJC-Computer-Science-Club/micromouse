@@ -47,6 +47,7 @@ namespace Micromouse
 		void draw();
 #endif
 
+
 	private:
 		int G = INF; //movement cost
 		int F = INF; //movement + hueristic cost

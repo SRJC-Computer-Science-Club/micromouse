@@ -95,7 +95,6 @@ namespace Micromouse
 		float estimateHeadingError();
 
 		void initIRSensors();
-		void initPins();
 
 		IRSensor* IRSensors[4];
 

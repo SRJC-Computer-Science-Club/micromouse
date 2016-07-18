@@ -9,6 +9,7 @@ Author GitHub:	joshuasrjc
 
 #include "MouseBot.h"
 #include "Logger.h"
+#include "ButtonFlag.h"
 
 
 
@@ -100,16 +101,14 @@ namespace Micromouse
 		
 		while (!choicePositions.empty())
 		{
+
 			//logC(DEBUG1) << *maze;
 
 			PositionVector* pos = choicePositions.top();
 			choicePositions.pop();
 
-			//while (position != *pos)
-			//{
-			//	backtrack();
-			//}
-
+			BUTTONFLAG
+			
 			Path* path = maze->findPath(position, *pos);
 			followPath(path);
 
@@ -119,6 +118,8 @@ namespace Micromouse
 			logC(DEBUG3) << "Number of possible directions: " << numPossibleDirections();
 			while (numPossibleDirections() > 0)
 			{
+				BUTTONFLAG
+
 				if (numPossibleDirections() > 1)
 				{
 #ifdef __MK20DX256__ // Teensy Compile
@@ -141,6 +142,8 @@ namespace Micromouse
 					lookAround();
 				}
 			}
+
+
 		}
 
 		logC(INFO) << "Mapped maze:\n";
@@ -150,41 +153,50 @@ namespace Micromouse
 		logC(INFO) << *maze;
 #endif
 
-		//temp for testing
-		//Path * path2 = maze.findPath(PositionVector(0, 0), PositionVector(0, 0));
-		/*Path * path = maze->findPath(PositionVector(0, 0), PositionVector(16, 16));
-		for (int i = 0; i < path->size(); i++)
-		{
-			log(DEBUG2) << "Dir: " << path->peekStep().dir() << " Mag: " << path->peekStep().mag();
-			path->popStep();
-		}
-		*/
+		returnToStart();
+
+		BUTTONEXIT
+			return;
 	}
 
 
 
 	void MouseBot::runMaze()
 	{
-#ifdef SFML_GRAPHICS_HPP
-		color = sf::Color::Color(20, 200, 200);
-#endif
 		log(DEBUG1) << "Run Maze";
-
-		followPath(maze->findPath(position, PositionVector(0, 0)));
 
 
 #ifdef SFML_GRAPHICS_HPP
 		color = sf::Color::Color(200, 20, 200);
 #endif
-		
-		followPath(maze->findPath(PositionVector(0, 0), PositionVector( MAZE_W , MAZE_H)));
-		//followPath(maze->findPath(position, PositionVector( /*NUM_NODES_W / 2*/16 , 16 /*NUM_NODES_H / 2*/)));
+
+		Path* pathCenter = maze->findPath(position, PositionVector(2, 2));
+		followPath(pathCenter);
+		delete pathCenter;
+
+		returnToStart();
+	}
+
+
+
+	void MouseBot::resetMaze()
+	{
+		delete maze;
+		maze = new Maze();
+
 	}
 
 
 
 	void MouseBot::returnToStart()
 	{
+#ifdef __MK20DX256__ // Teensy Compile
+		delay(400);
+#endif
+		Path* pathHome = maze->findPath(position, PositionVector(0, 0));
+		followPath(pathHome);
+		rotate(S);
+		delete pathHome;
 	}
 
 
@@ -349,11 +361,16 @@ namespace Micromouse
 		{
 			while (!path->empty())
 			{
+				BUTTONFLAG
+
 				DirectionVector dir = path->popStep();
 				rotateToFaceDirection(dir.dir());
 				moveForward(dir.mag());
 			}
 		}
+
+		BUTTONEXIT
+		return;
 	}
 
 

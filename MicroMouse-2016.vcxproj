@@ -240,6 +240,7 @@
     <ClCompile Include="micromouse\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="micromouse\ButtonFlag.h" />
     <ClInclude Include="micromouse\Controller.h" />
     <ClInclude Include="micromouse\FlagMatrix.h" />
     <ClInclude Include="micromouse\Logger.h" />

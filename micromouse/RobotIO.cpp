@@ -168,7 +168,7 @@ namespace Micromouse
 #ifdef __MK20DX256__ // Teensy Compile
 		//rotate(90.0f);
 		//delay(2000);
-		moveForward(180.0f);
+		moveForward(6*180.0f);
 
 /*
 		rightMotor.setMaxSpeed(0.2f);
@@ -235,19 +235,19 @@ namespace Micromouse
 	}
 
 
-
+	
 	void RobotIO::moveForward(float millimeters)
 	{
 		//millimeters represents how much farther the bot needs to travel.
 		//The function will loop until centimeters is within DISTANCE_TOLERANCE
 
-		Recorder<float> rec(6000,2);
+		Recorder<float> rec(3000,4);
 
 		float leftmm = millimeters;
 		float rightmm = millimeters;
 
-		PIDController leftDistPID = PIDController(97.0f, 46.0f, 16.0f , 1000);
-		PIDController rightDistPID = PIDController(97.0f, 46.0f, 16.0f , 1000);
+		PIDController leftDistPID = PIDController(97.0f, 46.0f, 160.0f , 1000);
+		PIDController rightDistPID = PIDController(97.0f, 46.0f, 160.0f , 1000);
 
 		PIDController speedPID = PIDController(30.0f, 1.0f, 1.0f);
 
@@ -286,6 +286,7 @@ namespace Micromouse
 			BUTTONFLAG
 
 			float deltaTime = timer.getDeltaTime();
+			
 
 			//Get distance from the front of the bot to the wall.
 			frontRightIRDist = IRSensors[FRONT_RIGHT]->getDistance();
@@ -307,21 +308,27 @@ namespace Micromouse
 			rightmm -= rightTraveled;
 
 
-
-	
-
-
 			leftSpeed = leftDistPID.getCorrection(leftmm);
 			rightSpeed = rightDistPID.getCorrection(rightmm);
 			
-			rec.addValue(leftmm,1);
 
-			if (!rec.addValue(leftSpeed,0))
+
+			///////////////////////////////////////////////////////////////////
+			// DATA LOGGGING
+			///////////////////////////////////////////////////////////////////
+
+			rec.addValue(leftDistPID.lastD_Correction, 3);
+			rec.addValue(leftDistPID.lastI_Correction, 2);
+			rec.addValue(leftDistPID.lastP_Correction,1);
+
+			if ( !rec.addValue(leftmm,0)/*leftDistPID correction*/ )
 			{
 				stopMotors();
 				rec.print();
 			}
-			
+
+			///////////////////////////////////////////////////////////////////
+
 
 
 			float speedError = actualLeftSpeed - actualRightSpeed;
@@ -369,6 +376,11 @@ namespace Micromouse
 
 			rightMotor.setMovement(rightSpeed);
 			leftMotor.setMovement(leftSpeed);
+
+
+#ifdef __MK20DX256__ // Teensy Compile
+			delay(10);
+#endif
 		}
 
 		logC(INFO) << leftDistPID.getI();

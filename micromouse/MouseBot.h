@@ -46,7 +46,7 @@ namespace Micromouse
 		//Otherwise, it generates a random, virtual maze and uses it to simulate mapping.
 		//The mouse will visit every cell.
 		//Currently, the mouse ends in a random cell. Later, this function should return the mouse to the start.
-		void mapMaze();
+		int mapMaze();
 
 		void runMaze();
 
@@ -63,7 +63,7 @@ namespace Micromouse
 		void testRotate();
 
 
-		void moveForward(int numNodes);			// Moves the mouse forward by 1 node (1/2 cell)
+		void moveForward(int numNodes = 1);			// Moves the mouse forward by 1 node (1/2 cell)
 		void rotate(direction dir);				// Rotates the mouse in place by the given direction.
 		void rotateToFaceDirection(direction dir); // Rotates the mouse in place until it reaches the given direction.
 
@@ -88,13 +88,15 @@ namespace Micromouse
 		const int MAX_SPEED = 8;
 
 		void move(direction dir);
-		void followPath(Path* path);
-		void backtrack();
+		void followPath(Path* path, bool keepPath = false); 
+		void followPathUntilBroken(Path* path , bool keepPath = false); // used for mapping maze
 
-		void lookAround();
-		bool isPossibleDirection(direction dir);
-		int numPossibleDirections();
-		direction pickPossibleDirection();
+		bool lookAround(PositionVector nextPathPosition);
+
+
+		NodePair getClosestNodePair(NodePairList & nodePairList);
+
+		int moves = 0;
 
 		Maze* maze;
 
@@ -104,7 +106,9 @@ namespace Micromouse
 		RobotIO robotIO;
 		std::stack<direction> movementHistory;
 
+		// Mouse position in the maze
 		PositionVector position = PositionVector(0,0);
+
 		direction facing = N;
 	};
 }

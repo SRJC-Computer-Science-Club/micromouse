@@ -4,9 +4,16 @@
 #include "Path.h"
 #include "FlagMatrix.h"
 
+#include <vector>
+#include <utility>//pair
+
 
 namespace Micromouse
 {
+	typedef std::pair<const Node*, const Node*> NodePair;
+	typedef std::vector<NodePair> NodePairList;
+
+
 #ifdef SFML_GRAPHICS_HPP
 	class Maze : public Drawable
 #else
@@ -19,47 +26,39 @@ namespace Micromouse
 
 
 		// TODO it should return a list of Vectors to utilized by the motion controller
-		Path * findPath( PositionVector start , PositionVector end );
-		Path * findPath( const Node * const start , const Node * const end );
+		Path * findPath( PositionVector start , PositionVector end , bool isMapping = false , NodePairList* passageNodes = nullptr );
 
 		// returns a Node from the maze
 		// 'pos' is the position of the Node being returned
-		Node* getNode( PositionVector pos );
+		Node* getNode(PositionVector pos) const;
 
 		// adds a Node to the Maze
 		// 'pos' is the position of the new Node being created
-		void addNode( PositionVector newPos );
+		void addNode( PositionVector pos );
+
+		// removes a Node from the Maze
+		// 'pos' is the position of the Node being removed
+		void removeNode(PositionVector pos);
 
 		// returns a pointer to the node in the direction 'dir' from the given Pos 'pos'
 		// if no such node exists then nullptr is returned
 		Node* getNeighborNode( PositionVector pos , direction dir );
 
-		//Sets the open flag at the given position.
-		//If the position is outside the maze, nothing happens.
-		void setOpen(bool flag, int x, int y);
-		void setOpen(bool flag, PositionVector pos);
-
 
 		//Sets the explored flag at the given position.
 		//If the position is outside the maze, nothing happens.
-		void setExplored(bool flag, int x, int y);
-		void setExplored(bool flag, PositionVector pos);
-
-		//Returns the open flag at the given position.
-		//If the position is outside the maze, returns false.
-		bool isOpen(int x, int y) const;
-		bool isOpen(PositionVector pos) const;
+		void setExplored( PositionVector pos );
 
 
-		//Returns the explored flag at the given position.
-		//If the position is outside the maze, returns false.
-		bool isExplored(int x, int y) const;
+		////Returns the explored flag at the given position.
+		////If the position is outside the maze, returns false.
+		//bool isExplored(int x, int y) const;
 		bool isExplored(PositionVector pos) const;
 
-		//Returns true if the given position in within the maze.
-		//( 0 <= x < NUM_NODES_W and 0 <= y < NUM_NODES_H )
-		bool isInsideMaze(int x, int y) const;
-		bool isInsideMaze(PositionVector pos) const;
+
+		// Once the opening to the cneter has been found the other
+		// nodes that form the wall around the center can be removed
+		void removeExcessFinshNodes();
 
 #ifdef SFML_GRAPHICS_HPP
 		void draw(); // draws the maze to the renderWindow
@@ -70,7 +69,7 @@ namespace Micromouse
 		// creates a Path object after findPath has been called
 		// 'node' is the finish node in the path
 		// the path is created by working backwards from end node to start node
-		Path* createPath( const Node* node );
+		Path* createPath( const Node* node , bool isMapping = false , NodePairList* passageNodes = nullptr );
 
 		// populates 'maze' with Nodes
 		void initNodes();
@@ -81,16 +80,9 @@ namespace Micromouse
 		// a 2D array of Nodes that represents the physical maze
 		Node* maze[ NUM_NODES_W ][ NUM_NODES_H ];
 
-		// a 2D array of flags (booleans), that denote whether or not a cell, edge, or corner is open.
-		FlagMatrix open;
-
-		//A 2D array of flags (booleans), that denote whether or not a cell, edge, or corner has been explored.
-		FlagMatrix explored;
-
 #ifdef SFML_GRAPHICS_HPP
 		void drawLine(PositionVector begin, PositionVector end);
 #endif
-
 	};
 
 	//Prints out a picture of the maze for debugging.

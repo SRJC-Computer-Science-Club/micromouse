@@ -131,13 +131,14 @@ namespace Micromouse
 		for ( direction dir = direction::E; dir != direction::NONE; ++dir )
 		{
 			sf::Color color;
-			if ( isClosed() )
+			if ( isExplored() )
 			{
 				color = sf::Color::Color( 250 , 30 , 30 );
 				//color = isDirectionBlocked( dir ) ? sf::Color::Color( 250 , 30 , 30 ) : sf::Color( 200 , 0 , 0 );
 			}
 			else
 			{
+				color = sf::Color::Color(250, 250, 30);
 				//color = isDirectionBlocked( dir ) ? sf::Color::Color( 250 , 250 , 250 ) : sf::Color( 50 , 50 , 50 );
 			}
 			sf::Vertex line[ 2 ];

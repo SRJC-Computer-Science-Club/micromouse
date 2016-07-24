@@ -89,9 +89,6 @@ namespace Micromouse
 
 	int MouseBot::mapMaze()
 	{
-#ifdef SFML_GRAPHICS_HPP
-		color = sf::Color::Color(200, 200, 30);
-#endif
 		log(DEBUG1) << "Mapping Maze...";
 		
 		moves = 0; // Reset moves made to zero
@@ -179,9 +176,6 @@ namespace Micromouse
 	{
 		log(DEBUG1) << "Run Maze";
 
-#ifdef SFML_GRAPHICS_HPP
-		color = sf::Color::Color(200, 20, 200);
-#endif
 		Path* pathCenter = maze->findPath(position, PositionVector::FINISH);
 		followPath(pathCenter);
 		delete pathCenter;
@@ -242,6 +236,9 @@ namespace Micromouse
 				{
 					isPathClear = false;
 				}
+#ifdef SFML_GRAPHICS_HPP
+				maze->drawLine(pos + (facing+E), pos + (facing + W) , sf::Color(250, 250, 250));
+#endif
 			}
 		}
 		
@@ -262,6 +259,9 @@ namespace Micromouse
 				{
 					isPathClear = false;
 				}
+#ifdef SFML_GRAPHICS_HPP
+				maze->drawLine(pos + facing, pos + (facing + S), sf::Color(250, 250, 250));
+#endif
 			}
 		}
 
@@ -281,6 +281,9 @@ namespace Micromouse
 				{
 					isPathClear = false;
 				}
+#ifdef SFML_GRAPHICS_HPP
+				maze->drawLine(pos + facing, pos + (facing + S), sf::Color(250, 250, 250));
+#endif
 			}
 		}
 
@@ -371,11 +374,16 @@ namespace Micromouse
 	/**** MOVEMENT FUNCTIONS ****/
 	void MouseBot::move(direction dir)
 	{
+#ifdef SFML_GRAPHICS_HPP
+		lastPosition = position;
+#endif
 		position = position + dir;
 		movementHistory.push(dir);
 
 #ifdef SFML_GRAPHICS_HPP
-		draw();
+		maze->drawCircle(lastPosition, 3, sf::Color(0, 0, 0),true, sf::Color(10, 80, 0));
+		maze->drawCircle(position, 3, sf::Color(10, 230, 0), true, sf::Color(10, 250, 0));
+		moves++;
 #endif
 	}
 
@@ -574,7 +582,7 @@ namespace Micromouse
 	{
 
 		//Window::clear();
-		virtualMaze->draw();
+		//virtualMaze->draw();
 		sf::CircleShape circle(3);
 		circle.setFillColor(color);
 		circle.setOrigin(4, 4);

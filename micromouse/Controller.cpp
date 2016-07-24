@@ -37,7 +37,7 @@ namespace Micromouse
 		//mouse.mapMaze();
 		//mouse.runMaze();
 		//mouse.testIR();
-		mouse.testMotors();
+		//mouse.testMotors();
 		//mouse.testRotate();
 		beginSimulation();
 		// DEBUG CODE GOES IN HERE!
@@ -325,12 +325,12 @@ namespace Micromouse
 
 
 
+#ifdef SFML_GRAPHICS_HPP
 
 	// This is the main loop that will virtually test the mouse
 	void Controller::beginSimulation()
 	{
 
-#ifdef SFML_GRAPHICS_HPP
 		bool drawn = false;
 
 		// to learn more on why these loops are like this read this:
@@ -355,20 +355,43 @@ namespace Micromouse
 
 			if (!drawn) // we dont want it to draw over itself..yet
 			{
-				Window::clear();
-				mouse.virtualMaze->draw();
-				mouse.mapMaze();
-				mouse.runMaze();
-#endif
-				//std::cout << maze->findPath( Vector::Pos( 2 , 2 ) , Vector::Pos( 14 , 11 ) );
-#ifdef SFML_GRAPHICS_HPP
+				int runs = 1000;
+				int sum = 0;
+				for (int i = 0; i < runs; i++)
+				{
 
-				Window::display();
-				drawn = true;
+
+					MouseBot mouseTemp;
+
+					Window::clear();
+					Window::display();					
+					Window::clear();
+					Window::display();
+
+					mouseTemp.virtualMaze->draw();
+					Window::display();
+					mouseTemp.virtualMaze->draw();
+					Window::display();
+
+					sum += mouseTemp.mapMaze();
+					mouseTemp.runMaze();
+
+
+
+
+					//std::cout << maze->findPath( Vector::Pos( 2 , 2 ) , Vector::Pos( 14 , 11 ) );
+
+
+					Window::display();
+					drawn = true;
+				}
+
+				std::cout << "Average moves: " << sum / runs << std::endl;
 			}
 		}
-#endif
+
 	}
+#endif
 
 
 }

@@ -4,12 +4,12 @@ namespace Micromouse
 {
 #ifdef SFML_GRAPHICS_HPP
 
-	sf::RenderWindow Window::renderWindow( sf::VideoMode( 1000 , 800 ) , "MicroMouse Sim" );
+	sf::RenderWindow Window::renderWindow( sf::VideoMode( 720 , 720 ) , "MicroMouse Sim" );
 
 	Window::Window()
 	{
 		initializeFont();
-		renderWindow.setFramerateLimit(30);
+		renderWindow.setFramerateLimit(5000);
 	}
 
 

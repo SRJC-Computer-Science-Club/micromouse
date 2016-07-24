@@ -62,6 +62,8 @@ namespace Micromouse
 
 #ifdef SFML_GRAPHICS_HPP
 		void draw(); // draws the maze to the renderWindow
+		void drawLine(PositionVector begin, PositionVector end, sf::Color);
+		void Maze::drawCircle(PositionVector pos, int rad, sf::Color color, bool fill = false, sf::Color colorFill = sf::Color::Transparent);
 #endif
 
 	private:
@@ -80,9 +82,6 @@ namespace Micromouse
 		// a 2D array of Nodes that represents the physical maze
 		Node* maze[ NUM_NODES_W ][ NUM_NODES_H ];
 
-#ifdef SFML_GRAPHICS_HPP
-		void drawLine(PositionVector begin, PositionVector end);
-#endif
 	};
 
 	//Prints out a picture of the maze for debugging.

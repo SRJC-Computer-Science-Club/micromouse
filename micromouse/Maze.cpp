@@ -78,7 +78,15 @@ namespace Micromouse
 				Node* temp = currentNode;
 				while ( temp->getParent() != nullptr ) // draw the path pack to the start node
 				{
-					drawLine( temp->getPos() , temp->getParent()->getPos() );
+					if (isMapping)
+					{
+						drawLine(temp->getPos(), temp->getParent()->getPos(), sf::Color(220, 30, 30));
+					}
+					else
+					{
+						drawLine(temp->getPos(), temp->getParent()->getPos(), sf::Color(255, 255, 50));
+					}
+
 					temp = temp->getParent();
 				}
 #endif
@@ -288,6 +296,10 @@ namespace Micromouse
 				}
 				else
 				{
+#ifdef SFML_GRAPHICS_HPP
+					drawCircle(passageNodeTemp->getPos(), 6, sf::Color(200, 120, 20));
+					drawCircle(node->getPos(), 6, sf::Color(200,120,20));
+#endif
 					// we now have a pair of nodes that represent an entrance
 					// and exit from unexplored nodes
 					passageNodes->push_back( std::make_pair( node , passageNodeTemp) );
@@ -363,16 +375,42 @@ namespace Micromouse
 
 
 #ifdef SFML_GRAPHICS_HPP
-	void Micromouse::Maze::drawLine(PositionVector begin , PositionVector end )
+	void Maze::drawLine(PositionVector begin , PositionVector end , sf::Color color )
 	{
-		sf::Vertex line[ 2 ];
-		sf::Color color = sf::Color( 220 , 30 , 30 );
-		line[ 0 ] = sf::Vertex( sf::Vector2f( NODE_W * begin.x() + 60.0f , NODE_H * (NUM_NODES_H - 1 - begin.y()) + 60.0f ) , color );
-		line[ 1 ] = sf::Vertex( sf::Vector2f( NODE_W * end.x() + 60.0f , NODE_H *(NUM_NODES_H - 1 - end.y()) + 60.0f ) , color );
-		renderWindow.draw( line , 2 , sf::Lines );
-		Window::display();
-		renderWindow.draw(line, 2, sf::Lines);
-		Window::display();
+		//sf::Vertex line[ 2 ];
+		//line[ 0 ] = sf::Vertex( sf::Vector2f( NODE_W * begin.x() + 60.0f , NODE_H * (NUM_NODES_H - 1 - begin.y()) + 60.0f ) , color );
+		//line[ 1 ] = sf::Vertex( sf::Vector2f( NODE_W * end.x() + 60.0f , NODE_H *(NUM_NODES_H - 1 - end.y()) + 60.0f ) , color );
+		//renderWindow.draw( line , 2 , sf::Lines );
+		//Window::display();
+		//renderWindow.draw(line, 2, sf::Lines);
+		//Window::display();
+	}
+
+
+	void Maze::drawCircle(PositionVector pos, int rad, sf::Color color, bool fill , sf::Color colorFill )
+	{
+
+		//rad *= NODE_W / 20.f;
+		//sf::CircleShape circle(rad );
+		//
+		//circle.setOutlineThickness(2);
+		//circle.setOutlineColor(color);
+
+		//if (fill)
+		//{
+		//	circle.setFillColor(colorFill);
+		//}
+		//else
+		//{
+		//	circle.setFillColor(sf::Color::Transparent);
+		//}
+
+		//circle.setOrigin(rad, rad);
+		//circle.setPosition(pos.x() * NODE_W + 60, (NUM_NODES_H - 1 - pos.y()) * NODE_H + 60);
+		//renderWindow.draw(circle);
+		//Window::display();
+		//renderWindow.draw(circle);
+		//Window::display();
 	}
 
 
@@ -383,7 +421,7 @@ namespace Micromouse
 		{
 			for ( int y = 0; y < MAZE_H; y++ )
 			{
-				maze[ x ][ y ]->draw();
+				//maze[ x ][ y ]->draw();
 			}
 		}
 	}

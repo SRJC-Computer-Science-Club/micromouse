@@ -222,8 +222,13 @@ namespace Micromouse
 #ifdef __MK20DX256__ // Teensy Compile
 			int r = random(numPossibleDirections);
 #else // PC compile
-			int r = rand() % numPossibleDirections;
+			int r = rand() % ( numPossibleDirections + 2 );
 #endif
+			if (r > numPossibleDirections)
+			{
+				r = 0;
+			}
+
 			return possibleDirections[r];
 		}
 	}
@@ -391,10 +396,10 @@ namespace Micromouse
 		// TODO make this function not so gigantic
 
 		int ns = 20; //nodeSize in px
-		float os = 3 * ns; //vertical and horizontal transaltion offset
+		float os = 60; //vertical and horizontal transaltion offset
 
 		sf::Color color;
-		color = sf::Color::Color( 250 , 250 , 250 );
+		color = sf::Color::Color( 30 , 30 , 30 );
 
 		sf::Vertex line[ 2 ];
 

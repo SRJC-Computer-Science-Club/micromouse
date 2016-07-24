@@ -34,10 +34,10 @@ namespace Micromouse
 	{
 		// DEBUG CODE GOES IN HERE!
 
-		//mouse.mapMaze();
+		mouse.mapMaze();
 		//mouse.runMaze();
 		//mouse.testIR();
-		mouse.testMotors();
+		//mouse.testMotors();
 		//mouse.testRotate();
 
 		// DEBUG CODE GOES IN HERE!

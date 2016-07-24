@@ -3,6 +3,11 @@
 
 namespace Micromouse
 {
+	const PositionVector PositionVector::START = PositionVector(0, 0);
+	const PositionVector PositionVector::FINISH = PositionVector(MAZE_W - 1, MAZE_W - 1);
+
+
+
 	direction operator+(const direction &dir1, const direction &dir2)
 	{
 		return static_cast<direction>(((int)dir1 + (int)dir2) % 8);
@@ -20,6 +25,20 @@ namespace Micromouse
 	direction& operator++(direction& dir)
 	{ //++prefix
 		return dir = static_cast<direction>(((int)dir + 1) % 9);
+	}
+
+	bool isValidPosition(int x, int y)
+	{
+		if (x < 0 || x >= NUM_NODES_H || y < 0 || y >= NUM_NODES_H)
+		{
+			// false because it is outsite the maze
+			return false;
+		}
+		else
+		{
+			// false if at pos with two odd coordinates, unless at cetner of maze
+			return (x % 2 == 0) || (y % 2 == 0) || (x >= MAZE_W - 2 && y >= MAZE_H - 2 && x <= MAZE_W && y <= MAZE_H );
+		}
 	}
 
 
@@ -50,9 +69,7 @@ namespace Micromouse
 	PositionVector::PositionVector( int x , int y ) :
 		_x( x ),
 		_y( y )
-	{
-		validateSelf();
-	}
+	{}
 
 
 
@@ -60,15 +77,11 @@ namespace Micromouse
 	{
 		_x = pos._x;
 		_y = pos._y;
-
-		validateSelf();
 	}
 
 
 
-	PositionVector::~PositionVector()
-	{
-	}
+	PositionVector::~PositionVector(){}
 
 
 
@@ -89,7 +102,6 @@ namespace Micromouse
 	void PositionVector::x( int x )
 	{
 		_x = x;
-		validateSelf();
 	}
 
 
@@ -97,7 +109,6 @@ namespace Micromouse
 	void PositionVector::y( int y )
 	{
 		_y = y;
-		validateSelf();
 	}
 
 
@@ -113,6 +124,13 @@ namespace Micromouse
 		if (dir == NW || dir == W || dir == SW) { x--; }
 
 		return PositionVector(x, y);
+	}
+
+	PositionVector PositionVector::operator+(PositionVector pos)
+	{
+		_x += pos.x();
+		_y += pos.y();
+		return *this;
 	}
 
 
@@ -138,15 +156,9 @@ namespace Micromouse
 
 
 
-	void PositionVector::validateSelf()
+	bool PositionVector::isValidPosition()
 	{
-		//assert( _x >= 0 );
-		//assert( _y >= 0 );
-		//assert( _x < NUM_NODES_W );
-		//assert( _y < NUM_NODES_H );
-
-		// no Pos should have a position at two odd coordinates
-		//assert( ( _x % 2 == 0 ) || ( _y % 2 == 0 ) );
+		return Micromouse::isValidPosition(_x, _y);
 	}
 
 

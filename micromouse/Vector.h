@@ -40,6 +40,10 @@ namespace Micromouse
 	// to N.
 	direction& operator++(direction& dir);
 
+
+	bool isValidPosition( int x, int y); //checks if x and y are valid position for the mouse
+
+
 #ifdef __MK20DX256__ // Teensy Compile
 #else
 	std::ostream& operator<<(std::ostream& out, const direction& dir);
@@ -61,14 +65,16 @@ namespace Micromouse
 		void y( int y ); // set y, 0 <= y < NUM_NODES_H
 
 		PositionVector operator+(direction dir); // Returns a Pos that has been offset in the given direction.
+		PositionVector operator+(PositionVector pos); // Returns the sum of the position vectors
 		PositionVector operator*(int scalar); // Returns a Pos with x and y multiplied by scalar.
 		bool operator==(PositionVector pos); // Returns true of the x of each position and the y of each position are equal.
 		bool operator!=(PositionVector pos); // Returns true of the x of each position and the y of each position are equal.
 
-		// static const Pos& UNDEFINED;//a Vector that represents an undefined Vector
+		bool isValidPosition(); //checks if x and y are valid position for the mouse
 
+		static const PositionVector START;
+		static const PositionVector FINISH;
 	private:
-		void validateSelf(); //ensures x and y are within bounds
 
 		int _x , _y;
 	};

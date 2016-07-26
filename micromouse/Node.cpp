@@ -46,11 +46,15 @@ namespace Micromouse
 		return dir;
 	}
 
-	bool Micromouse::Node::isClosed()
+	bool Micromouse::Node::isExplored() const
+	{
+		return explored;
+	}
+
+	bool Micromouse::Node::isClosed() const
 	{
 		return closed;
 	}
-
 
 
 
@@ -80,6 +84,12 @@ namespace Micromouse
 
 
 
+	void Micromouse::Node::setExplored()
+	{
+		explored = true;
+	}
+
+
 	void Micromouse::Node::close()
 	{
 		closed = true;
@@ -91,6 +101,9 @@ namespace Micromouse
 	{
 		closed = false;
 	}
+
+
+
 
 
 

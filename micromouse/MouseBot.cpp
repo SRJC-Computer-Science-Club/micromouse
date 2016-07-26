@@ -32,8 +32,8 @@ namespace Micromouse
 		virtualMaze = new VirtualMaze(NUM_NODES_W, NUM_NODES_H);
 		virtualMaze->generateRandomMaze();
 
-		logC(INFO) << "Randomly generated a virtual maze:\n";
-		logC(INFO) << *virtualMaze << "\n";
+		//logC(INFO) << "Randomly generated a virtual maze:\n";
+		//logC(INFO) << *virtualMaze << "\n";
 #endif
 	}
 
@@ -87,72 +87,87 @@ namespace Micromouse
 
 	/**** MAPPING FUNCTIONS ****/
 
-	void MouseBot::mapMaze()
+	int MouseBot::mapMaze()
 	{
 		log(DEBUG1) << "Mapping Maze...";
-
-		std::stack<PositionVector*> choicePositions = std::stack<PositionVector*>();
-		choicePositions.push(new PositionVector(position));
-		lookAround();
 		
-		while (!choicePositions.empty())
+		moves = 0; // Reset moves made to zero
+
+		Path* path;	// Used for pathfinding	
+		NodePairList nodePairList; // Vector of node pairs;
+		bool foundFinish = false; // If the maze finish has been found
+
+		// Set the starting and finish node as explored
+		maze->getNode(PositionVector::START)->setExplored();
+		maze->getNode(PositionVector::FINISH)->setExplored();
+		
+		for (;;)
 		{
+			BUTTONFLAG // Used to abort operation if button is pressed
 
-			//logC(DEBUG1) << *maze;
-
-			PositionVector* pos = choicePositions.top();
-			choicePositions.pop();
-
-			BUTTONFLAG
+			// Find a path from start to finish generating a NodePair for 
+			// everytime the path goes into unexplored nodes
+			path = maze->findPath(PositionVector::START, PositionVector::FINISH, true, &nodePairList);
+			delete path;
 			
-			Path* path = maze->findPath(position, *pos);
+			// If the shortest path was completely contained within explored nodes
+			// then no NodePairs were created and we can stop mapping
+			if (nodePairList.size() == 0) break; 
+
+			// Otherwise we do not have the shortest path fully explored
+			// So we find the closest node at the boundry between explored and 
+			// unexplored nodes
+			NodePair closestNodePair = getClosestNodePair(nodePairList);
+			nodePairList.clear();
+
+			// Travel to the nearest node we just found by only pathfinding on
+			// explored nodes to guarantee we can get there safely
+			path = maze->findPath(position, closestNodePair.first->getPos() );
 			followPath(path);
 
-
-			delete pos;
-	
-			logC(DEBUG3) << "Number of possible directions: " << numPossibleDirections();
-			while (numPossibleDirections() > 0)
+			for (;;)
 			{
-				BUTTONFLAG
+				BUTTONFLAG // Used to abort operation if button is pressed
 
-				if (numPossibleDirections() > 1)
-				{
-#ifdef __MK20DX256__ // Teensy Compile
-					digitalWrite(LED_PIN, LOW);
-					delay(200);
-					digitalWrite(LED_PIN, HIGH);
-#endif
-					choicePositions.push(new PositionVector(position));
-				}
+				// Attempt to travel from the first node of the pair to the second
+				// Stop if the path is blocked
+				path = maze->findPath(position, closestNodePair.second->getPos(), true);
+				followPathUntilBroken(path);
 
-				direction dir = pickPossibleDirection();
-				rotateToFaceDirection(dir);
+				// Find a new path from start to finish incase it was changed by
+				// the recently discovered walls
+				path = maze->findPath(PositionVector::START, PositionVector::FINISH, true, &nodePairList);
+				delete path;
 
-				logC(DEBUG3) << "Traveled " << dir;
+				// If the shortest path was completely contained within explored nodes
+				// then no NodePairs were created and we can stop mapping
+				if (nodePairList.size() == 0) goto FINISH_MAPPING;
 
-				moveForward(2);
-
-				if (!maze->isExplored(position))
-				{
-					lookAround();
-				}
+				// If we are at the second node of the pair
+				if (position == closestNodePair.second->getPos()) break;
 			}
 
+			// The first time this line is reached is when we are at the 
+			// finish of the maze. We can then remove all remaining nodes 
+			// around the center because we know they must be walls
+			if (!foundFinish)
+			{
+				maze->removeExcessFinshNodes();
+				foundFinish = true;
+			}
 
-		}
+			nodePairList.clear();
+		} 
 
-		logC(INFO) << "Mapped maze:\n";
+		// exit point for the inner loop
+		FINISH_MAPPING:
 
-#ifdef __MK20DX256__ // Teensy Compile
-#else // PC compile
-		logC(INFO) << *maze;
-#endif
+		logC(INFO) << "Mapped maze in: " << moves << " moves";
 
 		returnToStart();
 
 		BUTTONEXIT
-			return;
+		return moves;
 	}
 
 
@@ -161,9 +176,8 @@ namespace Micromouse
 	{
 		log(DEBUG1) << "Run Maze";
 
-		Path* pathCenter = maze->findPath(position, PositionVector(2, 2));
+		Path* pathCenter = maze->findPath(position, PositionVector::FINISH);
 		followPath(pathCenter);
-		delete pathCenter;
 
 		returnToStart();
 	}
@@ -183,110 +197,123 @@ namespace Micromouse
 #ifdef __MK20DX256__ // Teensy Compile
 		delay(400);
 #endif
-		Path* pathHome = maze->findPath(position, PositionVector(0, 0));
+		Path* pathHome = maze->findPath(position, PositionVector::START);
 		followPath(pathHome);
 		rotate(S);
-		delete pathHome;
 	}
 
 
 
-	void MouseBot::lookAround()
+	bool MouseBot::lookAround(PositionVector nextPathPosition)
 	{
 		logC(DEBUG4) << "lookAround()";
 
-		maze->addNode(position);
-		maze->setOpen(true, position);
-		maze->setExplored(true, position);
+		maze->setExplored( position);
+		bool isPathClear = true;
 
-		if (isClearForward())
+
+		PositionVector pos = position + facing; //forward
+		
+		// if the position is valid
+		if (pos.isValidPosition())
 		{
-			PositionVector pos = position + (facing + N);
-			maze->setOpen(true, pos);
-			maze->addNode(pos);
+			// if it is clear forward then set the node explored
+			if (isClearForward())
+			{
+				maze->setExplored(pos);
+			}
+			// else there is a wall so we remove the node
+			else
+			{
+				maze->removeNode(pos);
+
+				// if the node we removed was the next on our path
+				// then we need to make note that the path is not clear
+				if (pos == nextPathPosition)
+				{
+					isPathClear = false;
+				}
+			}
+		}
+		
+		// do the same for the left and right directions
+
+		pos = position + (facing + E); //right
+
+		if (pos.isValidPosition())
+		{
+			if (isClearRight())
+			{
+				maze->setExplored(pos);
+			}
+			else
+			{
+				maze->removeNode(pos);
+				if (pos == nextPathPosition)
+				{
+					isPathClear = false;
+				}
+			}
 		}
 
-		if (isClearRight())
+
+		pos = position + (facing + W); //right
+
+		if (pos.isValidPosition())
 		{
-			PositionVector pos = position + (facing + E);
-			maze->setOpen(true, pos);
-			maze->addNode(pos);
+			if (isClearLeft())
+			{
+				maze->setExplored(pos);
+			}
+			else
+			{
+				maze->removeNode(pos);
+				if (pos == nextPathPosition)
+				{
+					isPathClear = false;
+				}
+			}
 		}
 
-		if (isClearLeft())
-		{
-			PositionVector pos = position + (facing + W);
-			maze->setOpen(true, pos);
-			maze->addNode(pos);
-		}
-
-		maze->setExplored(true, position + (facing + N));
-		maze->setExplored(true, position + (facing + E));
-		maze->setExplored(true, position + (facing + W));
+		return isPathClear;
 	}
 
 
 
-	bool MouseBot::isPossibleDirection(direction dir)
+
+	NodePair MouseBot::getClosestNodePair(NodePairList & nodePairList)
 	{
-		logC(DEBUG4) << "isPossibleDirection()";
+		NodePair closestNodePair;
+		bool isClosestFirst;
+		int shortestDistance = NUM_NODES_H + NUM_NODES_W; // INT_MAX not defined on teensy
+		int distance;
 
-		return maze->isInsideMaze(position + dir) && maze->isOpen(position + dir) && !maze->isExplored((position + dir) + dir);
-	}
-
-
-
-	int MouseBot::numPossibleDirections()
-	{
-		logC(DEBUG4) << "numPossibleDirections()";
-
-		int n = 0;
-
-		if (isPossibleDirection(N)) n++;
-		if (isPossibleDirection(E)) n++;
-		if (isPossibleDirection(S)) n++;
-		if (isPossibleDirection(W)) n++;
-
-		return n;
-	}
-
-
-
-	direction MouseBot::pickPossibleDirection()
-	{
-		logC(DEBUG4) << "pickPossibleDirection()";
-
-#ifdef __MK20DX256__ // Teensy Compile
-		int rando = random(4);
-#else // PC compile
-		int rando = rand() % 4;
-#endif
-		rando = 0;
-		switch (rando)
+		// iterate through the nodePairs
+		for (NodePairList::iterator itr = nodePairList.begin(); itr != nodePairList.end(); ++itr)
 		{
-		case 0:
-			if (isPossibleDirection(N)) return N;
-			if (isPossibleDirection(E)) return E;
-			if (isPossibleDirection(S)) return S;
-			if (isPossibleDirection(W)) return W;
-		case 1:
-			if (isPossibleDirection(E)) return E;
-			if (isPossibleDirection(N)) return N;
-			if (isPossibleDirection(S)) return S;
-			if (isPossibleDirection(W)) return W;
-		case 2:
-			if (isPossibleDirection(W)) return W;
-			if (isPossibleDirection(N)) return N;
-			if (isPossibleDirection(E)) return E;
-			if (isPossibleDirection(S)) return S;
-		default:
-			if (isPossibleDirection(E)) return E;
-			if (isPossibleDirection(W)) return W;
-			if (isPossibleDirection(N)) return N;
-			if (isPossibleDirection(S)) return S;
+			//first of pair
+			distance = pow(itr->first->getPos().x() - position.x(), 2) + pow(itr->first->getPos().y() - position.y(), 2);
+
+			if ( distance < shortestDistance)
+			{
+				closestNodePair = *itr;
+				isClosestFirst = true;
+				shortestDistance = distance;
+			}
+
+			//second of pair
+			distance = pow(itr->second->getPos().x() - position.x(), 2) + pow(itr->second->getPos().y() - position.y(), 2);
+
+			if (distance < shortestDistance)
+			{
+				closestNodePair = *itr;
+				isClosestFirst = false;
+				shortestDistance = distance;
+			}
 		}
 
-		return NONE;
+		// make it so the closest node of the two always comes first
+		return isClosestFirst ? closestNodePair : std::make_pair( closestNodePair.second , closestNodePair.first );
 	}
 
 
@@ -342,35 +369,85 @@ namespace Micromouse
 
 
 
-	void MouseBot::followPath(Path* path)
+	void MouseBot::followPath(Path* path, bool keepPath)
 	{
+		// make sure there is a path
 		if (path != nullptr)
 		{
+			DirectionVector dirVec(N, 0);
+
+			// while there is still some path remaining
 			while (!path->empty())
 			{
 				BUTTONFLAG
 
-				DirectionVector dir = path->popStep();
-				rotateToFaceDirection(dir.dir());
-				moveForward(dir.mag());
+				// get the next step of the path
+				dirVec = path->popStep();
+
+				// follow the path
+				rotateToFaceDirection(dirVec.dir());
+				moveForward(dirVec.mag());
 			}
+		}
+		else
+		{
+			log(ERROR) << "COULD NOT FIND PATH DURING RUNNING";
 		}
 
 		BUTTONEXIT
+
+		if ( !keepPath)
+		{
+			delete path;
+		}
+
 		return;
 	}
 
 
 
-	void MouseBot::backtrack()
+	void MouseBot::followPathUntilBroken(Path * path, bool keepPath)
 	{
-		direction dir = movementHistory.top();
-		movementHistory.pop();
-		movementHistory.pop();
-		rotateToFaceDirection(dir + S);
-		moveForward(2);
-		movementHistory.pop();
-		movementHistory.pop();
+		// make sure there is a path
+		if (path != nullptr)
+		{
+			DirectionVector dirVec( N , 0 );
+
+			// while there is still some path remaining
+			while (!path->empty())
+			{
+				BUTTONFLAG
+	
+				// get the next step of the path
+				dirVec = path->popStep();
+
+				// if the next step in the path is unobstructed
+				// then follow the path
+				if (lookAround(position + dirVec.dir()))
+				{
+					rotateToFaceDirection(dirVec.dir());
+					moveForward();
+				}
+				else // desired path was obstructed
+				{
+					goto EXIT;
+				}
+			}
+		}
+		else
+		{
+			log(ERROR) << "COULD NOT FIND PATH DURING MAPPING";
+		}
+
+		EXIT:
+		BUTTONEXIT
+
+		if (!keepPath)
+		{
+			delete path;
+		}
+
+		return;
 	}
 
 
@@ -381,7 +458,6 @@ namespace Micromouse
 		robotIO.testMotors();
 #endif
 	}
-
 
 
 	void MouseBot::testIR()

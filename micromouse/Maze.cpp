@@ -8,9 +8,7 @@ namespace Micromouse
 {
 	// constructors //////////////////////////////////////////////////
 
-	Maze::Maze():
-		open(FlagMatrix(NUM_NODES_W, NUM_NODES_H)),
-		explored(FlagMatrix(NUM_NODES_W, NUM_NODES_H))
+	Maze::Maze()
 	{
 		initNodes();
 	}
@@ -32,9 +30,20 @@ namespace Micromouse
 
 
 
-	Path * Maze::findPath( PositionVector start , PositionVector end )
+	Path * Maze::findPath( PositionVector start , PositionVector end , bool isMapping , NodePairList* passageNodes)
 	{
 		resetNodes();
+
+		// if pathfinding during mapping
+		if (passageNodes != nullptr)
+		{
+			// Assert that both start and end have been explored
+			// This is needed to guarantee that NodePairs will be complete
+			assert(getNode(start)->isExplored() && getNode(end)->isExplored());
+
+			// a NodePairList should on be used during mapping
+			assert(isMapping);
+		}
 
 		std::vector< Node* > openNodes;
 
@@ -42,32 +51,38 @@ namespace Micromouse
 		// this prevents too many resizes, idk if this is optimal I was just estimating
 		openNodes.reserve( static_cast< int >( NUM_NODES_W * NUM_NODES_H * 0.5f ) );
 
+		// the start node is added to openNodes
+		openNodes.push_back( getNode( start ) );
 
-		openNodes.push_back( maze[ start.x() ][ start.y() ] );// the start node is added to openNodes
-		maze[ start.x() ][ start.y() ]->setG( 0 ); // initialize the movement cost to 0 for the first node
+		// initialize the movement cost to 0 for the first node
+		getNode( start )->setG( 0 );
 
 		Node* currentNode;
 		Node* neighborNode;
 		int tentative_G;
 
-		while ( !openNodes.empty() ) //while openNodes is not empty
+		// While there are still open nodes remaining
+		while ( !openNodes.empty() )
 		{
-			std::sort( openNodes.begin() , openNodes.end() , nodeComparator ); //sort in descending order by F value
-			currentNode = openNodes.back(); //get node will lowest F value
+			// sort the nodes in descending order by F value
+			// we sort by descending so we can later us pop_back()
+			std::sort( openNodes.begin() , openNodes.end() , nodeComparator ); 
 
-			if ( currentNode == maze[ end.x() ][ end.y() ] ) // if we are at the end node then we are done!
+			// get the node with the lowest F value
+			currentNode = openNodes.back();
+
+			// if we are at the end node then we are done!
+			if ( currentNode == getNode( end ) ) 
 			{
-				return createPath( currentNode ); // create a Path object for motion control to utilize
+				// create a Path object for motion control to utilize
+				return createPath( currentNode, isMapping, passageNodes ); 
 			}
 
 			openNodes.pop_back();
 			currentNode->close();
 
-			// Uses old direction order
-			//for (direction dir = E; dir != direction::NONE; ++dir)
-
-			for (direction dir = N; dir != NONE; ++dir)
-				//loop through neighbor nodes
+			// loop through neighbor nodes
+			for ( direction dir = N; dir != NONE; ++dir )
 			{
 				neighborNode = getNeighborNode( currentNode->getPos() , dir );
 
@@ -76,26 +91,31 @@ namespace Micromouse
 					continue; // there is no neighbor node in this direction
 				}
 
-				if ( neighborNode->isClosed() ) //if neighborNode in closedNodes
+				if ( neighborNode->isClosed() )
 				{
 					continue; // Ignore the neighbor which is already evaluated
 				}
 
+				if ( !isMapping && !neighborNode->isExplored())
+				{
+					continue; // Ignore the unexplored nodes if we arent mapping
+				}
 
-				//TODO turn this into a function
+
 				tentative_G = currentNode->getG();
-				tentative_G += ( dir == direction::NW || dir == direction::SW || dir == direction::NE || dir == direction::SE ) ? 14 : 10; //if moved diagnal add 14, else moved straight add 10
+
+				// if moved diagnal add 14, else moved straight add 10
+				tentative_G += ( dir == direction::NW || dir == direction::SW || dir == direction::NE || dir == direction::SE ) ? 14 : 10; 
 
 
-				if ( std::find( openNodes.begin() , openNodes.end() , neighborNode )
-					== openNodes.end() )
-					//if neighborNode not in openNodes
+				//if neighborNode is not already in openNodes then add id
+				if ( std::find( openNodes.begin() , openNodes.end() , neighborNode ) == openNodes.end() )
 				{
 					openNodes.push_back( neighborNode );
 				}
-				// neighborNode is already in openNodes
+				// else the neighborNode is already in openNodes
+				// if new path to neighborNode is worse than previous
 				else if ( tentative_G >= neighborNode->getG() )
-					// if new path to neighborNode is worse than previous
 				{
 					continue; //this is not a better path
 				}
@@ -117,17 +137,11 @@ namespace Micromouse
 
 
 
-	// an overload of  findPath that takes nodes instead of Vectors
-	// might be useful
-	Path * Maze::findPath( const Node * const start , const Node * const end )
-	{
-		return findPath( start->getPos() , end->getPos() );
-	}
 
 
 
 	// Retruns the Node at the given position.
-	Node* Maze::getNode( PositionVector pos )
+	Node* Maze::getNode( PositionVector pos ) const
 	{
 		return maze[ pos.x() ][ pos.y() ];
 	}
@@ -137,8 +151,15 @@ namespace Micromouse
 	// adds a new node to the maze at the given position
 	void Maze::addNode( PositionVector pos )
 	{
-		assert(isInsideMaze(pos));
+		assert(pos.isValidPosition());
 		maze[pos.x()][pos.y()] = new Node(pos);
+	}
+
+	void Maze::removeNode(PositionVector pos)
+	{
+		assert(pos.isValidPosition());
+		delete maze[pos.x()][pos.y()];
+		maze[pos.x()][pos.y()] = nullptr;
 	}
 
 
@@ -181,82 +202,96 @@ namespace Micromouse
 
 
 
-	void Maze::setOpen(bool flag, int x, int y)
+	void Maze::setExplored( PositionVector pos )
 	{
-		open.setFlag(flag, x, y);
+		Node* node = getNode(pos);
+
+		if (node != nullptr)
+		{
+			node->setExplored();
+		}
 	}
 
-	void Maze::setOpen(bool flag, PositionVector pos)
-	{
-		setOpen(flag, pos.x(), pos.y());
-	}
 
-	void Maze::setExplored(bool flag, int x, int y)
-	{
-		explored.setFlag(flag, x, y);
-	}
-
-	void Maze::setExplored(bool flag, PositionVector pos)
-	{
-		setExplored(flag, pos.x(), pos.y());
-	}
-
-	bool Maze::isOpen(int x, int y) const
-	{
-		return open.getFlag(x, y);
-	}
-
-	bool Maze::isOpen(PositionVector pos) const
-	{
-		return isOpen(pos.x(), pos.y());
-	}
-
-	bool Maze::isExplored(int x, int y) const
-	{
-		return explored.getFlag(x, y);
-	}
 
 	bool Maze::isExplored(PositionVector pos) const
 	{
-		return isExplored(pos.x(), pos.y());
-	}
+		Node* node = getNode(pos);
 
-	bool Maze::isInsideMaze(int x, int y) const
-	{
-		return (x >= 0) && (y >= 0) && (x < NUM_NODES_W) && (y < NUM_NODES_H);
-	}
+		if (node != nullptr)
+		{
+			return node->isExplored();
+		}
 
-	bool Maze::isInsideMaze(PositionVector pos) const
-	{
-		return isInsideMaze(pos.x(), pos.y());
+		return false;
 	}
 
 
 
-	Path * Micromouse::Maze::createPath( const Node * node )
+	Path * Maze::createPath( const Node * node , bool isMapping , NodePairList* passageNodes)
 	{
 		Path* path = new Path;
 		direction travelDir = node->getDir();
-		int mag = 1;
 
+		const Node* passageNodeTemp;
+		const Node* previousNode = node;
+
+		int magnitude = 1;
 		node = node->getParent();
+
+		// used to detect the transition between explored and unexplored nodes
+		// if the edge detectors are not equal then an edge is present
+		bool edgeDetectorA;
+		bool edgeDetectorB = true;
+
+
 
 		// while there is more to the path to traverse
 		while ( node != nullptr )
 		{
-			//if we are at the beginning of the path or if the path is not straight
-			if ( node->getParent() == nullptr || node->getDir() != travelDir )
+			//if we are at the beginning of the path or if the path is not straight 
+			// or we are mapping 
+			if ( isMapping || node->getDir() != travelDir || passageNodes != nullptr)
 			{
-				// add a step to the path to define the direction and distance need to travel
-				path->addStep( DirectionVector( travelDir , mag ) );
+				// add a step to the path to define the direction and distance needed to travel
+				path->addStep(DirectionVector(travelDir, magnitude));
 
 				travelDir = node->getDir();
-				mag = 0;
+				magnitude = 0;
 			}
 			//else the path is straight so no need for a step
 
+			
+			// the short circuit protects the second half of the boolean expression
+			edgeDetectorA = (node != nullptr && node->isExplored());
+
+			// if the edgeDectors are not equal then we are at a boundary between
+			// explored and unexplored nodes
+			if (passageNodes != nullptr && edgeDetectorA != edgeDetectorB)//an edge!
+			{
+				// edgeDetectorB will always be true first since we are 
+				// guaranteed to start and end at explored nodes
+				if (edgeDetectorB)
+				{
+					// we want to make sure we set it the previous node
+					// since the current one is unexplored.
+					// it is guaranteed that previousNode will be explored
+					passageNodeTemp = previousNode;
+				}
+				else
+				{
+					// we now have a pair of nodes that represent an entrance
+					// and exit from unexplored nodes
+					passageNodes->push_back( std::make_pair( node , passageNodeTemp) );
+				}
+			}
+
+			previousNode = node;
 			node = node->getParent();
-			mag++;
+
+			edgeDetectorB = edgeDetectorA;
+
+			magnitude++;
 		}
 
 		return path;
@@ -271,10 +306,19 @@ namespace Micromouse
 		{
 			for ( int y = 0; y < NUM_NODES_H; y++ )
 			{
-				maze[ x ][ y ] = nullptr;
+				if (isValidPosition( x, y) )
+				{
+					maze[ x ][ y ] = new Node( PositionVector(x,y) );
+				}
+				else
+				{
+					maze[x][y] = nullptr;
+				}
 			}
 		}
 	}
+
+
 
 	void Maze::resetNodes()
 	{
@@ -290,6 +334,24 @@ namespace Micromouse
 		}
 	}
 
+
+
+
+	void Maze::removeExcessFinshNodes()
+	{
+		Node * tempNode;
+		for (int i = -2; i <= 2; i++)
+		{
+			for (int j = -2; j <= 2; j++)
+			{
+				tempNode = getNode(PositionVector(i, j) + PositionVector::FINISH);
+				if (tempNode != nullptr && !tempNode->isExplored())
+				{
+					removeNode(PositionVector(i, j) + PositionVector::FINISH);
+				}
+			}
+		}
+	}
 
 
 #ifdef __MK20DX256__ // Teensy Compile
@@ -311,9 +373,9 @@ namespace Micromouse
 
 			for (int x = 0; x < NUM_NODES_W; x++)
 			{
-				if (maze.isExplored(x, y))
+				if (maze.isExplored(PositionVector(x,y)))
 				{
-					if (maze.isOpen(x, y))
+					if (maze.getNode(PositionVector(x,y)) != nullptr)
 					{
 						out << "  ";
 					}

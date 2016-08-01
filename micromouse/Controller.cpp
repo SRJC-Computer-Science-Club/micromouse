@@ -3,7 +3,7 @@
 #include <vector>
 #include "Timer.h"
 #include "ButtonFlag.h"
-
+#include "TeensyFunctions.h"
 #ifdef __MK20DX256__ // Teensy Compile
 	#include "WProgram.h"
 #else // pc compile

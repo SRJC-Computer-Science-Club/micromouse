@@ -1,6 +1,6 @@
 #include "Memory.h"
 #include <assert.h>
-
+#include "TeensyFunctions.h"
 namespace Micromouse {
 
 	int Memory::read(int address)

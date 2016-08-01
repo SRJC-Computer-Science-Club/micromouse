@@ -2,7 +2,7 @@
 #include "Logger.h"
 #include "RobotIO.h"
 #include <assert.h>
-
+#include "TeensyFunctions.h"
 #ifdef __MK20DX256__ // Teensy Compile
 	#include "WProgram.h"
 #endif

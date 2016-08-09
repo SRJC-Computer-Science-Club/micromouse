@@ -165,42 +165,38 @@ namespace Micromouse
 
 	void RobotIO::testMotors()
 	{
+		float millimeters = 2 * 180;
+		PIDController pid = PIDController(1.0f, 0.0f, 0.1f, 1000);
+		Timer timer;
+
+		timer.start();
+		pid.start(millimeters);
+		while (millimeters > 1 || millimeters < -1)
+		{
+			float correction = pid.getCorrection(millimeters);
+			leftMotor.setMovement(correction);
+			rightMotor.setMovement(correction);
+			int leftCounts = leftMotor.resetCounts();
+			int rightCounts = rightMotor.resetCounts();
+			float avgMove = (leftCounts + rightCounts) / 2 / COUNTS_PER_MM;
+			millimeters -= avgMove;
+
+			float p = pid.lastP_Correction;
+			float i = pid.lastI_Correction;
+			float d = pid.lastD_Correction;
+
 #ifdef __MK20DX256__ // Teensy Compile
-		//rotate(90.0f);
-		//delay(2000);
-		moveForward(6*180.0f);
 
-/*
-		rightMotor.setMaxSpeed(0.2f);
-		leftMotor.setMaxSpeed(0.2f);
+			Serial.print(p);
+			Serial.print(", ");
+			Serial.print(i);
+			Serial.print(", ");
+			Serial.print(d);
+			Serial.print("\n");
 
-		rightMotor.setMovement(1.0f);
-		delay(1000);
-		rightMotor.brake();
-		delay(1000);
-		leftMotor.setMovement(1.0f);
-		delay(1000);
-		leftMotor.brake();
-		delay(1000);
-		rightMotor.setMovement(-1.0f);
-		delay(1000);
-		rightMotor.coast();
-		delay(1000);
-		leftMotor.setMovement(-1.0f);
-		delay(1000);
-		leftMotor.coast();
-		delay(1000);
-
-		rightMotor.setMaxSpeed(1.0f);
-		leftMotor.setMaxSpeed(1.0f);
-
-		leftMotor.setMovement(1.0f);
-		rightMotor.setMovement(1.0f);
-		delay(2000);
-		leftMotor.brake();
-		rightMotor.brake();
-		*/
+			delay(50);
 #endif
+		}
 	}
 
 

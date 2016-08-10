@@ -15,7 +15,7 @@ Author GitHub:	joshuasrjc
 
 #ifdef __MK20DX256__ // Teensy compile
 #else // PC compile
-	#include <iostream>
+#include <iostream>
 #endif
 
 
@@ -49,7 +49,7 @@ namespace Micromouse
 		float iCorrection = I * totalError;
 		float dCorrection = D * (currentError - lastError);
 
-		lastError = currentError; 
+		lastError = 0.9 * lastError + 0.1 * currentError; 
 
 		pCorrection /= 1000;
 		iCorrection /= 1000;

@@ -165,20 +165,21 @@ namespace Micromouse
 
 	void RobotIO::testMotors()
 	{
-		float millimeters = 2 * 180;
-		PIDController pid = PIDController(1.0f, 0.0f, 0.1f, 1000);
+		float millimeters = 8 * 180;
+		PIDController pid = PIDController(5.0f, 4.0f, 0.5f, 200);
 		Timer timer;
 
 		timer.start();
 		pid.start(millimeters);
-		while (millimeters > 1 || millimeters < -1)
+		float avgMove = 10000000000000000000000000000000000000.0f;
+		while (millimeters > 1 || millimeters < -1 || avgMove > 1 || avgMove < -1)
 		{
 			float correction = pid.getCorrection(millimeters);
 			leftMotor.setMovement(correction);
 			rightMotor.setMovement(correction);
 			int leftCounts = leftMotor.resetCounts();
 			int rightCounts = rightMotor.resetCounts();
-			float avgMove = (leftCounts + rightCounts) / 2 / COUNTS_PER_MM;
+			avgMove = (leftCounts + rightCounts) / 2 / COUNTS_PER_MM;
 			millimeters -= avgMove;
 
 			float p = pid.lastP_Correction;
@@ -186,17 +187,25 @@ namespace Micromouse
 			float d = pid.lastD_Correction;
 
 #ifdef __MK20DX256__ // Teensy Compile
-
-			Serial.print(p);
+			Serial.print(millimeters/10, 4);
 			Serial.print(", ");
-			Serial.print(i);
+			Serial.print(p, 4);
 			Serial.print(", ");
-			Serial.print(d);
+			Serial.print(i, 4);
+			Serial.print(", ");
+			Serial.print(d, 4);
+			Serial.print(", ");
+			Serial.print(correction, 4);
+			Serial.print(", ");
+			Serial.print(leftCounts);
 			Serial.print("\n");
 
-			delay(50);
+			delay(5);
 #endif
 		}
+
+		leftMotor.brake();
+		rightMotor.brake();
 	}
 
 

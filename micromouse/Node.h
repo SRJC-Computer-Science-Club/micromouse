@@ -25,7 +25,10 @@ namespace Micromouse
 		void setParent( Node * const newParent );
 		void setDir( direction newDir );
 		
-		bool isClosed();
+		bool isExplored() const;
+		void setExplored();
+
+		bool isClosed() const;
 		void close();
 		void open();
 
@@ -39,6 +42,7 @@ namespace Micromouse
 
 		PositionVector pos;
 
+		bool explored = false;
 		bool closed = false;
 	};
 }

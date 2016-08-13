@@ -27,6 +27,8 @@ namespace Micromouse
 	class MouseBot
 	{
 	public:
+		RobotIO robotIO;
+
 		MouseBot(int x = 0, int y = 0);					// Sets the position to (x,y)
 		~MouseBot();
 
@@ -92,7 +94,6 @@ namespace Micromouse
 		VirtualMaze* virtualMaze;
 #endif
 		int saveAddress = 512;
-		RobotIO robotIO;
 		std::stack<direction> movementHistory;
 
 		// Mouse position in the maze

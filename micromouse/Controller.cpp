@@ -34,10 +34,10 @@ namespace Micromouse
 	{
 		// DEBUG CODE GOES IN HERE!
 
-		mouse.mapMaze();
+		//mouse.mapMaze();
 		//mouse.runMaze();
 		//mouse.testIR();
-		//mouse.testMotors();
+		mouse.testMotors();
 		//mouse.testRotate();
 
 		// DEBUG CODE GOES IN HERE!
@@ -95,7 +95,7 @@ namespace Micromouse
 			"1: map maze\n"
 			"2: run maze\n"
 			"3: cycle speed\n"
-			"4: nothing\n"
+			"4: debug\n"
 			"5: calibrate sensors\n"
 			"6: calibrate motor\n"
 			"7: reset Map\n";
@@ -209,7 +209,7 @@ namespace Micromouse
 
 			blinkLED(CAL_MOTOR);
 			state = NONE;
-			//TODO decide if this is even something we need
+			mouse.robotIO.calibrateMotors();
 		break;
 
 

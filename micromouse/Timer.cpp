@@ -6,6 +6,21 @@
 
 namespace Micromouse
 {
+	void Timer::sleep(float seconds)
+	{
+		Timer timer = Timer();
+		for (
+			float sleepTime = 0;
+			sleepTime < seconds;
+			sleepTime += timer.getDeltaTime()
+			)
+		{
+			// Wait
+		}
+	}
+
+
+
 	Timer::Timer()
 	{
 		start();

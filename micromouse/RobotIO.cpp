@@ -165,6 +165,12 @@ namespace Micromouse
 
 	void RobotIO::testMotors()
 	{
+		leftMotor.setMovement(0.004f);
+		rightMotor.setMovement(0.004f);
+		Timer::sleep(2.0f);
+		leftMotor.brake();
+		rightMotor.brake();
+		/*
 		float millimeters = 8 * 180;
 		PIDController pid = PIDController(5.0f, 4.0f, 0.5f, 200);
 		Timer timer;
@@ -205,7 +211,7 @@ namespace Micromouse
 		}
 
 		leftMotor.brake();
-		rightMotor.brake();
+		rightMotor.brake(); */
 	}
 
 
@@ -592,6 +598,13 @@ namespace Micromouse
 		IRSensors[RIGHT]->saveCalibration(IR_RIGHT_MEMORY);
 		IRSensors[FRONT_LEFT]->saveCalibration(IR_FRONT_LEFT_MEMORY);
 		IRSensors[FRONT_RIGHT]->saveCalibration(IR_FRONT_RIGHT_MEMORY);
+	}
+
+
+	void RobotIO::calibrateMotors()
+	{
+		rightMotor.calibrate();
+		leftMotor.calibrate();
 	}
 
 

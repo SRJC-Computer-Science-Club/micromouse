@@ -166,6 +166,7 @@
     <ClCompile Include="micromouse\VirtualMaze.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="micromouse\ArduinoDummy.h" />
     <ClInclude Include="micromouse\ButtonFlag.h" />
     <ClInclude Include="micromouse\Controller.h" />
     <ClInclude Include="micromouse\FlagMatrix.h" />

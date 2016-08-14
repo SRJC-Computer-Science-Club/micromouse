@@ -66,11 +66,11 @@ namespace Micromouse
 	{
 		digitalWrite(fwdPin, HIGH);
 		digitalWrite(bwdPin, LOW);
-		minFwdVoltage = calibrateMinVoltage() + 3;
+		minFwdVoltage = calibrateMinVoltage() + 1;
 
 		digitalWrite(fwdPin, LOW);
 		digitalWrite(bwdPin, HIGH);
-		minBwdVoltage = calibrateMinVoltage() + 3;
+		minBwdVoltage = calibrateMinVoltage() + 1;
 
 		digitalWrite(fwdPin, LOW);
 		digitalWrite(bwdPin, LOW);
@@ -83,7 +83,7 @@ namespace Micromouse
 	int Motor::calibrateMinVoltage()
 	{
 		Timer timer = Timer();
-		int voltage = 64;
+		int voltage = 32;
 		bool timedOut = false;
 		while (voltage > 0 && !timedOut)
 		{
@@ -93,7 +93,7 @@ namespace Micromouse
 			float waitTime = 0;
 			timer.start();
 			resetCounts();
-			while (getCounts() < 10 && getCounts() > -10 && !timedOut)
+			while (getCounts() < 20 && getCounts() > -20 && !timedOut)
 			{
 				waitTime += timer.getDeltaTime();
 				Serial.println(waitTime);
@@ -123,13 +123,13 @@ namespace Micromouse
 		{
 			digitalWrite(fwdPin, HIGH);
 			digitalWrite(bwdPin, LOW);
-			setVoltage((int)(255 * speed), true);
+			setVoltage((int)(256 * speed), true);
 		}
 		else
 		{
 			digitalWrite(fwdPin, LOW);
 			digitalWrite(bwdPin, HIGH);
-			setVoltage((int)(255 * (-speed)), false);
+			setVoltage((int)(256 * (-speed)), false);
 		}
 	}
 

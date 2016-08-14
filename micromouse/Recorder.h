@@ -84,7 +84,7 @@ namespace Micromouse {
 		{
 			for (int j = 0; j < DIMENSION - 1; j++)
 			{
-				Serial.print(arrs[j][i]);
+				Serial.print(arrs[j][i], 4);
 				Serial.print(", ");
 			}
 			Serial.println(arrs[DIMENSION-1][i]);

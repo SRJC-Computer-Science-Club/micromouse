@@ -22,7 +22,12 @@ namespace Micromouse
 	class SERIAL
 	{
 	public:
+		void println(char* x) {}
 		void println(float x) {}
+		void println(float x, int y) {}
+		void print(char* x) {}
+		void print(float x) {}
+		void print(float x, int y) {}
 	};
 
 	SERIAL Serial = SERIAL();

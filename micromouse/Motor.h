@@ -13,7 +13,7 @@ namespace Micromouse
 	class Motor
 	{
 	public:
-		const float CALIBRATION_TIMEOUT_SEC = 0.5f;
+		const float CALIBRATION_TIMEOUT_SEC = 2.0f;
 
 		Motor(int fwdPin, int bwdPin, int pwmPin, int fwdEncoderPin, int bwdEncoderPin);
 

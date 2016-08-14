@@ -16,7 +16,10 @@ namespace Micromouse
 	const float COUNTS_PER_MM = 3.420646f;
 
 	//How close the robot needs to be to the target distance (in mm) when moving forward.
-    const float DISTANCE_TOLERANCE = 5.0f;
+    const float DISTANCE_TOLERANCE = 1.0f;
+
+	//How slow each motor needs to be turning (in mm per second) before the robot stops.
+	const float SPEED_TOLERANCE = 1.0f;
 
 	//How close the robot needs to be to the target angle (in degrees) when rotating.
 	const float ANGLE_TOLERANCE = 1.8f;
@@ -25,6 +28,7 @@ namespace Micromouse
 	const float WALL_DISTANCE = 55.0f;
 	const float FRONT_RIGHT_WALL_DISTANCE = 52.0f;
 	const float FRONT_LEFT_WALL_DISTANCE = 58.0f;
+	const int IR_SAMPLE_SIZE = 12;
 
 	const int IR_FRONT_LEFT_PIN = 14;
 	const int IR_FRONT_RIGHT_PIN = 15;
@@ -73,6 +77,8 @@ namespace Micromouse
 		void testIR();
 		void testRotate();
 
+		void continuousMoveForward(float millimeters);
+
 		//Moves the bot forward by the given number of millimeters.
 		void moveForward(float millimeters);
 
@@ -93,12 +99,21 @@ namespace Micromouse
 		void stopMotors();
 
 	private:
+		struct IRDistances
+		{
+			float left;
+			float right;
+		};
+
 		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };
 
         bool isWallinDirection( direction dir );
 		float estimateHeadingError();
+		IRDistances getIRDistances();
 
 		void initIRSensors();
+
+		float leftoverDistance = 0;
 
 		IRSensor* IRSensors[4];
 

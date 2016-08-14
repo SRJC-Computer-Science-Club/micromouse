@@ -39,7 +39,10 @@ namespace Micromouse
 
 		float deltaTime = getDeltaTime();
 
-		totalError += currentError * deltaTime;
+		//if (currentError < 5.0f && currentError > -5.0f)
+		{
+			totalError += currentError * deltaTime;
+		}
 		
 		//totalError is bounded between -MAX_I_ERROR and +MAX_I_ERROR
 		totalError = totalError < -maxIntegralError ? -maxIntegralError : totalError;

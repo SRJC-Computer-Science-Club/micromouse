@@ -5,6 +5,7 @@
 #include "Timer.h"
 #include "ButtonFlag.h"
 #include "Recorder.h"
+#include "ArduinoDummy.h"
 
 
 
@@ -156,6 +157,56 @@ namespace Micromouse
 
 
 
+	RobotIO::IRDistances RobotIO::getIRDistances()
+	{
+		float* leftSamples = new float[IR_SAMPLE_SIZE];
+		float* rightSamples = new float[IR_SAMPLE_SIZE];
+		float leftAvg = 0;
+		float rightAvg = 0;
+		for (int i = 0; i < IR_SAMPLE_SIZE; i++)
+		{
+			if (i != 0) Timer::sleep(0.001);
+			leftSamples[i] = IRSensors[LEFT]->getDistance();
+			rightSamples[i] = IRSensors[RIGHT]->getDistance();
+			leftAvg += leftSamples[i];
+			rightAvg += rightSamples[i];
+		}
+		leftAvg /= IR_SAMPLE_SIZE;
+		rightAvg /= IR_SAMPLE_SIZE;
+		float leftClosestDist = 10000000000;
+		float rightClosestDist = 100000000000;
+		float leftClosestSample;
+		float rightClosestSample;
+		for (int i = 0; i < IR_SAMPLE_SIZE; i++)
+		{
+			float leftDist = abs(leftSamples[i] - leftAvg);
+			float rightDist = abs(rightSamples[i] - rightAvg);
+
+			if (leftDist < leftClosestDist)
+			{
+				leftClosestDist = leftDist;
+				leftClosestSample = leftSamples[i];
+			}
+
+			if (rightDist < rightClosestDist)
+			{
+				rightClosestDist = rightDist;
+				rightClosestSample = rightSamples[i];
+			}
+		}
+
+		IRDistances dists = IRDistances();
+		dists.left = leftClosestSample;
+		dists.right = rightClosestSample;
+
+		delete[] leftSamples;
+		delete[] rightSamples;
+
+		return dists;
+	}
+
+
+
 
 
 
@@ -165,53 +216,14 @@ namespace Micromouse
 
 	void RobotIO::testMotors()
 	{
-		leftMotor.setMovement(0.004f);
-		rightMotor.setMovement(0.004f);
-		Timer::sleep(2.0f);
+		continuousMoveForward(100.0f * 180.0f);
 		leftMotor.brake();
 		rightMotor.brake();
-		/*
-		float millimeters = 8 * 180;
-		PIDController pid = PIDController(5.0f, 4.0f, 0.5f, 200);
-		Timer timer;
-
-		timer.start();
-		pid.start(millimeters);
-		float avgMove = 10000000000000000000000000000000000000.0f;
-		while (millimeters > 1 || millimeters < -1 || avgMove > 1 || avgMove < -1)
-		{
-			float correction = pid.getCorrection(millimeters);
-			leftMotor.setMovement(correction);
-			rightMotor.setMovement(correction);
-			int leftCounts = leftMotor.resetCounts();
-			int rightCounts = rightMotor.resetCounts();
-			avgMove = (leftCounts + rightCounts) / 2 / COUNTS_PER_MM;
-			millimeters -= avgMove;
-
-			float p = pid.lastP_Correction;
-			float i = pid.lastI_Correction;
-			float d = pid.lastD_Correction;
-
-#ifdef __MK20DX256__ // Teensy Compile
-			Serial.print(millimeters/10, 4);
-			Serial.print(", ");
-			Serial.print(p, 4);
-			Serial.print(", ");
-			Serial.print(i, 4);
-			Serial.print(", ");
-			Serial.print(d, 4);
-			Serial.print(", ");
-			Serial.print(correction, 4);
-			Serial.print(", ");
-			Serial.print(leftCounts);
-			Serial.print("\n");
-
-			delay(5);
-#endif
-		}
-
-		leftMotor.brake();
-		rightMotor.brake(); */
+		//leftMotor.setMovement(0.004f);
+		//rightMotor.setMovement(0.004f);
+		//Timer::sleep(2.0f);
+		//leftMotor.brake();
+		//rightMotor.brake();
 	}
 
 
@@ -246,164 +258,189 @@ namespace Micromouse
 	}
 
 
-	
-	void RobotIO::moveForward(float millimeters)
+
+	void RobotIO::continuousMoveForward(float millimeters)
 	{
-		//millimeters represents how much farther the bot needs to travel.
-		//The function will loop until centimeters is within DISTANCE_TOLERANCE
+		IRDistances gaps = getIRDistances();
+		float leftGap = gaps.left;
+		float rightGap = gaps.right;
+		float lastLeftGap = gaps.left;
+		float lastRightGap = gaps.right;
+		float leftDeltaGap = 0;
+		float rightDeltaGap = 0;
+		
+		millimeters += leftoverDistance;
 
-		Recorder<float> rec(3000,4);
+		leftMotor.setMaxSpeed(0.105f);
+		rightMotor.setMaxSpeed(0.1f);
 
-		float leftmm = millimeters;
-		float rightmm = millimeters;
+		PIDController centerPID = PIDController(2.0f, 0.0f, 0.0f, 1000.0f);
+		PIDController anglePID = PIDController(0.35f, 0.0f, 0.075f, 1000.0f);
+		Timer timer = Timer();
 
-		PIDController leftDistPID = PIDController(97.0f, 46.0f, 160.0f , 1000);
-		PIDController rightDistPID = PIDController(97.0f, 46.0f, 160.0f , 1000);
-
-		PIDController speedPID = PIDController(30.0f, 1.0f, 1.0f);
-
-		PIDController headingPID = PIDController(0.5f, 0.01f, 0.2f);
-		//PIDController headingPID = PIDController(0.5f, 0.04f, 0.02f , 250.0f); i want to try this one
-		//PIDController headingPID = PIDController(1.2f, 0.03f, 0.15f,250.0f);
-
-		//leftMotor.setMaxSpeed(.2125f);
-		leftMotor.setMaxSpeed(.17f);
-		rightMotor.setMaxSpeed(.16f);
-
+		centerPID.start(0);
+		anglePID.start(0);
+		timer.start();
 		leftMotor.resetCounts();
 		rightMotor.resetCounts();
 
+		//leftMotor.setMovement(1);
+		//rightMotor.setMovement(1);
 
-		leftDistPID.start(millimeters);
-		rightDistPID.start(millimeters);
-		speedPID.start(0);
-		headingPID.start(estimateHeadingError());
+		Recorder<float> rec = Recorder<float>(2048, 2);
 
-		float leftSpeed = 1.0f;
-		float rightSpeed = 1.0f;
-
-		float frontLeftIRDist = 200.0f;
-		float frontRightIRDist = 200.0f;
-
-		Timer timer;
-
-		while
-			(
-				leftmm > DISTANCE_TOLERANCE || leftmm < -DISTANCE_TOLERANCE ||
-				rightmm > DISTANCE_TOLERANCE || rightmm < -DISTANCE_TOLERANCE ||
-				leftSpeed > 0.1f || rightSpeed > 0.1f
-			)
+		while (millimeters > 0)
 		{
-			BUTTONFLAG
-
 			float deltaTime = timer.getDeltaTime();
-			
 
-			//Get distance from the front of the bot to the wall.
-			frontRightIRDist = IRSensors[FRONT_RIGHT]->getDistance();
-			frontLeftIRDist = IRSensors[FRONT_LEFT]->getDistance();
-
-			//Get distance traveled in cm since last cycle (average of two encoders)
-			float leftTraveled = leftMotor.resetCounts();
-			float rightTraveled = rightMotor.resetCounts();
-
-
-			leftTraveled /= COUNTS_PER_MM;
-			rightTraveled /= COUNTS_PER_MM;
-
-			float actualLeftSpeed = leftTraveled / deltaTime;
-			float actualRightSpeed = rightTraveled / deltaTime;
-
-			//Decrease distance to go by the estimated amount traveled
-			leftmm -= leftTraveled;
-			rightmm -= rightTraveled;
-
-
-			leftSpeed = leftDistPID.getCorrection(leftmm);
-			rightSpeed = rightDistPID.getCorrection(rightmm);
-			
-
-
-			///////////////////////////////////////////////////////////////////
-			// DATA LOGGGING
-			///////////////////////////////////////////////////////////////////
-
-			rec.addValue(leftDistPID.lastD_Correction, 3);
-			rec.addValue(leftDistPID.lastI_Correction, 2);
-			rec.addValue(leftDistPID.lastP_Correction,1);
-
-			if ( !rec.addValue(leftmm,0)/*leftDistPID correction*/ )
+			gaps = getIRDistances();
+			lastLeftGap = 0.9f * lastLeftGap + 0.1f * leftGap;
+			lastRightGap = 0.9f * lastRightGap + 0.1f * rightGap;
+			if (abs(gaps.left - leftGap) > 4.0f)
 			{
-				stopMotors();
-				rec.print();
+				leftGap = 0.9f * leftGap + 0.1f * gaps.left;
 			}
-
-			///////////////////////////////////////////////////////////////////
-
-
-
-			float speedError = actualLeftSpeed - actualRightSpeed;
-			float speedCorrection = speedPID.getCorrection(speedError);
-			//speedCorrection *= -1;
-
-			//logC(INFO) << speedCorrection;
-
-			if (rightSpeed < 0.25f || leftSpeed < 0.25f)
+			if (abs(gaps.right - rightGap) > 4.0f)
 			{
-				speedCorrection = 0.0f;
+				rightGap = 0.9f * rightGap + 0.1f * gaps.right;
 			}
+			leftDeltaGap = 0.9 * leftDeltaGap + 0.1 * (leftGap - lastLeftGap) / deltaTime;
+			rightDeltaGap = 0.9 * rightDeltaGap + 0.1 * (rightGap - lastRightGap) / deltaTime;
 
-			if (speedCorrection < 0)
-			{
-				rightSpeed += speedCorrection;
-			}
-			else
-			{
-				leftSpeed -= speedCorrection;
-			}
+			int leftCounts = leftMotor.resetCounts();
+			int rightCounts = rightMotor.resetCounts();
+			float leftDist = leftCounts / COUNTS_PER_MM;
+			float rightDist = rightCounts / COUNTS_PER_MM;
+			float avgDist = (leftDist + rightDist) / 2.0f;
+			millimeters -= avgDist;
 
-			//Get rotational correction speed
-			float rotError = estimateHeadingError();
-			//logC(DEBUG1) << "Rotational Error: " << rotError;
-			float rotSpeed = headingPID.getCorrection(rotError);
+			float centerCorrection = centerPID.getCorrection(rightGap - leftGap);
+			centerCorrection /= 2.0f;
+			float angleCorrection = anglePID.getCorrection(rightDeltaGap - leftDeltaGap);
+			angleCorrection /= 2.0f;
 
-			//Disables heading correction.
-			//rotSpeed = 0.0f;
+			//centerCorrection = 0;
 
-			//Move forward while turning right.
+			float leftSpeed = 1;
+			float rightSpeed = 1;
 
-			if (rotSpeed < 0)
-			{
-				float c = (1 + 3 * rotSpeed);
-				c < 0.65 ? 0.65 : c;
-				rightSpeed *= c; //cos(PI * rotSpeed);
-			}
-			else
-			{
-				float c = (1 - 3 * rotSpeed);
-				c < 0.65 ? 0.65 : c;
-				leftSpeed *= c; //cos(PI * rotSpeed);
-			}
+			if (centerCorrection < 0) leftSpeed *= 1 + centerCorrection;
+			else rightSpeed *= 1 - centerCorrection;
 
-			rightMotor.setMovement(rightSpeed);
+			if (angleCorrection < 0) leftSpeed *= 1 + angleCorrection;
+			else rightSpeed *= 1 - angleCorrection;
+
 			leftMotor.setMovement(leftSpeed);
+			rightMotor.setMovement(rightSpeed);
 
+			//Serial.println(angleCorrection, 4);
 
-#ifdef __MK20DX256__ // Teensy Compile
-			delay(10);
-#endif
+			/*Serial.print(leftGap, 4);
+			Serial.print(", ");
+			Serial.print(lastLeftGap, 4);
+			Serial.print(", ");
+			Serial.println(leftDeltaGap, 4);*/
 		}
 
-		logC(INFO) << leftDistPID.getI();
-		logC(INFO) << rightDistPID.getI();
-		
+		leftoverDistance += millimeters;
+
+		rec.print();
+	}
+
+
+	
+	void RobotIO::moveForward(float millimeters)
+	{
+		leftMotor.setMaxSpeed(0.11f);
+		rightMotor.setMaxSpeed(0.1f);
+
+		float lmms = millimeters; //Left millimeters
+		float rmms = millimeters; //Right millimeters
+		float lspd = 0; //Left motor speed (mm per second)
+		float rspd = 0; //Right motor speed (mm per second)
+		PIDController ldPID = PIDController(25.0f, 200.0f, 15.0f, 200); // Left distance PID
+		PIDController rdPID = PIDController(25.0f, 200.0f, 15.0f, 200); // Right distance PID
+		PIDController spPID = PIDController(2.0f, 0.0f, 0.0f, 1000); // Left-right relative speed PID
+
+		Recorder<float> recorder = Recorder<float>(2048, 4);
+		Timer timer = Timer();
+
+		leftMotor.resetCounts();
+		rightMotor.resetCounts();
+		ldPID.start(lmms);
+		rdPID.start(rmms);
+		spPID.start(0);
+		timer.start();
+
+		while (lmms > DISTANCE_TOLERANCE
+			|| lmms < -DISTANCE_TOLERANCE
+			|| rmms > DISTANCE_TOLERANCE
+			|| rmms < -DISTANCE_TOLERANCE
+			|| lspd > SPEED_TOLERANCE
+			|| lspd < -SPEED_TOLERANCE
+			|| rspd > SPEED_TOLERANCE
+			|| rspd < -SPEED_TOLERANCE
+			)
+		{
+			BUTTONFLAG;
+			float dTime = timer.getDeltaTime();
+
+			float lCorr = ldPID.getCorrection(lmms); //Left correction
+			float rCorr = rdPID.getCorrection(rmms);
+
+			int lCounts = leftMotor.resetCounts();
+			int rCounts = rightMotor.resetCounts();
+			float lDist = lCounts / COUNTS_PER_MM;
+			float rDist = rCounts / COUNTS_PER_MM;
+			lspd = lDist / dTime;
+			rspd = rDist / dTime;
+
+			lmms -= lDist;
+			rmms -= rDist;
+
+			float sCorr = spPID.getCorrection(rspd - lspd);
+
+			if (sCorr < 0)
+			{
+				lCorr *= 1 + sCorr;
+			}
+			else
+			{
+				rCorr *= 1 - sCorr;
+			}
+
+			if (lCorr < 0.004f && lCorr > -0.004)
+			{
+				if (lCorr > 0) lCorr = 0.004;
+				if (lCorr < 0) lCorr = -0.004;
+			}
+			if (rCorr < 0.004f && rCorr > -0.004)
+			{
+				if (rCorr > 0) rCorr = 0.004;
+				if (rCorr < 0) rCorr = -0.004;
+			}
+
+			leftMotor.setMovement(lCorr);
+			rightMotor.setMovement(rCorr);
+
+			if (!recorder.addValue(ldPID.lastP_Correction, 0)
+				|| !recorder.addValue(ldPID.lastI_Correction, 1)
+				|| !recorder.addValue(ldPID.lastD_Correction, 2)
+				|| !recorder.addValue(lCorr, 3)
+				)
+			{
+				
+			}
+
+			Timer::sleep(1.0f / 50.0f);
+		}
+
 		BUTTONEXIT;
 
 		leftMotor.brake();
 		rightMotor.brake();
 
-		rec.print();
-
+		recorder.print();
 	}
 
 

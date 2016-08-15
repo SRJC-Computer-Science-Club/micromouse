@@ -109,7 +109,7 @@ namespace Micromouse
 
         bool isWallinDirection( direction dir );
 		float estimateHeadingError();
-		IRDistances getIRDistances();
+		IRDistances getIRDistances(bool front, int sampleSize);
 
 		void initIRSensors();
 

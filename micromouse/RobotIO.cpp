@@ -95,9 +95,10 @@ namespace Micromouse
 
         case N:
 		{
-			int dist = (int)IRSensors[FRONT_LEFT]->getDistance();
-
-			return (dist < 120 && abs(dist - IRSensors[FRONT_RIGHT]->getDistance()) < 30); 
+			IRDistances dists = getIRDistances(true, 3);
+			Serial.print(dists.left);
+			Serial.print(", ");
+			Serial.println(dists.right);
 		}
 
 		default:
@@ -157,27 +158,35 @@ namespace Micromouse
 
 
 
-	RobotIO::IRDistances RobotIO::getIRDistances()
+	RobotIO::IRDistances RobotIO::getIRDistances(bool front = false, int sampleSize = IR_SAMPLE_SIZE)
 	{
-		float* leftSamples = new float[IR_SAMPLE_SIZE];
-		float* rightSamples = new float[IR_SAMPLE_SIZE];
+		float* leftSamples = new float[sampleSize];
+		float* rightSamples = new float[sampleSize];
 		float leftAvg = 0;
 		float rightAvg = 0;
-		for (int i = 0; i < IR_SAMPLE_SIZE; i++)
+		for (int i = 0; i < sampleSize; i++)
 		{
 			if (i != 0) Timer::sleep(0.001);
-			leftSamples[i] = IRSensors[LEFT]->getDistance();
-			rightSamples[i] = IRSensors[RIGHT]->getDistance();
+			if (front)
+			{
+				leftSamples[i] = IRSensors[FRONT_LEFT]->getDistance();
+				rightSamples[i] = IRSensors[FRONT_RIGHT]->getDistance();
+			}
+			else
+			{
+				leftSamples[i] = IRSensors[LEFT]->getDistance();
+				rightSamples[i] = IRSensors[RIGHT]->getDistance();
+			}
 			leftAvg += leftSamples[i];
 			rightAvg += rightSamples[i];
 		}
-		leftAvg /= IR_SAMPLE_SIZE;
-		rightAvg /= IR_SAMPLE_SIZE;
+		leftAvg /= sampleSize;
+		rightAvg /= sampleSize;
 		float leftClosestDist = 10000000000;
 		float rightClosestDist = 100000000000;
 		float leftClosestSample;
 		float rightClosestSample;
-		for (int i = 0; i < IR_SAMPLE_SIZE; i++)
+		for (int i = 0; i < sampleSize; i++)
 		{
 			float leftDist = abs(leftSamples[i] - leftAvg);
 			float rightDist = abs(rightSamples[i] - rightAvg);
@@ -289,7 +298,7 @@ namespace Micromouse
 
 		Recorder<float> rec = Recorder<float>(2048, 2);
 
-		while (millimeters > 0)
+		while (!isWallinDirection(N))
 		{
 			float deltaTime = timer.getDeltaTime();
 
@@ -342,9 +351,12 @@ namespace Micromouse
 			Serial.println(leftDeltaGap, 4);*/
 		}
 
+		leftMotor.brake();
+		rightMotor.brake();
+
 		leftoverDistance += millimeters;
 
-		rec.print();
+		//rec.print();
 	}
 
 

@@ -28,7 +28,7 @@ namespace Micromouse
 	const float WALL_DISTANCE = 55.0f;
 	const float FRONT_RIGHT_WALL_DISTANCE = 52.0f;
 	const float FRONT_LEFT_WALL_DISTANCE = 58.0f;
-	const int IR_SAMPLE_SIZE = 12;
+	const int IR_SAMPLE_SIZE = 5;
 
 	const int IR_FRONT_LEFT_PIN = 14;
 	const int IR_FRONT_RIGHT_PIN = 15;

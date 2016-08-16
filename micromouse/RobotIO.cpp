@@ -96,9 +96,7 @@ namespace Micromouse
         case N:
 		{
 			IRDistances dists = getIRDistances(true, 3);
-			Serial.print(dists.left);
-			Serial.print(", ");
-			Serial.println(dists.right);
+			return dists.left < 55 && dists.right < 55;
 		}
 
 		default:
@@ -166,7 +164,6 @@ namespace Micromouse
 		float rightAvg = 0;
 		for (int i = 0; i < sampleSize; i++)
 		{
-			if (i != 0) Timer::sleep(0.001);
 			if (front)
 			{
 				leftSamples[i] = IRSensors[FRONT_LEFT]->getDistance();
@@ -226,13 +223,10 @@ namespace Micromouse
 	void RobotIO::testMotors()
 	{
 		continuousMoveForward(100.0f * 180.0f);
+		rotate(180.0f);
+		continuousMoveForward(100.0f * 180.0f);
 		leftMotor.brake();
 		rightMotor.brake();
-		//leftMotor.setMovement(0.004f);
-		//rightMotor.setMovement(0.004f);
-		//Timer::sleep(2.0f);
-		//leftMotor.brake();
-		//rightMotor.brake();
 	}
 
 
@@ -280,11 +274,11 @@ namespace Micromouse
 		
 		millimeters += leftoverDistance;
 
-		leftMotor.setMaxSpeed(0.105f);
-		rightMotor.setMaxSpeed(0.1f);
+		leftMotor.setMaxSpeed(0.21f);
+		rightMotor.setMaxSpeed(0.2f);
 
-		PIDController centerPID = PIDController(2.0f, 0.0f, 0.0f, 1000.0f);
-		PIDController anglePID = PIDController(0.35f, 0.0f, 0.075f, 1000.0f);
+		PIDController centerPID = PIDController(1.5f, 0.0f, 0.0f, 25.0f);
+		PIDController anglePID = PIDController(0.24f, 0.0f, 0.4f, 1000.0f);
 		Timer timer = Timer();
 
 		centerPID.start(0);
@@ -328,7 +322,7 @@ namespace Micromouse
 			float angleCorrection = anglePID.getCorrection(rightDeltaGap - leftDeltaGap);
 			angleCorrection /= 2.0f;
 
-			//centerCorrection = 0;
+			angleCorrection *= 1 - abs(centerCorrection*centerCorrection);
 
 			float leftSpeed = 1;
 			float rightSpeed = 1;
@@ -504,7 +498,7 @@ namespace Micromouse
 
 		PIDController speedPID = PIDController(30.f, 2.0f, 1.0f , 100.0f);
 
-		PIDController anglePID = PIDController(150.0f, 75.0f , 10.0f, 20.0f);
+		PIDController anglePID = PIDController(150.0f, 0.0f , 0.0f, 1000.0f);
 
 
 		anglePID.start(degrees);
@@ -551,7 +545,7 @@ namespace Micromouse
 			rightSpeed = angleCorrection;
 
 			float speedCorrection = speedPID.getCorrection( actualRightSpeed - actualLeftSpeed );
-			//speedCorrection = 0;
+			speedCorrection = 0;
 
 			if (rightSpeed < 0.25f || leftSpeed < 0.25f)
 			{

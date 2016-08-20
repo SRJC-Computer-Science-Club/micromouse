@@ -95,8 +95,7 @@ namespace Micromouse
 
         case N:
 		{
-			IRDistances dists = getIRDistances(true, 3);
-			return dists.left < 55 && dists.right < 55;
+			return irDistances[FRONT_LEFT] < 55 && irDistances[FRONT_RIGHT] < 55;
 		}
 
 		default:
@@ -156,59 +155,50 @@ namespace Micromouse
 
 
 
-	RobotIO::IRDistances RobotIO::getIRDistances(bool front = false, int sampleSize = IR_SAMPLE_SIZE)
+	void RobotIO::updateIRDistances()
 	{
-		float* leftSamples = new float[sampleSize];
-		float* rightSamples = new float[sampleSize];
-		float leftAvg = 0;
-		float rightAvg = 0;
-		for (int i = 0; i < sampleSize; i++)
+		float samples[N_IR_SENSORS][IR_SAMPLE_SIZE];
+		float averages[N_IR_SENSORS];
+
+		for (int a = 0; a < IR_SAMPLE_SIZE; a++)
 		{
-			if (front)
+			for (int n = 0; n < N_IR_SENSORS; n++)
 			{
-				leftSamples[i] = IRSensors[FRONT_LEFT]->getDistance();
-				rightSamples[i] = IRSensors[FRONT_RIGHT]->getDistance();
+				samples[n][a] = IRSensors[n]->getDistance();
+				averages[n] += samples[n][a];
 			}
-			else
-			{
-				leftSamples[i] = IRSensors[LEFT]->getDistance();
-				rightSamples[i] = IRSensors[RIGHT]->getDistance();
-			}
-			leftAvg += leftSamples[i];
-			rightAvg += rightSamples[i];
 		}
-		leftAvg /= sampleSize;
-		rightAvg /= sampleSize;
-		float leftClosestDist = 10000000000;
-		float rightClosestDist = 100000000000;
-		float leftClosestSample;
-		float rightClosestSample;
-		for (int i = 0; i < sampleSize; i++)
+		
+		for (int n = 0; n < N_IR_SENSORS; n++)
 		{
-			float leftDist = abs(leftSamples[i] - leftAvg);
-			float rightDist = abs(rightSamples[i] - rightAvg);
+			averages[n] /= 2;
+		}
 
-			if (leftDist < leftClosestDist)
-			{
-				leftClosestDist = leftDist;
-				leftClosestSample = leftSamples[i];
-			}
+		float smallestDistsToAvg[N_IR_SENSORS];
+		float closestSamples[N_IR_SENSORS];
 
-			if (rightDist < rightClosestDist)
+		for (int n = 0; n < N_IR_SENSORS; n++)
+		{
+			smallestDistsToAvg[n] = std::numeric_limits<float>::infinity();
+		}
+
+		for (int a = 0; a < IR_SAMPLE_SIZE; a++)
+		{
+			for (int n = 0; n < N_IR_SENSORS; n++)
 			{
-				rightClosestDist = rightDist;
-				rightClosestSample = rightSamples[i];
+				float distToAvg = abs(samples[n][a]);
+				if (distToAvg < smallestDistsToAvg[n])
+				{
+					smallestDistsToAvg[n] = distToAvg;
+					closestSamples[n] = samples[n][a];
+				}
 			}
 		}
 
-		IRDistances dists = IRDistances();
-		dists.left = leftClosestSample;
-		dists.right = rightClosestSample;
-
-		delete[] leftSamples;
-		delete[] rightSamples;
-
-		return dists;
+		for (int n = 0; n < N_IR_SENSORS; n++)
+		{
+			irDistances[n] = closestSamples[n];
+		}
 	}
 
 
@@ -222,11 +212,13 @@ namespace Micromouse
 
 	void RobotIO::testMotors()
 	{
-		continuousMoveForward(100.0f * 180.0f);
+		/*
+		continuousMoveForward(100.0f * 180.0f, true);
 		rotate(180.0f);
-		continuousMoveForward(100.0f * 180.0f);
+		continuousMoveForward(100.0f * 180.0f, true);
 		leftMotor.brake();
 		rightMotor.brake();
+		*/
 	}
 
 
@@ -262,13 +254,13 @@ namespace Micromouse
 
 
 
-	void RobotIO::continuousMoveForward(float millimeters)
+	void RobotIO::continuousMoveForward(float millimeters, bool keepGoing)
 	{
-		IRDistances gaps = getIRDistances();
-		float leftGap = gaps.left;
-		float rightGap = gaps.right;
-		float lastLeftGap = gaps.left;
-		float lastRightGap = gaps.right;
+		updateIRDistances();
+		float leftGap = irDistances[LEFT];
+		float rightGap = irDistances[RIGHT];
+		float lastLeftGap = irDistances[LEFT];
+		float lastRightGap = irDistances[RIGHT];
 		float leftDeltaGap = 0;
 		float rightDeltaGap = 0;
 		
@@ -296,16 +288,17 @@ namespace Micromouse
 		{
 			float deltaTime = timer.getDeltaTime();
 
-			gaps = getIRDistances();
+			updateIRDistances();
+
 			lastLeftGap = 0.9f * lastLeftGap + 0.1f * leftGap;
 			lastRightGap = 0.9f * lastRightGap + 0.1f * rightGap;
-			if (abs(gaps.left - leftGap) > 4.0f)
+			if (abs(irDistances[LEFT] - leftGap) > 4.0f)
 			{
-				leftGap = 0.9f * leftGap + 0.1f * gaps.left;
+				leftGap = 0.9f * leftGap + 0.1f * irDistances[LEFT];
 			}
-			if (abs(gaps.right - rightGap) > 4.0f)
+			if (abs(irDistances[RIGHT] - rightGap) > 4.0f)
 			{
-				rightGap = 0.9f * rightGap + 0.1f * gaps.right;
+				rightGap = 0.9f * rightGap + 0.1f * irDistances[RIGHT];
 			}
 			leftDeltaGap = 0.9 * leftDeltaGap + 0.1 * (leftGap - lastLeftGap) / deltaTime;
 			rightDeltaGap = 0.9 * rightDeltaGap + 0.1 * (rightGap - lastRightGap) / deltaTime;

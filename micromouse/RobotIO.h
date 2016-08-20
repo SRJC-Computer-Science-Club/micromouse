@@ -30,6 +30,8 @@ namespace Micromouse
 	const float FRONT_LEFT_WALL_DISTANCE = 58.0f;
 	const int IR_SAMPLE_SIZE = 5;
 
+	const int N_IR_SENSORS = 4;
+
 	const int IR_FRONT_LEFT_PIN = 14;
 	const int IR_FRONT_RIGHT_PIN = 15;
 	const int IR_LEFT_PIN = 22;
@@ -77,7 +79,7 @@ namespace Micromouse
 		void testIR();
 		void testRotate();
 
-		void continuousMoveForward(float millimeters);
+		void continuousMoveForward(float millimeters, bool keepGoing);
 
 		//Moves the bot forward by the given number of millimeters.
 		void moveForward(float millimeters);
@@ -99,17 +101,13 @@ namespace Micromouse
 		void stopMotors();
 
 	private:
-		struct IRDistances
-		{
-			float left;
-			float right;
-		};
 
 		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };
+		float irDistances[4];
 
         bool isWallinDirection( direction dir );
 		float estimateHeadingError();
-		IRDistances getIRDistances(bool front, int sampleSize);
+		void updateIRDistances();
 
 		void initIRSensors();
 

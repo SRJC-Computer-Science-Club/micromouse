@@ -24,11 +24,11 @@ namespace Micromouse
 	//How close the robot needs to be to the target angle (in degrees) when rotating.
 	const float ANGLE_TOLERANCE = 1.8f;
 
-	//The expected distance between a left/right sensor and the wall (in mm).
-	const float WALL_DISTANCE = 55.0f;
+	//The expected total distance between the left and right sensors and the walls (in mm).
+	const float WALL_DISTANCE = 108.0f;
 	const float FRONT_RIGHT_WALL_DISTANCE = 52.0f;
 	const float FRONT_LEFT_WALL_DISTANCE = 58.0f;
-	const int IR_SAMPLE_SIZE = 5;
+	const int IR_SAMPLE_SIZE = 25;
 
 	const int N_IR_SENSORS = 4;
 
@@ -78,15 +78,15 @@ namespace Micromouse
 		void testMotors(); //temp
 		void testIR();
 		void testRotate();
+		void printIRDistances();
 
-		void continuousMoveForward(float millimeters, bool keepGoing);
-
-		//Moves the bot forward by the given number of millimeters.
-		void moveForward(float millimeters);
+		void moveForward(float millimeters, bool keepGoing);
 
 		//Rotates the bot in place by the given number of degrees.
 		//Positive values turn the bot to the right. Negative values turn it to the left.
 		void rotate(float degrees);
+
+		void updateIRDistances();
 
 		bool isClearForward(); // Returns false if the range-finder sensors detect a wall in front of the bot. Otherwise, returns true.
 		bool isClearRight(); // Returns false if the range-finder sensors detect a wall to the right of the bot. Otherwise, returns true.
@@ -106,8 +106,6 @@ namespace Micromouse
 		float irDistances[4];
 
         bool isWallinDirection( direction dir );
-		float estimateHeadingError();
-		void updateIRDistances();
 
 		void initIRSensors();
 

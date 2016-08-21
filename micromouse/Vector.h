@@ -5,7 +5,7 @@
 namespace Micromouse
 {
 	//number of cells in maze
-	const int MAZE_W = 16, MAZE_H = 16;
+	const int MAZE_W = 8, MAZE_H = 8;
 
 	//number of nodes used to represent the maze
 	const int NUM_NODES_W = MAZE_W * 2 - 1 , NUM_NODES_H = MAZE_H * 2 - 1; 

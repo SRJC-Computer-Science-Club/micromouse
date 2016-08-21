@@ -88,10 +88,10 @@ namespace Micromouse
         switch( dir )
         {
         case W:
-			return IRSensors[LEFT]->getDistance() < 110;
+			return irDistances[LEFT] < 110;
 
         case E:
-			return IRSensors[RIGHT]->getDistance() < 110;
+			return irDistances[RIGHT] < 110;
 
         case N:
 		{
@@ -103,55 +103,6 @@ namespace Micromouse
 			return false;
 		}
     }
-
-
-
-	float RobotIO::estimateHeadingError()
-	{
-		float rightDist = IRSensors[RIGHT]->getDistance();
-		float leftDist = IRSensors[LEFT]->getDistance();
-
-		float frontLeftDist = IRSensors[FRONT_LEFT]->getDistance();
-		float frontRightDist = IRSensors[FRONT_RIGHT]->getDistance();
-
-		bool rightWall = leftDist < WALL_DISTANCE * 1.85f;
-		bool leftWall = rightDist < WALL_DISTANCE * 1.85f;
-
-		bool frontLeftWall = frontLeftDist < FRONT_LEFT_WALL_DISTANCE;
-		bool frontRightWall = frontRightDist < FRONT_RIGHT_WALL_DISTANCE;
-
-
-		if (frontLeftWall && !frontRightWall)
-		{
-			//return -4.0f;
-		}
-		else if (frontRightWall && frontLeftWall)
-		{
-			//return 4.0f;
-		}
-
-		if (rightWall && leftWall)
-		{
-			return (leftDist - rightDist);
-		}
-		else if (rightWall && !leftWall)
-		{
-			float error = WALL_DISTANCE - rightDist;
-			return error > 0 ? error : 0;
-			return 0;
-		}
-		else if (leftWall && !rightWall)
-		{
-			float error = leftDist - WALL_DISTANCE;
-			return error < 0 ? error : 0;
-			return 0;
-		}
-		else // (!rightWall && !leftWall)
-		{
-			// TODO: Use magnetometer
-			return 0.0f;
-		}
-	}
 
 
 
@@ -168,7 +119,7 @@ namespace Micromouse
 				averages[n] += samples[n][a];
 			}
 		}
-		
+
 		for (int n = 0; n < N_IR_SENSORS; n++)
 		{
 			averages[n] /= 2;
@@ -203,6 +154,35 @@ namespace Micromouse
 
 
 
+	void RobotIO::printIRDistances()
+	{
+		updateIRDistances();
+		float total = irDistances[LEFT] + irDistances[RIGHT];
+		float left = irDistances[LEFT];
+		while (true)
+		{
+			BUTTONFLAG;
+			//Timer::sleep(0.1);
+			updateIRDistances();
+			total = 0.99f * total + 0.01f * (irDistances[LEFT] + irDistances[RIGHT]);
+			left = 0.9f * left + 0.1f * irDistances[LEFT];
+			for (int n = 0; n < N_IR_SENSORS; n++)
+			{
+				Serial.print(irDistances[n], 4);
+				Serial.print(", ");
+			}
+			Serial.print(left, 4);
+			Serial.print(", ");
+			Serial.println(total, 4);
+		}
+
+		BUTTONEXIT;
+
+		return;
+	}
+
+
+
 
 
 
@@ -212,13 +192,11 @@ namespace Micromouse
 
 	void RobotIO::testMotors()
 	{
-		/*
-		continuousMoveForward(100.0f * 180.0f, true);
+		moveForward(10.0f * 180.0f, true);
 		rotate(180.0f);
-		continuousMoveForward(100.0f * 180.0f, true);
+		moveForward(10.0f * 180.0f, true);
 		leftMotor.brake();
 		rightMotor.brake();
-		*/
 	}
 
 
@@ -254,7 +232,7 @@ namespace Micromouse
 
 
 
-	void RobotIO::continuousMoveForward(float millimeters, bool keepGoing)
+	void RobotIO::moveForward(float millimeters, bool keepGoing)
 	{
 		updateIRDistances();
 		float leftGap = irDistances[LEFT];
@@ -265,6 +243,7 @@ namespace Micromouse
 		float rightDeltaGap = 0;
 		
 		millimeters += leftoverDistance;
+		leftoverDistance = 0;
 
 		leftMotor.setMaxSpeed(0.21f);
 		rightMotor.setMaxSpeed(0.2f);
@@ -273,35 +252,84 @@ namespace Micromouse
 		PIDController anglePID = PIDController(0.24f, 0.0f, 0.4f, 1000.0f);
 		Timer timer = Timer();
 
-		centerPID.start(0);
+		centerPID.start(rightGap - leftGap);
 		anglePID.start(0);
 		timer.start();
 		leftMotor.resetCounts();
 		rightMotor.resetCounts();
+
+		bool leftWall = false;
+		bool rightWall = false;
 
 		//leftMotor.setMovement(1);
 		//rightMotor.setMovement(1);
 
 		Recorder<float> rec = Recorder<float>(2048, 2);
 
-		while (!isWallinDirection(N))
+		while (!isWallinDirection(N) && millimeters > 0)
 		{
 			float deltaTime = timer.getDeltaTime();
 
 			updateIRDistances();
 
-			lastLeftGap = 0.9f * lastLeftGap + 0.1f * leftGap;
-			lastRightGap = 0.9f * lastRightGap + 0.1f * rightGap;
-			if (abs(irDistances[LEFT] - leftGap) > 4.0f)
+			bool wallChanged = false;
+
+			if (leftWall && irDistances[LEFT] > 100.0f)
 			{
-				leftGap = 0.9f * leftGap + 0.1f * irDistances[LEFT];
+				leftWall = false;
+				wallChanged = true;
 			}
-			if (abs(irDistances[RIGHT] - rightGap) > 4.0f)
+			else if (!leftWall && irDistances[LEFT] < 80.0f)
 			{
-				rightGap = 0.9f * rightGap + 0.1f * irDistances[RIGHT];
+				leftWall = true;
+				wallChanged = true;
 			}
-			leftDeltaGap = 0.9 * leftDeltaGap + 0.1 * (leftGap - lastLeftGap) / deltaTime;
-			rightDeltaGap = 0.9 * rightDeltaGap + 0.1 * (rightGap - lastRightGap) / deltaTime;
+
+			if (rightWall && irDistances[RIGHT] > 100.0f)
+			{
+				rightWall = false;
+				wallChanged = true;
+			}
+			else if (!rightWall && irDistances[RIGHT] < 80.0f)
+			{
+				rightWall = true;
+				wallChanged = true;
+			}
+
+			Serial.print(leftWall ? 1 : 0);
+			Serial.print(", ");
+			Serial.println(rightWall ? 1 : 0);
+
+			if (leftWall)
+			{
+				lastLeftGap = 0.9f * lastLeftGap + 0.1f * leftGap;
+				if (abs(irDistances[LEFT] - leftGap) > 4.0f)
+				{
+					leftGap = 0.9f * leftGap + 0.1f * irDistances[LEFT];
+				}
+				leftDeltaGap = 0.9 * leftDeltaGap + 0.1 * (leftGap - lastLeftGap) / deltaTime;
+			}
+			
+			if (rightWall)
+			{
+				lastRightGap = 0.9f * lastRightGap + 0.1f * rightGap;
+				if (abs(irDistances[RIGHT] - rightGap) > 4.0f)
+				{
+					rightGap = 0.9f * rightGap + 0.1f * irDistances[RIGHT];
+				}
+				rightDeltaGap = 0.9 * rightDeltaGap + 0.1 * (rightGap - lastRightGap) / deltaTime;
+			}
+
+			if (wallChanged)
+			{
+				lastLeftGap = leftGap;
+				leftDeltaGap = 0;
+				lastRightGap = rightGap;
+				rightDeltaGap = 0;
+				centerPID.start(rightGap - leftGap);
+				anglePID.start(0);
+				wallChanged = false;
+			}
 
 			int leftCounts = leftMotor.resetCounts();
 			int rightCounts = rightMotor.resetCounts();
@@ -310,9 +338,26 @@ namespace Micromouse
 			float avgDist = (leftDist + rightDist) / 2.0f;
 			millimeters -= avgDist;
 
-			float centerCorrection = centerPID.getCorrection(rightGap - leftGap);
+			float centerCorrection = 0;
+			float angleCorrection = 0;
+
+			if (leftWall && rightWall)
+			{
+				centerCorrection = centerPID.getCorrection(rightGap - leftGap);
+				angleCorrection = anglePID.getCorrection(rightDeltaGap - leftDeltaGap);
+			}
+			else if (leftWall)
+			{
+				centerCorrection = centerPID.getCorrection(WALL_DISTANCE - 2 * leftGap);
+				angleCorrection = anglePID.getCorrection(-2*leftDeltaGap);
+			}
+			else if (rightWall)
+			{
+				centerCorrection = centerPID.getCorrection(2 * rightGap - WALL_DISTANCE);
+				angleCorrection = anglePID.getCorrection(2*rightDeltaGap);
+			}
+
 			centerCorrection /= 2.0f;
-			float angleCorrection = anglePID.getCorrection(rightDeltaGap - leftDeltaGap);
 			angleCorrection /= 2.0f;
 
 			angleCorrection *= 1 - abs(centerCorrection*centerCorrection);
@@ -338,108 +383,17 @@ namespace Micromouse
 			Serial.println(leftDeltaGap, 4);*/
 		}
 
-		leftMotor.brake();
-		rightMotor.brake();
-
+		updateIRDistances();
 		leftoverDistance += millimeters;
 
-		//rec.print();
-	}
-
-
-	
-	void RobotIO::moveForward(float millimeters)
-	{
-		leftMotor.setMaxSpeed(0.11f);
-		rightMotor.setMaxSpeed(0.1f);
-
-		float lmms = millimeters; //Left millimeters
-		float rmms = millimeters; //Right millimeters
-		float lspd = 0; //Left motor speed (mm per second)
-		float rspd = 0; //Right motor speed (mm per second)
-		PIDController ldPID = PIDController(25.0f, 200.0f, 15.0f, 200); // Left distance PID
-		PIDController rdPID = PIDController(25.0f, 200.0f, 15.0f, 200); // Right distance PID
-		PIDController spPID = PIDController(2.0f, 0.0f, 0.0f, 1000); // Left-right relative speed PID
-
-		Recorder<float> recorder = Recorder<float>(2048, 4);
-		Timer timer = Timer();
-
-		leftMotor.resetCounts();
-		rightMotor.resetCounts();
-		ldPID.start(lmms);
-		rdPID.start(rmms);
-		spPID.start(0);
-		timer.start();
-
-		while (lmms > DISTANCE_TOLERANCE
-			|| lmms < -DISTANCE_TOLERANCE
-			|| rmms > DISTANCE_TOLERANCE
-			|| rmms < -DISTANCE_TOLERANCE
-			|| lspd > SPEED_TOLERANCE
-			|| lspd < -SPEED_TOLERANCE
-			|| rspd > SPEED_TOLERANCE
-			|| rspd < -SPEED_TOLERANCE
-			)
+		if (!keepGoing || isWallinDirection(N))
 		{
-			BUTTONFLAG;
-			float dTime = timer.getDeltaTime();
-
-			float lCorr = ldPID.getCorrection(lmms); //Left correction
-			float rCorr = rdPID.getCorrection(rmms);
-
-			int lCounts = leftMotor.resetCounts();
-			int rCounts = rightMotor.resetCounts();
-			float lDist = lCounts / COUNTS_PER_MM;
-			float rDist = rCounts / COUNTS_PER_MM;
-			lspd = lDist / dTime;
-			rspd = rDist / dTime;
-
-			lmms -= lDist;
-			rmms -= rDist;
-
-			float sCorr = spPID.getCorrection(rspd - lspd);
-
-			if (sCorr < 0)
-			{
-				lCorr *= 1 + sCorr;
-			}
-			else
-			{
-				rCorr *= 1 - sCorr;
-			}
-
-			if (lCorr < 0.004f && lCorr > -0.004)
-			{
-				if (lCorr > 0) lCorr = 0.004;
-				if (lCorr < 0) lCorr = -0.004;
-			}
-			if (rCorr < 0.004f && rCorr > -0.004)
-			{
-				if (rCorr > 0) rCorr = 0.004;
-				if (rCorr < 0) rCorr = -0.004;
-			}
-
-			leftMotor.setMovement(lCorr);
-			rightMotor.setMovement(rCorr);
-
-			if (!recorder.addValue(ldPID.lastP_Correction, 0)
-				|| !recorder.addValue(ldPID.lastI_Correction, 1)
-				|| !recorder.addValue(ldPID.lastD_Correction, 2)
-				|| !recorder.addValue(lCorr, 3)
-				)
-			{
-				
-			}
-
-			Timer::sleep(1.0f / 50.0f);
+			leftMotor.brake();
+			rightMotor.brake();
+			Timer::sleep(0.2);
 		}
 
-		BUTTONEXIT;
-
-		leftMotor.brake();
-		rightMotor.brake();
-
-		recorder.print();
+		//rec.print();
 	}
 
 
@@ -516,6 +470,8 @@ namespace Micromouse
 		{
 			BUTTONFLAG
 
+			updateIRDistances();
+
 #ifdef __MK20DX256__ // Teensy Compile
 			delayMicroseconds(2000);
 #endif
@@ -566,6 +522,10 @@ namespace Micromouse
 
 		leftMotor.brake();
 		rightMotor.brake();
+
+		Timer::sleep(0.2f);
+
+		updateIRDistances();
 	}
 
 

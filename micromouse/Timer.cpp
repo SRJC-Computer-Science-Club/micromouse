@@ -1,4 +1,5 @@
 #include "Timer.h"
+#include "ButtonFlag.h"
 
 #ifdef __MK20DX256__ // Teensy Compile
 	#include "Arduino.h"
@@ -15,8 +16,12 @@ namespace Micromouse
 			sleepTime += timer.getDeltaTime()
 			)
 		{
-			// Wait
+			BUTTONFLAG;
 		}
+
+		BUTTONEXIT;
+
+		return;
 	}
 
 

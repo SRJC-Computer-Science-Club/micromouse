@@ -10,6 +10,7 @@ Author GitHub:	joshuasrjc
 #include "MouseBot.h"
 #include "Logger.h"
 #include "ButtonFlag.h"
+#include "Timer.h"
 
 
 
@@ -90,6 +91,8 @@ namespace Micromouse
 	int MouseBot::mapMaze()
 	{
 		log(DEBUG1) << "Mapping Maze...";
+
+		robotIO.updateIRDistances();
 		
 		moves = 0; // Reset moves made to zero
 
@@ -101,6 +104,7 @@ namespace Micromouse
 		maze->getNode(PositionVector::START)->setExplored();
 		maze->getNode(PositionVector::FINISH)->setExplored();
 		
+
 		for (;;)
 		{
 			BUTTONFLAG // Used to abort operation if button is pressed
@@ -320,11 +324,10 @@ namespace Micromouse
 
 	bool MouseBot::isClearForward()
 	{
-#ifdef __MK20DX256__ // Teensy Compile
 		return robotIO.isClearForward();
-#else // PC compile
 		PositionVector pos = position + (facing + N);
 
+#ifndef __MK20DX256__
 		return virtualMaze->isInsideMaze(pos) && virtualMaze->isOpen(pos);
 #endif
 	}
@@ -488,10 +491,8 @@ namespace Micromouse
 			magnitude *= SQRT_OF_TWO;
 		}
 
-#ifdef __MK20DX256__ // Teensy Compile
-		robotIO.moveForward(magnitude);
-		delay(500);
-#endif
+		robotIO.moveForward(magnitude, true);
+		Timer::sleep(0.5f);
 	}
 
 

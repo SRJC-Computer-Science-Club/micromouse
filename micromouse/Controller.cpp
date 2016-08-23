@@ -37,8 +37,10 @@ namespace Micromouse
 		//mouse.mapMaze();
 		//mouse.runMaze();
 		//mouse.testIR();
-		mouse.testMotors();
+		//mouse.testMotors();
 		//mouse.testRotate();
+
+		mouse.robotIO.printIRDistances();
 
 		// DEBUG CODE GOES IN HERE!
 	}

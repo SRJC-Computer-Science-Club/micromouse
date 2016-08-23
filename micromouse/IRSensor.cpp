@@ -164,7 +164,7 @@ namespace Micromouse {
 
 			if (val < calibrationData[i])
 			{
-				int dist = interpolate(calibrationData[i], calibrationData[i + 1],
+				float dist = interpolate(calibrationData[i], calibrationData[i + 1],
 					i * calibrationInterval + calibrationStart,
 					(i + 1) * calibrationInterval + calibrationStart, val);
 
@@ -187,7 +187,7 @@ namespace Micromouse {
 
 
 
-	int IRSensor::interpolate(int x1, int x2, int y1, int y2, int x)
+	float IRSensor::interpolate(int x1, int x2, int y1, int y2, int x)
 	{
 		log(DEBUG4) << x1 << " " << x2 << " " << y1 << " " << y2 << " " << x;
  

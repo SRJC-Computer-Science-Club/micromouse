@@ -157,11 +157,13 @@ namespace Micromouse
 
 	void RobotIO::updateIRDistances()
 	{
+		// Gather N samples from each sensor, where N is IR_SAMPLE_SIZE
 		float samples[N_IR_SENSORS][IR_SAMPLE_SIZE];
 		float averages[N_IR_SENSORS];
 
 		for (int a = 0; a < IR_SAMPLE_SIZE; a++)
 		{
+			Timer::sleep(0.02);
 			for (int n = 0; n < N_IR_SENSORS; n++)
 			{
 				samples[n][a] = IRSensors[n]->getDistance();
@@ -174,31 +176,78 @@ namespace Micromouse
 			averages[n] /= 2;
 		}
 
-		float smallestDistsToAvg[N_IR_SENSORS];
-		float closestSamples[N_IR_SENSORS];
-
+		// For each IR sensor...
 		for (int n = 0; n < N_IR_SENSORS; n++)
 		{
-			smallestDistsToAvg[n] = std::numeric_limits<float>::infinity();
-		}
-
-		for (int a = 0; a < IR_SAMPLE_SIZE; a++)
-		{
-			for (int n = 0; n < N_IR_SENSORS; n++)
+			// ...selection sort each sample by its distance to the average.
+			for (int b = 0; b < IR_SAMPLE_SIZE - 1; b++)
 			{
-				float distToAvg = abs(samples[n][a]);
-				if (distToAvg < smallestDistsToAvg[n])
+				// Find the index of the closest sample:
+				int closestA;
+				float nearestDistToAvg = std::numeric_limits<float>::infinity();
+				for (int a = b; a < IR_SAMPLE_SIZE; a++)
 				{
-					smallestDistsToAvg[n] = distToAvg;
-					closestSamples[n] = samples[n][a];
+					float dist = abs(averages[n] - samples[n][a]);
+					if (dist < nearestDistToAvg)
+					{
+						nearestDistToAvg = dist;
+						closestA = a;
+					}
 				}
+
+				// Swap the closest sample with the sample at b
+				float temp = samples[n][b];
+				samples[n][b] = samples[n][closestA];
+				samples[n][closestA] = temp;
 			}
 		}
 
 		for (int n = 0; n < N_IR_SENSORS; n++)
 		{
-			irDistances[n] = closestSamples[n];
+			float avg = 0;
+			for (int a = 0; a < IR_AVG_SIZE; a++)
+			{
+				avg += samples[n][a];
+			}
+			avg /= IR_AVG_SIZE;
+
+			irDistances[n] = avg;
+
+			/*
+			if (abs(irDistances[n] - avg) > 1.0f)
+			{
+				irDistances[n] = avg;
+			}*/
 		}
+	}
+
+
+
+	void RobotIO::printIRDistances()
+	{
+		updateIRDistances();
+		float total = irDistances[LEFT] + irDistances[RIGHT];
+		float left = irDistances[LEFT];
+		while (true)
+		{
+			BUTTONFLAG;
+			//Timer::sleep(0.1);
+			updateIRDistances();
+			total = 0.99f * total + 0.01f * (irDistances[LEFT] + irDistances[RIGHT]);
+			left = 0.9f * left + 0.1f * irDistances[LEFT];
+			for (int n = 0; n < N_IR_SENSORS; n++)
+			{
+				Serial.print(irDistances[n], 4);
+				Serial.print(", ");
+			}
+			Serial.print(left, 4);
+			Serial.print(", ");
+			Serial.println(total, 4);
+		}
+
+		BUTTONEXIT;
+
+		return;
 	}
 
 

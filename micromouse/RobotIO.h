@@ -28,7 +28,8 @@ namespace Micromouse
 	const float WALL_DISTANCE = 55.0f;
 	const float FRONT_RIGHT_WALL_DISTANCE = 52.0f;
 	const float FRONT_LEFT_WALL_DISTANCE = 58.0f;
-	const int IR_SAMPLE_SIZE = 5;
+	const int IR_SAMPLE_SIZE = 4;
+	const int IR_AVG_SIZE = 3;
 
 	const int N_IR_SENSORS = 4;
 
@@ -78,6 +79,7 @@ namespace Micromouse
 		void testMotors(); //temp
 		void testIR();
 		void testRotate();
+		void printIRDistances();
 
 		void continuousMoveForward(float millimeters, bool keepGoing);
 

@@ -60,7 +60,7 @@ namespace Micromouse
 		void testRotate();
 
 
-		void moveForward(int numNodes = 1);			// Moves the mouse forward by 1 node (1/2 cell)
+		void moveForward(int numNodes = 1, bool keepGoing = true);			// Moves the mouse forward by 1 node (1/2 cell)
 		void rotate(direction dir);				// Rotates the mouse in place by the given direction.
 		void rotateToFaceDirection(direction dir); // Rotates the mouse in place until it reaches the given direction.
 

@@ -474,7 +474,7 @@ namespace Micromouse
 
 
 
-	void MouseBot::moveForward(int numNodes)
+	void MouseBot::moveForward(int numNodes, bool keepGoing)
 	{
 		for (int i = 0; i < numNodes; i++)
 		{
@@ -489,8 +489,7 @@ namespace Micromouse
 		}
 
 #ifdef __MK20DX256__ // Teensy Compile
-		robotIO.moveForward(magnitude);
-		delay(500);
+		robotIO.moveForward(magnitude, keepGoing);
 #endif
 	}
 

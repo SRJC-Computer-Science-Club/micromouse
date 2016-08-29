@@ -35,20 +35,20 @@ namespace Micromouse
 	const float MIN_WALL_DISTANCES[N_IR_SENSORS] = {
 		90.0f,
 		90.0f,
-		64.0f,
-		64.0f,
+		72.0f,
+		70.0f,
 	};
 
 	const float MAX_WALL_DISTANCES[N_IR_SENSORS] = {
 		110.0f,
 		110.0f,
-		100.0f,
-		100.0f
+		72.0f,
+		72.0f
 	};
 
 	const int IR_SAMPLE_SIZE = 7;
 	const int IR_SAMPLE_AVG_SIZE = 5;
-	const int IR_AVG_SIZE = 10;
+	const int IR_AVG_SIZE = 3;
 	const float IR_SAMPLE_SLEEP_SECONDS = 0.005f;
 
 
@@ -100,10 +100,8 @@ namespace Micromouse
 		void testRotate();
 		void printIRDistances();
 
-		void continuousMoveForward(float millimeters, bool keepGoing);
-
 		//Moves the bot forward by the given number of millimeters.
-		void moveForward(float millimeters);
+		void moveForward(float millimeters, bool keepGoing);
 
 		//Rotates the bot in place by the given number of degrees.
 		//Positive values turn the bot to the right. Negative values turn it to the left.

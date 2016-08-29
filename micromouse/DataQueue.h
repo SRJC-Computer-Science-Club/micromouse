@@ -2,8 +2,8 @@
 
 //A class that holds data in an array that functions like a queue.
 //First in, first out data structure.
-//It has a maximum size.
-//Once the max size is reached, it will start overwritting the oldest data.
+//It has a maximum capacity.
+//Once the capacity is reached, it will start overwritting the oldest data.
 class DataQueue
 {
 public:
@@ -26,22 +26,29 @@ public:
 	//Size must be greater than zero.
 	float pop();
 
+	void clear();
+
 
 
 	//Returns the current number of elements in the queue.
 	int getSize() const;
 
 	//Returns the maximum number of elements in the queue.
-	int getMaxSize() const;
+	int getCapacity() const;
 
 	//Returns true if there are no elements in the queue.
 	bool isEmpty() const;
 
 	//Returns true if the number of elements in the queue is equal to the max size.
 	bool isFull() const;
+
+
+
+	//Returns the average of all the elements in the queue.
+	float getAverage() const;
 	
 private:
-	int maxSize;
+	int capacity;
 	int size = 0;
 	float* data;
 	int tailIndex = 0;

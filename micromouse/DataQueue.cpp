@@ -1,21 +1,21 @@
 #include "DataQueue.h"
 #include <assert.h>
 
-DataQueue::DataQueue(int maxSize)
-	: maxSize(maxSize)
+DataQueue::DataQueue(int capacity)
+	: capacity(capacity)
 {
-	data = new float[maxSize];
+	data = new float[capacity];
 }
 
 DataQueue::DataQueue(const DataQueue& queue)
 {
-	maxSize = queue.maxSize;
+	capacity = queue.capacity;
 	size = queue.size;
 	tailIndex = queue.tailIndex;
 	headIndex = queue.headIndex;
 
-	data = new float[maxSize];
-	for (int i = 0; i < maxSize; i++)
+	data = new float[capacity];
+	for (int i = 0; i < capacity; i++)
 	{
 		data[i] = queue.data[i];
 	}
@@ -28,24 +28,24 @@ DataQueue::~DataQueue()
 
 void DataQueue::push(float element)
 {
-	assert(maxSize > 0); //Cannot push to a DataQueue with maxSize <= 0.
+	assert(capacity > 0); //Cannot push to a DataQueue with capacity <= 0.
 
 	data[headIndex] = element;
 
 	size++;
-	if (size > maxSize)
+	if (size > capacity)
 	{
-		size = maxSize;
+		size = capacity;
 
 		tailIndex++;
-		if (tailIndex >= maxSize)
+		if (tailIndex >= capacity)
 		{
 			tailIndex = 0;
 		}
 	}
 
 	headIndex++;
-	if (headIndex >= maxSize)
+	if (headIndex >= capacity)
 	{
 		headIndex = 0;
 	}
@@ -67,7 +67,7 @@ float DataQueue::pop()
 	size--;
 
 	tailIndex++;
-	if (tailIndex >= maxSize)
+	if (tailIndex >= capacity)
 	{
 		tailIndex = 0;
 	}
@@ -75,14 +75,21 @@ float DataQueue::pop()
 	return element;
 }
 
+void DataQueue::clear()
+{
+	size = 0;
+	tailIndex = 0;
+	headIndex = 0;
+}
+
 int DataQueue::getSize() const
 {
 	return size;
 }
 
-int DataQueue::getMaxSize() const
+int DataQueue::getCapacity() const
 {
-	return maxSize;
+	return capacity;
 }
 
 bool DataQueue::isEmpty() const
@@ -92,5 +99,16 @@ bool DataQueue::isEmpty() const
 
 bool DataQueue::isFull() const
 {
-	return size == maxSize;
+	return size == capacity;
+}
+
+float DataQueue::getAverage() const
+{
+	float avg = 0;
+	for (int i = 0; i < size; i++)
+	{
+		avg += data[(i + headIndex) % capacity];
+	}
+	avg /= size;
+	return avg;
 }

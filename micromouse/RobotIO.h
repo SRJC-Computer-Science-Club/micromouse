@@ -5,6 +5,7 @@
 #include "PIDController.h"
 #include "Vector.h"
 #include "Path.h"
+#include "DataQueue.h"
 
 
 namespace Micromouse
@@ -28,10 +29,28 @@ namespace Micromouse
 	const float WALL_DISTANCE = 55.0f;
 	const float FRONT_RIGHT_WALL_DISTANCE = 52.0f;
 	const float FRONT_LEFT_WALL_DISTANCE = 58.0f;
-	const int IR_SAMPLE_SIZE = 4;
-	const int IR_AVG_SIZE = 3;
 
 	const int N_IR_SENSORS = 4;
+
+	const float MIN_WALL_DISTANCES[N_IR_SENSORS] = {
+		90.0f,
+		90.0f,
+		64.0f,
+		64.0f,
+	};
+
+	const float MAX_WALL_DISTANCES[N_IR_SENSORS] = {
+		110.0f,
+		110.0f,
+		100.0f,
+		100.0f
+	};
+
+	const int IR_SAMPLE_SIZE = 7;
+	const int IR_SAMPLE_AVG_SIZE = 5;
+	const int IR_AVG_SIZE = 10;
+	const float IR_SAMPLE_SLEEP_SECONDS = 0.005f;
+
 
 	const int IR_FRONT_LEFT_PIN = 14;
 	const int IR_FRONT_RIGHT_PIN = 15;
@@ -105,7 +124,24 @@ namespace Micromouse
 	private:
 
 		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };
-		float irDistances[4];
+
+		float irDistances[N_IR_SENSORS];
+		DataQueue irDataQueues[N_IR_SENSORS] = {
+			DataQueue(IR_AVG_SIZE),
+			DataQueue(IR_AVG_SIZE),
+			DataQueue(IR_AVG_SIZE),
+			DataQueue(IR_AVG_SIZE)
+		};
+
+		float irDeltas[N_IR_SENSORS];
+		DataQueue oldIrDataQueues[N_IR_SENSORS] = {
+			DataQueue(IR_AVG_SIZE),
+			DataQueue(IR_AVG_SIZE),
+			DataQueue(IR_AVG_SIZE),
+			DataQueue(IR_AVG_SIZE)
+		};
+
+		bool isWall[N_IR_SENSORS];
 
         bool isWallinDirection( direction dir );
 		float estimateHeadingError();

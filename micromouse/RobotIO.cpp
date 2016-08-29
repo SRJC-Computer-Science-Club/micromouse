@@ -163,7 +163,7 @@ namespace Micromouse
 
 		for (int a = 0; a < IR_SAMPLE_SIZE; a++)
 		{
-			Timer::sleep(0.02);
+			Timer::sleep(IR_SAMPLE_SLEEP_SECONDS);
 			for (int n = 0; n < N_IR_SENSORS; n++)
 			{
 				samples[n][a] = IRSensors[n]->getDistance();
@@ -205,19 +205,46 @@ namespace Micromouse
 		for (int n = 0; n < N_IR_SENSORS; n++)
 		{
 			float avg = 0;
-			for (int a = 0; a < IR_AVG_SIZE; a++)
+			for (int a = 0; a < IR_SAMPLE_AVG_SIZE; a++)
 			{
 				avg += samples[n][a];
 			}
-			avg /= IR_AVG_SIZE;
+			avg /= IR_SAMPLE_AVG_SIZE;
 
-			irDistances[n] = avg;
-
-			/*
-			if (abs(irDistances[n] - avg) > 1.0f)
+			if (isWall[n] && avg > MAX_WALL_DISTANCES[n])
 			{
-				irDistances[n] = avg;
-			}*/
+				isWall[n] = false;
+				irDataQueues[n].clear();
+				oldIrDataQueues[n].clear();
+				return;
+			}
+
+			if (!isWall[n] && avg < MIN_WALL_DISTANCES[n])
+			{
+				isWall[n] = true;
+				irDataQueues[n].clear();
+				oldIrDataQueues[n].clear();
+				return;
+			}
+
+			if (irDataQueues[n].isFull())
+			{
+				oldIrDataQueues[n].push(irDataQueues[n].pop());
+				irDataQueues[n].push(avg);
+				irDistances[n] = irDataQueues[n].getAverage();
+				irDeltas[n] = (irDistances[n] - oldIrDataQueues[n].getAverage())
+					/ (IR_SAMPLE_SLEEP_SECONDS * IR_SAMPLE_SIZE * IR_AVG_SIZE);
+			}
+			else
+			{
+				while (!irDataQueues[n].isFull() || !oldIrDataQueues[n].isFull())
+				{
+					irDataQueues[n].push(avg);
+					oldIrDataQueues[n].push(avg);
+				}
+				irDistances[n] = irDataQueues[n].getAverage();
+				irDeltas[n] = 0;
+			}
 		}
 	}
 
@@ -233,16 +260,29 @@ namespace Micromouse
 			BUTTONFLAG;
 			//Timer::sleep(0.1);
 			updateIRDistances();
-			total = 0.99f * total + 0.01f * (irDistances[LEFT] + irDistances[RIGHT]);
-			left = 0.9f * left + 0.1f * irDistances[LEFT];
 			for (int n = 0; n < N_IR_SENSORS; n++)
 			{
 				Serial.print(irDistances[n], 4);
 				Serial.print(", ");
 			}
-			Serial.print(left, 4);
-			Serial.print(", ");
-			Serial.println(total, 4);
+			for (int n = 0; n < N_IR_SENSORS; n++)
+			{
+				Serial.print(irDeltas[n], 4);
+				Serial.print(", ");
+			}
+			for (int n = 0; n < N_IR_SENSORS; n++)
+			{
+				if (isWall[n])
+				{
+					Serial.print(50.0f);
+				}
+				else
+				{
+					Serial.print(20.0f);
+				}
+				Serial.print(", ");
+			}
+			Serial.println(0.0f);
 		}
 
 		BUTTONEXIT;

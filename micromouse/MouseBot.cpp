@@ -90,6 +90,8 @@ namespace Micromouse
 	int MouseBot::mapMaze()
 	{
 		log(DEBUG1) << "Mapping Maze...";
+
+		robotIO.updateIRDistances();
 		
 		moves = 0; // Reset moves made to zero
 
@@ -101,7 +103,7 @@ namespace Micromouse
 		maze->getNode(PositionVector::START)->setExplored();
 		maze->getNode(PositionVector::FINISH)->setExplored();
 		
-		for (;;)
+		while (true)
 		{
 			BUTTONFLAG // Used to abort operation if button is pressed
 
@@ -125,7 +127,7 @@ namespace Micromouse
 			path = maze->findPath(position, closestNodePair.first->getPos() );
 			followPath(path);
 
-			for (;;)
+			while (true)
 			{
 				BUTTONFLAG // Used to abort operation if button is pressed
 

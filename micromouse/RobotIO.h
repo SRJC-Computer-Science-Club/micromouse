@@ -35,15 +35,15 @@ namespace Micromouse
 	const float MIN_WALL_DISTANCES[N_IR_SENSORS] = {
 		90.0f,
 		90.0f,
-		72.0f,
-		70.0f,
+		100.0f,
+		100.0f,
 	};
 
 	const float MAX_WALL_DISTANCES[N_IR_SENSORS] = {
 		110.0f,
 		110.0f,
-		72.0f,
-		72.0f
+		110.0f,
+		110.0f
 	};
 
 	const int IR_SAMPLE_SIZE = 7;
@@ -99,6 +99,7 @@ namespace Micromouse
 		void testIR();
 		void testRotate();
 		void printIRDistances();
+		void updateIRDistances();
 
 		//Moves the bot forward by the given number of millimeters.
 		void moveForward(float millimeters, bool keepGoing);
@@ -143,7 +144,6 @@ namespace Micromouse
 
         bool isWallinDirection( direction dir );
 		float estimateHeadingError();
-		void updateIRDistances();
 
 		void initIRSensors();
 

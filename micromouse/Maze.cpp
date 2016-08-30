@@ -377,40 +377,40 @@ namespace Micromouse
 #ifdef SFML_GRAPHICS_HPP
 	void Maze::drawLine(PositionVector begin , PositionVector end , sf::Color color )
 	{
-		//sf::Vertex line[ 2 ];
-		//line[ 0 ] = sf::Vertex( sf::Vector2f( NODE_W * begin.x() + 60.0f , NODE_H * (NUM_NODES_H - 1 - begin.y()) + 60.0f ) , color );
-		//line[ 1 ] = sf::Vertex( sf::Vector2f( NODE_W * end.x() + 60.0f , NODE_H *(NUM_NODES_H - 1 - end.y()) + 60.0f ) , color );
-		//renderWindow.draw( line , 2 , sf::Lines );
-		//Window::display();
-		//renderWindow.draw(line, 2, sf::Lines);
-		//Window::display();
+		sf::Vertex line[ 2 ];
+		line[ 0 ] = sf::Vertex( sf::Vector2f( NODE_W * begin.x() + 60.0f , NODE_H * (NUM_NODES_H - 1 - begin.y()) + 60.0f ) , color );
+		line[ 1 ] = sf::Vertex( sf::Vector2f( NODE_W * end.x() + 60.0f , NODE_H *(NUM_NODES_H - 1 - end.y()) + 60.0f ) , color );
+		renderWindow.draw( line , 2 , sf::Lines );
+		Window::display();
+		renderWindow.draw(line, 2, sf::Lines);
+		Window::display();
 	}
 
 
 	void Maze::drawCircle(PositionVector pos, int rad, sf::Color color, bool fill , sf::Color colorFill )
 	{
 
-		//rad *= NODE_W / 20.f;
-		//sf::CircleShape circle(rad );
-		//
-		//circle.setOutlineThickness(2);
-		//circle.setOutlineColor(color);
+		rad *= NODE_W / 20.f;
+		sf::CircleShape circle(rad );
+		
+		circle.setOutlineThickness(2);
+		circle.setOutlineColor(color);
 
-		//if (fill)
-		//{
-		//	circle.setFillColor(colorFill);
-		//}
-		//else
-		//{
-		//	circle.setFillColor(sf::Color::Transparent);
-		//}
+		if (fill)
+		{
+			circle.setFillColor(colorFill);
+		}
+		else
+		{
+			circle.setFillColor(sf::Color::Transparent);
+		}
 
-		//circle.setOrigin(rad, rad);
-		//circle.setPosition(pos.x() * NODE_W + 60, (NUM_NODES_H - 1 - pos.y()) * NODE_H + 60);
-		//renderWindow.draw(circle);
-		//Window::display();
-		//renderWindow.draw(circle);
-		//Window::display();
+		circle.setOrigin(rad, rad);
+		circle.setPosition(pos.x() * NODE_W + 60, (NUM_NODES_H - 1 - pos.y()) * NODE_H + 60);
+		renderWindow.draw(circle);
+		Window::display();
+		renderWindow.draw(circle);
+		Window::display();
 	}
 
 

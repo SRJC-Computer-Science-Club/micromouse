@@ -355,7 +355,7 @@ namespace Micromouse
 
 			if (!drawn) // we dont want it to draw over itself..yet
 			{
-				int runs = 1000;
+				int runs = 1;
 				int sum = 0;
 				for (int i = 0; i < runs; i++)
 				{

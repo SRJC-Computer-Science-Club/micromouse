@@ -383,6 +383,9 @@ namespace Micromouse
 #ifdef SFML_GRAPHICS_HPP
 		maze->drawCircle(lastPosition, 3, sf::Color(0, 0, 0),true, sf::Color(10, 80, 0));
 		maze->drawCircle(position, 3, sf::Color(10, 230, 0), true, sf::Color(10, 250, 0));
+
+		//maze->drawCircle(lastPosition+facing, 2, sf::Color(0, 0, 0), true, sf::Color(10, 80, 0));
+		maze->drawCircle(position+facing, 2, sf::Color(10, 230, 230), true, sf::Color(10, 250, 230));
 		moves++;
 #endif
 	}
@@ -440,6 +443,7 @@ namespace Micromouse
 	
 				// get the next step of the path
 				dirVec = path->popStep();
+				maze->drawCircle(position + facing, 2, sf::Color(10, 230, 230), true, sf::Color(10, 250, 230));
 
 				// if the next step in the path is unobstructed
 				// then follow the path
@@ -540,6 +544,7 @@ namespace Micromouse
 	void MouseBot::rotateToFaceDirection(direction dir)
 	{
 		rotate(dir - facing);
+		maze->drawCircle(position + facing, 2, sf::Color(10, 230, 230), true, sf::Color(10, 250, 230));
 	}
 
 

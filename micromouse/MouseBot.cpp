@@ -204,13 +204,11 @@ namespace Micromouse
 
 
 
-	bool MouseBot::lookAround(PositionVector nextPathPosition)
+	void MouseBot::lookAround()
 	{
 		logC(DEBUG4) << "lookAround()";
 
 		maze->setExplored( position);
-		bool isPathClear = true;
-
 
 		PositionVector pos = position + facing; //forward
 		
@@ -226,13 +224,6 @@ namespace Micromouse
 			else
 			{
 				maze->removeNode(pos);
-
-				// if the node we removed was the next on our path
-				// then we need to make note that the path is not clear
-				if (pos == nextPathPosition)
-				{
-					isPathClear = false;
-				}
 			}
 		}
 		
@@ -249,10 +240,6 @@ namespace Micromouse
 			else
 			{
 				maze->removeNode(pos);
-				if (pos == nextPathPosition)
-				{
-					isPathClear = false;
-				}
 			}
 		}
 
@@ -268,14 +255,8 @@ namespace Micromouse
 			else
 			{
 				maze->removeNode(pos);
-				if (pos == nextPathPosition)
-				{
-					isPathClear = false;
-				}
 			}
 		}
-
-		return isPathClear;
 	}
 
 
@@ -421,9 +402,10 @@ namespace Micromouse
 				// get the next step of the path
 				dirVec = path->popStep();
 
+				lookAround();
 				// if the next step in the path is unobstructed
 				// then follow the path
-				if (lookAround(position + dirVec.dir()))
+				if ( maze->getNeighborNode( position , dirVec.dir() ) != nullptr )
 				{
 					rotateToFaceDirection(dirVec.dir());
 					moveForward();
@@ -449,6 +431,8 @@ namespace Micromouse
 
 		return;
 	}
+
+
 
 
 

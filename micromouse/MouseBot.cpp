@@ -207,13 +207,11 @@ namespace Micromouse
 
 
 
-	bool MouseBot::lookAround(PositionVector nextPathPosition)
+	void MouseBot::lookAround()
 	{
 		logC(DEBUG4) << "lookAround()";
 
 		maze->setExplored( position);
-		bool isPathClear = true;
-
 
 		PositionVector pos = position + facing; //forward
 		
@@ -230,12 +228,6 @@ namespace Micromouse
 			{
 				maze->removeNode(pos);
 
-				// if the node we removed was the next on our path
-				// then we need to make note that the path is not clear
-				if (pos == nextPathPosition)
-				{
-					isPathClear = false;
-				}
 #ifdef SFML_GRAPHICS_HPP
 				maze->drawLine(pos + (facing+E), pos + (facing + W) , sf::Color(250, 250, 250));
 #endif
@@ -255,10 +247,6 @@ namespace Micromouse
 			else
 			{
 				maze->removeNode(pos);
-				if (pos == nextPathPosition)
-				{
-					isPathClear = false;
-				}
 #ifdef SFML_GRAPHICS_HPP
 				maze->drawLine(pos + facing, pos + (facing + S), sf::Color(250, 250, 250));
 #endif
@@ -277,17 +265,12 @@ namespace Micromouse
 			else
 			{
 				maze->removeNode(pos);
-				if (pos == nextPathPosition)
-				{
-					isPathClear = false;
-				}
+
 #ifdef SFML_GRAPHICS_HPP
 				maze->drawLine(pos + facing, pos + (facing + S), sf::Color(250, 250, 250));
 #endif
 			}
 		}
-
-		return isPathClear;
 	}
 
 
@@ -445,9 +428,10 @@ namespace Micromouse
 				dirVec = path->popStep();
 				maze->drawCircle(position + facing, 2, sf::Color(10, 230, 230), true, sf::Color(10, 250, 230));
 
+				lookAround();
 				// if the next step in the path is unobstructed
 				// then follow the path
-				if (lookAround(position + dirVec.dir()))
+				if ( maze->getNeighborNode( position , dirVec.dir() ) != nullptr )
 				{
 					rotateToFaceDirection(dirVec.dir());
 					moveForward();
@@ -473,6 +457,8 @@ namespace Micromouse
 
 		return;
 	}
+
+
 
 
 

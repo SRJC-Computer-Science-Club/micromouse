@@ -91,7 +91,7 @@ namespace Micromouse
 		void followPath(Path* path, bool keepPath = false); 
 		void followPathUntilBroken(Path* path , bool keepPath = false); // used for mapping maze
 
-		bool lookAround(PositionVector nextPathPosition);
+		void lookAround();
 
 
 		NodePair getClosestNodePair(NodePairList & nodePairList);

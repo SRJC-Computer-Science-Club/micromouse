@@ -10,6 +10,9 @@ Author GitHub:	joshuasrjc
 #include "MouseBot.h"
 #include "Logger.h"
 #include "ButtonFlag.h"
+#include "Controller.h"
+#include "Timer.h"
+#include "ArduinoDummy.h"
 
 
 
@@ -92,6 +95,19 @@ namespace Micromouse
 		log(DEBUG1) << "Mapping Maze...";
 
 		robotIO.updateIRDistances();
+
+		if (robotIO.isClearForward())
+		{
+			Controller::blinkLED(2, 400, 400);
+		}
+		if (robotIO.isClearLeft())
+		{
+			Controller::blinkLED(4, 200, 200);
+		}
+		if (robotIO.isClearRight())
+		{
+			Controller::blinkLED(8, 100, 100);
+		}
 		
 		moves = 0; // Reset moves made to zero
 
@@ -168,7 +184,8 @@ namespace Micromouse
 
 		returnToStart();
 
-		BUTTONEXIT
+		BUTTONEXIT;
+
 		return moves;
 	}
 
@@ -421,6 +438,12 @@ namespace Micromouse
 		else
 		{
 			log(ERROR) << "COULD NOT FIND PATH DURING MAPPING";
+
+			while (!buttonFlag)
+			{
+				// Wait
+			}
+			maze->printToSerial();
 		}
 
 		EXIT:

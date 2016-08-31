@@ -14,23 +14,23 @@ namespace Micromouse
 		LOW, HIGH
 	};
 
-	void pinMode(int pin, PinMode mode) { }
-	void digitalWrite(int pin, PinValue value) { }
-	void analogWrite(int pin, int value) { }
+	static void pinMode(int pin, PinMode mode) { }
+	static void digitalWrite(int pin, PinValue value) { }
+	static void analogWrite(int pin, int value) { }
 
 
 	class SERIAL
 	{
 	public:
-		void println(char* x) {}
+		void println(const char* x) {}
 		void println(float x) {}
 		void println(float x, int y) {}
-		void print(char* x) {}
+		void print(const char* x) {}
 		void print(float x) {}
 		void print(float x, int y) {}
 	};
 
-	SERIAL Serial = SERIAL();
+	static SERIAL Serial = SERIAL();
 
 #endif
 }

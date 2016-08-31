@@ -55,6 +55,8 @@ namespace Micromouse
 		// nodes that form the wall around the center can be removed
 		void removeExcessFinshNodes();
 
+		void printToSerial() const;
+
 	private:
 
 		// creates a Path object after findPath has been called
@@ -72,11 +74,4 @@ namespace Micromouse
 		Node* maze[ NUM_NODES_W ][ NUM_NODES_H ];
 
 	};
-
-	//Prints out a picture of the maze for debugging.
-	//Just use: log( DEBUGX ) << maze;
-#ifdef __MK20DX256__ // Teensy Compile
-#else
-	std::ostream& operator<<(std::ostream& out, const Maze& maze);
-#endif
 }

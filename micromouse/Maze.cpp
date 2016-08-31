@@ -3,6 +3,10 @@
 #include <math.h>
 #include "Maze.h"
 #include <assert.h>
+#include "ArduinoDummy.h"
+#ifdef __MK20DX256__ // Teensy Compile
+#include <Arduino.h>
+#endif
 
 namespace Micromouse
 {
@@ -354,65 +358,73 @@ namespace Micromouse
 	}
 
 
-#ifdef __MK20DX256__ // Teensy Compile
-#else // PC compile
-	std::ostream& operator<<(std::ostream& out, const Maze& maze)
+	void Maze::printToSerial() const
 	{
-		out << std::endl << "+ ";
+		Serial.print("\n+ ");
 
 		for (int x = 0; x < NUM_NODES_W; x++)
 		{
-			out << "- ";
+			Serial.print("- ");
 		}
 
-		out << "+" << std::endl;
+		Serial.print("+\n");
 
 		for (int y = NUM_NODES_H - 1; y >= 0; y--)
 		{
-			out << "| ";
+			Serial.print("| ");
 
 			for (int x = 0; x < NUM_NODES_W; x++)
 			{
-				if (maze.isExplored(PositionVector(x,y)))
+				if (y % 2 == 0 && x % 2 == 0)
 				{
-					if (maze.getNode(PositionVector(x,y)) != nullptr)
+					if (isExplored(PositionVector(x, y)))
 					{
-						out << "  ";
+						Serial.print("  ");
 					}
 					else
 					{
-						if (y % 2 == 0 && x % 2 == 1)
-						{
-							out << "| ";
-						}
-						else if (y % 2 == 1 && x % 2 == 0)
-						{
-							out << "- ";
-						}
-						else
-						{
-							out << "+ ";
-						}
+						Serial.print("# ");
+					}
+
+				}
+				else if (y % 2 == 0 && x % 2 == 1)
+				{
+					if (getNode(PositionVector(x, y)) != nullptr)
+					{
+						Serial.print("  ");
+					}
+					else
+					{
+						Serial.print("| ");
+					}
+				}
+				else if (y % 2 == 1 && x % 2 == 0)
+				{
+					if (getNode(PositionVector(x, y)) != nullptr)
+					{
+						Serial.print("  ");
+					}
+					else
+					{
+						Serial.print("- ");
 					}
 				}
 				else
 				{
-					out << "+ ";
+					Serial.print("+ ");
 				}
+
 			}
-			out << "|" << std::endl;
+			Serial.print("|\n");
 		}
 
-		out << "+ ";
+		Serial.print("+ ");
 
 		for (int x = 0; x < NUM_NODES_W; x++)
 		{
-			out << "- ";
+			Serial.print("- ");
 		}
 
-		out << "+" << std::endl;
-
-		return out;
+		Serial.print("+\n");
 	}
-#endif
 }

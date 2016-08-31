@@ -174,8 +174,8 @@ namespace Micromouse {
 			}
 		}
 
-		log(DEBUG3) << "Measured Distance*: " << MIN_RANGE;
-		return MIN_RANGE;
+		log(DEBUG3) << "Measured Distance*: " << MAX_RANGE;
+		return MAX_RANGE;
 	}
 
 

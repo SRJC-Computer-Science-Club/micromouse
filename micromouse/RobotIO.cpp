@@ -209,6 +209,11 @@ namespace Micromouse
 			}
 			avg /= IR_SAMPLE_AVG_SIZE;
 
+			if (!irInit)
+			{
+				isWall[n] = avg < MIN_WALL_DISTANCES[n];
+			}
+
 			if (isWall[n] && avg > MAX_WALL_DISTANCES[n])
 			{
 				isWall[n] = false;
@@ -244,6 +249,8 @@ namespace Micromouse
 				irDeltas[n] = 0;
 			}
 		}
+
+		irInit = true;
 	}
 
 

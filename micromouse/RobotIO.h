@@ -141,6 +141,7 @@ namespace Micromouse
 		};
 
 		bool isWall[N_IR_SENSORS];
+		bool irInit = false;
 
         bool isWallinDirection( direction dir );
 		float estimateHeadingError();

@@ -427,7 +427,19 @@ namespace Micromouse
 				if ( maze->getNeighborNode( position , dirVec.dir() ) != nullptr )
 				{
 					rotateToFaceDirection(dirVec.dir());
-					moveForward();
+
+					// if we are at the end of the path
+					// or there is a turn in the path
+					// then we need to move by only one node
+					if ( path->empty() || ( !path->empty() && path->peekStep().dir() != dirVec.dir() ) )
+					{
+						moveForward( 1 , false );
+					}
+					else
+					// we are going straight and not stopping
+					{
+						moveForward();
+					}
 				}
 				else // desired path was obstructed
 				{

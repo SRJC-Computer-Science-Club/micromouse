@@ -12,9 +12,9 @@ namespace Micromouse
 {
 	const float MM_BETWEEN_WHEELS = 66.5f;
 
-	//Number of encoder counts per centimeters traveled.
-	//360 / (3.35 * PI)
-	const float COUNTS_PER_MM = 3.420646f;
+	//Number of encoder counts per millimeter traveled.
+	//360 / (33 * PI)
+	const float COUNTS_PER_MM = 3.472472f;
 
 	//How close the robot needs to be to the target distance (in mm) when moving forward.
     const float DISTANCE_TOLERANCE = 1.0f;
@@ -29,27 +29,28 @@ namespace Micromouse
 	const float WALL_DISTANCE = 55.0f;
 	const float FRONT_RIGHT_WALL_DISTANCE = 52.0f;
 	const float FRONT_LEFT_WALL_DISTANCE = 58.0f;
+	const float AVG_FRONT_WALL_DISTANCE = 65.0f;
 
 	const int N_IR_SENSORS = 4;
 
 	const float MIN_WALL_DISTANCES[N_IR_SENSORS] = {
 		90.0f,
 		90.0f,
-		100.0f,
-		100.0f,
+		145.0f,
+		145.0f,
 	};
 
 	const float MAX_WALL_DISTANCES[N_IR_SENSORS] = {
 		110.0f,
 		110.0f,
-		110.0f,
-		110.0f
+		147.0f,
+		147.0f
 	};
 
-	const int IR_SAMPLE_SIZE = 7;
-	const int IR_SAMPLE_AVG_SIZE = 5;
+	const int IR_SAMPLE_SIZE = 4;
+	const int IR_SAMPLE_AVG_SIZE = 2;
 	const int IR_AVG_SIZE = 3;
-	const float IR_SAMPLE_SLEEP_SECONDS = 0.005f;
+	const float IR_SAMPLE_SLEEP_MILLIS = 2;
 
 
 	const int IR_FRONT_LEFT_PIN = 14;
@@ -71,7 +72,6 @@ namespace Micromouse
 	const int MOTOR_LEFT_PWM_PIN = 10;
 	const int ENCODER_LEFT_FWD_PIN = 20;
 	const int ENCODER_LEFT_BWD_PIN = 21;
-
 
 	const int BUTTON_PIN = 6;
 	const int SWITCH_A_PIN = 0;

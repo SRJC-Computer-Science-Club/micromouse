@@ -21,11 +21,14 @@ namespace Micromouse
 	{
 	public:
 		// Sets the P, I, and D constants for the controller.
-		PIDController(float P, float I, float D, float maxIntegralError = 500.0f ): 
+		PIDController(float P, float I, float D,
+			float maxIntegralError = 500.0f, float minIntegralThreshold = -1.0f): 
 			P(P),
 			I(I),
 			D(D),
-			maxIntegralError(maxIntegralError) {}
+			maxIntegralError(maxIntegralError),
+			minIntegralThreshold(minIntegralThreshold)
+		{}
 
 		// Starts the controller with an initial error, and resets the total error.
 		// MUST be called before calling getCorrection().
@@ -59,6 +62,7 @@ namespace Micromouse
 		float totalError = 0;
 		float lastError = 0;
 		float maxIntegralError;
+		float minIntegralThreshold;
 
 		float P;
 		float I;

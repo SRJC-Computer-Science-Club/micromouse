@@ -39,14 +39,18 @@ namespace Micromouse
 
 		float deltaTime = getDeltaTime();
 
-		//if (currentError < 5.0f && currentError > -5.0f)
+		if (minIntegralThreshold > 0
+			&& currentError < minIntegralThreshold
+			&& currentError > -minIntegralThreshold
+		)
 		{
 			totalError += currentError * deltaTime;
+
+			//totalError is bounded between -MAX_I_ERROR and +MAX_I_ERROR
+			totalError = totalError < -maxIntegralError ? -maxIntegralError : totalError;
+			totalError = totalError > maxIntegralError ? maxIntegralError : totalError;
 		}
 		
-		//totalError is bounded between -MAX_I_ERROR and +MAX_I_ERROR
-		totalError = totalError < -maxIntegralError ? -maxIntegralError : totalError;
-		totalError = totalError > maxIntegralError ? maxIntegralError : totalError;
 
 		float pCorrection = P * currentError;
 		float iCorrection = I * totalError;

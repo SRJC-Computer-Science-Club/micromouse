@@ -433,12 +433,12 @@ namespace Micromouse
 					// then we need to move by only one node
 					if ( path->empty() || ( !path->empty() && path->peekStep().dir() != dirVec.dir() ) )
 					{
-						moveForward( 1 , false );
+						moveForward( dirVec.mag(), false );
 					}
 					else
 					// we are going straight and not stopping
 					{
-						moveForward();
+						moveForward(dirVec.mag());
 					}
 				}
 				else // desired path was obstructed
@@ -453,7 +453,7 @@ namespace Micromouse
 
 			while (!buttonFlag)
 			{
-				// Wait
+				Controller::blinkLED(1, 100, 100);
 			}
 			maze->printToSerial();
 		}

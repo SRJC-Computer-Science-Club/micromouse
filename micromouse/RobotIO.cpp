@@ -6,7 +6,7 @@
 #include "ButtonFlag.h"
 #include "Recorder.h"
 #include "ArduinoDummy.h"
-
+#include "Controller.h"
 
 
 #ifdef __MK20DX256__ // Teensy Compile
@@ -104,55 +104,6 @@ namespace Micromouse
 
 
 
-	float RobotIO::estimateHeadingError()
-	{
-		float rightDist = IRSensors[RIGHT]->getDistance();
-		float leftDist = IRSensors[LEFT]->getDistance();
-
-		float frontLeftDist = IRSensors[FRONT_LEFT]->getDistance();
-		float frontRightDist = IRSensors[FRONT_RIGHT]->getDistance();
-
-		bool rightWall = leftDist < WALL_DISTANCE * 1.85f;
-		bool leftWall = rightDist < WALL_DISTANCE * 1.85f;
-
-		bool frontLeftWall = frontLeftDist < FRONT_LEFT_WALL_DISTANCE;
-		bool frontRightWall = frontRightDist < FRONT_RIGHT_WALL_DISTANCE;
-
-
-		if (frontLeftWall && !frontRightWall)
-		{
-			//return -4.0f;
-		}
-		else if (frontRightWall && frontLeftWall)
-		{
-			//return 4.0f;
-		}
-
-		if (rightWall && leftWall)
-		{
-			return (leftDist - rightDist);
-		}
-		else if (rightWall && !leftWall)
-		{
-			float error = WALL_DISTANCE - rightDist;
-			return error > 0 ? error : 0;
-			return 0;
-		}
-		else if (leftWall && !rightWall)
-		{
-			float error = leftDist - WALL_DISTANCE;
-			return error < 0 ? error : 0;
-			return 0;
-		}
-		else // (!rightWall && !leftWall)
-		{
-			// TODO: Use magnetometer
-			return 0.0f;
-		}
-	}
-
-
-
 	void RobotIO::updateIRDistances()
 	{
 		// Gather N samples from each sensor, where N is IR_SAMPLE_SIZE
@@ -161,7 +112,7 @@ namespace Micromouse
 
 		for (int a = 0; a < IR_SAMPLE_SIZE; a++)
 		{
-			Timer::sleep(IR_SAMPLE_SLEEP_SECONDS);
+			delay(IR_SAMPLE_SLEEP_MILLIS);
 			for (int n = 0; n < N_IR_SENSORS; n++)
 			{
 				samples[n][a] = IRSensors[n]->getDistance();
@@ -236,7 +187,7 @@ namespace Micromouse
 				irDataQueues[n].push(avg);
 				irDistances[n] = irDataQueues[n].getAverage();
 				irDeltas[n] = (irDistances[n] - oldIrDataQueues[n].getAverage())
-					/ (IR_SAMPLE_SLEEP_SECONDS * IR_SAMPLE_SIZE * IR_AVG_SIZE);
+					/ ((IR_SAMPLE_SLEEP_MILLIS / 1000.0f) * IR_SAMPLE_SIZE * IR_AVG_SIZE);
 			}
 			else
 			{
@@ -306,17 +257,39 @@ namespace Micromouse
 
 	void RobotIO::testMotors()
 	{
-		for (int i = 0; i < 12; i++)
-		{
-			moveForward(180.0f, i != 11);
-		}
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, false);
 		rotate(180.0f);
-		for (int i = 0; i < 5; i++)
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, false);
+		rotate(180.0f);
+		Controller::blinkLED(5, 50, 50);
+		/*
+		while (true)
 		{
-			moveForward(180.0f, i != 11);
+			for (int i = 0; i < 12; i++)
+			{
+				moveForward(180.0f, i != 11);
+			}
+			rotate(180.0f);
+			for (int i = 0; i < 5; i++)
+			{
+				moveForward(180.0f, i != 11);
+			}
 		}
-		leftMotor.brake();
-		rightMotor.brake();
+		*/
 	}
 
 
@@ -366,15 +339,18 @@ namespace Micromouse
 		leftMotor.setMaxSpeed(0.21f);
 		rightMotor.setMaxSpeed(0.2f);
 
-		PIDController centerPID = PIDController(0.2f, 0.0f, 0.0f, 25.0f);
-		PIDController anglePID = PIDController(2.0f, 0.0f, 0.8f, 1000.0f);
+		PIDController centerPID = PIDController(2.5f, 0.0f, 0.5f, 25.0f);
+		PIDController anglePID = PIDController(2.0f, 0.0f, 1.0f, 1000.0f);
+		PIDController distPID = PIDController(20.0f, 35.0f, 2.0, 1000.0f, 30.0f);
 		Timer timer = Timer();
 
 		centerPID.start(rightGap - leftGap);
 		anglePID.start(0);
+		distPID.start(180.0f);
 		timer.start();
 		leftMotor.resetCounts();
 		rightMotor.resetCounts();
+		bool wallInFront = false;
 
 		while (true)
 		{
@@ -405,6 +381,13 @@ namespace Micromouse
 			float leftSpeed = 1;
 			float rightSpeed = 1;
 
+			if (!keepGoing && millimeters < 180.0f)
+			{
+				float distCorrection = distPID.getCorrection(millimeters);
+				leftSpeed *= distCorrection;
+				rightSpeed *= distCorrection;
+			}
+
 			if (centerCorrection < 0) leftSpeed *= 1 + centerCorrection;
 			else rightSpeed *= 1 - centerCorrection;
 
@@ -424,11 +407,16 @@ namespace Micromouse
 
 			if (isWall[FRONT_LEFT] && isWall[FRONT_RIGHT])
 			{
-				keepGoing = false;
-				break;
+				millimeters = (irDistances[FRONT_LEFT] + irDistances[FRONT_RIGHT]) / 2 - AVG_FRONT_WALL_DISTANCE;
+				if (!wallInFront)
+				{
+					wallInFront = true;
+					keepGoing = false;
+					distPID.start(millimeters);
+				}
 			}
 
-			if (millimeters < 0)
+			if (millimeters < 2 && millimeters > -2)
 			{
 				break;
 			}
@@ -439,6 +427,7 @@ namespace Micromouse
 			leftMotor.brake();
 			rightMotor.brake();
 			Timer::sleep(0.25f);
+
 		}
 
 		leftoverDistance += millimeters;

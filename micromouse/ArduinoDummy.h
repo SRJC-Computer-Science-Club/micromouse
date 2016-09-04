@@ -18,6 +18,7 @@ namespace Micromouse
 	static void digitalWrite(int pin, PinValue value) { }
 	static void analogWrite(int pin, int value) { }
 
+	static void delay(int x) { }
 
 	class SERIAL
 	{

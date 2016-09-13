@@ -170,6 +170,7 @@ namespace Micromouse
 				isWall[n] = false;
 				irDataQueues[n].clear();
 				oldIrDataQueues[n].clear();
+				irDeltaFactor = 0;
 				return;
 			}
 
@@ -178,6 +179,7 @@ namespace Micromouse
 				isWall[n] = true;
 				irDataQueues[n].clear();
 				oldIrDataQueues[n].clear();
+				irDeltaFactor = 0;
 				return;
 			}
 
@@ -255,28 +257,36 @@ namespace Micromouse
 
 	/**** MOTORS ****/
 
+	void RobotIO::resetEncoders()
+	{
+		leftMotor.resetCounts();
+		rightMotor.resetCounts();
+	}
+
 	void RobotIO::testMotors()
 	{
-		moveForward(180.0f, true);
-		moveForward(180.0f, true);
-		moveForward(180.0f, true);
-		moveForward(180.0f, true);
-		moveForward(180.0f, true);
-		moveForward(180.0f, true);
-		moveForward(180.0f, true);
-		moveForward(180.0f, false);
 		rotate(180.0f);
-		moveForward(180.0f, true);
-		moveForward(180.0f, true);
-		moveForward(180.0f, true);
-		moveForward(180.0f, true);
-		moveForward(180.0f, true);
-		moveForward(180.0f, true);
-		moveForward(180.0f, true);
-		moveForward(180.0f, false);
-		rotate(180.0f);
+		rotate(-180.0f);
 		Controller::blinkLED(5, 50, 50);
 		/*
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, false);
+		rotate(180.0f);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, true);
+		moveForward(180.0f, false);
+		rotate(180.0f);
 		while (true)
 		{
 			for (int i = 0; i < 12; i++)
@@ -334,23 +344,24 @@ namespace Micromouse
 		float rightDeltaGap = irDeltas[RIGHT];
 		
 		millimeters += leftoverDistance;
+		millimeters -= (leftMotor.resetCounts() + rightMotor.resetCounts())
+			/ (2 * COUNTS_PER_MM);
 		leftoverDistance = 0;
 
 		leftMotor.setMaxSpeed(0.21f);
 		rightMotor.setMaxSpeed(0.2f);
 
-		PIDController centerPID = PIDController(2.5f, 0.0f, 0.5f, 25.0f);
-		PIDController anglePID = PIDController(2.0f, 0.0f, 1.0f, 1000.0f);
-		PIDController distPID = PIDController(20.0f, 35.0f, 2.0, 1000.0f, 30.0f);
+		PIDController centerPID = PIDController(2.0f, 0.0f, 0.75f, 25.0f);
+		PIDController anglePID = PIDController(1.8f, 0.0f, 1.0f, 1000.0f);
+		PIDController distPID = PIDController(20.0f, 75.0f, 4.0, 1000.0f, 35.0f);
 		Timer timer = Timer();
 
 		centerPID.start(rightGap - leftGap);
 		anglePID.start(0);
 		distPID.start(180.0f);
 		timer.start();
-		leftMotor.resetCounts();
-		rightMotor.resetCounts();
 		bool wallInFront = false;
+		bool stoppingAtWall = false;
 
 		while (true)
 		{
@@ -369,9 +380,37 @@ namespace Micromouse
 			float avgDist = (leftDist + rightDist) / 2.0f;
 			millimeters -= avgDist;
 
-			float centerCorrection = centerPID.getCorrection(rightGap - leftGap);
+			float centerCorrection = 0;
+			float angleCorrection = 0;
+			float speedCorrection = 0;
+
+			float deltaError;
+			float centerError;
+
+			if (isWall[LEFT] && isWall[RIGHT])
+			{
+				centerError = rightGap - leftGap;
+				deltaError = rightDeltaGap - leftDeltaGap;
+			}
+			else if (isWall[LEFT])
+			{
+				centerError = WALL_DISTANCE - 2*leftGap;
+				deltaError = -2*leftDeltaGap;
+			}
+			else if (isWall[RIGHT])
+			{
+				centerError = 2*rightGap - WALL_DISTANCE;
+				deltaError = (2*rightDeltaGap);
+			}
+			else
+			{
+
+			}
+
+			centerCorrection = centerPID.getCorrection(centerError);
+			angleCorrection = anglePID.getCorrection(irDeltaFactor * deltaError);
+
 			centerCorrection /= 2.0f;
-			float angleCorrection = anglePID.getCorrection(rightDeltaGap - leftDeltaGap);
 			angleCorrection /= 2.0f;
 
 			//centerCorrection = 0;
@@ -397,6 +436,12 @@ namespace Micromouse
 			leftMotor.setMovement(leftSpeed);
 			rightMotor.setMovement(rightSpeed);
 
+			irDeltaFactor += deltaTime / IR_DELTA_COOLDOWN_SECONDS;
+			if (irDeltaFactor > 1.0f)
+			{
+				irDeltaFactor = 1.0f;
+			}
+
 			//Serial.println(angleCorrection, 4);
 
 			/*Serial.print(leftGap, 4);
@@ -407,7 +452,6 @@ namespace Micromouse
 
 			if (isWall[FRONT_LEFT] && isWall[FRONT_RIGHT])
 			{
-				millimeters = (irDistances[FRONT_LEFT] + irDistances[FRONT_RIGHT]) / 2 - AVG_FRONT_WALL_DISTANCE;
 				if (!wallInFront)
 				{
 					wallInFront = true;
@@ -416,9 +460,17 @@ namespace Micromouse
 				}
 			}
 
-			if (millimeters < 2 && millimeters > -2)
+			if (millimeters < DISTANCE_TOLERANCE && millimeters > -DISTANCE_TOLERANCE)
 			{
-				break;
+				if (isWall[FRONT_LEFT] && isWall[FRONT_RIGHT] && !stoppingAtWall)
+				{
+					stoppingAtWall = true;
+					millimeters = (irDistances[FRONT_LEFT] + irDistances[FRONT_RIGHT]) / 2 - AVG_FRONT_WALL_DISTANCE;
+				}
+				else
+				{
+					break;
+				}
 			}
 		}
 
@@ -426,8 +478,11 @@ namespace Micromouse
 		{
 			leftMotor.brake();
 			rightMotor.brake();
-			Timer::sleep(0.25f);
-
+			delay(250);
+			if (wallInFront)
+			{
+				delay(500);
+			}
 		}
 
 		leftoverDistance += millimeters;
@@ -479,12 +534,12 @@ namespace Micromouse
 
 	void RobotIO::rotate(float degrees)
 	{
-		leftMotor.setMaxSpeed(0.16f);
+		leftMotor.setMaxSpeed(0.18f);
 		rightMotor.setMaxSpeed(0.16f);
 
 		PIDController speedPID = PIDController(30.f, 2.0f, 1.0f , 100.0f);
 
-		PIDController anglePID = PIDController(150.0f, 0.0f , 0.0f, 1000.0f);
+		PIDController anglePID = PIDController(40.0f, 120.0f , 8.0f, 1000.0f, 45.0f);
 
 
 		anglePID.start(degrees);
@@ -530,8 +585,7 @@ namespace Micromouse
 			leftSpeed = -angleCorrection;
 			rightSpeed = angleCorrection;
 
-			float speedCorrection = speedPID.getCorrection( actualRightSpeed - actualLeftSpeed );
-			speedCorrection = 0;
+			float speedCorrection = speedPID.getCorrection( actualRightSpeed - actualLeftSpeed );\
 
 			if (rightSpeed < 0.25f || leftSpeed < 0.25f)
 			{
@@ -560,7 +614,7 @@ namespace Micromouse
 		leftMotor.brake();
 		rightMotor.brake();
 
-		Timer::sleep(0.25f);
+		delay(250);
 	}
 
 

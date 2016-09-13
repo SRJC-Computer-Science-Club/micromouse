@@ -95,6 +95,7 @@ namespace Micromouse
 		log(DEBUG1) << "Mapping Maze...";
 
 		robotIO.updateIRDistances();
+		robotIO.resetEncoders();
 
 		if (robotIO.isClearForward())
 		{
@@ -420,6 +421,7 @@ namespace Micromouse
 	
 				// get the next step of the path
 				dirVec = path->popStep();
+				path->popStep();
 
 				lookAround();
 				// if the next step in the path is unobstructed
@@ -433,12 +435,12 @@ namespace Micromouse
 					// then we need to move by only one node
 					if ( path->empty() || ( !path->empty() && path->peekStep().dir() != dirVec.dir() ) )
 					{
-						moveForward( dirVec.mag(), false );
+						moveForward( 2, false );
 					}
 					else
 					// we are going straight and not stopping
 					{
-						moveForward(dirVec.mag());
+						moveForward(2);
 					}
 				}
 				else // desired path was obstructed

@@ -66,11 +66,11 @@ namespace Micromouse
 	{
 		digitalWrite(fwdPin, HIGH);
 		digitalWrite(bwdPin, LOW);
-		minFwdVoltage = calibrateMinVoltage() + 1;
+		minFwdVoltage = calibrateMinVoltage() + 2;
 
 		digitalWrite(fwdPin, LOW);
 		digitalWrite(bwdPin, HIGH);
-		minBwdVoltage = calibrateMinVoltage() + 1;
+		minBwdVoltage = calibrateMinVoltage() + 2;
 
 		digitalWrite(fwdPin, LOW);
 		digitalWrite(bwdPin, LOW);
@@ -123,13 +123,13 @@ namespace Micromouse
 		{
 			digitalWrite(fwdPin, HIGH);
 			digitalWrite(bwdPin, LOW);
-			setVoltage((int)(256 * speed), true);
+			setVoltage((int)ceil(256 * speed), true);
 		}
 		else
 		{
 			digitalWrite(fwdPin, LOW);
 			digitalWrite(bwdPin, HIGH);
-			setVoltage((int)(256 * (-speed)), false);
+			setVoltage((int)ceil(256 * (-speed)), false);
 		}
 	}
 

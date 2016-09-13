@@ -10,26 +10,27 @@
 
 namespace Micromouse
 {
-	const float MM_BETWEEN_WHEELS = 66.5f;
+	//const float MM_BETWEEN_WHEELS = 66.5f;
+	const float MM_BETWEEN_WHEELS = 65.5f;
 
 	//Number of encoder counts per millimeter traveled.
 	//360 / (33 * PI)
 	const float COUNTS_PER_MM = 3.472472f;
 
 	//How close the robot needs to be to the target distance (in mm) when moving forward.
-    const float DISTANCE_TOLERANCE = 1.0f;
+    const float DISTANCE_TOLERANCE = 2.0f;
 
 	//How slow each motor needs to be turning (in mm per second) before the robot stops.
 	const float SPEED_TOLERANCE = 1.0f;
 
 	//How close the robot needs to be to the target angle (in degrees) when rotating.
-	const float ANGLE_TOLERANCE = 1.8f;
+	const float ANGLE_TOLERANCE = 3.0f;
 
 	//The expected distance between a left/right sensor and the wall (in mm).
-	const float WALL_DISTANCE = 55.0f;
+	const float WALL_DISTANCE = 108.0f;
 	const float FRONT_RIGHT_WALL_DISTANCE = 52.0f;
 	const float FRONT_LEFT_WALL_DISTANCE = 58.0f;
-	const float AVG_FRONT_WALL_DISTANCE = 65.0f;
+	const float AVG_FRONT_WALL_DISTANCE = 55.0f;
 
 	const int N_IR_SENSORS = 4;
 
@@ -51,6 +52,7 @@ namespace Micromouse
 	const int IR_SAMPLE_AVG_SIZE = 2;
 	const int IR_AVG_SIZE = 3;
 	const float IR_SAMPLE_SLEEP_MILLIS = 2;
+	const float IR_DELTA_COOLDOWN_SECONDS = 0.2;
 
 
 	const int IR_FRONT_LEFT_PIN = 14;
@@ -101,6 +103,8 @@ namespace Micromouse
 		void printIRDistances();
 		void updateIRDistances();
 
+		void resetEncoders();
+
 		//Moves the bot forward by the given number of millimeters.
 		void moveForward(float millimeters, bool keepGoing);
 
@@ -139,6 +143,8 @@ namespace Micromouse
 			DataQueue(IR_AVG_SIZE),
 			DataQueue(IR_AVG_SIZE)
 		};
+
+		float irDeltaFactor = 1.0f;
 
 		bool isWall[N_IR_SENSORS];
 		bool irInit = false;

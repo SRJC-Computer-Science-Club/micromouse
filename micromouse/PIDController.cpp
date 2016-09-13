@@ -39,9 +39,9 @@ namespace Micromouse
 
 		float deltaTime = getDeltaTime();
 
-		if (minIntegralThreshold > 0
-			&& currentError < minIntegralThreshold
-			&& currentError > -minIntegralThreshold
+		if (minIntegralThreshold < 0 ||
+			(currentError < minIntegralThreshold
+			&& currentError > -minIntegralThreshold)
 		)
 		{
 			totalError += currentError * deltaTime;

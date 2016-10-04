@@ -4,7 +4,6 @@
 * master : code that has been successfully tested on mouse and in sim
 * sim : code that has been successfully tested in dev
 * dev : code that successfully compiles and has been self tested
-* master-2 : master does not matter :P it's all about dev :)
 
 ![alt branches](https://github.com/SRJC-Computer-Science-Club/micromouse/blob/master/workflow.png)
 

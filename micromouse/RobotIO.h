@@ -88,6 +88,10 @@ namespace Micromouse
 
 		void calibrateIRSensors();
 
+		void calibrateMotors();
+
+		void stopMotors();
+
 	private:
 		enum IRDirection { LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT };
 
@@ -98,15 +102,6 @@ namespace Micromouse
 
 		IRSensor* IRSensors[4];
 
-		Motor rightMotor = Motor
-		(
-			MOTOR_RIGHT_FWD_PIN,
-			MOTOR_RIGHT_BWD_PIN,
-			MOTOR_RIGHT_PWM_PIN,
-			ENCODER_RIGHT_FWD_PIN,
-			ENCODER_RIGHT_BWD_PIN
-		);
-
 		Motor leftMotor = Motor
 		(
 			MOTOR_LEFT_FWD_PIN,
@@ -114,6 +109,15 @@ namespace Micromouse
 			MOTOR_LEFT_PWM_PIN,
 			ENCODER_LEFT_FWD_PIN,
 			ENCODER_LEFT_BWD_PIN
+		);
+
+		Motor rightMotor = Motor
+		(
+			MOTOR_RIGHT_FWD_PIN,
+			MOTOR_RIGHT_BWD_PIN,
+			MOTOR_RIGHT_PWM_PIN,
+			ENCODER_RIGHT_FWD_PIN,
+			ENCODER_RIGHT_BWD_PIN
 		);
 	};
 }

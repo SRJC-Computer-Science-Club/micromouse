@@ -9,6 +9,8 @@ namespace Micromouse
 	class Timer
 	{
 	public:
+		static void sleep(float seconds);
+
 		Timer();
 
 		void start();

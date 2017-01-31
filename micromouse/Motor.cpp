@@ -1,5 +1,9 @@
 #include "Motor.h"
 #include "Logger.h"
+#include "Timer.h"
+#include "ArduinoDummy.h"
+#include "Memory.h"
+#include "RobotIO.h"
 
 namespace Micromouse
 {
@@ -11,25 +15,102 @@ namespace Micromouse
 		, encoder(Encoder(fwdEncoderPin, bwdEncoderPin))
 #endif
 	{
+		loadCalibration();
 		initPins();
+	}
+
+
+	
+	void Motor::loadCalibration()
+	{
+		if (pwmPin == MOTOR_LEFT_PWM_PIN)
+		{
+			minFwdVoltage = Memory::read(Memory::LEFT_FWD_VOLTAGE);
+			minBwdVoltage = Memory::read(Memory::LEFT_BWD_VOLTAGE);
+		}
+		else if (pwmPin == MOTOR_RIGHT_PWM_PIN)
+		{
+			minFwdVoltage = Memory::read(Memory::RIGHT_FWD_VOLTAGE);
+			minBwdVoltage = Memory::read(Memory::RIGHT_BWD_VOLTAGE);
+		}
+	}
+
+
+
+	void Motor::saveCalibration()
+	{
+		if (pwmPin == MOTOR_LEFT_PWM_PIN)
+		{
+			Memory::write(Memory::LEFT_FWD_VOLTAGE, minFwdVoltage);
+			Memory::write(Memory::LEFT_BWD_VOLTAGE, minBwdVoltage);
+		}
+		else if (pwmPin == MOTOR_RIGHT_PWM_PIN)
+		{
+			Memory::write(Memory::RIGHT_FWD_VOLTAGE, minFwdVoltage);
+			Memory::write(Memory::RIGHT_BWD_VOLTAGE, minBwdVoltage);
+		}
 	}
 
 
 
 	void Motor::initPins()
 	{
-#ifdef __MK20DX256__ // Teensy Compile
 		pinMode(fwdPin, OUTPUT);
 		pinMode(bwdPin, OUTPUT);
 		pinMode(pwmPin, OUTPUT);
-#endif
+	}
+
+
+
+	void Motor::calibrate()
+	{
+		digitalWrite(fwdPin, HIGH);
+		digitalWrite(bwdPin, LOW);
+		minFwdVoltage = calibrateMinVoltage() + 3;
+
+		digitalWrite(fwdPin, LOW);
+		digitalWrite(bwdPin, HIGH);
+		minBwdVoltage = calibrateMinVoltage() + 3;
+
+		digitalWrite(fwdPin, LOW);
+		digitalWrite(bwdPin, LOW);
+
+		saveCalibration();
+	}
+
+
+
+	int Motor::calibrateMinVoltage()
+	{
+		Timer timer = Timer();
+		int voltage = 64;
+		bool timedOut = false;
+		while (voltage > 0 && !timedOut)
+		{
+			voltage--;
+			analogWrite(pwmPin, voltage);
+
+			float waitTime = 0;
+			timer.start();
+			resetCounts();
+			while (getCounts() < 10 && getCounts() > -10 && !timedOut)
+			{
+				waitTime += timer.getDeltaTime();
+				Serial.println(waitTime);
+				if (waitTime >= CALIBRATION_TIMEOUT_SEC)
+				{
+					timedOut = true;
+				}
+			}
+		}
+
+		return voltage;
 	}
 
 
 
 	void Motor::setMovement(float speed)
 	{
-#ifdef __MK20DX256__ // Teensy Compile
 		if (speed > 1 || speed < -1)
 		{
 			logC(WARN) << "In setMovement, speed was not between -1 and 1";
@@ -42,29 +123,51 @@ namespace Micromouse
 		{
 			digitalWrite(fwdPin, HIGH);
 			digitalWrite(bwdPin, LOW);
-			analogWrite(pwmPin, (int)(255 * speed));
+			setVoltage((int)(255 * speed), true);
 		}
 		else
 		{
 			digitalWrite(fwdPin, LOW);
 			digitalWrite(bwdPin, HIGH);
-			analogWrite(pwmPin, (int)(255 * (-speed)));
+			setVoltage((int)(255 * (-speed)), false);
 		}
-#endif
+	}
+
+
+	
+	void Motor::setVoltage(int voltage, bool fwd)
+	{
+		if (voltage > 0)
+		{
+			if (fwd)
+			{
+				if (voltage < minFwdVoltage)
+				{
+					voltage = minFwdVoltage;
+				}
+			}
+			else
+			{
+				if (voltage < minBwdVoltage)
+				{
+					voltage = minBwdVoltage;
+				}
+			}
+		}
+
+		analogWrite(pwmPin, voltage);
 	}
 
 
 
 	void Motor::setMaxSpeed(float maxSpeed)
 	{
-#ifdef __MK20DX256__ // Teensy Compile
 		if (maxSpeed < 0 || maxSpeed > 1)
 		{
 			logC(WARN) << "Motor was given a maxSpeed that is not between 0 and 1.";
 			maxSpeed = maxSpeed < 0 ? 0 : 1;
 		}
 		this->maxSpeed = maxSpeed;
-#endif
 	}
 
 
@@ -78,22 +181,18 @@ namespace Micromouse
 
 	void Motor::brake()
 	{
-#ifdef __MK20DX256__ // Teensy Compile
 		digitalWrite(fwdPin, HIGH);
 		digitalWrite(bwdPin, HIGH);
 		analogWrite(pwmPin, 0);
-#endif
 	}
 
 
 
 	void Motor::coast()
 	{
-#ifdef __MK20DX256__ // Teensy Compile
 		digitalWrite(fwdPin, LOW);
 		digitalWrite(bwdPin, LOW);
 		analogWrite(pwmPin, 0);
-#endif
 	}
 	
 

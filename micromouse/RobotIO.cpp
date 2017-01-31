@@ -4,6 +4,7 @@
 #include "Logger.h"
 #include "Timer.h"
 #include "ButtonFlag.h"
+#include "Recorder.h"
 
 
 
@@ -164,47 +165,53 @@ namespace Micromouse
 
 	void RobotIO::testMotors()
 	{
+		leftMotor.setMovement(0.004f);
+		rightMotor.setMovement(0.004f);
+		Timer::sleep(2.0f);
+		leftMotor.brake();
+		rightMotor.brake();
+		/*
+		float millimeters = 8 * 180;
+		PIDController pid = PIDController(5.0f, 4.0f, 0.5f, 200);
+		Timer timer;
+
+		timer.start();
+		pid.start(millimeters);
+		float avgMove = 10000000000000000000000000000000000000.0f;
+		while (millimeters > 1 || millimeters < -1 || avgMove > 1 || avgMove < -1)
+		{
+			float correction = pid.getCorrection(millimeters);
+			leftMotor.setMovement(correction);
+			rightMotor.setMovement(correction);
+			int leftCounts = leftMotor.resetCounts();
+			int rightCounts = rightMotor.resetCounts();
+			avgMove = (leftCounts + rightCounts) / 2 / COUNTS_PER_MM;
+			millimeters -= avgMove;
+
+			float p = pid.lastP_Correction;
+			float i = pid.lastI_Correction;
+			float d = pid.lastD_Correction;
+
 #ifdef __MK20DX256__ // Teensy Compile
-		//rotate(90.0f);
-		//delay(2000);
-		moveForward(180.0f);
-		moveForward(180.0f);
-		moveForward(180.0f);
-		moveForward(180.0f);
-		moveForward(180.0f);
-		moveForward(180.0f);
-		moveForward(180.0f);
-/*
-		rightMotor.setMaxSpeed(0.2f);
-		leftMotor.setMaxSpeed(0.2f);
+			Serial.print(millimeters/10, 4);
+			Serial.print(", ");
+			Serial.print(p, 4);
+			Serial.print(", ");
+			Serial.print(i, 4);
+			Serial.print(", ");
+			Serial.print(d, 4);
+			Serial.print(", ");
+			Serial.print(correction, 4);
+			Serial.print(", ");
+			Serial.print(leftCounts);
+			Serial.print("\n");
 
-		rightMotor.setMovement(1.0f);
-		delay(1000);
-		rightMotor.brake();
-		delay(1000);
-		leftMotor.setMovement(1.0f);
-		delay(1000);
-		leftMotor.brake();
-		delay(1000);
-		rightMotor.setMovement(-1.0f);
-		delay(1000);
-		rightMotor.coast();
-		delay(1000);
-		leftMotor.setMovement(-1.0f);
-		delay(1000);
-		leftMotor.coast();
-		delay(1000);
-
-		rightMotor.setMaxSpeed(1.0f);
-		leftMotor.setMaxSpeed(1.0f);
-
-		leftMotor.setMovement(1.0f);
-		rightMotor.setMovement(1.0f);
-		delay(2000);
-		leftMotor.brake();
-		rightMotor.brake();
-		*/
+			delay(5);
 #endif
+		}
+
+		leftMotor.brake();
+		rightMotor.brake(); */
 	}
 
 
@@ -239,17 +246,19 @@ namespace Micromouse
 	}
 
 
-
+	
 	void RobotIO::moveForward(float millimeters)
 	{
 		//millimeters represents how much farther the bot needs to travel.
 		//The function will loop until centimeters is within DISTANCE_TOLERANCE
 
+		Recorder<float> rec(3000,4);
+
 		float leftmm = millimeters;
 		float rightmm = millimeters;
 
-		PIDController leftDistPID = PIDController(97.0f, 46.0f, 16.0f , 1000);
-		PIDController rightDistPID = PIDController(97.0f, 46.0f, 16.0f , 1000);
+		PIDController leftDistPID = PIDController(97.0f, 46.0f, 160.0f , 1000);
+		PIDController rightDistPID = PIDController(97.0f, 46.0f, 160.0f , 1000);
 
 		PIDController speedPID = PIDController(30.0f, 1.0f, 1.0f);
 
@@ -288,6 +297,7 @@ namespace Micromouse
 			BUTTONFLAG
 
 			float deltaTime = timer.getDeltaTime();
+			
 
 			//Get distance from the front of the bot to the wall.
 			frontRightIRDist = IRSensors[FRONT_RIGHT]->getDistance();
@@ -296,6 +306,8 @@ namespace Micromouse
 			//Get distance traveled in cm since last cycle (average of two encoders)
 			float leftTraveled = leftMotor.resetCounts();
 			float rightTraveled = rightMotor.resetCounts();
+
+
 			leftTraveled /= COUNTS_PER_MM;
 			rightTraveled /= COUNTS_PER_MM;
 
@@ -306,8 +318,29 @@ namespace Micromouse
 			leftmm -= leftTraveled;
 			rightmm -= rightTraveled;
 
+
 			leftSpeed = leftDistPID.getCorrection(leftmm);
 			rightSpeed = rightDistPID.getCorrection(rightmm);
+			
+
+
+			///////////////////////////////////////////////////////////////////
+			// DATA LOGGGING
+			///////////////////////////////////////////////////////////////////
+
+			rec.addValue(leftDistPID.lastD_Correction, 3);
+			rec.addValue(leftDistPID.lastI_Correction, 2);
+			rec.addValue(leftDistPID.lastP_Correction,1);
+
+			if ( !rec.addValue(leftmm,0)/*leftDistPID correction*/ )
+			{
+				stopMotors();
+				rec.print();
+			}
+
+			///////////////////////////////////////////////////////////////////
+
+
 
 			float speedError = actualLeftSpeed - actualRightSpeed;
 			float speedCorrection = speedPID.getCorrection(speedError);
@@ -354,6 +387,11 @@ namespace Micromouse
 
 			rightMotor.setMovement(rightSpeed);
 			leftMotor.setMovement(leftSpeed);
+
+
+#ifdef __MK20DX256__ // Teensy Compile
+			delay(10);
+#endif
 		}
 
 		logC(INFO) << leftDistPID.getI();
@@ -363,6 +401,8 @@ namespace Micromouse
 
 		leftMotor.brake();
 		rightMotor.brake();
+
+		rec.print();
 
 	}
 
@@ -558,5 +598,19 @@ namespace Micromouse
 		IRSensors[RIGHT]->saveCalibration(IR_RIGHT_MEMORY);
 		IRSensors[FRONT_LEFT]->saveCalibration(IR_FRONT_LEFT_MEMORY);
 		IRSensors[FRONT_RIGHT]->saveCalibration(IR_FRONT_RIGHT_MEMORY);
+	}
+
+
+	void RobotIO::calibrateMotors()
+	{
+		rightMotor.calibrate();
+		leftMotor.calibrate();
+	}
+
+
+	void RobotIO::stopMotors()
+	{
+		leftMotor.brake();
+		rightMotor.brake();
 	}
 }

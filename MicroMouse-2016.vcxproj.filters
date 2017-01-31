@@ -110,5 +110,11 @@
     <ClInclude Include="micromouse\ButtonFlag.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="micromouse\Recorder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="micromouse\ArduinoDummy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
